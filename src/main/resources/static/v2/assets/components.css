@@ -1657,6 +1657,14 @@ body[data-viewer="L3"] [data-level="L2"] { display: none; }
   font-weight:800;
   letter-spacing:.12em;
 }
+@media(min-width:901px){
+  .sales-course[data-course-category] .sales-question>.container{align-items:start}
+  .sales-course[data-course-category] .sales-question>.container>span{grid-column:1;grid-row:1}
+  .sales-course[data-course-category] .sales-question h2{grid-column:1;grid-row:2 / span 2;align-self:center}
+  .sales-course[data-course-category] .course-question__visual{position:relative;top:auto;right:auto;grid-column:2;grid-row:1 / span 2;justify-self:end;width:100%;max-width:390px}
+  .sales-course[data-course-category] .sales-question>div>p{grid-column:2;grid-row:3;margin-top:24px}
+  .sales-course[data-course-category] .course-conviction{grid-column:1 / -1;grid-row:4}
+}
 @keyframes courseQuestionFloat { 50%{transform:translateY(-8px) rotate(1.5deg)} }
 @keyframes trackGeneratedFloat { 50%{transform:translateY(-11px) rotate(1.5deg)} }
 @media(max-width:1100px){.course-question__visual{width:280px}.course-question__visual i{width:145px}}
