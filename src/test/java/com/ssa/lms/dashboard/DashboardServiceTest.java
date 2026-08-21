@@ -153,6 +153,21 @@ class DashboardServiceTest {
                 .noneMatch(t -> t.contains("[격리검증]"));
     }
 
+    @Test
+    @DisplayName("훈련생 안심 홈은 실제 과정 상태와 코치 요약을 항상 제공한다")
+    void 안심_홈_요약은_실제_데이터로_구성된다() {
+        User trainee = user("trainee1");
+
+        TraineeDashboardView view = traineeDashboardService.load(trainee.getId(), trainee.getName());
+
+        assertThat(view.assurance()).isNotNull();
+        assertThat(view.assurance().headline()).contains(trainee.getName());
+        assertThat(view.assurance().progressRate()).isBetween(0, 100);
+        assertThat(view.todaySchedule()).isNotNull();
+        assertThat(view.coach()).isNotNull();
+        assertThat(view.coach().href()).startsWith("/trainee/qna/tutoring");
+    }
+
     /* ===================== 데이터 0건 ===================== */
 
     @Test
@@ -171,6 +186,9 @@ class DashboardServiceTest {
         assertThat(view.courses()).isEmpty();
         assertThat(view.todos()).isEmpty();
         assertThat(view.stats()).isNotEmpty();
+        assertThat(view.assurance().tone()).isEqualTo("empty");
+        assertThat(view.todaySchedule()).isEmpty();
+        assertThat(view.coach().hasFeedback()).isFalse();
         // 전체 공지(course=null)는 신규 훈련생에게도 보여야 한다 — 유의사항 정보제공 요건.
         assertThat(view.notices()).allMatch(n -> "전체".equals(n.scope()));
     }

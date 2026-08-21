@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="내일의AI — 배움에서 취업까지 연결되는 AI 교육 LXP">
+    <title>내일의AI | AI 교육과 성장의 모든 과정</title>
+    <link rel="stylesheet" th:href="@{/static/css/font-style.css}" href="/static/css/font-style.css">
+    <link rel="stylesheet" th:href="@{/static/css/landing.css}" href="/static/css/landing.css">
+</head>
+<body>
+<div th:replace="~{landing/fragments :: header}"></div>
+<main>
+    <section th:replace="~{landing/fragments :: hero}"></section>
+    <section th:replace="~{landing/fragments :: courses(${courses})}"></section>
+    <section th:replace="~{landing/fragments :: experience(${experiences})}"></section>
+    <section th:replace="~{landing/fragments :: curriculum(${curriculum})}"></section>
+    <section th:replace="~{landing/fragments :: projects(${projects})}"></section>
+    <section th:replace="~{landing/fragments :: career}"></section>
+    <section th:replace="~{landing/fragments :: finalCta}"></section>
+</main>
+<footer th:replace="~{landing/fragments :: footer}"></footer>
+<script th:src="@{/static/js/landing.js}" src="/static/js/landing.js" defer></script>
+</body>
+</html>

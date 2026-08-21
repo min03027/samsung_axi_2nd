@@ -44,4 +44,14 @@ public record CoursePaceView(
     public Integer gapToAhead() {
         return aheadProgress == null ? null : aheadProgress - myProgress;
     }
+
+    /** 순위보다 현재 페이스를 안심시키는 홈 화면용 문장. */
+    public String reassuranceMessage() {
+        int averageGap = myProgress - classAverage;
+        if (averageGap >= 0) {
+            return "반 평균보다 " + averageGap + "% 앞서 있어요. 지금 속도면 충분해요.";
+        }
+        return "반 평균까지 " + Math.abs(averageGap)
+                + "% 남았어요. 오늘 한 걸음씩 이어가면 충분해요.";
+    }
 }
