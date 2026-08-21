@@ -1461,30 +1461,30 @@ body[data-viewer="L3"] [data-level="L2"] { display: none; }
 .sales-course[data-course-category] .sales-question>.container { z-index:1; }
 .sales-course[data-course-category] .sales-question h2 { color:#fff; font-size:clamp(3rem,6vw,6.4rem); }
 .sales-course[data-course-category] .sales-question p { color:#eee9e6; border:1px solid color-mix(in srgb,var(--course-accent) 28%,transparent); background:color-mix(in srgb,var(--course-cover-deep) 38%,rgba(7,6,5,.92)); backdrop-filter:blur(18px); }
-.course-conviction { grid-column:1/-1; display:grid; grid-template-columns:minmax(0,1fr) 68px minmax(0,1.15fr); gap:18px; align-items:stretch; margin-top:clamp(42px,7vw,84px); }
-.course-conviction>article { position:relative; min-height:260px; display:flex; flex-direction:column; padding:clamp(28px,3vw,44px); overflow:hidden; border:1px solid rgba(255,255,255,.12); border-radius:28px; }
+.course-conviction { grid-column:1/-1; width:min(100%,1180px); display:grid; grid-template-columns:minmax(0,1fr) 46px minmax(0,1.08fr); gap:14px; align-items:stretch; margin:clamp(34px,5vw,58px) auto 0; }
+.course-conviction>article { position:relative; min-width:0; min-height:220px; display:flex; flex-direction:column; padding:clamp(24px,2.4vw,34px); overflow:hidden; border:1px solid rgba(255,255,255,.12); border-radius:24px; }
 .course-conviction__before { color:#bcb6b2; background:rgba(255,255,255,.035); }
 .course-conviction__before::after { content:'BEFORE'; position:absolute; right:-.03em; bottom:-.22em; color:rgba(255,255,255,.035); font-size:clamp(5rem,10vw,9rem); font-weight:900; letter-spacing:-.08em; pointer-events:none; }
 .course-conviction__after { color:#fff; border-color:color-mix(in srgb,var(--course-accent) 62%,transparent); background:linear-gradient(145deg,color-mix(in srgb,var(--course-cover-deep) 78%,#090807),color-mix(in srgb,var(--course-accent) 42%,#090807)); box-shadow:0 28px 80px color-mix(in srgb,var(--course-accent) 15%,transparent); }
-.course-conviction>i { align-self:center; color:var(--course-accent); font-size:2.2rem; font-style:normal; text-align:center; }
+.course-conviction>i { align-self:center; color:var(--course-accent); font-size:1.8rem; font-style:normal; text-align:center; }
 .course-conviction small { color:var(--course-accent-soft); font-size:11px; font-weight:800; letter-spacing:.14em; }
-.course-conviction strong { display:block; margin-top:var(--sp-5); font-size:clamp(1.35rem,2.25vw,2rem); line-height:1.32; }
+.course-conviction strong { display:block; min-width:0; margin-top:var(--sp-4); font-size:clamp(1.25rem,1.7vw,1.7rem); line-height:1.34; overflow-wrap:anywhere; }
 .sales-course[data-course-category] .course-conviction p { margin:auto 0 0; padding:var(--sp-7) 0 0; color:#97908c; border:0; background:none; box-shadow:none; backdrop-filter:none; font-size:var(--fs-body); line-height:1.7; }
-.course-conviction ul { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:auto 0 0; padding:var(--sp-7) 0 0; list-style:none; }
-.course-conviction li { min-height:92px; display:grid; place-items:center; padding:14px 12px; border:1px solid rgba(255,255,255,.13); border-radius:16px; background:rgba(255,255,255,.075); font-size:clamp(.82rem,1vw,.95rem); font-weight:700; line-height:1.45; text-align:center; word-break:keep-all; text-wrap:balance; }
+.course-conviction ul { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; margin:auto 0 0; padding:var(--sp-5) 0 0; list-style:none; }
+.course-conviction li { min-width:0; min-height:72px; display:grid; place-items:center; padding:11px 9px; border:1px solid rgba(255,255,255,.13); border-radius:14px; background:rgba(255,255,255,.075); font-size:clamp(.76rem,.9vw,.88rem); font-weight:700; line-height:1.4; text-align:center; word-break:keep-all; overflow-wrap:anywhere; text-wrap:balance; }
 
-.sales-course[data-course-category] .sales-outcome { position:relative; padding:clamp(100px,12vw,180px) 0; background:color-mix(in srgb,var(--course-accent) 7%,#f4f2ef); }
-.sales-course[data-course-category] .sales-outcome>.container { display:grid; grid-template-columns:minmax(300px,.65fr) minmax(0,1.35fr); gap:clamp(38px,8vw,120px); align-items:start; }
-.sales-course[data-course-category] .sales-outcome .sales-section-head { position:sticky; top:155px; }
-.sales-course[data-course-category] .sales-outcome .sales-section-head h2 { font-size:clamp(3rem,5vw,5.4rem); }
-.sales-course[data-course-category] .outcome-stage { grid-template-columns:1fr; gap:22px; margin-top:0; }
-.sales-course[data-course-category] .outcome-stage article,.sales-course[data-course-category] .outcome-stage article:nth-child(2) { min-height:400px; display:grid; grid-template-columns:minmax(0,.92fr) minmax(260px,1.08fr); grid-template-rows:auto auto 1fr; gap:12px 28px; padding:clamp(28px,4vw,50px); border:1px solid color-mix(in srgb,var(--course-accent) 18%,#ded9d4); border-radius:30px; box-shadow:0 28px 80px color-mix(in srgb,var(--course-accent) 10%,transparent); transform:none; }
-.sales-course[data-course-category] .outcome-stage h3 { grid-column:1; font-size:clamp(1.8rem,3vw,2.7rem); line-height:1.12; }
-.sales-course[data-course-category] .outcome-stage article>p { grid-column:1; align-self:end; font-size:var(--fs-body-lg); line-height:1.65; }
-.sales-course[data-course-category] .outcome-visual { grid-column:2; grid-row:1/4; height:auto; min-height:270px; margin:0; background:color-mix(in srgb,var(--course-accent) 11%,#f4f2ef); }
+.sales-course[data-course-category] .sales-outcome { position:relative; padding:clamp(68px,8vh,108px) 0; background:color-mix(in srgb,var(--course-accent) 7%,#f4f2ef); }
+.sales-course[data-course-category] .sales-outcome>.container { display:block; }
+.sales-course[data-course-category] .sales-outcome .sales-section-head { position:static; max-width:900px; }
+.sales-course[data-course-category] .sales-outcome .sales-section-head h2 { font-size:clamp(2.6rem,4.2vw,4.5rem); }
+.sales-course[data-course-category] .outcome-stage { grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-top:clamp(30px,4vh,48px); }
+.sales-course[data-course-category] .outcome-stage article,.sales-course[data-course-category] .outcome-stage article:nth-child(2) { min-width:0; min-height:430px; display:flex; flex-direction:column; gap:0; padding:clamp(24px,2.4vw,34px); border:1px solid color-mix(in srgb,var(--course-accent) 18%,#ded9d4); border-radius:26px; box-shadow:0 22px 60px color-mix(in srgb,var(--course-accent) 9%,transparent); transform:none; }
+.sales-course[data-course-category] .outcome-stage h3 { font-size:clamp(1.45rem,2vw,2rem); line-height:1.16; }
+.sales-course[data-course-category] .outcome-stage article>p { margin-top:auto; font-size:var(--fs-body); line-height:1.6; }
+.sales-course[data-course-category] .outcome-visual { width:100%; height:200px; min-height:0; margin:18px 0; background:color-mix(in srgb,var(--course-accent) 11%,#f4f2ef); }
 .sales-course[data-course-category] .outcome-visual { position:relative; overflow:hidden; align-items:center; border:1px solid color-mix(in srgb,var(--course-accent) 15%,transparent); isolation:isolate; }
 .sales-course[data-course-category] .outcome-visual::before { content:""; position:absolute; inset:auto 8% -42% auto; width:70%; aspect-ratio:1; border-radius:50%; background:color-mix(in srgb,var(--course-accent) 18%,transparent); filter:blur(42px); z-index:-1; }
-.sales-course[data-course-category] .outcome-icon { --outcome-icon-index:0; position:relative; display:block; width:min(100%,350px); aspect-ratio:4/5; overflow:hidden; border-radius:26px; filter:drop-shadow(0 22px 28px color-mix(in srgb,var(--course-accent) 22%,transparent)); animation:outcomeIconFloat 5.4s ease-in-out infinite; transition:transform .35s ease,filter .35s ease; }
+.sales-course[data-course-category] .outcome-icon { --outcome-icon-index:0; position:relative; display:block; width:min(100%,160px); aspect-ratio:4/5; overflow:hidden; border-radius:22px; filter:drop-shadow(0 18px 24px color-mix(in srgb,var(--course-accent) 22%,transparent)); animation:outcomeIconFloat 5.4s ease-in-out infinite; transition:transform .35s ease,filter .35s ease; }
 .sales-course[data-course-category] .outcome-stage article:nth-child(2) .outcome-icon { animation-delay:-1.8s; }
 .sales-course[data-course-category] .outcome-stage article:nth-child(3) .outcome-icon { animation-delay:-3.6s; }
 .sales-course[data-course-category] .outcome-icon img { position:absolute; top:50%; left:calc(var(--outcome-icon-index) * -100%); width:300%; max-width:none; height:auto; transform:translateY(-50%); }
@@ -1537,7 +1537,7 @@ body[data-viewer="L3"] [data-level="L2"] { display: none; }
 
 .course-enhanced .course-scene:not(.is-visible)>.container { opacity:0; transform:translateY(44px); }
 .course-enhanced .course-scene>.container { transition:opacity .75s ease,transform .85s cubic-bezier(.2,.7,.2,1); }
-@media(max-width:1050px){.sales-course[data-course-category] .sales-outcome>.container{grid-template-columns:1fr}.sales-course[data-course-category] .sales-outcome .sales-section-head{position:static}.sales-course[data-course-category] .outcome-stage article,.sales-course[data-course-category] .outcome-stage article:nth-child(2){grid-template-columns:1fr;min-height:0}.sales-course[data-course-category] .outcome-visual{grid-column:1;grid-row:auto;min-height:240px}.course-conviction{grid-template-columns:1fr}.course-conviction>i{rotate:90deg}.course-journey{display:none}}
+@media(max-width:1050px){.sales-course[data-course-category] .sales-outcome>.container{grid-template-columns:1fr}.sales-course[data-course-category] .sales-outcome .sales-section-head{position:static}.sales-course[data-course-category] .outcome-stage{grid-template-columns:1fr}.sales-course[data-course-category] .outcome-stage article,.sales-course[data-course-category] .outcome-stage article:nth-child(2){min-height:0}.sales-course[data-course-category] .outcome-visual{min-height:200px}.course-conviction{grid-template-columns:1fr}.course-conviction>i{rotate:90deg}.course-journey{display:none}}
 @media(max-width:700px){.sales-course[data-course-category] .sales-question{min-height:auto}.sales-course[data-course-category] .sales-question h2{font-size:3rem}.course-conviction ul{grid-template-columns:1fr}.course-conviction li{min-height:64px}.sales-course[data-course-category] .sales-stack{min-height:auto}.sales-course[data-course-category] .sales-apply{min-height:72svh}.course-enhanced .course-scene:not(.is-visible)>.container{transform:translateY(24px)}}
 @media(prefers-reduced-motion:reduce){.course-enhanced .course-scene>.container{transition:none}.course-enhanced .course-scene:not(.is-visible)>.container{opacity:1;transform:none}.course-journey *{transition:none!important}}
 
