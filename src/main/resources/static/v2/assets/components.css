@@ -1250,7 +1250,11 @@ body[data-viewer="L3"] [data-level="L2"] { display: none; }
 .application-panel { position:relative; padding:clamp(44px,6vw,96px); background:radial-gradient(circle at 100% 0,rgba(255,91,31,.1),transparent 32%),#f3efeb; }
 .application-panel form { width:min(100%,840px); }
 .application-panel fieldset { padding:clamp(28px,4vw,52px); border:1px solid rgba(30,21,17,.09); border-radius:26px; background:rgba(255,255,255,.78); box-shadow:0 26px 75px rgba(60,34,22,.09); backdrop-filter:blur(18px); }
-.application-panel legend { margin-bottom:var(--sp-8); }
+.application-panel legend { float:left; width:100%; margin:0 0 var(--sp-8); padding:0; }
+.application-panel legend+* { clear:both; }
+.application-panel legend .form-kicker,.application-panel legend strong { display:block; }
+.application-panel legend .form-kicker { margin-bottom:var(--sp-3); }
+.application-panel legend strong { color:var(--ink-950); font:inherit; line-height:1.08; }
 .application-panel label>.input,.application-panel label>.select,.application-panel label>.textarea,.form-choice { border-color:#ded5cf; background:rgba(248,245,242,.9); }
 .application-panel .input:focus,.application-panel .select:focus,.application-panel .textarea:focus { border-color:#ff5b1f; box-shadow:0 0 0 4px rgba(255,91,31,.1); }
 .application-summary { background:linear-gradient(140deg,#0a0807,#21150f); }
@@ -1267,7 +1271,7 @@ body[data-viewer="L3"] [data-level="L2"] { display: none; }
 @media(prefers-reduced-motion:reduce){.application-orbit{animation:none}}
 
 /* 수강 신청 1단계 — 과정 직접 선택 / 추천 상담 분기 */
-.course-choice-step .course-choice-lead { margin-top:-22px; margin-bottom:28px; color:#736b67; line-height:1.7; }
+.course-choice-step .course-choice-lead { max-width:620px; margin:0 0 28px; color:#736b67; line-height:1.7; }
 .application-route-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
 .application-route-card { position:relative; min-height:164px; display:grid!important; grid-template-columns:auto 1fr auto; gap:18px; align-items:center; padding:24px; overflow:hidden; color:#302722!important; border:1px solid #ddd3cc; border-radius:20px; background:rgba(255,255,255,.86); cursor:pointer; transition:border-color .22s ease,transform .22s ease,box-shadow .22s ease,background .22s ease; }
 .application-route-card:hover { transform:translateY(-3px); border-color:#ff8a5e; box-shadow:0 18px 42px rgba(71,35,19,.1); }
@@ -1294,7 +1298,7 @@ body[data-viewer="L3"] [data-level="L2"] { display: none; }
 .application-recommend-note b { color:#ff7540; }
 .application-recommend-note p { margin-top:6px; color:#c8bcb6; line-height:1.65; }
 @keyframes application-reveal { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
-@media(max-width:720px){.application-route-options{grid-template-columns:1fr}.application-route-card{min-height:130px}.course-choice-step .course-choice-lead{margin-top:-14px}.application-steps{gap:3px}.application-steps li{padding:9px 5px}.application-steps span{font-size:10px}}
+@media(max-width:720px){.application-route-options{grid-template-columns:1fr}.application-route-card{min-height:130px}.application-steps{gap:3px}.application-steps li{padding:9px 5px}.application-steps span{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.application-course-picker,.application-recommend-note{animation:none}.application-route-card{transition:none}}
 
 /* 실제 Samsung AXI 상세 정보 순서를 반영한 과정 커버 + 주요정보 */
