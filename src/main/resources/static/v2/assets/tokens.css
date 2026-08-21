@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+
 /* ============================================================
    내일의AI 통합 플랫폼 — 디자인 토큰
    v2 신규 디자인. 기존 static/css/* 와 섞어 쓰지 않는다.
@@ -77,9 +79,9 @@
   --border-brand:  var(--brand-500);
 
   /* ---------- 타이포 ----------
-     Pretendard 를 우선하되 없으면 시스템 한글 폰트로 떨어진다.
-     별도 웹폰트 로드는 하지 않는다(로딩 비용 > 이득). */
-  --font-sans: "Pretendard", "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+     배포 환경에서도 동일하게 보이도록 Pretendard Variable 웹폰트를 사용한다.
+     CDN 장애 시에는 시스템 한글 폰트로 안전하게 대체한다. */
+  --font-sans: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont,
                "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
