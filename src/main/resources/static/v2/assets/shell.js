@@ -170,11 +170,10 @@
     var header = el(
       '<a class="skip-link" href="#main">본문 바로가기</a>' +
       '<div class="servicebar"><div class="container servicebar__inner">' +
-        '<strong style="color:var(--ink-500);letter-spacing:var(--ls-caps);font-size:11px">NETWORK</strong>' +
+        '<strong class="servicebar__brand"><span data-brand="name"></span></strong>' +
         serviceLinks +
       '</div></div>' +
       '<header class="gnb"><div class="container gnb__inner">' +
-        '<a class="gnb__logo" href="' + home + '"><span data-brand="name"></span></a>' +
         '<nav class="gnb__menu" aria-label="주요 메뉴">' + menuLinks + '</nav>' +
         '<div class="gnb__actions">' +
           '<a class="btn btn--ghost btn--sm" href="/v2/login/index.html">로그인</a>' +

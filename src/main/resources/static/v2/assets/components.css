@@ -400,6 +400,7 @@
 .servicebar__inner { display:flex; gap:clamp(22px,3vw,48px); align-items:center; height:68px; overflow-x:auto; scrollbar-width:none; }
 .servicebar__inner::-webkit-scrollbar { display:none; }
 .servicebar__inner>strong { color:#69708b; letter-spacing:.18em; font-size:.78em; white-space:nowrap; }
+.servicebar__inner>.servicebar__brand { color:var(--white); letter-spacing:-.02em; font-size:1em; }
 .servicebar a { position:relative; display:grid; align-items:center; height:100%; color:#969aaf; white-space:nowrap; }
 .servicebar a:hover { color: var(--white); text-decoration: none; }
 .servicebar a[aria-current="true"] { color:var(--white); font-weight:var(--fw-bold); }
@@ -929,7 +930,6 @@ body[data-viewer="L3"] [data-level="L2"] { display: none; }
   --text-link:#e53d00;--border-brand:#ff6a33;--sh-focus:0 0 0 3px #ffd9c7;
 }
 .class-site .servicebar { background:#1b0c06; }
-.class-site .gnb__logo::before { content:"●"; margin-right:8px; color:var(--brand-500); }
 .class-site .btn--primary { color:var(--white); background:var(--brand-600); }
 .class-site .btn--primary:hover { background:var(--brand-700); }
 .class-site>.section:first-of-type { position:relative; overflow:hidden; min-height:470px; display:flex; align-items:center; background:var(--brand-600)!important; }
