@@ -189,11 +189,30 @@
   document.body.append(journey);
   const journeyLinks = [...journey.querySelectorAll('a')];
   const activateJourney = id => journeyLinks.forEach(link => link.setAttribute('aria-current', link.hash === '#' + id ? 'step' : 'false'));
+  const updateJourney = () => {
+    const guideLine = window.innerHeight * .42;
+    let current = journeySections[0];
+    journeySections.forEach(item => {
+      if (item.section.getBoundingClientRect().top <= guideLine) current = item;
+    });
+    if (current) activateJourney(current.id);
+  };
+  let journeyFrame = 0;
+  const requestJourneyUpdate = () => {
+    if (journeyFrame) return;
+    journeyFrame = requestAnimationFrame(() => {
+      updateJourney();
+      journeyFrame = 0;
+    });
+  };
+  journeyLinks.forEach(link => link.addEventListener('click', () => activateJourney(link.hash.slice(1))));
+  window.addEventListener('scroll', requestJourneyUpdate, {passive:true});
+  window.addEventListener('resize', requestJourneyUpdate);
+  updateJourney();
   if ('IntersectionObserver' in window) {
     const sceneObserver = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
-        activateJourney(entry.target.id);
       }
     }),{threshold:.18,rootMargin:'-18% 0px -52%'});
     journeySections.forEach(item => sceneObserver.observe(item.section));
