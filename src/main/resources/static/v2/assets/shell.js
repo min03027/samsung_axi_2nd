@@ -63,84 +63,84 @@
      --------------------------------------------------------- */
   var TRAINEE_NAV = [
     { group: "학습", items: [
-      { key: "home",     label: "학습 홈",      href: "/v2/lxp/trainee/index.html" },
-      { key: "mycourse", label: "내 과정",      href: "/v2/lxp/trainee/my-course.html" },
-      { key: "contents", label: "학습 콘텐츠",  href: "/v2/lxp/trainee/contents.html" }
+      { key: "home",     label: "학습 홈",      href: "/trainee" },
+      { key: "mycourse", label: "내 과정",      href: "/trainee/my-course" },
+      { key: "contents", label: "학습 콘텐츠",  href: "/trainee/contents" }
     ]},
     { group: "평가", items: [
-      { key: "assignment", label: "과제",       href: "/v2/lxp/trainee/assignments.html", badge: "2" },
-      { key: "exam",       label: "온라인 시험", href: "/v2/lxp/trainee/exams.html" },
-      { key: "survey",     label: "설문",        href: "/v2/lxp/trainee/surveys.html" }
+      { key: "assignment", label: "과제",       href: "/trainee/assignment", badge: "2" },
+      { key: "exam",       label: "온라인 시험", href: "/trainee/exam" },
+      { key: "survey",     label: "설문",        href: "/trainee/survey" }
     ]},
     { group: "기록", items: [
-      { key: "attendance", label: "출결 현황",   href: "/v2/lxp/trainee/attendance.html" },
-      { key: "completion", label: "이수 관리",   href: "/v2/lxp/trainee/completion.html" }
+      { key: "attendance", label: "출결 현황",   href: "/trainee/attendance" },
+      { key: "completion", label: "이수 관리",   href: "/trainee/completion-management" }
     ]},
     { group: "성장", items: [
-      { key: "roadmap",    label: "직무 로드맵",     href: "/v2/lxp/trainee/ai-roadmap.html" },
-      { key: "curriculum", label: "커리큘럼 추천",   href: "/v2/lxp/trainee/ai-curriculum.html" },
-      { key: "aiqna",      label: "AI 학습 도우미",  href: "/v2/lxp/trainee/ai-qna.html" }
+      { key: "roadmap",    label: "직무 로드맵",     href: "/trainee/ai/roadmap" },
+      { key: "curriculum", label: "커리큘럼 추천",   href: "/trainee/ai/curriculum" },
+      { key: "aiqna",      label: "AI 학습 도우미",  href: "/trainee/ai/qna" }
     ]},
     { group: "소통", items: [
-      { key: "notice",   label: "공지사항",     href: "/v2/lxp/trainee/notices.html" },
-      { key: "qna",      label: "Q&A",          href: "/v2/lxp/trainee/qna.html" },
-      { key: "tutoring", label: "튜터링",       href: "/v2/lxp/trainee/tutoring.html" },
-      { key: "alarm",    label: "알림함",       href: "/v2/lxp/trainee/alarm.html", badge: "5" }
+      { key: "notice",   label: "공지사항",     href: "/trainee/notice" },
+      { key: "qna",      label: "Q&A",          href: "/trainee/qna" },
+      { key: "tutoring", label: "튜터링",       href: "/trainee/qna/tutoring" },
+      { key: "alarm",    label: "알림함",       href: "/trainee/alarm", badge: "5" }
     ]}
   ];
 
   var ADMIN_NAV = [
     { group: "관제", items: [
-      { key: "dash",    label: "운영 관제",   href: "/v2/admin/index.html" },
-      { key: "queue",   label: "개입 큐",     href: "/v2/admin/queue.html", badge: "4" },
-      { key: "dropout", label: "이탈 예측",   href: "/v2/admin/analytics-dropout.html", level: "L2" }
+      { key: "dash",    label: "운영 관제",   href: "/admin" },
+      { key: "queue",   label: "개입 큐",     href: "/admin/analytics/dropout", badge: "4" },
+      { key: "dropout", label: "이탈 예측",   href: "/admin/analytics/dropout", level: "L2" }
     ]},
     { group: "과정·콘텐츠", items: [
-      { key: "courses",  label: "과정 관리",     href: "/v2/admin/courses.html", level: "L2" },
-      { key: "schedule", label: "차시·일정",     href: "/v2/admin/schedule.html", level: "L2" },
-      { key: "contents", label: "콘텐츠 라이브러리", href: "/v2/admin/contents.html" },
-      { key: "versions", label: "콘텐츠 버전",   href: "/v2/admin/content-versions.html" }
+      { key: "courses",  label: "과정 관리",     href: "/admin/courses", level: "L2" },
+      { key: "schedule", label: "차시·일정",     href: "/admin/courses/schedule", level: "L2" },
+      { key: "contents", label: "콘텐츠 라이브러리", href: "/instructor/contents" },
+      { key: "versions", label: "콘텐츠 버전",   href: null /* 화면 미구현 */ }
     ]},
     { group: "사용자", items: [
-      { key: "trainees",    label: "훈련생 관리", href: "/v2/admin/trainees.html" },
-      { key: "instructors", label: "강사 관리",   href: "/v2/admin/instructors.html", level: "L2" },
-      { key: "pending",     label: "가입 승인",   href: "/v2/admin/pending-users.html", level: "L2", badge: "7" },
-      { key: "enrollments", label: "수강 승인",   href: "/v2/admin/enrollments.html", level: "L2" },
-      { key: "classes",     label: "분반 관리",   href: "/v2/admin/classes.html", level: "L2" }
+      { key: "trainees",    label: "훈련생 관리", href: "/admin/users/trainees" },
+      { key: "instructors", label: "강사 관리",   href: "/admin/users/instructors", level: "L2" },
+      { key: "pending",     label: "가입 승인",   href: "/admin/users/pending", level: "L2", badge: "7" },
+      { key: "enrollments", label: "수강 승인",   href: "/admin/enrollments/pending", level: "L2" },
+      { key: "classes",     label: "분반 관리",   href: null /* 화면 미구현 */, level: "L2" }
     ]},
     { group: "출결·이수", items: [
-      { key: "attendance",  label: "출결부",      href: "/v2/admin/attendance.html" },
-      { key: "completion",  label: "이수 관리",   href: "/v2/admin/completion.html", level: "L2" },
-      { key: "certificate", label: "이수증 편집", href: "/v2/admin/certificate-editor.html", level: "L2" }
+      { key: "attendance",  label: "출결부",      href: "/admin/attendance" },
+      { key: "completion",  label: "이수 관리",   href: "/admin/completion", level: "L2" },
+      { key: "certificate", label: "이수증 편집", href: null /* 화면 미구현 */, level: "L2" }
     ]},
     { group: "평가·감독", items: [
-      { key: "exams",       label: "시험 관리",   href: "/v2/admin/exams.html" },
-      { key: "questions",   label: "문항 은행",   href: "/v2/admin/questions.html" },
-      { key: "grading",     label: "채점",        href: "/v2/admin/grading.html", badge: "18" },
-      { key: "assignments", label: "과제 관리",   href: "/v2/admin/assignments.html" },
-      { key: "proctor",     label: "시험 감독",   href: "/v2/admin/proctor.html" }
+      { key: "exams",       label: "시험 관리",   href: "/admin/evaluation/exams" },
+      { key: "questions",   label: "문항 은행",   href: "/admin/evaluation/questions" },
+      { key: "grading",     label: "채점",        href: "/admin/evaluation/grading", badge: "18" },
+      { key: "assignments", label: "과제 관리",   href: "/admin/evaluation/assignments" },
+      { key: "proctor",     label: "시험 감독",   href: "/admin/evaluation/monitoring" }
     ]},
     { group: "소통", items: [
-      { key: "notices",   label: "공지사항",     href: "/v2/admin/notices.html" },
-      { key: "notify",    label: "알림 발송",    href: "/v2/admin/notifications.html", level: "L2" },
-      { key: "reminder",  label: "리마인더 설정", href: "/v2/admin/reminder.html", level: "L2" },
-      { key: "surveys",   label: "설문 관리",    href: "/v2/admin/surveys.html" },
-      { key: "qna",       label: "Q&A 응답",     href: "/v2/admin/qna.html" },
-      { key: "tutoring",  label: "튜터링",       href: "/v2/admin/tutoring.html" }
+      { key: "notices",   label: "공지사항",     href: "/admin/notice" },
+      { key: "notify",    label: "알림 발송",    href: "/admin/notice/alarms", level: "L2" },
+      { key: "reminder",  label: "리마인더 설정", href: "/admin/settings/reminder", level: "L2" },
+      { key: "surveys",   label: "설문 관리",    href: "/admin/survey" },
+      { key: "qna",       label: "Q&A 응답",     href: "/admin/support/qna" },
+      { key: "tutoring",  label: "튜터링",       href: "/admin/support/tutoring" }
     ]},
     { group: "공개사이트 CMS", items: [
-      { key: "cms-courses",  label: "과정 마스터", href: "/v2/admin/cms-courses.html", level: "L2" },
-      { key: "cms-reviews",  label: "후기 관리",   href: "/v2/admin/cms-reviews.html", level: "L2" },
-      { key: "cms-partners", label: "기업·기관",   href: "/v2/admin/cms-partners.html", level: "L2" },
-      { key: "cms-inquiry",  label: "문의 통합",   href: "/v2/admin/cms-inquiries.html", level: "L2" },
-      { key: "cms-site",     label: "메뉴·배너",   href: "/v2/admin/cms-site.html", level: "L2" },
-      { key: "cms-seo",      label: "검색·SEO",    href: "/v2/admin/cms-seo.html", level: "L1" }
+      { key: "cms-courses",  label: "과정 마스터", href: null /* 화면 미구현 */, level: "L2" },
+      { key: "cms-reviews",  label: "후기 관리",   href: null /* 화면 미구현 */, level: "L2" },
+      { key: "cms-partners", label: "기업·기관",   href: null /* 화면 미구현 */, level: "L2" },
+      { key: "cms-inquiry",  label: "문의 통합",   href: null /* 화면 미구현 */, level: "L2" },
+      { key: "cms-site",     label: "메뉴·배너",   href: null /* 화면 미구현 */, level: "L2" },
+      { key: "cms-seo",      label: "검색·SEO",    href: null /* 화면 미구현 */, level: "L1" }
     ]},
     { group: "설정", items: [
-      { key: "admins",   label: "관리자 계정", href: "/v2/admin/admins.html", level: "L1" },
-      { key: "roles",    label: "권한 관리",   href: "/v2/admin/roles.html", level: "L1" },
-      { key: "settings", label: "시스템 설정", href: "/v2/admin/settings.html", level: "L1" },
-      { key: "audit",    label: "감사 로그",   href: "/v2/admin/audit-log.html", level: "L1" }
+      { key: "admins",   label: "관리자 계정", href: "/admin/admins", level: "L1" },
+      { key: "roles",    label: "권한 관리",   href: null /* 화면 미구현 */, level: "L1" },
+      { key: "settings", label: "시스템 설정", href: null /* 화면 미구현 */, level: "L1" },
+      { key: "audit",    label: "감사 로그",   href: null /* 화면 미구현 */, level: "L1" }
     ]}
   ];
 
@@ -252,11 +252,14 @@
     opts = opts || {};
     var isAdmin = opts.role === "admin";
     var groups = isAdmin ? ADMIN_NAV : TRAINEE_NAV;
-    var homeHref = isAdmin ? "/v2/admin/index.html" : "/v2/lxp/trainee/index.html";
+    var homeHref = window.lxpUrl(isAdmin ? "/admin" : "/trainee");
 
     var navHtml = groups.map(function (g) {
       var items = g.items.map(function (it) {
-        return '<a class="sidebar__link" href="' + it.href + '"' +
+        var to = it.href
+          ? ' href="' + (window.lxpUrl ? window.lxpUrl(it.href) : it.href) + '"'
+          : ' href="#" onclick="alert(\'준비 중인 기능입니다.\');return false"';
+        return '<a class="sidebar__link"' + to +
           (it.key === opts.nav ? ' aria-current="page"' : "") +
           (it.level ? ' data-level="' + it.level + '"' : "") + ">" +
           "<span>" + esc(it.label) + "</span>" +
@@ -275,8 +278,8 @@
         "</a>" +
         '<nav class="sidebar__nav" aria-label="' + (isAdmin ? "관리 메뉴" : "학습 메뉴") + '">' + navHtml + "</nav>" +
         '<div class="sidebar__foot">' +
-          '<a class="sidebar__link" href="/v2/' + (isAdmin ? "admin" : "lxp/trainee") + '/my-info.html"><span>내 정보</span></a>' +
-          '<a class="sidebar__link" href="/v2/login/index.html"><span>로그아웃</span></a>' +
+          '<a class="sidebar__link" href="' + window.lxpUrl(isAdmin ? "/admin/my-info" : "/trainee/my-info") + '"><span>내 정보</span></a>' +
+          '<a class="sidebar__link" href="' + window.lxpUrl("/logout") + '"><span>로그아웃</span></a>' +
         "</div>" +
       "</aside>"
     );

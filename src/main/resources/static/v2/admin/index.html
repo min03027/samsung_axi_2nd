@@ -19,8 +19,8 @@
       <p class="muted small">2026.08.21 (금) 09:12 기준 · 운영 과정 18개</p>
     </div>
     <div class="btn-group">
-      <a class="btn btn--outline btn--sm" href="/v2/admin/briefing.html">오늘 브리핑 내려받기</a>
-      <a class="btn btn--primary btn--sm" href="/v2/admin/schedule.html" data-level="L2">운영 일정 등록</a>
+      <a class="btn btn--outline btn--sm" href="/admin" data-lxp>오늘 브리핑 내려받기</a>
+      <a class="btn btn--primary btn--sm" href="/admin/courses/schedule" data-lxp data-level="L2">운영 일정 등록</a>
     </div>
   </div>
 
@@ -73,7 +73,7 @@
           <span class="eyebrow">COHORT SIGNAL</span>
           <p class="card__title">학습자 상태 분포</p>
         </div>
-        <a class="btn btn--ghost btn--sm" style="margin-left:auto" href="/v2/admin/settings.html" data-level="L1">기준 설정</a>
+        <a class="btn btn--ghost btn--sm" style="margin-left:auto" href="/admin/settings/reminder" data-lxp data-level="L1">기준 설정</a>
       </div>
       <div class="card__body">
         <div class="signalmap">
@@ -100,7 +100,7 @@
             <span class="legend__item"><i class="dot dot--warn"></i> 관찰 <b class="num">4</b></span>
             <span class="legend__item"><i class="dot dot--risk"></i> 개입 <b class="num">2</b></span>
           </div>
-          <a class="btn btn--ghost btn--sm" href="/v2/admin/analytics-dropout.html" data-level="L2">전체 분석 →</a>
+          <a class="btn btn--ghost btn--sm" href="/admin/analytics/dropout" data-lxp data-level="L2">전체 분석 →</a>
         </div>
       </div>
     </section>
@@ -112,7 +112,7 @@
           <span class="eyebrow">ACTION QUEUE</span>
           <p class="card__title">우선 개입 큐</p>
         </div>
-        <a class="btn btn--ghost btn--sm" style="margin-left:auto" href="/v2/admin/queue.html">전체 4건 →</a>
+        <a class="btn btn--ghost btn--sm" style="margin-left:auto" href="/admin/analytics/dropout" data-lxp>전체 4건 →</a>
       </div>
       <div class="table-wrap">
         <table class="table table--rows">
@@ -133,7 +133,7 @@
               </td>
               <td><span class="badge badge--risk">출석 2회 누락</span> <span class="badge badge--risk">접속 급감</span></td>
               <td class="col-num"><span class="queue-score num">92</span></td>
-              <td class="col-actions"><a class="btn btn--sm btn--primary" href="/v2/admin/trainee-detail.html">확인</a></td>
+              <td class="col-actions"><a class="btn btn--sm btn--primary" href="/admin/users/trainees" data-lxp>확인</a></td>
             </tr>
             <tr>
               <td>
@@ -142,7 +142,7 @@
               </td>
               <td><span class="badge badge--risk">과제 2회 미제출</span></td>
               <td class="col-num"><span class="queue-score num">78</span></td>
-              <td class="col-actions"><a class="btn btn--sm btn--primary" href="/v2/admin/trainee-detail.html">확인</a></td>
+              <td class="col-actions"><a class="btn btn--sm btn--primary" href="/admin/users/trainees" data-lxp>확인</a></td>
             </tr>
             <tr>
               <td>
@@ -151,7 +151,7 @@
               </td>
               <td><span class="badge badge--warn">진도 3일 정체</span></td>
               <td class="col-num"><span class="queue-score queue-score--mid num">65</span></td>
-              <td class="col-actions"><a class="btn btn--sm btn--outline" href="/v2/admin/trainee-detail.html">확인</a></td>
+              <td class="col-actions"><a class="btn btn--sm btn--outline" href="/admin/users/trainees" data-lxp>확인</a></td>
             </tr>
             <tr>
               <td>
@@ -160,7 +160,7 @@
               </td>
               <td><span class="badge badge--warn">설문 부정 응답</span></td>
               <td class="col-num"><span class="queue-score queue-score--low num">52</span></td>
-              <td class="col-actions"><a class="btn btn--sm btn--outline" href="/v2/admin/trainee-detail.html">확인</a></td>
+              <td class="col-actions"><a class="btn btn--sm btn--outline" href="/admin/users/trainees" data-lxp>확인</a></td>
             </tr>
           </tbody>
         </table>
@@ -176,7 +176,7 @@
     <!-- 오늘 운영 타임라인 -->
     <section class="card">
       <div class="card__head"><p class="card__title">오늘 운영 일정</p>
-        <a class="btn btn--ghost btn--sm" style="margin-left:auto" href="/v2/admin/schedule.html" data-level="L2">일정 관리</a>
+        <a class="btn btn--ghost btn--sm" style="margin-left:auto" href="/admin/courses/schedule" data-lxp data-level="L2">일정 관리</a>
       </div>
       <div class="card__body">
         <div class="timeline">
@@ -184,22 +184,22 @@
             <p class="timeline__time">09:00</p>
             <p class="timeline__title">데이터 분석 4기 · 3차시</p>
             <p class="timeline__meta">출석 34/35 · <span style="color:var(--signal-warn-600)">1명 미인증</span>
-              <a class="small" href="/v2/admin/attendance.html">출결부 열기</a></p>
+              <a class="small" href="/admin/attendance" data-lxp>출결부 열기</a></p>
           </div>
           <div class="timeline__item timeline__item--now">
             <p class="timeline__time">11:00</p>
             <p class="timeline__title">의료 AI Campus · 프로젝트 점검</p>
-            <p class="timeline__meta">진행 중 · 담당 한지훈 <a class="small" href="/v2/admin/courses.html">과정 열기</a></p>
+            <p class="timeline__meta">진행 중 · 담당 한지훈 <a class="small" href="/admin/courses" data-lxp>과정 열기</a></p>
           </div>
           <div class="timeline__item">
             <p class="timeline__time">14:00</p>
             <p class="timeline__title">SQL 인증평가</p>
-            <p class="timeline__meta">응시 예정 42명 · 감독 배정 완료 <a class="small" href="/v2/admin/proctor.html">감독 화면</a></p>
+            <p class="timeline__meta">응시 예정 42명 · 감독 배정 완료 <a class="small" href="/admin/evaluation/monitoring" data-lxp>감독 화면</a></p>
           </div>
           <div class="timeline__item">
             <p class="timeline__time">17:30</p>
             <p class="timeline__title">AIoT 자율주행 · 회고 마감</p>
-            <p class="timeline__meta">제출 12/28 <a class="small" href="/v2/admin/assignments.html">과제 열기</a></p>
+            <p class="timeline__meta">제출 12/28 <a class="small" href="/admin/evaluation/assignments" data-lxp>과제 열기</a></p>
           </div>
         </div>
       </div>
@@ -210,16 +210,16 @@
       <section class="card">
         <div class="card__head"><p class="card__title">처리 대기</p></div>
         <div class="card__body stack-sm">
-          <a class="row row--between" href="/v2/admin/grading.html" style="padding:var(--sp-3) 0;border-bottom:1px solid var(--border-subtle);color:inherit">
+          <a class="row row--between" href="/admin/evaluation/grading" data-lxp style="padding:var(--sp-3) 0;border-bottom:1px solid var(--border-subtle);color:inherit">
             <span>시험·과제 채점</span><span class="badge badge--warn num">18건</span>
           </a>
-          <a class="row row--between" href="/v2/admin/pending-users.html" style="padding:var(--sp-3) 0;border-bottom:1px solid var(--border-subtle);color:inherit" data-level="L2">
+          <a class="row row--between" href="/admin/users/pending" data-lxp style="padding:var(--sp-3) 0;border-bottom:1px solid var(--border-subtle);color:inherit" data-level="L2">
             <span>가입 승인</span><span class="badge num">3건</span>
           </a>
-          <a class="row row--between" href="/v2/admin/enrollments.html" style="padding:var(--sp-3) 0;border-bottom:1px solid var(--border-subtle);color:inherit" data-level="L2">
+          <a class="row row--between" href="/admin/enrollments/pending" data-lxp style="padding:var(--sp-3) 0;border-bottom:1px solid var(--border-subtle);color:inherit" data-level="L2">
             <span>수강신청 승인</span><span class="badge num">4건</span>
           </a>
-          <a class="row row--between" href="/v2/admin/qna.html" style="padding:var(--sp-3) 0;color:inherit">
+          <a class="row row--between" href="/admin/support/qna" data-lxp style="padding:var(--sp-3) 0;color:inherit">
             <span>Q&amp;A 미응답</span><span class="badge badge--risk num">6건</span>
           </a>
         </div>
@@ -235,7 +235,7 @@
             <dt>자동 알림</dt><dd class="num">128건 발송 완료</dd>
             <dt>최근 배포</dt><dd class="num">2026.08.20 21:40</dd>
           </dl>
-          <a class="btn btn--ghost btn--sm btn--block" style="margin-top:var(--sp-4)" href="/v2/admin/audit-log.html" data-level="L1">감사 로그 보기</a>
+          <a class="btn btn--ghost btn--sm btn--block" style="margin-top:var(--sp-4)" href="#" onclick="alert('준비 중인 기능입니다.');return false" data-level="L1">감사 로그 보기</a>
         </div>
       </section>
     </div>

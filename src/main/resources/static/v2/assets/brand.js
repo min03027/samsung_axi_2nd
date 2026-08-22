@@ -21,10 +21,13 @@
    그래서 호스트를 보고 고른다. 앱이 서빙하는 곳 목록만 관리하면 된다. */
 var LXP_ORIGIN = "https://lms.samsungax.com";   // 운영 LXP
 var LXP_APP_HOSTS = ["lms.samsungax.com", "localhost", "127.0.0.1"];
-var LXP_LOGIN_HREF = (function () {
+/* LXP 화면 주소를 만든다. 화면 파일에는 실제 경로("/trainee/my-course")만 쓰고
+   여기서 배포 위치에 맞게 상대/절대를 고른다. */
+function lxpUrl(path) {
   var host = (typeof location !== "undefined" && location.hostname) || "";
-  return LXP_APP_HOSTS.indexOf(host) !== -1 ? "/login" : LXP_ORIGIN + "/login";
-})();
+  return LXP_APP_HOSTS.indexOf(host) !== -1 ? path : LXP_ORIGIN + path;
+}
+var LXP_LOGIN_HREF = lxpUrl("/login");
 
 window.BRAND = {
   /* --- 정체 --- */
@@ -69,6 +72,8 @@ window.BRAND = {
 
 /* 화면에서 문자열을 심는 헬퍼.
    <span data-brand="name"></span> 형태로 쓰면 자동 치환된다. */
+window.lxpUrl = lxpUrl;
+
 window.applyBrand = function applyBrand(root) {
   var scope = root || document;
   scope.querySelectorAll("[data-brand]").forEach(function (el) {
@@ -82,6 +87,11 @@ window.applyBrand = function applyBrand(root) {
   scope.querySelectorAll("[data-brand-href]").forEach(function (el) {
     var val = window.BRAND[el.getAttribute("data-brand-href")];
     if (typeof val === "string") el.setAttribute("href", val);
+  });
+  // <a href="/trainee/my-course" data-lxp> — 실제 LXP 화면으로 가는 링크.
+  // href 에 진짜 경로를 그대로 두고, 정적 배포에서만 절대주소로 바꾼다.
+  scope.querySelectorAll("[data-lxp]").forEach(function (el) {
+    el.setAttribute("href", window.lxpUrl(el.getAttribute("href")));
   });
   // <title> 안의 {brand} 치환
   if (document.title.indexOf("{brand}") !== -1) {
