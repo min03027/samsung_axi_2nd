@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // 정적 리소스, 로그인/가입, H2 콘솔(local)
                         .requestMatchers("/static/**", "/css/**", "/js/**", "/img/**",
-                                "/icons/**", "/font/**", "/favicon.ico", "/v2/**").permitAll()
+                                "/icons/**", "/font/**", "/favicon.ico").permitAll()
                         .requestMatchers("/", "/login", "/signup/**", "/error").permitAll()
                         // 약관·방침 — 가입 동의 대상 문서라 로그인 전에도 열려야 한다
                         .requestMatchers("/terms", "/privacy").permitAll()
@@ -76,7 +76,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/v2/index.html")   // 로그아웃하면 통합 홈으로
+                        .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 )
                 // H2 콘솔용 (local 프로필에서만 콘솔이 열림)

@@ -257,9 +257,9 @@ class AuthSecurityAuditTest {
         mvc.perform(get("/trainee/my-course").session(session))
                 .andExpect(status().isOk());
 
-        // 로그아웃 — 통합 홈(v2)으로 보낸다
+        // 로그아웃
         mvc.perform(post("/logout").with(csrf()).session(session))
-                .andExpect(redirectedUrl("/v2/index.html"));
+                .andExpect(redirectedUrl("/login?logout"));
 
         // 같은 세션 재사용 → 미인증으로 로그인 리다이렉트
         mvc.perform(get("/trainee/my-course").session(session))

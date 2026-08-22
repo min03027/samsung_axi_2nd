@@ -28,18 +28,6 @@ public class AuthController {
         return "01-login/login";
     }
 
-    /*
-     * v2 화면(몰입클라쓰)의 '수강생 로그인' 진입점.
-     * v2 에서 /login 으로 주소를 걸지 않고 v2 경로 안에서 같은 화면을 연다.
-     * 정적 복사본을 두지 않고 같은 템플릿을 렌더하는 이유 — 로그인 폼은 CSRF 토큰과
-     * 실패 사유(?error/?pending) 표시를 서버가 심어 줘야 동작한다. 복사본은 곧 원본과 갈린다.
-     * 인증 처리는 그대로 POST /login (Spring Security) 이다.
-     */
-    @GetMapping({"/v2/login", "/v2/login/index.html"})
-    public String v2LoginPage() {
-        return "01-login/login";
-    }
-
     /** 가입 유형 선택 */
     @GetMapping("/signup")
     public String signupType() {

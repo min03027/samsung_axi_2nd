@@ -1,8 +1,0 @@
-{
-  "name": "samsung-axi-2nd",
-  "compatibility_date": "2026-08-21",
-  "assets": {
-    "directory": "./src/main/resources/static",
-    "not_found_handling": "404-page"
-  }
-}

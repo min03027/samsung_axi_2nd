@@ -21,21 +21,17 @@ K-디지털 트레이닝 훈련기관 학습데이터관리시스템(LMS). 기�
 
 ## Git
 
-- **저장소가 3개다. 푸시 전에 `git remote -v` 로 확인할 것 — 리모트 이름이 PC 마다 다르다.**
+- **푸시는 반드시 https://github.com/woongscoding/axi_project (사용자 소유) 로만 한다.**
+- **⚠ 리모트 이름이 PC 마다 다르다. 푸시 전에 `git remote -v` 로 확인할 것.**
 
-  | 저장소 | 용도 | 사무실 PC | **Mac (`~/Desktop/test/samsung-lxp`)** |
-  |---|---|---|---|
-  | `woongscoding/axi_project` | **정본** — 코드·운영 배포(`v*` 태그) | `origin` | **`a`** |
-  | `min03027/samsung_axi_2nd` | **공유용** — Cloudflare 정적 배포가 이 저장소에 연결됨 | — | **`cf`** |
-  | `mina-2026-ai/samsung-lxp` | **금지** — 옛 프로토타입 저장소 | `mina-old` | **`origin` ← 여기선 origin 이 금지 대상** |
+  | 환경 | 정본(axi_project) | 금지(mina-2026-ai) |
+  |---|---|---|
+  | 사무실 PC | `origin` | `mina-old` |
+  | **Mac (`~/Desktop/test/samsung-lxp`)** | **`a`** | **`origin` ← 여기선 origin 이 금지 대상** |
 
   Mac 에서 `git push origin main` 을 그대로 치면 **금지 저장소로 나간다.**
-  Mac 기준: 정본 `git push a main` / 태그 `git push a v0.1.x-draft` / 공유용 `git push cf main`.
+  Mac 에서는 항상 `git push a main` / `git push a v0.1.x-draft`.
   `docs/deploy-guide.md` 는 사무실 PC 기준으로 쓰여 있어 `origin` 이라고 돼 있다 — 이 표를 우선한다.
-
-- **⚠ 화면(`static/v2/**`)을 고쳤으면 `a` 와 `cf` **둘 다** 푸시할 것.**
-  `cf` 에만 Cloudflare 가 붙어 있어서, `a` 에만 올리면 다른 사람이 보는 화면은 그대로다.
-  (2026-08-22 실제 사고 — `a` 에만 5커밋 올리고 "왜 남들은 옛날 화면이 보이냐"로 한참 헤맸다.)
 - 1인 개발이므로 main 직접 커밋 허용. 규모 있는 작업(병렬 세션·실험)은 `feat/*` 브랜치 + worktree(`C:\work\` — OneDrive 밖이라 init 스크립트 불필요).
 - 커밋 메시지 한글, 작은 단위 유지.
 

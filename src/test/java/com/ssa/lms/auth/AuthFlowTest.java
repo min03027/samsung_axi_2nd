@@ -38,19 +38,6 @@ class AuthFlowTest {
     }
 
     @Test
-    void v2_수강생_로그인_진입점이_같은_로그인_화면을_렌더한다() throws Exception {
-        // v2 화면(몰입클라쓰)은 /login 으로 주소를 걸지 않고 v2 경로 안에서 같은 화면을 연다.
-        // 잘린 응답도 200 이므로 </html> 까지 확인한다 (CLAUDE.md 규칙 3).
-        for (String url : new String[]{"/v2/login", "/v2/login/index.html"}) {
-            String html = mvc.perform(get(url))
-                    .andExpect(status().isOk())
-                    .andExpect(view().name("01-login/login"))
-                    .andReturn().getResponse().getContentAsString();
-            assertThat(html).contains("</html>");
-        }
-    }
-
-    @Test
     void 훈련생_가입시_PENDING_상태와_동의시각이_저장되고_비밀번호는_해시된다() throws Exception {
         mvc.perform(post("/signup/trainee").with(csrf())
                         .param("loginId", "newtrainee")

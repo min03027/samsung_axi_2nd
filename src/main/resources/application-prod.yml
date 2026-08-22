@@ -26,12 +26,6 @@ spring:
   thymeleaf:
     cache: true   # 공통 설정(개발용 false) 재정의
 
-# Cloudflare 터널 뒤에 있어서 앱은 자기가 HTTPS 로 서비스되는 줄 모른다.
-# 이게 없으면 로그인 후 리다이렉트가 http:// 로 나가고, 브라우저가 https↔http 를
-# 오가면서 세션이 끊긴다 (2026-08-22 "로그인이 됐다 안 됐다" 증상).
-server:
-  forward-headers-strategy: framework
-
 logging:
   level:
     root: info
