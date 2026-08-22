@@ -31,10 +31,10 @@
      --------------------------------------------------------- */
   var SITE_NAV = {
     campus: [
-      { key: "about",   label: "브랜드 스토리", href: "/v2/site/campus/about.html" },
-      { key: "outcome", label: "취업 성과",     href: "/v2/site/campus/outcome.html" },
-      { key: "review",  label: "수료생 후기",   href: "/v2/site/campus/reviews.html" },
-      { key: "support", label: "취업 지원",     href: "/v2/site/campus/support.html" },
+      { key: "about",   label: "브랜드 스토리", href: "/v2/site/campus/about.html", todo: true },
+      { key: "outcome", label: "취업 성과",     href: "/v2/site/campus/outcome.html", todo: true },
+      { key: "review",  label: "수료생 후기",   href: "/v2/site/campus/reviews.html", todo: true },
+      { key: "support", label: "취업 지원",     href: "/v2/site/campus/support.html", todo: true },
       { key: "facility",label: "캠퍼스·기숙사", href: "/v2/site/campus/facility.html" }
     ],
     class: [
@@ -43,11 +43,11 @@
       { key: "apply",   label: "수강 신청",   href: "/v2/site/class/apply.html" }
     ],
     biz: [
-      { key: "diagnosis", label: "조직 진단",   href: "/v2/site/biz/diagnosis.html" },
-      { key: "flow",      label: "AX Flow",     href: "/v2/site/biz/flow.html" },
-      { key: "programs",  label: "직무별 과정", href: "/v2/site/biz/programs.html" },
-      { key: "cases",     label: "기업 사례",   href: "/v2/site/biz/cases.html" },
-      { key: "contact",   label: "도입 문의",   href: "/v2/site/biz/contact.html" }
+      { key: "diagnosis", label: "조직 진단",   href: "/v2/site/biz/diagnosis.html", todo: true },
+      { key: "flow",      label: "AX Flow",     href: "/v2/site/biz/flow.html", todo: true },
+      { key: "programs",  label: "직무별 과정", href: "/v2/site/biz/programs.html", todo: true },
+      { key: "cases",     label: "기업 사례",   href: "/v2/site/biz/cases.html", todo: true },
+      { key: "contact",   label: "도입 문의",   href: "/v2/site/biz/contact.html", todo: true }
     ]
   };
 
@@ -147,19 +147,82 @@
   /* =========================================================
      공개사이트 셸
      ========================================================= */
-  function site(opts) {
+  /* ---------------------------------------------------------
+     오른쪽 내비게이션 — 흰 상단바(.servicebar/.landing-nav/.gnb) 대체.
+     우상단에 브랜드와 여는 버튼만 띄우고, 메뉴는 오른쪽 패널에서 연다.
+     로그인 버튼은 두지 않는다 — 로그인은 LXP 소개 페이지에서만 한다.
+     --------------------------------------------------------- */
+  function sideNav(opts) {
     opts = opts || {};
-    var svc = opts.service || "campus";
-    var nav = SITE_NAV[svc] || [];
-    var home = SITE_HOME[svc] || "/v2/site/index.html";
+    var svc = opts.service || "";
+    var sections = opts.sections || [];
 
     var serviceLinks = B.services.map(function (s) {
       return '<a href="' + s.href + '"' + (s.key === svc ? ' aria-current="true"' : "") + ">" + esc(s.label) + "</a>";
     }).join("");
 
-    var menuLinks = nav.map(function (m) {
-      return '<a href="' + m.href + '"' + (m.key === opts.nav ? ' aria-current="page"' : "") + ">" + esc(m.label) + "</a>";
-    }).join("");
+    var sectionBlock = "";
+    if (sections.length) {
+      sectionBlock =
+        '<div><p class="sidenav__label">이 페이지</p><div class="sidenav__list">' +
+        sections.map(function (m) {
+          if (m.todo) {  // 아직 화면이 없다 — 404 대신 안내 (CLAUDE.md 규칙 8)
+            return '<a href="#" onclick="alert(\'준비 중인 기능입니다.\');return false">' + esc(m.label) + "</a>";
+          }
+          return '<a href="' + m.href + '"' + (m.key && m.key === opts.nav ? ' aria-current="page"' : "") + ">" + esc(m.label) + "</a>";
+        }).join("") +
+        "</div></div>";
+    }
+
+    var node = el(
+      '<a class="skip-link" href="#main">본문 바로가기</a>' +
+      '<div class="sitebar">' +
+        '<a class="sitebar__brand" href="/v2/index.html"><span data-brand="name"></span></a>' +
+        '<button class="sitebar__toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="sidenav"><i></i><i></i><i></i></button>' +
+      '</div>' +
+      '<div class="sidenav-scrim" data-sidenav-scrim hidden></div>' +
+      '<nav class="sidenav" id="sidenav" aria-label="사이트 메뉴">' +
+        '<div class="sidenav__head"><b data-brand="name"></b>' +
+          '<button class="sidenav__close" type="button" aria-label="메뉴 닫기">&times;</button></div>' +
+        '<div><p class="sidenav__label">서비스</p><div class="sidenav__list">' + serviceLinks + '</div></div>' +
+        sectionBlock +
+        '<div class="sidenav__cta"><a class="btn btn--primary btn--lg btn--block" href="/v2/site/class/index.html">모집 과정 보기</a></div>' +
+      '</nav>'
+    );
+    document.body.insertBefore(node, document.body.firstChild);
+
+    var panel  = document.getElementById("sidenav");
+    var scrim  = document.querySelector("[data-sidenav-scrim]");
+    var toggle = document.querySelector(".sitebar__toggle");
+    var closeBtn = panel.querySelector(".sidenav__close");
+
+    function setOpen(open) {
+      panel.dataset.open = open ? "true" : "";
+      scrim.dataset.open = open ? "true" : "";
+      scrim.hidden = !open;
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.setAttribute("aria-label", open ? "메뉴 닫기" : "메뉴 열기");
+      document.body.dataset.sidenav = open ? "open" : "";
+      if (open) closeBtn.focus();
+    }
+    toggle.addEventListener("click", function () { setOpen(panel.dataset.open !== "true"); });
+    closeBtn.addEventListener("click", function () { setOpen(false); toggle.focus(); });
+    scrim.addEventListener("click", function () { setOpen(false); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && panel.dataset.open === "true") { setOpen(false); toggle.focus(); }
+    });
+    // 같은 페이지 안 앵커로 이동하면 패널을 닫는다
+    panel.addEventListener("click", function (e) {
+      var a = e.target.closest("a");
+      if (a && (a.getAttribute("href") || "").charAt(0) === "#") setOpen(false);
+    });
+  }
+
+  function site(opts) {
+    opts = opts || {};
+    var svc = opts.service || "campus";
+    var nav = SITE_NAV[svc] || [];
+    var home = SITE_HOME[svc] || "/v2/site/index.html";
 
     // 본문을 <main id="main"> 으로 감싼다 (건너뛰기 링크 대상)
     var siteMain = document.createElement("main");
@@ -167,22 +230,7 @@
     while (document.body.firstChild) siteMain.appendChild(document.body.firstChild);
     document.body.appendChild(siteMain);
 
-    var header = el(
-      '<a class="skip-link" href="#main">본문 바로가기</a>' +
-      '<div class="servicebar"><div class="container servicebar__inner">' +
-        '<strong class="servicebar__brand"><span data-brand="name"></span></strong>' +
-        serviceLinks +
-      '</div></div>' +
-      '<header class="gnb"><div class="container gnb__inner">' +
-        '<nav class="gnb__menu" aria-label="주요 메뉴">' + menuLinks + '</nav>' +
-        '<div class="gnb__actions">' +
-          '<a class="btn btn--ghost btn--sm" href="' + (B.lxpLogin || "/login") + '">로그인</a>' +
-          '<a class="btn btn--primary btn--sm" href="/v2/site/campus/counsel.html">상담 신청</a>' +
-          '<button class="btn btn--ghost btn--sm gnb__burger" type="button" aria-label="메뉴 열기">☰</button>' +
-        '</div>' +
-      '</div></header>'
-    );
-    document.body.insertBefore(header, document.body.firstChild);
+    sideNav({ service: svc, sections: nav, nav: opts.nav });
 
     // 전체 과정 화면에서는 스크롤 위치에 맞춰 '전체 과정'과 '과정 상세' 표시를 전환한다.
     if (svc === "class" && /\/site\/class\/index\.html$/.test(location.pathname)) {
@@ -190,7 +238,7 @@
       var scrollTicking = false;
       var syncCourseMenu = function () {
         var isDetailList = courseSection && courseSection.getBoundingClientRect().top <= 150;
-        document.querySelectorAll(".gnb__menu a").forEach(function (link) {
+        document.querySelectorAll(".sidenav__list a").forEach(function (link) {
           var href = link.getAttribute("href") || "";
           var active = isDetailList ? href.indexOf("#course-list-all") > -1 : href === "/v2/site/class/index.html";
           if (active) link.setAttribute("aria-current", "page");
@@ -279,7 +327,9 @@
         '<nav class="sidebar__nav" aria-label="' + (isAdmin ? "관리 메뉴" : "학습 메뉴") + '">' + navHtml + "</nav>" +
         '<div class="sidebar__foot">' +
           '<a class="sidebar__link" href="' + window.lxpUrl(isAdmin ? "/admin/my-info" : "/trainee/my-info") + '"><span>내 정보</span></a>' +
-          '<a class="sidebar__link" href="' + window.lxpUrl("/logout") + '"><span>로그아웃</span></a>' +
+          // 로그아웃하면 통합 홈으로 (실제 세션 종료는 LXP 화면의 POST /logout 이 담당한다.
+          // 여기는 정적 프로토타입이라 세션이 없어 링크로 둔다.)
+          '<a class="sidebar__link" href="/v2/index.html"><span>로그아웃</span></a>' +
         "</div>" +
       "</aside>"
     );
@@ -348,5 +398,5 @@
     sync();
   }
 
-  window.Shell = { site: site, app: app, NAV: { trainee: TRAINEE_NAV, admin: ADMIN_NAV, site: SITE_NAV } };
+  window.Shell = { site: site, app: app, nav: sideNav, NAV: { trainee: TRAINEE_NAV, admin: ADMIN_NAV, site: SITE_NAV } };
 })();

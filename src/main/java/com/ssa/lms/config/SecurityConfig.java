@@ -76,7 +76,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/v2/index.html")   // 로그아웃하면 통합 홈으로
                         .permitAll()
                 )
                 // H2 콘솔용 (local 프로필에서만 콘솔이 열림)

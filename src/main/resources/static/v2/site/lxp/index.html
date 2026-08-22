@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LXP 학습 — {brand}</title>
+<meta name="description" content="오늘 할 일부터 출결·과제·시험·이수까지, 학습의 모든 기록이 한 화면에서 이어지는 학습 관리 시스템.">
+<link rel="stylesheet" href="/v2/assets/tokens.css"><link rel="stylesheet" href="/v2/assets/base.css"><link rel="stylesheet" href="/v2/assets/components.css"></head>
+<body class="pg-site">
+<main id="main">
+
+  <section class="pg-hero">
+    <div class="container">
+      <span class="pg-kicker">LEARNING EXPERIENCE PLATFORM</span>
+      <h1>배운 것이 흩어지지 않게,<br><em>기록이 실력이 되도록.</em></h1>
+      <p>오늘 할 일부터 출결·과제·시험·이수증까지<br>학습의 모든 흐름이 하나의 화면에서 이어집니다.</p>
+      <div class="pg-hero__actions">
+        <a class="btn btn--primary btn--lg" href="/signup" data-lxp>회원가입</a>
+        <a class="btn btn--outline btn--lg" href="/v2/login" data-brand-href="lxpLogin">로그인</a>
+      </div>
+      <small class="pg-hero__note">이미 수강 중이라면 로그인만 하면 됩니다. 처음이라면 회원가입 후 관리자 승인을 거칩니다.</small>
+    </div>
+  </section>
+
+  <section class="pg-band">
+    <div class="container">
+      <p class="pg-label">WHY LXP</p>
+      <h2>강의는 끝나도<br><em>기록은 남습니다.</em></h2>
+      <p class="pg-lead">출결이 몇 번 빠졌는지, 어떤 피드백을 받았는지, 무엇을 만들었는지 —
+        수료 시점에 증명해야 할 것들이 학습하는 동안 자동으로 쌓입니다.</p>
+    </div>
+  </section>
+
+  <section class="pg-feature">
+    <div class="container">
+      <p class="pg-label">WHAT YOU GET</p>
+      <h2>학습에 필요한 것만,<br>필요한 자리에</h2>
+      <div class="pg-grid">
+        <article><b>01</b><h3>오늘 할 일</h3><p>남은 학습, 마감이 가까운 과제, 새로 온 피드백을 학습 홈에서 먼저 정리해 보여줍니다.</p></article>
+        <article><b>02</b><h3>학습 콘텐츠</h3><p>차시별 영상과 문서를 이어서 볼 수 있고, 어디까지 봤는지 진도가 그대로 남습니다.</p></article>
+        <article><b>03</b><h3>과제와 피드백</h3><p>제출한 과제에 강사가 남긴 코멘트를 과제별로 모아 봅니다. 보완 제출도 같은 자리에서.</p></article>
+        <article><b>04</b><h3>온라인 시험</h3><p>정해진 시간에 응시하고 결과를 바로 확인합니다. 연습 시험은 성적에 반영되지 않습니다.</p></article>
+        <article><b>05</b><h3>출결과 이수</h3><p>일자별 출결과 이수 요건 충족 여부를 직접 확인합니다. 부족하면 미리 알 수 있습니다.</p></article>
+        <article><b>06</b><h3>AI 학습 도우미</h3><p>과정 자료를 근거로 답하는 Q&amp;A, 목표 직무에 맞춘 커리큘럼 추천과 직무 로드맵.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="pg-flow">
+    <div class="container">
+      <p class="pg-label">HOW IT WORKS</p>
+      <h2>가입부터 이수까지</h2>
+      <ol class="pg-steps">
+        <li><span>STEP 1</span><b>회원가입</b><p>훈련생으로 가입하고 개인정보 수집에 동의합니다.</p></li>
+        <li><span>STEP 2</span><b>관리자 승인</b><p>승인 전에는 로그인해도 학습 화면이 열리지 않습니다.</p></li>
+        <li><span>STEP 3</span><b>과정 배정</b><p>신청한 과정에 배정되면 학습 홈에 오늘 할 일이 나타납니다.</p></li>
+        <li><span>STEP 4</span><b>학습과 평가</b><p>콘텐츠·과제·시험·설문을 진행하고 출결이 기록됩니다.</p></li>
+        <li><span>STEP 5</span><b>수료</b><p>이수 요건을 채우면 이수증을 발급받습니다.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="pg-cta">
+    <div class="container">
+      <h2>지금 시작하세요</h2>
+      <p>수강 중이라면 로그인, 처음이라면 회원가입부터.</p>
+      <div class="pg-hero__actions">
+        <a class="btn btn--primary btn--lg" href="/signup" data-lxp>회원가입</a>
+        <a class="btn btn--inverse btn--lg" href="/v2/login" data-brand-href="lxpLogin">로그인</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+<footer class="landing-footer"><div class="container row row--between row--wrap">
+  <div><b data-brand="name"></b><p class="small muted" data-brand="tagline"></p></div>
+  <p class="small muted">© <span data-brand="legalName"></span></p>
+</div></footer>
+<script src="/v2/assets/brand.js"></script>
+<script src="/v2/assets/shell.js"></script>
+<script>Shell.nav({service:"lxp",sections:[
+  {href:"#main",label:"LXP 소개"}]});
+window.applyBrand();</script>
+</body></html>

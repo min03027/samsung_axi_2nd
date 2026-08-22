@@ -51,15 +51,16 @@ window.BRAND = {
   lxpLogin: LXP_LOGIN_HREF,
 
   /* --- 서비스 6종 (공통-001 통합 내비게이션) ---
+     LXP 학습은 로그인으로 바로 보내지 않고 소개 페이지를 먼저 거친다.
+     기숙사·수영센터는 "시설 소개" 하나로 합쳤다.
      current 는 각 화면에서 Shell.gnb({ service: "campus" }) 로 지정한다. */
   services: [
     { key: "home",    label: "통합 홈",       href: "/v2/index.html" },
     { key: "campus",  label: "취업캠퍼스",     href: "/v2/site/campus/index.html" },
     { key: "class",   label: "몰입클라쓰",     href: "/v2/site/class/index.html" },
     { key: "biz",     label: "비즈워크넥트",   href: "/v2/site/biz/index.html" },
-    { key: "lxp",     label: "LXP 학습",       href: LXP_LOGIN_HREF },
-    { key: "dorm",    label: "기숙사",         href: "/v2/site/campus/facility.html#dorm" },
-    { key: "pool",    label: "수영센터",       href: "/v2/site/campus/facility.html#pool" }
+    { key: "lxp",     label: "LXP 학습",       href: "/v2/site/lxp/index.html" },
+    { key: "facility",label: "시설 소개",      href: "/v2/site/campus/facility.html" }
   ],
 
   /* --- 관리자 권한 3단계 --- */
