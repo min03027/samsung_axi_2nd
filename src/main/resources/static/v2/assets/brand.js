@@ -13,8 +13,18 @@
    '수강생 로그인'은 v2 프로토타입 로그인 화면이 아니라 실제 LXP 로그인으로 보낸다.
    경로는 Spring Security 의 loginPage/loginProcessingUrl 과 같은 "/login" 이고,
    화면 내용은 templates/01-login/login.html 이 그대로 담당한다(여기서 다시 그리지 않는다).
-   화면 파일에 이 경로를 직접 쓰지 말고 BRAND.lxpLogin 을 읽는다. */
-var LXP_LOGIN_HREF = "/login";
+   화면 파일에 이 경로를 직접 쓰지 말고 BRAND.lxpLogin 을 읽는다.
+
+   주의 — v2 화면은 두 곳에서 서빙된다:
+     (1) 스프링 앱 (lms.samsungax.com, 로컬 8080) — /login 이 실제로 있다 → 상대경로
+     (2) Cloudflare 정적 배포 (wrangler.jsonc) — 앱이 없어서 /login 은 404 → 운영 절대주소
+   그래서 호스트를 보고 고른다. 앱이 서빙하는 곳 목록만 관리하면 된다. */
+var LXP_ORIGIN = "https://lms.samsungax.com";   // 운영 LXP
+var LXP_APP_HOSTS = ["lms.samsungax.com", "localhost", "127.0.0.1"];
+var LXP_LOGIN_HREF = (function () {
+  var host = (typeof location !== "undefined" && location.hostname) || "";
+  return LXP_APP_HOSTS.indexOf(host) !== -1 ? "/login" : LXP_ORIGIN + "/login";
+})();
 
 window.BRAND = {
   /* --- 정체 --- */
@@ -65,6 +75,13 @@ window.applyBrand = function applyBrand(root) {
     var key = el.getAttribute("data-brand");
     var val = window.BRAND[key];
     if (typeof val === "string" || typeof val === "number") el.textContent = val;
+  });
+  // <a data-brand-href="lxpLogin"> 형태로 링크 주소도 심는다.
+  // HTML 에는 상대경로를 그대로 두어 JS 가 죽어도 앱에서는 동작하게 하고,
+  // 정적 배포처럼 앱이 없는 곳에서만 절대주소로 바뀐다.
+  scope.querySelectorAll("[data-brand-href]").forEach(function (el) {
+    var val = window.BRAND[el.getAttribute("data-brand-href")];
+    if (typeof val === "string") el.setAttribute("href", val);
   });
   // <title> 안의 {brand} 치환
   if (document.title.indexOf("{brand}") !== -1) {
