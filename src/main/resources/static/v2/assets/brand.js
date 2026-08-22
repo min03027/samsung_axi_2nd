@@ -9,6 +9,13 @@
            옛 이름이 남아 있으면 그 화면은 하드코딩된 것이다.
    ============================================================ */
 
+/* LXP 로그인 진입점.
+   '수강생 로그인'은 v2 프로토타입 로그인 화면이 아니라 실제 LXP 로그인으로 보낸다.
+   경로는 Spring Security 의 loginPage/loginProcessingUrl 과 같은 "/login" 이고,
+   화면 내용은 templates/01-login/login.html 이 그대로 담당한다(여기서 다시 그리지 않는다).
+   화면 파일에 이 경로를 직접 쓰지 말고 BRAND.lxpLogin 을 읽는다. */
+var LXP_LOGIN_HREF = "/login";
+
 window.BRAND = {
   /* --- 정체 --- */
   name:     "내일의AI",              // 국문 브랜드명 (미확정)
@@ -27,6 +34,9 @@ window.BRAND = {
   email: "help@example.com",
   addr:  "주소 확정 예정",
 
+  /* --- LXP 진입 --- */
+  lxpLogin: LXP_LOGIN_HREF,
+
   /* --- 서비스 6종 (공통-001 통합 내비게이션) ---
      current 는 각 화면에서 Shell.gnb({ service: "campus" }) 로 지정한다. */
   services: [
@@ -34,7 +44,7 @@ window.BRAND = {
     { key: "campus",  label: "취업캠퍼스",     href: "/v2/site/campus/index.html" },
     { key: "class",   label: "몰입클라쓰",     href: "/v2/site/class/index.html" },
     { key: "biz",     label: "비즈워크넥트",   href: "/v2/site/biz/index.html" },
-    { key: "lxp",     label: "LXP 학습",       href: "/v2/login/index.html" },
+    { key: "lxp",     label: "LXP 학습",       href: LXP_LOGIN_HREF },
     { key: "dorm",    label: "기숙사",         href: "/v2/site/campus/facility.html#dorm" },
     { key: "pool",    label: "수영센터",       href: "/v2/site/campus/facility.html#pool" }
   ],

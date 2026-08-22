@@ -176,7 +176,7 @@
       '<header class="gnb"><div class="container gnb__inner">' +
         '<nav class="gnb__menu" aria-label="주요 메뉴">' + menuLinks + '</nav>' +
         '<div class="gnb__actions">' +
-          '<a class="btn btn--ghost btn--sm" href="/v2/login/index.html">로그인</a>' +
+          '<a class="btn btn--ghost btn--sm" href="' + (B.lxpLogin || "/login") + '">로그인</a>' +
           '<a class="btn btn--primary btn--sm" href="/v2/site/campus/counsel.html">상담 신청</a>' +
           '<button class="btn btn--ghost btn--sm gnb__burger" type="button" aria-label="메뉴 열기">☰</button>' +
         '</div>' +

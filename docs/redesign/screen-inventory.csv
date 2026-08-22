@@ -26,7 +26,7 @@ BZ-04,비즈워크넥트,직무별 기업교육,/v2/site/biz/programs.html,비�
 BZ-05,비즈워크넥트,기업교육 사례 목록,/v2/site/biz/cases.html,비즈-053 비즈-054,P1,D2,
 BZ-06,비즈워크넥트,기업교육 사례 상세,/v2/site/biz/case-detail.html,비즈-053,P1,D2,
 BZ-07,비즈워크넥트,도입 문의·맞춤 구성,/v2/site/biz/contact.html,비즈-052 비즈-055 비즈-056 비즈-058,P0,D2,
-CM-01,공통,로그인,/v2/login/index.html,LXP 로그인,P0,D3,
+CM-01,공통,로그인,/login,LXP 로그인(실제 화면: templates/01-login/login.html),P0,D3,연결완료
 CM-02,공통,회원가입 유형 선택,/v2/login/signup.html,공통-005 공통-006,P1,D3,
 CM-03,공통,훈련생 회원가입,/v2/login/signup-trainee.html,공통-005 공통-006,P1,D3,
 CM-04,공통,가입 완료·승인 대기,/v2/login/signup-done.html,공통-005,P2,D3,
