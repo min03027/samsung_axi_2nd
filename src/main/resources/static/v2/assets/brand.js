@@ -11,7 +11,7 @@
 
 /* LXP 로그인 진입점.
    '수강생 로그인'은 v2 프로토타입 로그인 화면이 아니라 실제 LXP 로그인으로 보낸다.
-   경로는 Spring Security 의 loginPage/loginProcessingUrl 과 같은 "/login" 이고,
+   주소는 v2 안의 "/v2/login" 이고(AuthController 가 LXP 로그인 템플릿을 그대로 렌더),
    화면 내용은 templates/01-login/login.html 이 그대로 담당한다(여기서 다시 그리지 않는다).
    화면 파일에 이 경로를 직접 쓰지 말고 BRAND.lxpLogin 을 읽는다.
 
@@ -27,7 +27,7 @@ function lxpUrl(path) {
   var host = (typeof location !== "undefined" && location.hostname) || "";
   return LXP_APP_HOSTS.indexOf(host) !== -1 ? path : LXP_ORIGIN + path;
 }
-var LXP_LOGIN_HREF = lxpUrl("/login");
+var LXP_LOGIN_HREF = lxpUrl("/v2/login");
 
 window.BRAND = {
   /* --- 정체 --- */
