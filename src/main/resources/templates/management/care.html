@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수강생 케어 | 통합 관리자 플랫폼</title>
+    <link sec:authorize="hasRole('ADMIN')" rel="stylesheet" href="/static/css/common-style.css">
+    <link sec:authorize="hasRole('ADMIN')" rel="stylesheet" href="/static/css/sidebar-style.css">
+    <link sec:authorize="hasRole('INSTRUCTOR')" rel="stylesheet" href="/static/css/i-common-style.css">
+    <link sec:authorize="hasRole('INSTRUCTOR')" rel="stylesheet" href="/static/css/i-sidebar-style.css">
+    <link rel="stylesheet" href="/static/css/management-hubs.css">
+    <script src="/static/js/sidebar-function.js" defer></script>
+</head>
+<body class="management-hub-body">
+<header th:replace="~{fragments/management :: header('수강생 케어')}"></header>
+<th:block th:replace="~{fragments/management :: sidebar('care-overview')}"></th:block>
+
+<main class="main-content management-hub-main">
+    <div class="management-hub-shell">
+        <section class="management-hub-hero">
+            <div>
+                <span class="management-kicker">STUDENT CARE WORKSPACE</span>
+                <h2>기록을 모으고,<br>필요한 도움으로 연결합니다.</h2>
+                <p>학생 목록, 학습·출결·평가 기록과 상담 흐름을 한 자리에서 확인하는 케어 워크스페이스입니다.</p>
+            </div>
+            <aside class="management-scope-card">
+                <span>현재 확인 범위</span>
+                <strong th:text="${managementScope}">전체 과정·수강생</strong>
+                <small sec:authorize="hasRole('ADMIN')">전체 운영 범위의 학생과 관리 업무를 확인합니다.</small>
+                <small sec:authorize="hasRole('INSTRUCTOR')">현재 계정에 배정된 과정과 학생을 중심으로 확인합니다.</small>
+            </aside>
+        </section>
+
+        <section class="management-section">
+            <div class="management-section-head">
+                <div><h3>현재 연결된 관리 기능</h3><p>이미 서버와 연결된 화면으로 바로 이동합니다.</p></div>
+            </div>
+            <div class="management-action-grid">
+                <a sec:authorize="hasRole('ADMIN')" class="management-action-card" href="/admin/users/trainees">
+                    <span class="card-index">01 · STUDENTS</span><strong>전체 수강생</strong><p>과정별 학생과 계정 상태를 확인합니다.</p>
+                </a>
+                <a sec:authorize="hasRole('INSTRUCTOR')" class="management-action-card" href="/instructor/trainees">
+                    <span class="card-index">01 · STUDENTS</span><strong>담당 수강생</strong><p>내 과정에 배정된 학생을 확인합니다.</p>
+                </a>
+                <a class="management-action-card" href="/admin/support/tutoring">
+                    <span class="card-index">02 · SUPPORT</span><strong>Q&amp;A·튜터링</strong><p>질문, 답변과 담당자 대응 상태를 확인합니다.</p>
+                </a>
+                <a sec:authorize="hasRole('ADMIN')" class="management-action-card" href="/admin/attendance">
+                    <span class="card-index">03 · ATTENDANCE</span><strong>출결·이수</strong><p>출결 이상과 수료 진행 상태를 확인합니다.</p>
+                </a>
+                <a sec:authorize="hasRole('INSTRUCTOR')" class="management-action-card" href="/instructor/attendance">
+                    <span class="card-index">03 · ATTENDANCE</span><strong>담당 과정 출결</strong><p>학생별 출석 기록과 이상 여부를 확인합니다.</p>
+                </a>
+                <a sec:authorize="hasRole('ADMIN')" class="management-action-card" href="/admin/evaluation/grading">
+                    <span class="card-index">04 · EVALUATION</span><strong>평가 결과</strong><p>시험·과제 결과와 채점 진행 상황을 확인합니다.</p>
+                </a>
+                <a sec:authorize="hasRole('INSTRUCTOR')" class="management-action-card" href="/instructor/grading">
+                    <span class="card-index">04 · EVALUATION</span><strong>담당 평가</strong><p>담당 시험·과제의 채점과 피드백을 확인합니다.</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="management-section">
+            <div class="management-section-head">
+                <div><h3>학생 통합 상세</h3><p>학생 한 명의 학습과 관리 이력을 한 흐름으로 확인합니다.</p></div>
+            </div>
+            <div class="management-workspace-grid">
+                <article class="management-panel">
+                    <h4>학생 목록·검색</h4>
+                    <p class="management-panel-intro">과정, 기수, 반, 상태로 대상을 좁히고 학생을 찾습니다.</p>
+                    <div class="management-empty"><span>⌕</span><strong>학생 목록에서 대상을 선택하세요.</strong><p>현재는 상단의 전체·담당 수강생 화면에서 학생 정보를 확인할 수 있습니다.</p></div>
+                </article>
+                <article class="management-panel">
+                    <h4>선택 학생 요약</h4>
+                    <p class="management-panel-intro">진도·출결·과제·시험·상담 상태를 함께 해석합니다.</p>
+                    <div class="management-empty"><span>○</span><strong>선택된 학생이 없습니다.</strong><p>학생을 선택하면 연결된 실제 기록만 표시됩니다.</p></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="management-section">
+            <div class="management-section-head">
+                <div><h3>관찰에서 정상화까지</h3><p>메모가 쌓이기만 하지 않고 다음 행동으로 이어지는 관리 흐름입니다.</p></div>
+            </div>
+            <ol class="management-flow">
+                <li>관찰 필요</li><li>상담 예정</li><li>상담 진행</li><li>조치 완료</li><li>정상화</li>
+            </ol>
+        </section>
+    </div>
+</main>
+</body>
+</html>

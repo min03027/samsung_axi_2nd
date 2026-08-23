@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교육품질·강사평가 | 통합 관리자 플랫폼</title>
+    <link sec:authorize="hasRole('ADMIN')" rel="stylesheet" href="/static/css/common-style.css">
+    <link sec:authorize="hasRole('ADMIN')" rel="stylesheet" href="/static/css/sidebar-style.css">
+    <link sec:authorize="hasRole('INSTRUCTOR')" rel="stylesheet" href="/static/css/i-common-style.css">
+    <link sec:authorize="hasRole('INSTRUCTOR')" rel="stylesheet" href="/static/css/i-sidebar-style.css">
+    <link rel="stylesheet" href="/static/css/management-hubs.css">
+    <script src="/static/js/sidebar-function.js" defer></script>
+</head>
+<body class="management-hub-body">
+<header th:replace="~{fragments/management :: header('소통·교육품질 > 교육품질·강사평가')}"></header>
+<th:block th:replace="~{fragments/management :: sidebar('quality')}"></th:block>
+
+<main class="main-content management-hub-main">
+    <div class="management-hub-shell">
+        <section class="management-hub-hero">
+            <div><span class="management-kicker">EDUCATION QUALITY</span><h2>설문과 평가를 모아<br>교육 개선으로 연결합니다.</h2><p>과정 만족도, 강의·강사평가, 주관식 의견과 운영 지표를 비교할 교육품질 허브입니다.</p></div>
+            <aside class="management-scope-card"><span>품질 확인 범위</span><strong th:text="${managementScope}">전체 과정·수강생</strong><small sec:authorize="hasRole('ADMIN')">전체 과정의 설문과 평가 결과를 확인하는 영역입니다.</small><small sec:authorize="hasRole('INSTRUCTOR')">본인과 담당 과정의 결과를 확인하는 영역입니다.</small></aside>
+        </section>
+
+        <section class="management-section">
+            <div class="management-section-head"><div><h3>현재 연결된 품질 관련 기능</h3><p>실제 설문·평가·공지 화면을 재사용합니다.</p></div></div>
+            <div class="management-action-grid">
+                <a sec:authorize="hasRole('ADMIN')" class="management-action-card" href="/admin/survey"><span class="card-index">01 · SURVEY</span><strong>설문 관리</strong><p>설문 작성, 응답 현황과 엑셀 결과를 확인합니다.</p></a>
+                <a sec:authorize="hasRole('ADMIN')" class="management-action-card" href="/admin/evaluation/grading"><span class="card-index">02 · RESULT</span><strong>평가 결과</strong><p>시험·과제 결과와 채점 진행 상태를 확인합니다.</p></a>
+                <a sec:authorize="hasRole('INSTRUCTOR')" class="management-action-card" href="/instructor/grading"><span class="card-index">01 · RESULT</span><strong>담당 평가 결과</strong><p>내 담당 범위의 시험 결과와 피드백을 확인합니다.</p></a>
+                <a sec:authorize="hasRole('ADMIN')" class="management-action-card" href="/admin/notice/new"><span class="card-index">03 · NOTICE</span><strong>중요 공지 작성</strong><p>기존 중요 공지와 로그인 팝업 기능을 사용합니다.</p></a>
+                <a sec:authorize="hasRole('INSTRUCTOR')" class="management-action-card" href="/instructor/notice"><span class="card-index">02 · NOTICE</span><strong>담당 과정 공지</strong><p>현재 공개된 담당 과정 공지를 확인합니다.</p></a>
+                <a sec:authorize="hasRole('ADMIN')" class="management-action-card" href="/admin/analytics/dropout"><span class="card-index">04 · RISK</span><strong>학습 이탈 분석</strong><p>현재 제공되는 실제 위험 지표를 확인합니다.</p></a>
+            </div>
+        </section>
+
+        <section class="management-section">
+            <div class="management-section-head"><div><h3>교육품질 대시보드</h3><p>연결된 평가 결과와 추이를 한곳에서 확인합니다.</p></div></div>
+            <div class="management-quality-grid">
+                <article class="management-quality-card"><h4>과정 만족도와 응답률</h4><p>과정·기수·반별 응답률과 평가 분포를 확인합니다.</p><div class="management-empty"><span>◇</span><strong>연결된 강의평가 결과가 없습니다.</strong><p>일반 설문 결과를 강의평가로 해석하지 않습니다.</p></div></article>
+                <article class="management-quality-card"><h4>강사별 평가 추이</h4><p>강사별 기간 추이와 주관식 의견을 함께 확인합니다.</p><div class="management-empty"><span>↗</span><strong>연결된 강사평가 결과가 없습니다.</strong><p>평가 정책과 공개 범위가 적용된 실제 결과만 표시됩니다.</p></div></article>
+                <article class="management-quality-card"><h4>주관식 의견과 개선 과제</h4><p>의견을 분류하고 담당자와 완료일을 연결합니다.</p><div class="management-empty"><span>“”</span><strong>표시할 교육평가 의견이 없습니다.</strong><p>일반 Q&amp;A와 교육평가 의견을 섞지 않습니다.</p></div></article>
+                <article class="management-quality-card"><h4>교육 품질 비교</h4><p>출결·진도·이수·만족도를 과정별로 비교합니다.</p><div class="management-empty"><span>◎</span><strong>통합 품질 지표가 정의되지 않았습니다.</strong><p>기준이 확정된 실제 지표만 비교에 사용됩니다.</p></div></article>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>
