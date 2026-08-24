@@ -46,8 +46,8 @@
     biz: [
       { key: "diagnosis", label: "조직 진단",   href: "/v2/site/biz/diagnosis.html", todo: true },
       { key: "flow",      label: "AX Flow",     href: "/v2/site/biz/flow.html", todo: true },
-      { key: "programs",  label: "직무별 과정", href: "/v2/site/biz/programs.html", todo: true },
-      { key: "cases",     label: "기업 사례",   href: "/v2/site/biz/cases.html", todo: true },
+      { key: "programs",  label: "직무별 과정", href: "/v2/site/biz/programs.html" },
+      { key: "cases",     label: "기업 사례",   href: "/v2/site/biz/cases.html" },
       { key: "contact",   label: "도입 문의",   href: "/v2/site/biz/contact.html", todo: true }
     ]
   };
