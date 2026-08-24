@@ -48,4 +48,32 @@
       }
     });
   });
+
+  var diagnosisForm = document.getElementById("biz-diagnosis-form");
+  var diagnosisResult = document.getElementById("biz-diagnosis-result");
+  if (diagnosisForm && diagnosisResult) {
+    diagnosisForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var values = new FormData(diagnosisForm);
+      var task = values.get("task");
+      var skill = values.get("skill");
+      var data = values.get("data");
+      var security = values.get("security");
+      var course = skill === "low" ? "4~8시간 기초·직무 실습" : (data === "high" ? "24~40시간 프로젝트형 과정" : "8~16시간 직무 적용 과정");
+      var priorities = [];
+      if (data === "low") priorities.push("업무 자료와 데이터 정리 기준 수립");
+      if (security !== "low") priorities.push("사용 가능 도구와 보안 가이드 확정");
+      if (skill === "low") priorities.push("공통 AI 리터러시와 안전한 사용법 교육");
+      if (!priorities.length) priorities.push("실제 업무 기반 PoC와 성과 지표 설정");
+      var taskLabels = {document:"문서·보고 자동화",data:"데이터 분석·집계",content:"콘텐츠 제작",development:"개발·서비스 구축"};
+      diagnosisResult.innerHTML = "<span>진단 결과</span><h4>" + taskLabels[task] + "부터 시작하는 것이 좋습니다.</h4><p><b>권장 구성</b> " + course + "</p><ul>" + priorities.map(function (item) { return "<li>" + item + "</li>"; }).join("") + "</ul><a class=\"btn btn--primary\" href=\"#biz-contact\" data-diagnosis-inquiry>이 결과로 상담하기</a>";
+      diagnosisResult.hidden = false;
+      diagnosisResult.scrollIntoView({behavior:"smooth", block:"nearest"});
+      var inquiry = diagnosisResult.querySelector("[data-diagnosis-inquiry]");
+      inquiry.addEventListener("click", function () {
+        var issue = document.getElementById("issue");
+        if (issue) issue.value = "AX 간편 진단 결과: " + taskLabels[task] + " / " + course + " / 우선 확인: " + priorities.join(", ");
+      });
+    });
+  }
 })();
