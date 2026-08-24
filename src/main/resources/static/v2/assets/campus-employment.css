@@ -128,9 +128,8 @@
 .employment-history__item.is-right i { grid-column:2;grid-row:1; }
 .employment-history__item.is-right>div { grid-column:1;grid-row:1;justify-self:end;text-align:right; }
 .employment-history__item--now time,.employment-history__item--now h3 { color:#ff7a40;text-shadow:0 0 34px rgba(255,91,31,.2); }
-.employment-history__closing { display:flex;align-items:end;justify-content:space-between;gap:30px;margin-top:40px;padding-top:48px;border-top:1px solid rgba(255,255,255,.18); }
+.employment-history__closing { margin-top:40px;padding-top:48px;border-top:1px solid rgba(255,255,255,.18); }
 .employment-history__closing p { max-width:720px;color:#fff;font-size:clamp(25px,3vw,40px);font-weight:750;line-height:1.35; }
-.employment-history__closing a { flex:none;color:#ff6a31;font-size:14px;font-weight:750; }
 
 /* 수상·평가·취업성과·도구 사용의 관계를 같은 카드 안에서 명확히 구분 */
 .employment-credentials { padding:clamp(90px,10vw,145px) 0;background:#f4f1ed; }
@@ -197,7 +196,6 @@
   .employment-history__item time,.employment-history__item.is-left time,.employment-history__item.is-right time { grid-column:2;grid-row:1;text-align:left;font-size:42px; }
   .employment-history__item i,.employment-history__item.is-left i,.employment-history__item.is-right i { grid-column:1;grid-row:1;margin-top:8px; }
   .employment-history__item>div,.employment-history__item.is-left>div,.employment-history__item.is-right>div { grid-column:2;grid-row:2;justify-self:start;text-align:left;padding-top:17px; }
-  .employment-history__closing { align-items:flex-start;flex-direction:column; }
   .employment-awards { display:grid;grid-auto-flow:column;grid-auto-columns:138px;grid-template-columns:none;overflow-x:auto;padding-inline:18px;scroll-snap-type:x proximity;scrollbar-width:thin; }
   .employment-awards figure { scroll-snap-align:start; }
   .employment-credentials__grid { grid-template-columns:1fr; }
