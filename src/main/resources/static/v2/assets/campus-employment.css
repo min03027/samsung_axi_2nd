@@ -150,9 +150,6 @@
 .employment-credentials__grid small { color:#df4816;font:800 10px/1.3 var(--font-mono);letter-spacing:.13em; }
 .employment-credentials__grid h3 { max-width:470px;margin-top:34px;font-size:clamp(25px,2.4vw,35px);line-height:1.2;letter-spacing:-.04em; }
 .employment-credentials__grid p { max-width:560px;margin-top:18px;color:#6f6862;line-height:1.72; }
-.employment-credentials__source { margin-top:22px;color:#918981;font-size:12px;line-height:1.6; }
-.employment-credentials__source a { color:#df4816;font-weight:750; }
-
 /* 취업-023: 실제 목적지가 있는 역할 중심 브랜드 네트워크 */
 .employment-network { padding:clamp(95px,10vw,150px) 0;background:#fff; }
 .employment-network__head { max-width:900px; }
