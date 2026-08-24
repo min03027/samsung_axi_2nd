@@ -28,7 +28,7 @@
     [20012,'수많은 프로젝트가, 나의 실전 능력으로','안O진','20260617090906_1781654946_0_2.png','career'],
     [20011,'하고 싶은 게 없던 제가, 가고 싶은 곳을 찾기까지','양O민','20260617090929_1781654969_0_1.png','career']
   ];
-  const reviews = raw.map(([uid,title,name,image,field]) => ({uid,title,name,field,year:'2026',image:`/v2/assets/reviews/${uid}.png`,detail:`/v2/site/campus/review.html?id=${uid}`}));
+  const reviews = raw.map(([uid,title,name,image,field]) => ({uid,title,name,field,year:'2026',image:`/v2/assets/reviews/${uid}.png`,detail:`/v2/site/class/review.html?id=${uid}`}));
   const featured = {...reviews[2], fullName:'김유신', company:'브레인크루(주)', role:'AI·AIgent 개발', course:'데이터 분석 · 로봇 AI', summary:'무역회사 오퍼 대신 IT를 선택하고 두 과정을 연달아 수강했습니다. 데이터 처리 감각을 로봇·영상 AI로 연결해 현재 AI·AIgent 개발자로 일합니다.', skills:['Hadoop','Tableau','TensorFlow','라이다','뎁스카메라','자율주행·협동로봇']};
   const escapeHtml = value => String(value).replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
   const card = item => `<article class="review-card"><a href="${item.detail}" aria-label="${escapeHtml(item.title)} 상세 보기"><img src="${item.image}" alt="${escapeHtml(item.name)} 수료생 인터뷰 대표 이미지" loading="lazy"><span><small>2026 · CAREER TRANSITION</small><strong>${escapeHtml(item.title)}</strong><em>${escapeHtml(item.name)} 수료생</em></span></a></article>`;

@@ -40,6 +40,7 @@
     class: [
       { key: "catalog", label: "전체 과정",   href: "/v2/site/class/index.html" },
       { key: "detail",  label: "과정 상세",   href: "/v2/site/class/index.html#course-list-all" },
+      { key: "career",  label: "취업클라쓰",  href: "/v2/site/class/reviews.html" },
       { key: "apply",   label: "수강 신청",   href: "/v2/site/class/apply.html" }
     ],
     biz: [
