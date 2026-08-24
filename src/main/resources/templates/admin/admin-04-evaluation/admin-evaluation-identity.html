@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>신분 확인 대기열</title>
+  <link rel="stylesheet" href="/static/css/common-style.css">
+  <link rel="stylesheet" href="/static/css/sidebar-style.css">
+  <link rel="stylesheet" href="/static/css/btn-style.css">
+  <link rel="stylesheet" href="/static/css/admin-identity.css">
+</head>
+<body class="admin-identity-page">
+
+<div th:replace="~{fragments/admin :: header('평가 관리 > 신분 확인')}"></div>
+<div th:replace="~{fragments/admin :: sidebar('eval-monitoring')}"></div>
+
+<main class="main-content">
+  <section class="main-content-inner">
+
+  <p class="page-note">
+    응시 <b>전</b> 신분증을 검토하는 화면입니다. 시험이 끝난 뒤 녹화·이벤트를 보는
+    사후 검토 화면과는 역할이 다릅니다.
+  </p>
+
+  <div class="summary-row">
+    <span>검토 대기 <strong th:text="${waiting}">0</strong></span>
+    <span class="sep" aria-hidden="true"></span>
+    <span>표시 <strong th:text="${#lists.size(rows)}">0</strong>건</span>
+  </div>
+
+  <form class="search-container" method="get" th:action="@{/admin/evaluation/identity}">
+    <label class="sr-only" for="q">훈련생 또는 시험 검색</label>
+    <input type="search" id="q" name="q" th:value="${keyword}" placeholder="훈련생 이름 또는 시험명 검색">
+    <label class="sr-only" for="status">상태 필터</label>
+    <select id="status" name="status">
+      <option value="all" th:selected="${status == 'all'}">상태 전체</option>
+      <option value="SUBMITTED" th:selected="${status == 'SUBMITTED'}">검토 대기</option>
+      <option value="UNDER_REVIEW" th:selected="${status == 'UNDER_REVIEW'}">검토 중</option>
+      <option value="APPROVED" th:selected="${status == 'APPROVED'}">승인</option>
+      <option value="REJECTED" th:selected="${status == 'REJECTED'}">반려</option>
+    </select>
+    <button type="submit" class="btn btn-secondary">검색</button>
+  </form>
+
+  <!-- 제출 시각 범위 필터 (LXP-016). 서버 쿼리를 늘리지 않고 표시된 행에만 적용한다. -->
+  <div class="range-filter">
+    <label for="fromDate">제출 시각</label>
+    <input type="date" id="fromDate" aria-label="제출 시각 시작일">
+    <span aria-hidden="true">~</span>
+    <input type="date" id="toDate" aria-label="제출 시각 종료일">
+    <button type="button" class="btn btn-secondary btn-sm" id="rangeClear">범위 해제</button>
+    <span class="hint-text" id="rangeCount" aria-live="polite"></span>
+  </div>
+
+  <p class="flash ok" th:if="${message}" th:text="${message}"></p>
+  <p class="flash err" th:if="${error}" th:text="${error}"></p>
+
+  <div class="admin-card">
+    <table class="admin-table">
+      <thead>
+      <tr>
+        <th>시험</th>
+        <th>훈련생</th>
+        <th>아이디</th>
+        <th>제출 시각</th>
+        <th>대기</th>
+        <th>상태</th>
+        <th>사유</th>
+        <th>검토</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="r : ${rows}">
+        <td th:text="${r.examTitle}">시험명</td>
+        <td class="nowrap" th:text="${r.traineeName}">이름</td>
+        <td class="nowrap mono" th:text="${r.loginId}">아이디</td>
+        <td class="nowrap mono" th:attr="data-submitted=${r.submittedAt}"
+            th:text="${r.submittedAt}">--</td>
+        <td class="nowrap" th:text="${r.waited}">--</td>
+        <td class="nowrap">
+          <span class="state-badge" th:classappend="${r.tone}" th:text="${r.statusLabel}">상태</span>
+        </td>
+        <td class="reason-cell" th:text="${r.reason}"></td>
+        <td class="nowrap">
+          <a class="btn btn-secondary btn-sm"
+             th:href="@{'/admin/evaluation/identity/' + ${r.sessionId}}">검토</a>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(rows)}">
+        <td colspan="8" class="hint-text">조건에 맞는 신분확인 건이 없습니다.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  </section>
+</main>
+
+<script>
+/* 제출 시각 범위 필터 (LXP-016).
+   서버가 내려준 문자열(예: "08-24 14:03")에서 월·일만 읽어 비교한다.
+   연도가 없으므로 <b>올해</b> 기준으로 본다 — 서버 DTO 를 바꿀 수 없어(수정 금지 범위)
+   표시 문자열을 그대로 쓴다. 값이 없거나 형식이 다르면 그 행은 걸러내지 않는다. */
+(function () {
+  var from = document.getElementById("fromDate");
+  var to = document.getElementById("toDate");
+  var clear = document.getElementById("rangeClear");
+  var count = document.getElementById("rangeCount");
+  if (!from || !to) return;
+
+  var rows = Array.prototype.slice.call(
+    document.querySelectorAll(".admin-table tbody tr[data-submitted-row], .admin-table tbody tr")
+  ).filter(function (tr) { return tr.querySelector("td[data-submitted]"); });
+
+  var YEAR = new Date().getFullYear();
+
+  function parseCell(v) {
+    if (!v) return null;
+    var m = /^(\d{2})-(\d{2})/.exec(v.trim());
+    if (!m) return null;
+    return new Date(YEAR, Number(m[1]) - 1, Number(m[2])).getTime();
+  }
+
+  function apply() {
+    var f = from.value ? new Date(from.value + "T00:00:00").getTime() : null;
+    var t = to.value ? new Date(to.value + "T23:59:59").getTime() : null;
+    var shown = 0;
+
+    rows.forEach(function (tr) {
+      var cell = tr.querySelector("td[data-submitted]");
+      var ts = parseCell(cell && cell.getAttribute("data-submitted"));
+      var on = true;
+      /* 시각을 못 읽는 행은 숨기지 않는다 — 정보를 잃는 쪽이 더 위험하다. */
+      if (ts !== null) {
+        if (f !== null && ts < f) on = false;
+        if (t !== null && ts > t) on = false;
+      }
+      tr.hidden = !on;
+      if (on) shown++;
+    });
+
+    count.textContent = (f || t) ? (shown + " / " + rows.length + "건 표시") : "";
+  }
+
+  from.addEventListener("change", apply);
+  to.addEventListener("change", apply);
+  clear.addEventListener("click", function () {
+    from.value = ""; to.value = ""; apply();
+  });
+})();
+</script>
+
+</body>
+</html>

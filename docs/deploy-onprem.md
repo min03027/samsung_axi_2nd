@@ -23,13 +23,12 @@ curl -sI https://github.com | head -1   # 인터넷/GitHub 접근 확인
 
 ```bash
 cd ~
-git clone https://github.com/woongscoding/axi_project.git lxp
+git clone https://github.com/min03027/samsung_axi_2nd.git lxp
 cd lxp
 git checkout v0.1.0-draft   # 배포 기준 태그 (최신 main 으로 하려면 이 줄 생략)
 ```
 
-- private repo 라 계정 인증 필요: ID = GitHub 계정, PW = **Personal Access Token** (미리 만들어 갈 것 — GitHub Settings > Developer settings > Fine-grained token, 대상 repo / Contents: Read-only)
-- 토큰 입력이 번거로우면: `git clone https://<토큰>@github.com/woongscoding/axi_project.git lxp`
+- **공개 저장소라 별도 인증 없이 clone 된다** (예전 private 저장소 시절 필요하던 Personal Access Token 절차는 불필요).
 
 ### A-2. 환경 파일(.env) 작성 — ★제일 중요
 

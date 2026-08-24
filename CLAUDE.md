@@ -21,22 +21,12 @@ K-디지털 트레이닝 훈련기관 학습데이터관리시스템(LMS). 기�
 
 ## Git
 
-- **⚠ 푸시는 `min03027/samsung_axi_2nd` (Mac 리모트 이름 `cf`) 에만 한다.**
-  `git push cf main`. 로컬 main 은 `cf/main` 을 추적하도록 맞춰져 있으므로 `git push` 만 쳐도 된다.
+- **저장소는 하나다 — https://github.com/min03027/samsung_axi_2nd**
+  코드·화면·운영 배포(`v*` 태그)를 모두 이 저장소에서 처리한다.
+  푸시 전에 `git remote -v` 로 대상이 이 저장소인지 확인할 것 — PC 마다 리모트 이름이 다를 수 있다.
+  예전에 쓰던 다른 저장소(옛 정본·옛 프로토타입)는 더 이상 사용하지 않는다.
+  로컬에 남아 있는 리모트가 있으면 `git remote remove <이름>` 으로 정리해 오발송을 막는다.
 
-  | 저장소 | 리모트(Mac) | 상태 |
-  |---|---|---|
-  | `min03027/samsung_axi_2nd` | **`cf`** | **지금 작업하는 곳.** V2 공개사이트 + LXP 전체. Cloudflare 배포가 여기 붙는다 |
-  | `woongscoding/axi_project` | `a` | LXP 정본. **2026-08-22 에 V2 작업 18커밋을 revert 로 걷어냈다** — 여기로 푸시하지 말 것 |
-  | `mina-2026-ai/samsung-lxp` | `origin` | 옛 프로토타입. **금지** — Mac 에서 `git push origin main` 은 여기로 나간다 |
-
-  운영 서버(`lms.samsungax.com`) 배포용 `v*` 태그는 `a` 기준이다. 태그를 밀 일이 생기면
-  V2 가 빠진 `a/main` 이 올라간다는 뜻이므로, 배포 전에 반드시 확인할 것.
-
-- **V2 화면(`static/v2/**`)은 정적 파일이라 스프링이 없어도 뜬다.**
-  단 로그인(`/v2/login`)만은 서버가 CSRF 토큰을 심어 줘야 해서 스프링이 필요하다.
-  Cloudflare 처럼 서버가 없는 곳에서는 `brand.js` 의 `lxpUrl()` 이 자동으로
-  운영 LXP 절대주소(`https://lms.samsungax.com/...`)로 바꿔 보낸다.
 - 1인 개발이므로 main 직접 커밋 허용. 규모 있는 작업(병렬 세션·실험)은 `feat/*` 브랜치 + worktree(`C:\work\` — OneDrive 밖이라 init 스크립트 불필요).
 - 커밋 메시지 한글, 작은 단위 유지.
 

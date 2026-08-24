@@ -1,0 +1,167 @@
+<!doctype html>
+<!-- 사후 검토 — LXP-016(시험 중·완료 후 신분증 검토).
+     운영 admin-04-evaluation/recordings.html 을 기준으로 삼는다:
+       왼쪽 .content-left(영상 컨트롤 + 타임라인 + 이벤트), 오른쪽 400px 상세·제재 패널.
+     실제 얼굴 사진과 신분증 번호는 넣지 않는다. 이니셜 아바타와 마스킹 값만 쓴다.
+
+     페이지 루트 클래스 .proctor-review-page 는 <body> 에 붙는다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/css/common-style.css">
+<link rel="stylesheet" href="/static/css/sidebar-style.css">
+<link rel="stylesheet" href="/static/css/btn-style.css">
+<link rel="stylesheet" href="/v2/assets/exam.css">
+<title>Samsung Academy LXP - 관리자</title>
+</head>
+<body class="proctor-review-page">
+
+<main class="main-content">
+
+  <!-- 왼쪽: 녹화·타임라인·이벤트 -->
+  <section class="content-left">
+
+    <p class="demo-flash">
+      <b>저장된 실제 영상이 아닌 프론트엔드 재생 시뮬레이션입니다.</b>
+      신분증 이미지와 프로필 사진 자리는 비워 두었으며, 판정 결과는 브라우저 세션에만 남고 서버에 저장되지 않습니다.
+    </p>
+
+    <div class="search-container">
+      <label class="sr-only" for="candSelect">응시자</label>
+      <select id="candSelect"></select>
+      <span class="hint-text" id="loadNote" aria-live="polite"></span>
+    </div>
+
+    <!-- 영상 컨트롤 — recordings.html 의 .video-controls -->
+    <div class="video-controls">
+      <div class="controls-main">
+        <button type="button" class="control-btn" id="backBtn" title="10초 뒤로" aria-label="10초 뒤로">⏮</button>
+        <button type="button" class="control-btn play-btn" id="playBtn" title="재생" aria-label="재생">▶</button>
+        <button type="button" class="control-btn" id="fwdBtn" title="10초 앞으로" aria-label="10초 앞으로">⏭</button>
+      </div>
+
+      <div class="timeline-container">
+        <div class="timeline-info">
+          <span id="curTime">00:00</span>
+          <span id="totTime">45:00</span>
+        </div>
+        <div class="timeline-bar"><div class="timeline-progress" id="timelineProgress"></div></div>
+        <label class="sr-only" for="seek">재생 위치</label>
+        <input class="seek-range" type="range" id="seek" min="0" max="2700" value="0" step="1">
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <h3>녹화 화면</h3>
+      <div class="video-item rec-frame">
+        <div class="video-placeholder tall">
+          재생 시뮬레이션<br>저장된 실제 영상이 아닙니다
+        </div>
+        <div class="video-label" id="recLabel">응시자</div>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <h3>이벤트 마커</h3>
+      <p class="hint-text mb-12">마커를 선택하면 해당 시점으로 이동합니다. Tab 과 Enter 로도 선택할 수 있습니다.</p>
+      <div class="marker-track" id="markerTrack" role="group" aria-label="이벤트 마커"></div>
+
+      <div id="eventDetail" aria-live="polite" class="mt-12">
+        <p class="hint-text">마커를 선택하면 상세가 표시됩니다.</p>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <h3>전체 이벤트</h3>
+      <div class="table-scroll">
+        <table class="proctor-table">
+          <thead><tr><th>시각</th><th>유형</th><th>심각도</th><th>내용</th></tr></thead>
+          <tbody id="eventList"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- 오른쪽: 상세·판정 — recordings.html 의 우측 패널 -->
+  <aside class="review-sidebar">
+    <div class="sidebar-header">
+      <h3 class="sidebar-title">검토 상세</h3>
+    </div>
+
+    <div class="info-section">
+      <div class="review-head">
+        <span class="avatar-initial" id="rvAvatar">-</span>
+        <div>
+          <div class="info-value" id="rvName">-</div>
+          <div class="info-value sub" id="rvSeat">-</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">연락처</div>
+        <div class="info-value" id="rvContact">-</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">생년월일</div>
+        <div class="info-value" id="rvBirth">-</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">진행률 / 이벤트</div>
+        <div class="info-value"><span id="rvProgress">-</span> · <span id="rvEventCount">-</span></div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-label">제출 신분증</div>
+      <div class="idcard-slot" id="rvIdSlot">이미지 없음</div>
+      <div class="info-row spaced">
+        <div class="info-label">신분 확인 상태</div>
+        <div class="info-value" id="rvIdStatus">-</div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-label">등록 프로필</div>
+      <div class="idcard-slot">이니셜 아바타로 대체<br>실제 얼굴 사진 미사용</div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-label">검토 메모 (판정 근거로 기록)</div>
+      <textarea class="memo-textarea" id="verdictMemo" placeholder="판단 근거와 확인한 시점을 적습니다."></textarea>
+    </div>
+
+    <div class="info-section">
+      <div class="info-label">판정</div>
+      <div class="sanction-options">
+        <div class="sanction-option">
+          <input type="radio" id="verdict-none" name="verdict" value="정상">
+          <label for="verdict-none">정상 — 특이사항 없음</label>
+        </div>
+        <div class="sanction-option">
+          <input type="radio" id="verdict-check" name="verdict" value="추가 확인">
+          <label for="verdict-check">추가 확인 — 담당자 재검토 필요</label>
+        </div>
+        <div class="sanction-option">
+          <input type="radio" id="verdict-void" name="verdict" value="무효 검토">
+          <label for="verdict-void">무효 검토 — 응시 무효 여부 심의</label>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary save-btn" id="saveVerdict">판정 기록</button>
+      <p class="hint-text mt-12" id="verdictState" aria-live="polite">미검토</p>
+      <p class="hint-text mt-12">
+        판정은 브라우저 세션에만 기록됩니다. 최종 무효 처리는 서버 승인 절차가 필요합니다.
+      </p>
+    </div>
+  </aside>
+
+</main>
+
+<script src="/v2/assets/exam-legacy-shell.js"></script>
+<script src="/v2/assets/exam-demo-data.js"></script>
+<script src="/v2/assets/exam-common.js"></script>
+<script src="/v2/assets/proctor-review.js"></script>
+<script>ExamShell.admin({ active: "eval-review-demo", title: "평가 관리 > 평가 모니터링 > 시험 사후 검토(데모)" });</script>
+</body>
+</html>

@@ -1,0 +1,1417 @@
+/* ============================================================
+   exam.css — LXP 시험 데모 전용 스타일
+
+   전제: 운영 CSS 를 먼저 로드한다. 이 파일은 그 위에 얹는다.
+     훈련생 화면 : basic-form-trainee.css → btn-style.css → exam.css
+     관리자 화면 : common-style.css → sidebar-style.css → btn-style.css → exam.css
+
+   색·간격은 위 파일의 :root 토큰(--color-primary, --gray-*, --color-line-gray 등)만
+   쓴다. 운영 CSS 에 토큰이 없는 색은 운영 원본 hex 를 그대로 옮겼다(억지로
+   토큰화하면 운영 화면과 색이 달라진다). /v2 의 디자인 토큰 파일에는 의존하지 않는다.
+
+   ── 범위 규칙 (반드시 지킬 것) ────────────────────────────────
+   이 파일의 모든 선택자는 아래 7개 "페이지 루트 클래스" 중 하나로 시작한다.
+   루트 클래스는 각 화면의 <body> 에 붙는다 — GNB·사이드바·모달·토스트·푸터가
+   본문 div 바깥에 삽입되기 때문에 body 가 아니면 전부 감쌀 수 없다.
+
+     .exam-demo-page        /v2/lxp/trainee/exams.html
+     .exam-precheck-page    /v2/lxp/trainee/exam-precheck.html
+     .exam-id-page          /v2/lxp/trainee/exam-id-upload.html
+     .exam-workspace        /v2/lxp/trainee/exam-workspace.html
+     .proctor-page          /v2/admin/proctor.html
+     .proctor-review-page   /v2/admin/proctor-review.html
+     .execution-infra-page  /v2/admin/execution-infra.html
+
+   접두 목록은 "그 규칙이 실제로 쓰이는 화면"만 적는다. 전부 나열하지 않는 것은
+   의도적이다 — 훈련생 규칙이 관리자 화면으로, 데모 규칙이 운영 화면으로 새지
+   않는다는 것을 선택자만 읽고 확인할 수 있어야 한다.
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   0. 셸 보정
+   ------------------------------------------------------------ */
+
+/* 훈련생 GNB 활성 메뉴 —
+   운영 fragments/trainee.html 은 활성 li 에 .active_menu 를 붙이지만
+   basic-form-trainee.css 에 대응 규칙이 없다(sidebar-style.css 에만 있고
+   훈련생 화면은 그 파일을 로드하지 않는다).
+   운영이 다른 곳에서 쓰는 .active_menu 표현(굵기 600)을 그대로 가져온다.
+   밑줄 같은 새 표현을 만들지 않는 것은 의도적이다 — 데모 GNB 와 운영 GNB 를
+   오가며 봤을 때 서로 달라 보이면 안 된다. */
+.exam-demo-page .gnb > ul > li.active_menu,
+.exam-precheck-page .gnb > ul > li.active_menu { font-weight: 600; }
+
+/* [hidden] 은 UA 스타일의 display:none 이라 클래스 규칙에 진다.
+   .pane-tabs / .video-pane 처럼 display 를 지정한 요소는 명시적으로 다시 숨긴다. */
+.exam-demo-page [hidden],
+.exam-precheck-page [hidden],
+.exam-id-page [hidden],
+.exam-workspace [hidden],
+.proctor-page [hidden],
+.proctor-review-page [hidden],
+.execution-infra-page [hidden] { display: none !important; }
+
+/* 관리자 3종 — 운영 .main-content(고정 헤더·사이드바 오프셋)는 그대로 두고
+   안쪽 여백과 스크롤 방향만 화면별로 정한다. */
+.proctor-page .main-content,
+.execution-infra-page .main-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* 좁은 화면 drawer 뒤를 덮는 판.
+   .sidebar(z-index 100) 와 .toggle-btn(101) 바로 아래에 깔려야
+   사이드바와 토글은 그대로 누를 수 있고 본문만 가려진다.
+   여는 조건은 exam-legacy-shell.js 가 hidden 속성으로 정한다 —
+   여기서 미디어쿼리를 또 쓰면 경계값이 두 군데로 갈라진다. */
+.proctor-page .shell-backdrop,
+.proctor-review-page .shell-backdrop,
+.execution-infra-page .shell-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+
+/* ------------------------------------------------------------
+   1. 데모 표시 — 모의 동작임을 항상 드러낸다
+   ------------------------------------------------------------ */
+.exam-demo-page .demo-chip,
+.exam-workspace .demo-chip {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+/* 운영 online-test.html 의 .page-warn 과 같은 톤 — 화면에서 가장 강한 요소가 되지 않게 한다 */
+.exam-demo-page .demo-warn,
+.exam-precheck-page .demo-warn,
+.exam-id-page .demo-warn {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #ffe5b8;
+    background: #fff7e8;
+    color: #7a4a00;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.exam-demo-page .demo-warn strong,
+.exam-precheck-page .demo-warn strong,
+.exam-id-page .demo-warn strong { font-weight: 700; }
+
+/* 관리자 화면용 — monitoring-live 의 .flash-message 와 같은 형태 */
+.proctor-page .demo-flash,
+.proctor-review-page .demo-flash,
+.execution-infra-page .demo-flash {
+    margin: 0 0 12px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: #E8F4FF;
+    color: #0b4a7d;
+    font-size: 14px;
+    line-height: 1.5;
+}
+/* 모달 본문은 이미 gap 으로 간격을 준다 — 아래 여백이 겹치지 않게 뺀다 */
+.proctor-page .modal-body .demo-flash { margin-bottom: 0; }
+
+
+/* ------------------------------------------------------------
+   2. 훈련생 공통 — online-test.css 의 카드/필터/배지 문법을 따른다
+   ------------------------------------------------------------ */
+.exam-demo-page .page-header,
+.exam-precheck-page .page-header { margin-bottom: 14px; }
+
+.exam-demo-page .page-desc,
+.exam-precheck-page .page-desc {
+    margin: 6px 0 0 0;
+    font-size: 14px;
+    color: var(--gray-600);
+    line-height: 1.5;
+}
+
+/* 상태 배지 — online-test.css 의 .badge 와 같은 팔레트 */
+.exam-demo-page .exam-badge {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    border: 1px solid var(--gray-200);
+    background: #f4f4f4;
+    color: var(--gray-600);
+    white-space: nowrap;
+}
+.exam-demo-page .exam-badge.available   { background: #eaf2ff; border-color: #cfe0ff; color: #1f4aa8; }
+.exam-demo-page .exam-badge.in_progress { background: #eaf7f0; border-color: #cfeadf; color: #176b43; }
+.exam-demo-page .exam-badge.completed   { background: var(--gray-100); border-color: var(--gray-200); color: var(--gray-600); }
+.exam-demo-page .exam-badge.scheduled   { background: #fff2e6; border-color: #ffd9b3; color: #9a4b00; }
+.exam-demo-page .exam-badge.ended       { background: #ffecec; border-color: #ffd0d0; color: #9a1f1f; }
+
+/* 점검·문항·컨테이너 상태 배지 — 운영 상태색 토큰만 쓴다.
+   색만으로 구분하지 않도록 배지에 항상 라벨 텍스트가 함께 들어간다. */
+.exam-precheck-page .state-badge,
+.exam-id-page .state-badge,
+.exam-workspace .state-badge,
+.execution-infra-page .state-badge {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    background: var(--gray-100);
+    color: var(--gray-600);
+    border: 1px solid var(--gray-200);
+}
+.exam-precheck-page .state-badge.ok,
+.exam-id-page .state-badge.ok,
+.exam-workspace .state-badge.ok,
+.execution-infra-page .state-badge.ok { background: var(--color-success-bg); color: var(--color-success); border-color: #cfe7d1; }
+
+.exam-precheck-page .state-badge.warn,
+.exam-id-page .state-badge.warn,
+.exam-workspace .state-badge.warn,
+.execution-infra-page .state-badge.warn { background: var(--color-warning-bg); color: var(--color-warning); border-color: #f4dfc0; }
+
+.exam-precheck-page .state-badge.risk,
+.exam-id-page .state-badge.risk,
+.exam-workspace .state-badge.risk,
+.execution-infra-page .state-badge.risk { background: var(--color-danger-bg); color: var(--color-danger); border-color: #f3cfcb; }
+
+
+/* ------------------------------------------------------------
+   3. 시험 허브 — online-test.css 의 .exam-card / .card-list 문법
+   ------------------------------------------------------------ */
+.exam-demo-page .card-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(320px, 1fr));
+    gap: 14px;
+}
+
+.exam-demo-page .exam-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.exam-demo-page .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.exam-demo-page .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-900);
+    line-height: 1.25;
+}
+.exam-demo-page .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    font-size: 13px;
+    color: var(--gray-800);
+}
+.exam-demo-page .meta .dim { color: var(--gray-500); }
+.exam-demo-page .submeta { font-size: 12px; color: var(--gray-600); line-height: 1.4; }
+.exam-demo-page .card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+/* 안내 목록 — online-test.css 의 .note-box 를 그대로 쓴다(마케팅형 step 컴포넌트 금지) */
+.exam-demo-page .note-box {
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    background: #fff;
+    padding: 14px;
+    margin-top: 14px;
+}
+.exam-demo-page .note-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 8px;
+}
+.exam-demo-page .note-body {
+    font-size: 13px;
+    color: var(--gray-800);
+    line-height: 1.7;
+}
+.exam-demo-page .note-body ol { counter-reset: step; }
+.exam-demo-page .note-body li { padding-left: 18px; position: relative; }
+.exam-demo-page .note-body li + li { margin-top: 6px; }
+.exam-demo-page .note-body li::before {
+    content: counter(step);
+    counter-increment: step;
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+
+/* ------------------------------------------------------------
+   4. 사전점검 — 5개 점검 카드
+   ------------------------------------------------------------ */
+.exam-precheck-page .check-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.exam-precheck-page .check-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-left: 4px solid var(--gray-300);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.exam-precheck-page .check-card[data-state="pass"]        { border-left-color: var(--color-success); }
+.exam-precheck-page .check-card[data-state="fail"]        { border-left-color: var(--color-danger); }
+.exam-precheck-page .check-card[data-state="checking"]    { border-left-color: var(--color-warning); }
+.exam-precheck-page .check-card[data-state="unsupported"] { border-left-color: var(--gray-400); }
+
+.exam-precheck-page .check-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+.exam-precheck-page .check-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.exam-precheck-page .check-desc  { font-size: 12px; color: var(--gray-600); line-height: 1.5; margin-top: 4px; }
+.exam-precheck-page .check-msg   { font-size: 13px; color: var(--gray-800); line-height: 1.5; min-height: 1.4em; }
+.exam-precheck-page .check-msg[data-tone="ok"]   { color: var(--color-success); }
+.exam-precheck-page .check-msg[data-tone="risk"] { color: var(--color-danger); }
+.exam-precheck-page .check-msg[data-tone="warn"] { color: var(--color-warning); }
+.exam-precheck-page .check-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+
+/* 미디어 미리보기 타일 */
+.exam-precheck-page .media-tile {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.exam-precheck-page .media-tile video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.exam-precheck-page .media-tile .tile-empty {
+    color: var(--gray-400);
+    font-size: 12px;
+    text-align: center;
+    padding: 10px;
+    line-height: 1.5;
+}
+.exam-precheck-page .media-tile .tile-label {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+/* 데모 QR — 외부 라이브러리 없이 CSS 로만 그린다 */
+.exam-precheck-page .qr-demo {
+    width: 132px;
+    height: 132px;
+    background-color: #fff;
+    background-image:
+        linear-gradient(90deg, var(--gray-900) 25%, transparent 25% 50%, var(--gray-900) 50% 62%, transparent 62%),
+        linear-gradient(0deg,  var(--gray-900) 18%, transparent 18% 44%, var(--gray-900) 44% 58%, transparent 58% 74%, var(--gray-900) 74%);
+    background-size: 15px 15px, 15px 15px;
+    border: 6px solid #fff;
+    outline: 1px solid var(--gray-300);
+    border-radius: 4px;
+    flex: none;
+}
+
+/* 입장 게이트 */
+.exam-precheck-page .gate-box {
+    margin-top: 16px;
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+}
+.exam-precheck-page .gate-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.exam-precheck-page .gate-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.exam-precheck-page .gate-msg { font-size: 13px; color: var(--gray-600); margin-top: 4px; }
+.exam-precheck-page .btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
+
+.exam-precheck-page .stack-8 { display: flex; flex-direction: column; gap: 8px; }
+.exam-precheck-page .fallback-hint { margin-bottom: 8px; }
+
+/* 신분 확인 카드의 QR + 안내 2단 — .check-actions 는 margin-top:auto 라 여기 쓸 수 없다 */
+.exam-precheck-page .id-row { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
+.exam-precheck-page .id-row .stack-8 { flex: 1; min-width: 180px; }
+.exam-precheck-page .id-link { word-break: break-all; }
+
+
+/* ------------------------------------------------------------
+   5. 모바일 신분증 제출 — 390px 우선
+   ------------------------------------------------------------ */
+.exam-id-page { background: var(--gray-50); }
+
+.exam-id-page .id-wrap {
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 0 16px 32px;
+}
+.exam-id-page .id-head {
+    background: var(--color-deep-primary);
+    margin: 0 -16px 18px;
+    padding: 18px 16px;
+    color: #fff;
+}
+.exam-id-page .id-head img { width: 118px; display: block; }
+.exam-id-page .id-head p { margin-top: 8px; font-size: 13px; color: rgba(255, 255, 255, 0.75); }
+
+.exam-id-page .id-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.exam-id-page .id-card + .id-card { margin-top: 14px; }
+.exam-id-page .id-card h2 { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+
+.exam-id-page .id-steps { font-size: 13px; color: var(--gray-600); line-height: 1.8; padding-left: 18px; list-style: decimal; }
+
+.exam-id-page .id-preview {
+    aspect-ratio: 16 / 10;
+    border: 1px dashed var(--gray-300);
+    border-radius: 10px;
+    background: var(--gray-50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--gray-500);
+    font-size: 13px;
+    text-align: center;
+    padding: 10px;
+}
+.exam-id-page .id-preview img { width: 100%; height: 100%; object-fit: contain; }
+
+.exam-id-page .field-label { font-size: 13px; color: var(--gray-800); margin-bottom: 6px; display: block; }
+.exam-id-page .field-hint  { font-size: 12px; color: var(--gray-500); margin-top: 6px; }
+.exam-id-page .field-error { font-size: 12px; color: var(--color-danger); margin-top: 6px; }
+.exam-id-page .consent { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--gray-800); line-height: 1.5; }
+.exam-id-page .consent input { width: 16px; height: 16px; flex: none; margin-top: 2px; }
+.exam-id-page .privacy-note {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 12px;
+    color: var(--gray-600);
+    line-height: 1.6;
+}
+.exam-id-page .privacy-note .warn-line { color: var(--color-danger); }
+/* 터치 타깃 확보 */
+.exam-id-page .btn { min-height: 44px; padding: 12px 16px; font-size: 15px; width: 100%; }
+.exam-id-page .btn-row-inline { display: flex; gap: 8px; }
+.exam-id-page .btn-row-inline .btn { width: auto; flex: 1; }
+.exam-id-page .back-row { margin-top: 14px; }
+
+
+/* ------------------------------------------------------------
+   6. 코딩 시험장 — do-test.html(.exam-student/.card/.stat) 기준
+   ------------------------------------------------------------ */
+.exam-workspace .ws-body { display: flex; flex-direction: column; gap: 14px; padding: 20px 0; }
+
+.exam-workspace .exam-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+.exam-workspace .exam-title { margin: 0; font-size: 18px; font-weight: 800; color: var(--gray-900); }
+.exam-workspace .exam-badges { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 0 0; }
+.exam-workspace .exam-notice { margin: 8px 0 0 0; font-size: 13px; color: var(--gray-600); line-height: 1.5; }
+.exam-workspace .exam-notice.conn-row { display: flex; gap: 14px; flex-wrap: wrap; }
+.exam-workspace .exam-top-right { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+
+.exam-workspace .stat {
+    border: 1px solid #eef0f4;
+    border-radius: 10px;
+    padding: 10px 12px;
+    min-width: 118px;
+    text-align: center;
+}
+.exam-workspace .stat.stat-action { display: flex; align-items: center; justify-content: center; }
+.exam-workspace .stat-label { font-size: 12px; font-weight: 800; color: var(--gray-500); margin-bottom: 6px; }
+.exam-workspace .stat-value { font-size: 15px; font-weight: 900; color: var(--gray-900); font-variant-numeric: tabular-nums; }
+.exam-workspace .stat-value[data-warn="soon"]   { color: var(--color-warning); }
+.exam-workspace .stat-value[data-warn="urgent"] { color: var(--color-danger); }
+
+.exam-workspace .conn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray-600); }
+.exam-workspace .conn .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; background: var(--color-success); }
+.exam-workspace .conn .dot.off { background: var(--color-danger); }
+
+/* 3분할 — do-test 의 .exam-body(260px 1fr) 를 3열로 확장 */
+.exam-workspace .split {
+    display: grid;
+    grid-template-columns: var(--col-a, 24%) 6px var(--col-b, 36%) 6px 1fr;
+    gap: 0;
+    align-items: stretch;
+    min-height: 520px;
+    background: #fff;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.exam-workspace .pane { min-width: 0; overflow: auto; padding: 14px; }
+
+.exam-workspace .split__sep {
+    background: var(--color-line-gray);
+    border: 0;
+    padding: 0;
+    cursor: col-resize;
+}
+.exam-workspace .split__sep:hover,
+.exam-workspace .split__sep:focus-visible {
+    background: var(--color-primary);
+    outline: none;
+}
+.exam-workspace .split__sep:focus-visible { box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.3); }
+
+/* 좁은 화면 — 탭 전환 */
+.exam-workspace .split.is-tabs { display: block; min-height: 0; }
+.exam-workspace .split.is-tabs .split__sep { display: none; }
+.exam-workspace .split.is-tabs .pane { display: none; }
+.exam-workspace .split.is-tabs .pane.is-active { display: block; }
+
+.exam-workspace .pane-tabs { display: flex; gap: 8px; margin-bottom: 10px; }
+.exam-workspace .pane-tabs button {
+    padding: 8px 14px;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 20px;
+    background: #fff;
+    font-size: 14px;
+    color: var(--gray-800);
+    cursor: pointer;
+}
+.exam-workspace .pane-tabs button.is-active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+}
+
+/* 문제 목록 — do-test 의 .nav-btn 계열 */
+.exam-workspace .pane-title { font-size: 14px; font-weight: 900; color: var(--gray-900); margin-bottom: 10px; }
+.exam-workspace .q-list { display: flex; flex-direction: column; gap: 8px; }
+.exam-workspace .q-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: 1px solid #e5e9f2;
+    border-radius: 10px;
+    background: #fff;
+    padding: 10px 12px;
+    cursor: pointer;
+    color: var(--gray-800);
+    font-size: 13px;
+}
+.exam-workspace .q-btn:hover { background: #f7f9ff; }
+.exam-workspace .q-btn[aria-pressed="true"] {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.12);
+}
+.exam-workspace .q-btn .q-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.exam-workspace .q-btn .q-name { font-weight: 700; color: var(--gray-900); }
+.exam-workspace .q-btn .q-meta { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+
+.exam-workspace .q-body h3 { font-size: 15px; font-weight: 700; color: var(--gray-900); margin: 14px 0 8px; }
+.exam-workspace .q-body p  { font-size: 13px; color: var(--gray-800); line-height: 1.7; margin-bottom: 8px; }
+.exam-workspace .q-body ul { font-size: 13px; color: var(--gray-600); line-height: 1.7; padding-left: 18px; list-style: disc; }
+
+/* 코드 편집기 */
+.exam-workspace .editor { display: flex; flex-direction: column; gap: 10px; }
+.exam-workspace .editor-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.exam-workspace .editor-bar select { height: 34px; padding: 6px 10px; font-size: 13px; }
+.exam-workspace .editor-bar .spacer { flex: 1; }
+
+.exam-workspace .code-box {
+    display: flex;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #1e1e1e;
+    min-height: 220px;
+}
+.exam-workspace .code-gutter {
+    padding: 12px 8px;
+    text-align: right;
+    white-space: pre;          /* 줄번호는 \n 으로 이어 붙이므로 pre 가 필요하다 */
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    /* 코드 영역과 글자 크기·행간이 같아야 줄번호가 코드 줄에 붙어 있는다.
+       12px 이던 시절엔 줄당 1.6px 씩 밀려 20번째 줄에서 한 줄이 어긋났다. */
+    font-size: 13px;
+    line-height: 1.6;
+    color: #6a737d;
+    background: #181818;
+    user-select: none;
+    overflow: hidden;
+    min-width: 3ch;
+}
+.exam-workspace .code-area {
+    flex: 1;
+    border: 0;
+    outline: none;
+    resize: none;
+    padding: 12px;
+    height: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #e6e6e6;
+    background: #1e1e1e;
+    tab-size: 4;
+    white-space: pre;
+    overflow: auto;
+}
+.exam-workspace .code-area:focus { box-shadow: none; border: 0; }
+
+/* 테스트 케이스 */
+.exam-workspace .testcase { border: 1px solid var(--gray-200); border-radius: 10px; overflow: hidden; }
+.exam-workspace .testcase + .testcase { margin-top: 8px; }
+.exam-workspace .testcase .tc-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--gray-50);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-800);
+}
+.exam-workspace .testcase .tc-body {
+    padding: 10px 12px;
+    display: grid;
+    gap: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: var(--gray-600);
+}
+.exam-workspace .testcase .tc-body b { color: var(--gray-900); }
+.exam-workspace .testcase[data-result="pass"]  .tc-head { background: var(--color-success-bg); }
+.exam-workspace .testcase[data-result="fail"]  .tc-head { background: var(--color-danger-bg); }
+.exam-workspace .testcase[data-result="error"] .tc-head { background: var(--color-warning-bg); }
+
+.exam-workspace .console-box {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 12px;
+    border-radius: 10px;
+    max-height: 180px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+/* 문제 설명 안의 예시 블록은 높이를 제한하지 않는다 */
+.exam-workspace .q-body .console-box { max-height: none; }
+.exam-workspace .q-body .q-meta { font-size: 12px; color: var(--gray-500); margin-bottom: 4px; }
+
+
+/* ------------------------------------------------------------
+   7. 관리자 공통 — monitoring-live 의 헤더·요약·검색·표 문법
+   ------------------------------------------------------------ */
+.proctor-page .online-header,
+.execution-infra-page .online-header {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--color-line-gray);
+    flex-wrap: wrap;
+}
+.proctor-page .online-header > h2,
+.execution-infra-page .online-header > h2 {
+    font-size: 20px;
+    font-weight: normal;
+    color: var(--color-font-gray);
+    min-width: 80px;
+    margin: 0;
+}
+
+.proctor-page .student-list,
+.execution-infra-page .student-list { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; padding: 4px 0; }
+
+.proctor-page .student-btn,
+.execution-infra-page .student-btn {
+    padding: 8px 16px;
+    background: #fff;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--gray-800);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.proctor-page .student-btn:hover,
+.execution-infra-page .student-btn:hover { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+.proctor-page .student-btn.active,
+.execution-infra-page .student-btn.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+
+.proctor-page .student-btn .status-dot,
+.execution-infra-page .student-btn .status-dot {
+    width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+    background: var(--color-success);
+}
+.proctor-page .student-btn .status-dot.warn,
+.execution-infra-page .student-btn .status-dot.warn { background: var(--color-warning); }
+.proctor-page .student-btn .status-dot.risk,
+.execution-infra-page .student-btn .status-dot.risk { background: var(--color-danger); }
+.proctor-page .student-btn .status-dot.off,
+.execution-infra-page .student-btn .status-dot.off  { background: var(--gray-400); }
+
+/* 요약 줄 — KPI 대시보드 카드가 아니라 monitoring-live 의 .proctor-summary 형태 */
+.proctor-page .proctor-summary,
+.execution-infra-page .proctor-summary {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 14px 0 10px;
+    font-size: 14px;
+    color: var(--gray-800);
+}
+.proctor-page .proctor-summary strong,
+.execution-infra-page .proctor-summary strong { font-size: 18px; font-weight: 700; color: var(--gray-900); }
+.proctor-page .proctor-summary .sep,
+.execution-infra-page .proctor-summary .sep { width: 1px; height: 16px; background: var(--gray-300); }
+
+/* 검색 영역 — common-style 의 .search-container 와 같은 밀도 */
+.proctor-page .search-container,
+.proctor-review-page .search-container,
+.execution-infra-page .search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.proctor-page .search-container input,
+.execution-infra-page .search-container input { width: 220px; }
+.proctor-review-page .search-container select { min-width: 240px; }
+
+/* 영상 타일 — monitoring-live 의 .video-grid.proctor */
+.proctor-page .video-grid.proctor {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-auto-rows: minmax(150px, auto);
+    gap: 12px;
+}
+.proctor-page .video-grid.triple { grid-template-columns: repeat(3, 1fr); }
+
+.proctor-page .video-item,
+.proctor-review-page .video-item {
+    position: relative;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--color-line-gray);
+}
+.proctor-page .video-item.severity-warn     { border-color: #F9A825; }
+.proctor-page .video-item.severity-critical { border-color: var(--color-danger); }
+
+.proctor-page .video-item .video-placeholder,
+.proctor-review-page .video-item .video-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-500);
+    font-size: 13px;
+    text-align: center;
+    padding: 8px;
+    line-height: 1.6;
+    background: repeating-linear-gradient(45deg, var(--gray-900), var(--gray-900) 10px, #1a1a1a 10px, #1a1a1a 20px);
+}
+.proctor-review-page .video-item .video-placeholder.tall { min-height: 280px; }
+
+.proctor-page .video-item .video-label,
+.proctor-review-page .video-item .video-label {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 4px;
+}
+.proctor-page .video-item .video-meta {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    color: #fff;
+    font-size: 12px;
+}
+.proctor-review-page .video-item.rec-frame { max-width: 640px; }
+
+/* 감독 테이블 — monitoring-live 의 .proctor-table */
+.proctor-page .proctor-table,
+.proctor-review-page .proctor-table,
+.execution-infra-page .proctor-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    background: #fff;
+    font-size: 13px;
+}
+.proctor-page .proctor-table th,
+.proctor-page .proctor-table td,
+.proctor-review-page .proctor-table th,
+.proctor-review-page .proctor-table td,
+.execution-infra-page .proctor-table th,
+.execution-infra-page .proctor-table td {
+    border-bottom: 1px solid var(--color-line-gray);
+    padding: 8px 10px;
+    text-align: left;
+}
+.proctor-page .proctor-table th,
+.proctor-review-page .proctor-table th,
+.execution-infra-page .proctor-table th { background: #f5f6f8; font-weight: 600; white-space: nowrap; }
+
+.proctor-page .proctor-table td.nowrap,
+.proctor-review-page .proctor-table td.nowrap,
+.execution-infra-page .proctor-table td.nowrap { white-space: nowrap; }
+
+.proctor-page .proctor-table tr.is-selected td { background: var(--color-light-primary); }
+
+.proctor-page .sev-critical,
+.proctor-review-page .sev-critical { color: var(--color-danger); font-weight: 700; }
+.proctor-page .sev-warn,
+.proctor-review-page .sev-warn { color: #F9A825; font-weight: 600; }
+
+.proctor-page .table-scroll,
+.proctor-review-page .table-scroll,
+.execution-infra-page .table-scroll { overflow-x: auto; }
+
+/* 관리자 화면용 카드 */
+.proctor-page .admin-card,
+.proctor-review-page .admin-card,
+.execution-infra-page .admin-card {
+    background: #fff;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 8px;
+    padding: 16px;
+}
+.proctor-page .admin-card + .admin-card,
+.proctor-review-page .admin-card + .admin-card,
+.execution-infra-page .admin-card + .admin-card { margin-top: 14px; }
+
+.proctor-page .admin-card > h3,
+.proctor-review-page .admin-card > h3,
+.execution-infra-page .admin-card > h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 12px;
+}
+.proctor-page .admin-card > .row-between > div > h3 { font-size: 15px; font-weight: 600; color: var(--gray-900); margin: 0; }
+.execution-infra-page .admin-card > .row-between > div > h3 { font-size: 15px; font-weight: 600; color: var(--gray-900); margin: 0; }
+.execution-infra-page .admin-card .sub-head { margin-top: 18px; }
+
+/* 3면 피드 탭 — 감독 화면 */
+.proctor-page .pane-tabs { display: flex; gap: 8px; }
+
+
+/* ------------------------------------------------------------
+   8. 사후 검토 — recordings.html(.content-left + 우측 패널) 구조
+   ------------------------------------------------------------ */
+.proctor-review-page .main-content {
+    flex-direction: row;
+    padding: 0;
+    overflow: hidden;
+}
+.proctor-review-page .content-left {
+    width: calc(100% - 400px);
+    padding: 20px;
+    overflow-y: auto;
+}
+.proctor-review-page .review-sidebar {
+    width: 400px;
+    flex: none;
+    background: #fff;
+    padding: 20px;
+    overflow-y: auto;
+    border-left: 1px solid var(--color-line-gray);
+}
+.proctor-review-page .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--color-line-gray);
+}
+.proctor-review-page .sidebar-title { font-size: 20px; font-weight: 700; color: var(--gray-900); }
+
+.proctor-review-page .video-controls {
+    background: var(--gray-50);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--color-line-gray);
+}
+.proctor-review-page .video-controls .controls-main { display: flex; gap: 8px; align-items: center; justify-content: center; }
+.proctor-review-page .control-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--color-line-gray);
+    background: #fff;
+    cursor: pointer;
+    font-size: 15px;
+    color: var(--gray-800);
+}
+.proctor-review-page .control-btn:hover { background: var(--gray-100); }
+.proctor-review-page .control-btn.play-btn { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+.proctor-review-page .control-btn.play-btn:hover { background: var(--color-primary-hover); }
+
+.proctor-review-page .timeline-container { margin-top: 14px; }
+.proctor-review-page .timeline-info {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--gray-600);
+    margin-bottom: 6px; font-variant-numeric: tabular-nums;
+}
+.proctor-review-page .timeline-bar {
+    position: relative; width: 100%; height: 15px;
+    background: var(--gray-200); border-radius: 4px; overflow: hidden;
+}
+.proctor-review-page .timeline-progress {
+    position: absolute; left: 0; top: 0; height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+}
+.proctor-review-page .seek-range { width: 100%; margin-top: 8px; }
+
+.proctor-review-page .marker-track { position: relative; height: 34px; margin-top: 10px; background: var(--gray-100); border-radius: 4px; }
+.proctor-review-page .marker {
+    position: absolute;
+    top: 4px;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 26px;
+    padding: 0;
+    border: 1px solid var(--gray-300);
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 11px;
+    line-height: 1;
+    color: var(--gray-600);
+}
+.proctor-review-page .marker[data-sev="warn"] { background: var(--color-warning-bg); border-color: var(--color-warning); color: var(--color-warning); }
+.proctor-review-page .marker[data-sev="risk"] { background: var(--color-danger-bg);  border-color: var(--color-danger);  color: var(--color-danger); }
+.proctor-review-page .marker[aria-pressed="true"] { box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.25); }
+.proctor-review-page .track-empty { padding: 8px; }
+.proctor-review-page .ev-type { font-size: 15px; margin-bottom: 6px; }
+.proctor-review-page .ev-note { margin-top: 8px; }
+
+/* recordings.css 의 info-section 문법 그대로 */
+.proctor-review-page .info-section { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--color-line-gray); }
+.proctor-review-page .info-section:last-child { border-bottom: none; }
+.proctor-review-page .info-row { margin-bottom: 12px; }
+.proctor-review-page .info-row.spaced { margin-top: 10px; }
+.proctor-review-page .info-value { font-size: 14px; color: var(--gray-800); font-weight: 600; }
+.proctor-review-page .info-value.sub { font-size: 13px; color: var(--gray-600); font-weight: 400; margin-top: 2px; }
+.proctor-review-page .review-head { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+
+.proctor-page .info-label,
+.proctor-review-page .info-label { font-size: 12px; color: var(--gray-600); margin-bottom: 4px; font-weight: 500; }
+
+.proctor-page .memo-textarea,
+.proctor-review-page .memo-textarea {
+    width: 100%;
+    height: 110px;
+    padding: 10px;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 4px;
+    font-size: 13px;
+    resize: none;
+    font-family: inherit;
+}
+
+.proctor-review-page .sanction-options { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 14px; }
+.proctor-review-page .sanction-option { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--gray-800); }
+.proctor-review-page .sanction-option input { width: 16px; height: 16px; }
+.proctor-review-page .save-btn { width: 100%; padding: 10px; }
+
+.proctor-review-page .idcard-slot {
+    aspect-ratio: 16 / 10;
+    border: 1px dashed var(--gray-300);
+    border-radius: 8px;
+    background: var(--gray-50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12px;
+    color: var(--gray-500);
+    font-size: 12px;
+    line-height: 1.6;
+}
+.proctor-review-page .avatar-initial {
+    width: 56px; height: 56px; flex: none;
+    border-radius: 50%;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700;
+}
+
+
+/* ------------------------------------------------------------
+   9. 실행환경 관제
+   ------------------------------------------------------------ */
+.execution-infra-page .node-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.execution-infra-page .node-card {
+    background: #fff;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.execution-infra-page .node-card[data-state="down"] { border-color: var(--color-danger); background: var(--color-danger-bg); }
+.execution-infra-page .node-card .node-name { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 700; color: var(--gray-900); }
+.execution-infra-page .node-card .node-sub { font-size: 13px; color: var(--gray-600); }
+.execution-infra-page .meter { height: 8px; border-radius: 999px; background: var(--gray-200); overflow: hidden; }
+.execution-infra-page .meter .meter-fill { height: 100%; background: var(--color-primary); }
+.execution-infra-page .meter .meter-fill[data-tone="warn"] { background: #F9A825; }
+.execution-infra-page .meter .meter-fill[data-tone="risk"] { background: var(--color-danger); }
+
+.execution-infra-page .scale-steps { display: flex; flex-wrap: wrap; gap: 8px; }
+.execution-infra-page .scale-step {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--gray-300);
+    background: #fff;
+    font-size: 12px;
+    color: var(--gray-600);
+}
+.execution-infra-page .scale-step[data-state="active"] { border-color: var(--color-primary); background: var(--color-light-primary); color: var(--color-primary); font-weight: 600; }
+.execution-infra-page .scale-step[data-state="done"]   { border-color: var(--color-success); background: var(--color-success-bg); color: var(--color-success); font-weight: 600; }
+.execution-infra-page .scale-step[data-state="failed"] { border-color: var(--color-danger);  background: var(--color-danger-bg);  color: var(--color-danger);  font-weight: 600; }
+
+.execution-infra-page .scale-history { list-style: none; margin-top: 10px; }
+.execution-infra-page .scale-history li {
+    display: flex;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--color-line-gray);
+    font-size: 13px;
+    color: var(--gray-800);
+}
+.execution-infra-page .scale-history li:last-child { border-bottom: none; }
+.execution-infra-page .scale-history .t { color: var(--gray-500); font-variant-numeric: tabular-nums; flex: none; }
+.execution-infra-page .btn-row { display: flex; gap: 8px; }
+
+
+/* ------------------------------------------------------------
+   10. 모달 — online-test.css 의 .modal-backdrop 문법 (모달이 있는 3개 화면)
+   ------------------------------------------------------------ */
+.exam-demo-page .modal-backdrop,
+.exam-workspace .modal-backdrop,
+.proctor-page .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 9999;
+}
+.exam-demo-page .modal-backdrop.open,
+.exam-workspace .modal-backdrop.open,
+.proctor-page .modal-backdrop.open { display: flex; }
+
+.exam-demo-page .modal-box,
+.exam-workspace .modal-box,
+.proctor-page .modal-box {
+    width: 560px;
+    max-width: 100%;
+    max-height: 85vh;
+    overflow: auto;
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid var(--gray-200);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+.exam-demo-page .modal-box .modal-head,
+.exam-workspace .modal-box .modal-head,
+.proctor-page .modal-box .modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--gray-200);
+    background: var(--gray-50);
+}
+.exam-demo-page .modal-box .modal-title,
+.exam-workspace .modal-box .modal-title,
+.proctor-page .modal-box .modal-title { margin: 0; font-size: 16px; font-weight: 600; color: var(--gray-900); }
+
+.exam-demo-page .modal-box .modal-body,
+.exam-workspace .modal-box .modal-body,
+.proctor-page .modal-box .modal-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--gray-800);
+    line-height: 1.6;
+}
+.exam-demo-page .modal-box .modal-foot,
+.exam-workspace .modal-box .modal-foot,
+.proctor-page .modal-box .modal-foot {
+    padding: 12px 16px;
+    border-top: 1px solid var(--gray-200);
+    background: var(--gray-50);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.exam-demo-page .icon-btn,
+.exam-workspace .icon-btn,
+.proctor-page .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid var(--gray-200);
+    background: #fff;
+    cursor: pointer;
+    color: var(--gray-600);
+}
+.exam-demo-page .icon-btn:hover,
+.exam-workspace .icon-btn:hover,
+.proctor-page .icon-btn:hover { background: var(--gray-100); }
+
+/* 모달이 열린 동안 배경 스크롤 잠금 — 루트 클래스가 <body> 에 있어 자기 자신에 붙는다 */
+.exam-demo-page.has-modal,
+.exam-workspace.has-modal,
+.proctor-page.has-modal { overflow: hidden; }
+
+.proctor-page .field-error { font-size: 12px; color: var(--color-danger); margin-top: 6px; }
+
+
+/* ------------------------------------------------------------
+   11. 토스트 — ExamDemo.toast 가 7개 화면 어디서나 쓴다
+   ------------------------------------------------------------ */
+.exam-demo-page .toast-host,
+.exam-precheck-page .toast-host,
+.exam-id-page .toast-host,
+.exam-workspace .toast-host,
+.proctor-page .toast-host,
+.proctor-review-page .toast-host,
+.execution-infra-page .toast-host {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: min(340px, calc(100vw - 40px));
+}
+.exam-demo-page .toast,
+.exam-precheck-page .toast,
+.exam-id-page .toast,
+.exam-workspace .toast,
+.proctor-page .toast,
+.proctor-review-page .toast,
+.execution-infra-page .toast {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: var(--color-deep-primary);
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.exam-demo-page .toast.ok,
+.exam-precheck-page .toast.ok,
+.exam-id-page .toast.ok,
+.exam-workspace .toast.ok,
+.proctor-page .toast.ok,
+.proctor-review-page .toast.ok,
+.execution-infra-page .toast.ok { background: var(--color-success); }
+
+.exam-demo-page .toast.warn,
+.exam-precheck-page .toast.warn,
+.exam-id-page .toast.warn,
+.exam-workspace .toast.warn,
+.proctor-page .toast.warn,
+.proctor-review-page .toast.warn,
+.execution-infra-page .toast.warn { background: var(--color-warning); }
+
+.exam-demo-page .toast.risk,
+.exam-precheck-page .toast.risk,
+.exam-id-page .toast.risk,
+.exam-workspace .toast.risk,
+.proctor-page .toast.risk,
+.proctor-review-page .toast.risk,
+.execution-infra-page .toast.risk { background: var(--color-danger); }
+
+.exam-demo-page .toast.is-out,
+.exam-precheck-page .toast.is-out,
+.exam-id-page .toast.is-out,
+.exam-workspace .toast.is-out,
+.proctor-page .toast.is-out,
+.proctor-review-page .toast.is-out,
+.execution-infra-page .toast.is-out { opacity: 0; transform: translateY(6px); }
+
+
+/* ------------------------------------------------------------
+   12. 공통 보조 유틸
+   ------------------------------------------------------------ */
+.exam-demo-page .sr-only,
+.exam-precheck-page .sr-only,
+.exam-id-page .sr-only,
+.exam-workspace .sr-only,
+.proctor-page .sr-only,
+.proctor-review-page .sr-only,
+.execution-infra-page .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+.exam-demo-page .row-between,
+.exam-precheck-page .row-between,
+.exam-id-page .row-between,
+.exam-workspace .row-between,
+.proctor-page .row-between,
+.proctor-review-page .row-between,
+.execution-infra-page .row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+.exam-demo-page .mono,
+.exam-precheck-page .mono,
+.exam-id-page .mono,
+.exam-workspace .mono,
+.proctor-page .mono,
+.proctor-review-page .mono,
+.execution-infra-page .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; }
+
+.exam-demo-page .hint-text,
+.exam-precheck-page .hint-text,
+.exam-id-page .hint-text,
+.exam-workspace .hint-text,
+.proctor-page .hint-text,
+.proctor-review-page .hint-text,
+.execution-infra-page .hint-text { font-size: 12px; color: var(--gray-500); line-height: 1.6; }
+
+/* 자주 쓰는 간격 — 인라인 style 대신 클래스로 둔다 */
+.exam-demo-page .mt-12,
+.exam-precheck-page .mt-12,
+.exam-id-page .mt-12,
+.exam-workspace .mt-12,
+.proctor-page .mt-12,
+.proctor-review-page .mt-12,
+.execution-infra-page .mt-12 { margin-top: 12px; }
+
+.exam-demo-page .mb-12,
+.exam-precheck-page .mb-12,
+.exam-id-page .mb-12,
+.exam-workspace .mb-12,
+.proctor-page .mb-12,
+.proctor-review-page .mb-12,
+.execution-infra-page .mb-12 { margin-bottom: 12px; }
+
+/* 푸터 — fragments/trainee.html :: footer 와 같은 형태.
+   ExamShell.footer() 가 붙이므로 GNB 를 쓰는 두 화면에만 나온다. */
+.exam-demo-page .simple-footer,
+.exam-precheck-page .simple-footer {
+    border-top: 1px solid var(--color-line-gray);
+    background: #fff;
+    padding: 18px 0;
+    margin-top: 32px;
+}
+.exam-demo-page .simple-footer .footer-inner,
+.exam-precheck-page .simple-footer .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--gray-500);
+}
+.exam-demo-page .simple-footer .footer-link:hover,
+.exam-precheck-page .simple-footer .footer-link:hover { color: var(--color-primary); }
+.exam-demo-page .simple-footer .footer-dot,
+.exam-precheck-page .simple-footer .footer-dot { margin: 0 6px; color: var(--gray-300); }
+
+
+/* ------------------------------------------------------------
+   13. 반응형 — 운영 화면과 같은 브레이크포인트(1440/1240/1024/768/480)
+   ------------------------------------------------------------ */
+@media (max-width: 1240px) {
+    .proctor-review-page .content-left { width: calc(100% - 340px); }
+    .proctor-review-page .review-sidebar { width: 340px; }
+}
+
+/* 카드 2열 해제 지점은 운영 online-test.css 와 같은 980px 을 쓴다. */
+@media (max-width: 980px) {
+    .exam-demo-page .card-list { grid-template-columns: 1fr; }
+}
+
+/* 3면 그리드 → 탭 전환.
+   ⚠ 이 경계값은 proctor-demo.js / exam-workspace.js 의
+   matchMedia("(max-width: 1023px)") 와 반드시 같아야 한다.
+   어긋나면 1024px 에서 CSS 는 탭 모드인데 JS 는 그리드 모드로 판단해
+   패널이 전부 숨겨지거나 전부 펼쳐진다(실제로 밟았다). */
+@media (max-width: 1023px) {
+    .proctor-page .video-grid.triple { grid-template-columns: 1fr; }
+    .proctor-page .video-grid.triple .video-pane { display: none; }
+    .proctor-page .video-grid.triple .video-pane.is-active { display: block; }
+
+    /* 사후 검토는 위아래로 쌓는다 */
+    .proctor-review-page .main-content { flex-direction: column; overflow-y: auto; }
+    .proctor-review-page .content-left { width: 100%; overflow: visible; }
+    .proctor-review-page .review-sidebar {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid var(--color-line-gray);
+        overflow: visible;
+    }
+}
+
+/* ⚠ 이 768 은 exam-legacy-shell.js 의 matchMedia("(max-width: 768px)") 와 같아야 한다.
+   그쪽에서 사이드바를 자동으로 접고, 여기서 그 폭에 맞춰 헤더 여백을 줄인다. */
+@media (max-width: 768px) {
+    .proctor-page .main-content,
+    .execution-infra-page .main-content { padding: 14px; }
+
+    /* 사이드바가 60px 로 접힌 상태 기준으로 헤더를 다시 짠다.
+       운영 .header 는 padding-left 에 --sidebar-collapsed-width(60px)를 또 주기 때문에
+       그대로 두면 390px 화면에서 제목 자리가 120px 밖에서 시작한다. */
+    .proctor-page .header,
+    .proctor-review-page .header,
+    .execution-infra-page .header { padding-left: 12px; padding-right: 12px; gap: 8px; }
+
+    .proctor-page .header h1,
+    .proctor-review-page .header h1,
+    .execution-infra-page .header h1 {
+        font-size: 14px;
+        min-width: 0;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .proctor-page .header .icon-container,
+    .proctor-review-page .header .icon-container,
+    .execution-infra-page .header .icon-container { gap: 4px; flex: none; }
+    .proctor-page .header .icon-box,
+    .proctor-review-page .header .icon-box,
+    .execution-infra-page .header .icon-box { width: 32px; height: 32px; }
+    .proctor-page .header .icon-box img,
+    .proctor-review-page .header .icon-box img,
+    .execution-infra-page .header .icon-box img { width: 20px !important; }
+
+    /* "접속중" 제목 옆에 pill 이 2열로 접히면 제목만 세로 가운데에 떠 보인다 — 위아래로 쌓는다 */
+    .proctor-page .online-header,
+    .execution-infra-page .online-header { flex-direction: column; align-items: stretch; gap: 10px; }
+    .proctor-page .online-header > h2,
+    .execution-infra-page .online-header > h2 { font-size: 17px; }
+
+    .proctor-page .proctor-summary,
+    .execution-infra-page .proctor-summary { gap: 12px; font-size: 13px; }
+    .proctor-page .proctor-summary strong,
+    .execution-infra-page .proctor-summary strong { font-size: 16px; }
+
+    .proctor-page .search-container input,
+    .execution-infra-page .search-container input { width: 100%; }
+    .proctor-review-page .search-container select { min-width: 0; width: 100%; }
+
+    /* 표는 가로 스크롤 컨테이너 안에서만 넘치게 한다 — 페이지가 옆으로 밀리면 안 된다 */
+    .proctor-page .proctor-table,
+    .proctor-review-page .proctor-table,
+    .execution-infra-page .proctor-table { min-width: 560px; }
+}
+
+@media (max-width: 480px) {
+    .exam-workspace .exam-top-right { justify-content: flex-start; }
+    .exam-workspace .stat { min-width: 96px; }
+    .exam-id-page .id-head img { width: 104px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .exam-demo-page .toast,
+    .exam-precheck-page .toast,
+    .exam-id-page .toast,
+    .exam-workspace .toast,
+    .proctor-page .toast,
+    .proctor-review-page .toast,
+    .execution-infra-page .toast { transition: none; }
+
+    .proctor-page .student-btn,
+    .execution-infra-page .student-btn { transition: none; }
+}
