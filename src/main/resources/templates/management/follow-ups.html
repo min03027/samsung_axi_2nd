@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상담·후속조치 | 통합 관리자 플랫폼</title>
+    <link sec:authorize="hasRole('ADMIN')" rel="stylesheet" href="/static/css/common-style.css">
+    <link sec:authorize="hasRole('ADMIN')" rel="stylesheet" href="/static/css/sidebar-style.css">
+    <link sec:authorize="hasRole('INSTRUCTOR')" rel="stylesheet" href="/static/css/i-common-style.css">
+    <link sec:authorize="hasRole('INSTRUCTOR')" rel="stylesheet" href="/static/css/i-sidebar-style.css">
+    <link rel="stylesheet" href="/static/css/management-hubs.css">
+    <script src="/static/js/sidebar-function.js" defer></script>
+</head>
+<body class="management-hub-body">
+<header th:replace="~{fragments/management :: header('수강생 케어 > 상담·후속조치')}"></header>
+<th:block th:replace="~{fragments/management :: sidebar('care-followup')}"></th:block>
+
+<main class="main-content management-hub-main">
+    <div class="management-hub-shell">
+        <section class="management-hub-hero">
+            <div><span class="management-kicker">FOLLOW-UP WORKFLOW</span><h2>확인이 필요한 학생을<br>조치 완료까지 관리합니다.</h2><p>관찰 기록이 상담과 후속조치로 이어지도록 담당자·예정일·처리 상태를 함께 확인합니다.</p></div>
+            <aside class="management-scope-card"><span>업무 확인 범위</span><strong th:text="${managementScope}">전체 과정·수강생</strong><small>등록된 상담과 조치 업무만 단계별로 표시합니다.</small></aside>
+        </section>
+
+        <section class="management-section">
+            <div class="management-section-head"><div><h3>상담·조치 보드</h3><p>학생 다이어리에서 등록된 조치 건을 처리 단계별로 확인합니다.</p></div>
+                <a class="management-link" th:href="${managementBase + '/care/diary'}">학생 다이어리 보기 →</a></div>
+            <div class="management-board">
+                <article class="management-board-column"><h4>관찰 필요 <span>—</span></h4><div class="management-board-empty">등록된 관찰 건이 없습니다.</div></article>
+                <article class="management-board-column"><h4>상담 예정 <span>—</span></h4><div class="management-board-empty">예약된 상담이 없습니다.</div></article>
+                <article class="management-board-column"><h4>상담 진행 <span>—</span></h4><div class="management-board-empty">진행 중인 상담이 없습니다.</div></article>
+                <article class="management-board-column"><h4>조치 완료 <span>—</span></h4><div class="management-board-empty">완료 처리된 조치가 없습니다.</div></article>
+                <article class="management-board-column"><h4>정상화 <span>—</span></h4><div class="management-board-empty">정상화 기록이 없습니다.</div></article>
+            </div>
+        </section>
+
+        <section class="management-section">
+            <div class="management-section-head"><div><h3>후속조치 상세</h3><p>학생, 원인 기록, 담당자, 예정일, 상담 내용과 완료 근거를 함께 확인합니다.</p></div></div>
+            <div class="management-workspace-grid">
+                <article class="management-panel"><h4>조치 대상</h4><p class="management-panel-intro">선택한 상태 카드의 학생과 원인 기록을 표시합니다.</p><div class="management-empty"><span>○</span><strong>선택된 조치 건이 없습니다.</strong><p>실제 조치 건이 생성되면 학생의 이전 기록과 함께 표시합니다.</p></div></article>
+                <article class="management-panel"><h4>처리 이력</h4><p class="management-panel-intro">상태 변경, 담당자 변경과 상담 결과를 시간순으로 표시합니다.</p><div class="management-empty"><span>↻</span><strong>처리 이력이 없습니다.</strong><p>보존 기준에 맞는 실제 처리 이력만 표시됩니다.</p></div></article>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>
