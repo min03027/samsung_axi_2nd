@@ -19,7 +19,10 @@
     count.textContent = "공개 사례 " + visible + "건";
     empty.hidden = visible !== 0;
   }
-  form.addEventListener("change", applyFilters);
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    applyFilters();
+  });
   form.addEventListener("reset", function () { window.setTimeout(applyFilters, 0); });
   var initial = new URLSearchParams(location.search).get("industry");
   if (initial && form.elements.industry) form.elements.industry.value = initial;
