@@ -1,5 +1,4 @@
 (() => {
-  const source = 'https://samsungaxi.com/p/?j=87&ej_code=woosoo&st=100&sv=&pno=9&sort=0';
   const raw = [
     [20136,'불안함을 없애는 커리큘럼 ㅡ데이터를 쓰는 법은 여기서 익혔어요','임O은','20260707181846_1783415926_0_1.png','data'],
     [20135,'웹 개발을 넘어, 스스로 판단하는 AI로','허O원','20260707181709_1783415829_0_1.png','ai web'],
@@ -29,20 +28,15 @@
     [20012,'수많은 프로젝트가, 나의 실전 능력으로','안O진','20260617090906_1781654946_0_2.png','career'],
     [20011,'하고 싶은 게 없던 제가, 가고 싶은 곳을 찾기까지','양O민','20260617090929_1781654969_0_1.png','career']
   ];
-  const reviews = raw.map(([uid,title,name,image,field]) => ({uid,title,name,field,year:'2026',image:`https://samsungaxi.com/data/board/woosoo/${image}`,source:`${source}&page=${uid >= 20106 ? 1 : uid >= 20027 ? 2 : 3}&act=view&bbs_uid=${uid}`}));
+  const reviews = raw.map(([uid,title,name,image,field]) => ({uid,title,name,field,year:'2026',image:`/v2/assets/reviews/${uid}.png`,detail:`/v2/site/campus/review.html?id=${uid}`}));
   const featured = {...reviews[2], fullName:'김유신', company:'브레인크루(주)', role:'AI·AIgent 개발', course:'데이터 분석 · 로봇 AI', summary:'무역회사 오퍼 대신 IT를 선택하고 두 과정을 연달아 수강했습니다. 데이터 처리 감각을 로봇·영상 AI로 연결해 현재 AI·AIgent 개발자로 일합니다.', skills:['Hadoop','Tableau','TensorFlow','라이다','뎁스카메라','자율주행·협동로봇']};
   const escapeHtml = value => String(value).replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
-  const card = item => `<article class="review-card"><button type="button" data-review-id="${item.uid}" aria-label="${escapeHtml(item.title)} 상세 보기"><img src="${item.image}" alt="${escapeHtml(item.name)} 수료생 인터뷰 대표 이미지" loading="lazy"><span><small>2026 · CAREER TRANSITION</small><strong>${escapeHtml(item.title)}</strong><em>${escapeHtml(item.name)} 수료생</em></span></button></article>`;
-  document.querySelector('[data-featured-review]').innerHTML = `<article class="featured-review"><img src="${featured.image}" alt="김유신 수료생 인터뷰 대표 이미지"><div><span>FEATURED · DATA + ROBOT AI</span><h2>${featured.title}</h2><p>${featured.summary}</p><dl><div><dt>연계 과정</dt><dd>${featured.course}</dd></div><div><dt>현재</dt><dd>${featured.company} · ${featured.role}</dd></div></dl><div class="featured-review__skills">${featured.skills.map(skill => `<b>${skill}</b>`).join('')}</div><button class="btn btn--primary" type="button" data-review-id="${featured.uid}">인터뷰 상세 보기</button></div></article>`;
+  const card = item => `<article class="review-card"><a href="${item.detail}" aria-label="${escapeHtml(item.title)} 상세 보기"><img src="${item.image}" alt="${escapeHtml(item.name)} 수료생 인터뷰 대표 이미지" loading="lazy"><span><small>2026 · CAREER TRANSITION</small><strong>${escapeHtml(item.title)}</strong><em>${escapeHtml(item.name)} 수료생</em></span></a></article>`;
+  document.querySelector('[data-featured-review]').innerHTML = `<article class="featured-review"><img src="${featured.image}" alt="김유신 수료생 인터뷰 대표 이미지"><div><span>FEATURED · DATA + ROBOT AI</span><h2>${featured.title}</h2><p>${featured.summary}</p><dl><div><dt>연계 과정</dt><dd>${featured.course}</dd></div><div><dt>현재</dt><dd>${featured.company} · ${featured.role}</dd></div></dl><div class="featured-review__skills">${featured.skills.map(skill => `<b>${skill}</b>`).join('')}</div><a class="btn btn--primary" href="${featured.detail}">인터뷰 상세 보기</a></div></article>`;
   const grid = document.querySelector('[data-review-grid]');
   const form = document.querySelector('[data-review-filter]');
   const count = document.querySelector('[data-review-count]');
   const empty = document.querySelector('[data-review-empty]');
   function render() { const data = new FormData(form); const query = String(data.get('query') || '').trim().toLowerCase(); const year = data.get('year'); const field = data.get('field'); const matches = reviews.filter(item => (!query || `${item.title} ${item.name}`.toLowerCase().includes(query)) && (year === 'all' || item.year === year) && (field === 'all' || item.field.split(' ').includes(field))); grid.innerHTML = matches.map(card).join(''); count.textContent = matches.length; empty.hidden = matches.length !== 0; }
   form.addEventListener('input', render); form.addEventListener('reset', () => setTimeout(render)); render();
-  const dialog = document.querySelector('[data-review-dialog]');
-  const detail = document.querySelector('[data-review-detail]');
-  function openDetail(uid) { const item = reviews.find(review => review.uid === Number(uid)); if (!item) return; const isFeatured = item.uid === featured.uid; detail.innerHTML = `<img src="${item.image}" alt="${escapeHtml(item.name)} 수료생 인터뷰"><div class="review-dialog__copy"><span>2026 · CAREER TRANSITION INTERVIEW</span><h2>${escapeHtml(item.title)}</h2><p><b>${escapeHtml(isFeatured ? featured.fullName : item.name)}</b> 수료생의 공개 취업 인터뷰입니다.</p>${isFeatured ? `<dl><div><dt>과정</dt><dd>${featured.course}</dd></div><div><dt>현재 직장</dt><dd>${featured.company}</dd></div><div><dt>현재 직무</dt><dd>${featured.role}</dd></div></dl><p>${featured.summary}</p>` : '<p>과정 경험과 취업 전환의 전체 내용은 삼성AXI 원문 인터뷰에서 확인할 수 있습니다.</p>'}<div><a class="btn btn--primary" href="${item.source}" target="_blank" rel="noopener">원문 인터뷰 전체 보기 ↗</a><a class="btn btn--outline" href="/v2/site/class/index.html">관련 과정 보기</a></div></div>`; dialog.showModal(); }
-  document.addEventListener('click', event => { const trigger = event.target.closest('[data-review-id]'); if (trigger) openDetail(trigger.dataset.reviewId); });
-  document.querySelector('[data-review-close]').addEventListener('click', () => dialog.close()); dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
 })();
