@@ -7,7 +7,7 @@
 <meta name="description" content="AI를 배우는 조직에서 AI로 일하는 조직으로. 조직 진단부터 정착까지 설계합니다.">
 <link rel="stylesheet" href="/v2/assets/tokens.css">
 <link rel="stylesheet" href="/v2/assets/base.css">
-<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/biz-pages.css?v=20260824-97">
+<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/biz-pages.css?v=20260824-99">
 </head>
 <body>
 
@@ -30,6 +30,54 @@
       <div class="hero__stat"><b class="num">5종</b><span>시간별 기본 구성</span></div>
       <div class="hero__stat"><b class="num">맞춤형</b><span>업무·보안 기준 반영</span></div>
     </div>
+  </div>
+</section>
+
+<!-- 조직 유형별 교육 설계 -->
+<section class="biz-education-types" id="education-types" aria-labelledby="education-types-title">
+  <div class="container">
+    <div class="biz-education-types__head">
+      <span class="eyebrow">EDUCATION TYPE</span>
+      <h2 id="education-types-title">조직에 맞는 교육 방식부터 선택하세요</h2>
+      <p>기업의 실무 전환, 공공의 행정·서비스 적용, 조직별 맞춤 설계를 각각 다른 기준으로 구성합니다.</p>
+    </div>
+    <div class="biz-type-tabs" role="tablist" aria-label="교육 유형 선택">
+      <button type="button" role="tab" id="biz-type-tab-company" aria-controls="biz-type-company" aria-selected="true" data-biz-type-tab="company">기업 특화 IT 교육</button>
+      <button type="button" role="tab" id="biz-type-tab-public" aria-controls="biz-type-public" aria-selected="false" tabindex="-1" data-biz-type-tab="public">공공 부문 특화 교육</button>
+      <button type="button" role="tab" id="biz-type-tab-custom" aria-controls="biz-type-custom" aria-selected="false" tabindex="-1" data-biz-type-tab="custom">맞춤형 교육</button>
+    </div>
+
+    <article class="biz-type-panel" id="biz-type-company" role="tabpanel" aria-labelledby="biz-type-tab-company" data-biz-type-panel="company" data-tone="company">
+      <header class="biz-type-panel__intro"><div><span>FOR BUSINESS</span><h3>기업 경쟁력을 만드는 실무 중심 교육</h3></div><p>단순한 도구 학습을 넘어 실제 업무의 효율과 결과물을 개선할 수 있도록 직무별 실습을 설계합니다.</p></header>
+      <div class="biz-type-cards biz-type-cards--three">
+        <div><b>AI 활용 교육</b><p>생성형 AI, 업무 자동화, 콘텐츠·데이터 활용</p></div>
+        <div><b>Cloud·데이터 교육</b><p>클라우드 기초, 배포·운영, 데이터 처리 실습</p></div>
+        <div><b>솔루션·업무자동화 교육</b><p>기업 시스템과 업무 흐름을 반영한 적용 실습</p></div>
+      </div>
+      <ol class="biz-type-process" aria-label="기업교육 진행 과정"><li><b>사전 진단</b><span>업무 환경과 요구 분석</span></li><li><b>교육 설계</b><span>직무별 커리큘럼 구성</span></li><li><b>교육 운영</b><span>실습·프로젝트 중심 진행</span></li><li><b>적용 및 확산</b><span>조직 내 활용과 정착</span></li></ol>
+      <div class="biz-type-panel__cta"><p>교육을 넘어, 조직의 실행력을 만듭니다.</p><a class="btn btn--primary" href="#biz-contact" data-education-type="기업 특화 IT 교육">기업교육 문의</a></div>
+    </article>
+
+    <article class="biz-type-panel" id="biz-type-public" role="tabpanel" aria-labelledby="biz-type-tab-public" data-biz-type-panel="public" data-tone="public" hidden>
+      <header class="biz-type-panel__intro"><div><span>FOR PUBLIC</span><h3>공공 환경에 최적화된 교육 체계</h3></div><p>정책·행정·서비스 업무에 적용할 수 있도록 기관의 목적과 보안 환경을 반영해 운영합니다.</p></header>
+      <div class="biz-type-cards biz-type-cards--three">
+        <div><b>중앙부처 대상</b><p>정책 수립과 행정 업무를 위한 데이터·AI 활용</p></div>
+        <div><b>공기업 대상</b><p>운영 효율과 서비스 품질을 높이는 업무 적용</p></div>
+        <div><b>지자체·교육기관 대상</b><p>지역과 교육 환경에 맞춘 AI 기초·디지털 역량</p></div>
+      </div>
+      <ol class="biz-type-process" aria-label="공공교육 진행 과정"><li><b>사전 진단</b><span>기관 환경과 목적 분석</span></li><li><b>교육 설계</b><span>정책·업무별 과정 구성</span></li><li><b>교육 운영</b><span>사례·실습 중심 진행</span></li><li><b>적용 및 확산</b><span>현업 적용과 운영 지원</span></li></ol>
+      <div class="biz-type-panel__cta"><p>교육을 넘어, 공공의 성장을 함께 설계합니다.</p><a class="btn btn--primary" href="#biz-contact" data-education-type="공공 부문 특화 교육">공공교육 문의</a></div>
+    </article>
+
+    <article class="biz-type-panel" id="biz-type-custom" role="tabpanel" aria-labelledby="biz-type-tab-custom" data-biz-type-panel="custom" data-tone="custom" hidden>
+      <header class="biz-type-panel__intro"><div><span>TAILORED PROGRAM</span><h3>조직에 최적화된 교육 설계</h3></div><p>조직 수준과 직무별 요구를 먼저 분석하고, 일정과 목표에 맞는 교육 방식을 함께 정합니다.</p></header>
+      <div class="biz-type-cards biz-type-cards--two">
+        <div><b>체계적인 교육 설계</b><p>조직 수준과 직무 요구를 분석해 단계별 커리큘럼을 구성합니다.</p></div>
+        <div><b>맞춤 과정 제안</b><p>교육 목적·일정·인원을 반영해 적합한 시간과 운영 방식을 제안합니다.</p></div>
+      </div>
+      <ol class="biz-type-process" aria-label="맞춤교육 진행 과정"><li><b>사전 진단</b><span>조직 환경과 목표 분석</span></li><li><b>교육 설계</b><span>맞춤 커리큘럼 구성</span></li><li><b>교육 운영</b><span>실습·프로젝트 중심 진행</span></li><li><b>적용 및 확산</b><span>성과 연결과 운영 정착</span></li></ol>
+      <div class="biz-type-panel__cta"><p>우리 조직에 가장 적합한 교육을 제안받아보세요.</p><a class="btn btn--primary" href="#biz-contact" data-education-type="맞춤형 교육">맞춤교육 문의</a></div>
+    </article>
   </div>
 </section>
 
@@ -210,7 +258,8 @@
 
 <script src="/v2/assets/brand.js"></script>
 <script src="/v2/assets/page-section-navigation.js"></script>
-<script>Shell.site({service:"biz",nav:"home",sections:[{href:"#org-diagnosis",label:"조직 진단"},{href:"#change-flow",label:"변화 경로"},{href:"#job-programs",label:"직무별 과정"},{href:"#company-cases",label:"기업 사례"},{href:"#biz-contact",label:"도입 문의"}]});</script>
+<script>Shell.site({service:"biz",nav:"home",sections:[{href:"#education-types",label:"교육 유형"},{href:"#org-diagnosis",label:"조직 진단"},{href:"#change-flow",label:"변화 경로"},{href:"#job-programs",label:"직무별 과정"},{href:"#company-cases",label:"기업 사례"},{href:"#biz-contact",label:"도입 문의"}]});</script>
+<script src="/v2/assets/biz-education-types.js?v=20260824-99"></script>
 <script>var selectedProgram=new URLSearchParams(location.search).get('program');if(selectedProgram){var issue=document.getElementById('issue');if(issue&&!issue.value){issue.value=selectedProgram+' 직무 과정의 시간·대상·교육 방식을 문의합니다.'}}</script>
 </body>
 </html>

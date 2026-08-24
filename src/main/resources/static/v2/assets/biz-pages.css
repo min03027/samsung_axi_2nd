@@ -8,3 +8,40 @@
 .biz-site .biz-quickbar{top:72px;z-index:99}
 .biz-program-card[hidden]{display:none!important}
 .biz-case[hidden]{display:none!important}
+
+/* 조직 유형별 교육 설계 */
+.biz-education-types{padding:clamp(72px,8vw,120px) 0;background:#f7f5f2;color:#171513}
+.biz-education-types__head{max-width:780px;margin-bottom:34px}
+.biz-education-types__head h2{margin-top:12px;font-size:clamp(34px,4.5vw,58px);line-height:1.12;letter-spacing:-.055em}
+.biz-education-types__head p{margin-top:18px;color:#6e6862;font-size:17px;line-height:1.75}
+.biz-type-tabs{display:flex;gap:8px;margin-bottom:18px;padding:6px;border:1px solid #ded9d2;border-radius:14px;background:#fff}
+.biz-type-tabs button{flex:1;min-height:58px;padding:12px 18px;border:0;border-radius:9px;background:transparent;color:#77716b;font-size:15px;font-weight:800;cursor:pointer}
+.biz-type-tabs button[aria-selected="true"]{background:#191715;color:#fff}
+.biz-type-tabs button:focus-visible{outline:3px solid rgba(240,75,20,.3);outline-offset:2px}
+.biz-type-panel{--type-accent:#f04b14;--type-soft:#fff0ea;overflow:hidden;border:1px solid #ded9d2;border-radius:20px;background:#fff}
+.biz-type-panel[hidden]{display:none!important}
+.biz-type-panel[data-tone="public"]{--type-accent:#008f83;--type-soft:#e9f7f5}
+.biz-type-panel[data-tone="custom"]{--type-accent:#6441d8;--type-soft:#f0ecff}
+.biz-type-panel__intro{display:grid;grid-template-columns:minmax(0,.9fr) minmax(320px,1.1fr);gap:48px;align-items:end;padding:clamp(30px,4vw,56px)}
+.biz-type-panel__intro span{color:var(--type-accent);font-size:12px;font-weight:900;letter-spacing:.14em}
+.biz-type-panel__intro h3{max-width:610px;margin-top:12px;font-size:clamp(30px,4vw,50px);line-height:1.12;letter-spacing:-.055em}
+.biz-type-panel__intro p{color:#6f6963;font-size:16px;line-height:1.75}
+.biz-type-cards{display:grid;gap:1px;margin-inline:clamp(20px,4vw,56px);border-top:6px solid #191715;background:#ded9d2}
+.biz-type-cards--three{grid-template-columns:repeat(3,1fr)}
+.biz-type-cards--two{grid-template-columns:repeat(2,1fr)}
+.biz-type-cards>div{min-height:180px;padding:34px;background:#fff}
+.biz-type-cards b{display:block;font-size:21px;letter-spacing:-.03em}
+.biz-type-cards p{margin-top:12px;color:#6f6963;line-height:1.65}
+.biz-type-process{display:grid;grid-template-columns:repeat(4,1fr);margin:clamp(42px,6vw,76px) clamp(20px,4vw,56px);padding:0;list-style:none;counter-reset:type-step}
+.biz-type-process li{position:relative;padding:54px 20px 0 0;counter-increment:type-step}
+.biz-type-process li::before{content:counter(type-step);position:absolute;top:0;left:0;z-index:1;display:grid;width:38px;height:38px;place-items:center;border-radius:5px;background:#171513;color:#fff;font-weight:850}
+.biz-type-process li::after{content:"";position:absolute;top:18px;left:38px;width:calc(100% - 38px);border-top:2px dashed #393532}
+.biz-type-process li:last-child::after{display:none}
+.biz-type-process b,.biz-type-process span{display:block}
+.biz-type-process b{font-size:17px}
+.biz-type-process span{margin-top:7px;color:#827b74;font-size:12px;line-height:1.5}
+.biz-type-panel__cta{display:flex;min-height:170px;align-items:center;justify-content:space-between;gap:28px;padding:34px clamp(24px,4vw,56px);background:linear-gradient(120deg,var(--type-soft),#fff)}
+.biz-type-panel__cta p{max-width:650px;font-size:clamp(23px,3vw,38px);font-weight:850;line-height:1.2;letter-spacing:-.04em}
+.biz-type-panel__cta .btn{flex:none;border-color:var(--type-accent);background:var(--type-accent)}
+@media(max-width:780px){.biz-type-panel__intro{grid-template-columns:1fr;gap:18px}.biz-type-cards--three{grid-template-columns:1fr}.biz-type-cards--two{grid-template-columns:1fr}.biz-type-cards>div{min-height:0;padding:26px}.biz-type-process{grid-template-columns:1fr;gap:22px}.biz-type-process li{min-height:54px;padding:6px 0 0 58px}.biz-type-process li::after{top:38px;left:18px;width:0;height:calc(100% + 22px);border-top:0;border-left:2px dashed #393532}.biz-type-panel__cta{align-items:flex-start;flex-direction:column}.biz-type-tabs{overflow-x:auto;justify-content:flex-start}.biz-type-tabs button{flex:0 0 auto;white-space:nowrap}}
+@media(max-width:480px){.biz-education-types{padding-block:62px}.biz-education-types__head p{font-size:15px}.biz-type-tabs{margin-inline:-10px;border-radius:0;border-inline:0}.biz-type-panel{margin-inline:-10px;border-radius:14px}.biz-type-panel__intro{padding:28px 22px}.biz-type-panel__intro p{font-size:14px}.biz-type-cards{margin-inline:14px}.biz-type-process{margin-inline:22px}.biz-type-panel__cta{min-height:0;padding:30px 22px}}
