@@ -1,7 +1,7 @@
 export default {
   async fetch(request, env) {
     const assetUrl = new URL(request.url);
-    assetUrl.searchParams.set("__axi_asset_version", "20260824-64");
+    assetUrl.searchParams.set("__axi_asset_version", "20260824-65");
     const response = await env.ASSETS.fetch(new Request(assetUrl, request));
     const headers = new Headers(response.headers);
     const type = headers.get("content-type") || "";
