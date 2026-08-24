@@ -53,11 +53,7 @@
 .employment-partner-wordmark__layered-logo--moe>img+img { clip-path:inset(0 0 0 36%); }
 .employment-partner-wordmark--sds img { width:270px;max-width:100%;max-height:58px;filter:brightness(1.25) saturate(.9); }
 .employment-partner-wordmark--woowa img { width:276px;max-width:100%;max-height:72px; }
-.employment-partner-wordmark--gachon { gap:12px; }
-.employment-partner-wordmark--gachon>img { width:62px;max-width:62px;height:54px;max-height:54px;filter:brightness(1.18) saturate(.95); }
-.employment-partner-wordmark__gachon-copy { display:flex;flex-direction:column;align-items:flex-start;line-height:1; }
-.employment-partner-wordmark__gachon-copy strong { color:#75a9dc;font-size:22px;font-weight:800;letter-spacing:-.055em; }
-.employment-partner-wordmark__gachon-copy small { margin-top:7px;color:#75a9dc;font-family:Georgia,"Times New Roman",serif;font-size:13px;font-weight:700;letter-spacing:-.025em; }
+.employment-partner-wordmark--gachon>img { width:285px;max-width:100%;max-height:70px;filter:brightness(1.22) saturate(.95); }
 @keyframes employment-partner-marquee {
   to { transform:translateX(-50%); }
 }
