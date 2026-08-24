@@ -26,10 +26,10 @@
 .employment-campus .hero__stat span { color:rgba(255,255,255,.52); }
 
 /* 기관·기업 로고가 끊김 없이 왼쪽으로 순환하는 파트너 네트워크 */
-.employment-partners { overflow:hidden;padding:clamp(72px,8vw,118px) 0;background:#080d0c;color:#fff; }
-.employment-partners__panel { position:relative;overflow:hidden;padding:30px 0 58px;border:1px solid rgba(255,255,255,.035);border-radius:32px;background:#0b1110;box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 28px 80px rgba(0,0,0,.26); }
-.employment-partners__panel::before { content:"";position:absolute;z-index:0;left:50%;bottom:-150px;width:min(780px,68vw);height:320px;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(0,127,74,.22),rgba(0,93,55,.045) 48%,transparent 72%);filter:blur(7px);pointer-events:none; }
-.employment-partners__panel::after { content:"";position:absolute;z-index:0;left:50%;bottom:-4px;width:min(700px,66vw);height:176px;transform:translateX(-50%);opacity:.2;background-image:linear-gradient(rgba(26,153,94,.27) 1px,transparent 1px),linear-gradient(90deg,rgba(26,153,94,.27) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(to top,#000,transparent 90%);pointer-events:none; }
+.employment-partners { overflow:hidden;padding:clamp(72px,8vw,118px) 0;background:#080706;color:#fff; }
+.employment-partners__panel { position:relative;overflow:hidden;padding:30px 0 58px;border:1px solid rgba(255,112,54,.1);border-radius:32px;background:linear-gradient(155deg,#0b0b0b 0%,#0d0a08 72%,#170b06 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 28px 80px rgba(0,0,0,.3),0 16px 44px rgba(255,82,24,.045); }
+.employment-partners__panel::before { content:"";position:absolute;z-index:0;left:50%;bottom:-150px;width:min(820px,70vw);height:330px;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(255,92,30,.25),rgba(190,53,11,.07) 48%,transparent 72%);filter:blur(8px);pointer-events:none; }
+.employment-partners__panel::after { content:"";position:absolute;z-index:0;left:50%;bottom:-4px;width:min(720px,68vw);height:180px;transform:translateX(-50%);opacity:.24;background-image:linear-gradient(rgba(255,112,54,.26) 1px,transparent 1px),linear-gradient(90deg,rgba(255,112,54,.26) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(to top,#000,transparent 90%);pointer-events:none; }
 .employment-partners__head { position:relative;z-index:2;text-align:center; }
 .employment-partners__head h2 { margin:0;color:rgba(255,255,255,.82);font-size:clamp(22px,2vw,29px);letter-spacing:-.04em; }
 .employment-partners__viewport { position:relative;z-index:2;overflow:hidden;margin-top:38px;mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%); }
@@ -104,29 +104,30 @@
 .employment-campus .campus-facility-teaser__copy>p { color:rgba(255,255,255,.72); }
 
 /* 실제 공개 연혁을 핵심 시점 중심의 스크롤 타임라인으로 구성 */
-.employment-history { position:relative;overflow:hidden;padding:clamp(110px,12vw,180px) 0;background:#07090d;color:#fff; }
-.employment-history::after { content:"";position:absolute;inset:auto 0 0;height:38%;background:linear-gradient(180deg,transparent,rgba(9,43,86,.54));pointer-events:none; }
-.employment-history__intro,.employment-history__timeline,.employment-history__closing { position:relative;z-index:1; }
+.employment-history { position:relative;overflow:hidden;padding:clamp(110px,12vw,180px) 0;background:linear-gradient(180deg,#050811 0%,#080b13 45%,#110b0b 72%,#251006 100%);color:#fff; }
+.employment-history::before { content:"";position:absolute;left:50%;bottom:-360px;width:min(1180px,96vw);height:760px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 50% 50%,rgba(255,181,103,.48) 0,rgba(255,102,41,.28) 22%,rgba(255,77,20,.12) 46%,transparent 70%);filter:blur(18px);pointer-events:none; }
+.employment-history::after { content:"";position:absolute;inset:auto 0 0;height:46%;background:linear-gradient(180deg,transparent 0,rgba(255,80,22,.045) 42%,rgba(255,100,34,.13) 74%,rgba(255,158,78,.18) 100%);box-shadow:inset 0 -1px 0 rgba(255,188,118,.16);pointer-events:none; }
+.employment-history__intro,.employment-history__timeline,.employment-history__closing { position:relative;z-index:2; }
 .employment-history__intro { text-align:center; }
 .employment-history__intro>span { color:#ff5b1f;font:850 12px/1 var(--font-mono);letter-spacing:.2em; }
 .employment-history__intro h2 { max-width:1050px;margin:24px auto 0;color:#fff;font-size:clamp(48px,6.4vw,92px);line-height:1.05;letter-spacing:-.06em; }
-.employment-history__intro p { max-width:650px;margin:30px auto 0;color:rgba(255,255,255,.55);font-size:17px;line-height:1.75; }
+.employment-history__intro p { max-width:650px;margin:30px auto 0;color:rgba(255,255,255,.62);font-size:17px;line-height:1.75; }
 .employment-history__timeline { margin-top:clamp(90px,12vw,160px);padding-block:20px; }
-.employment-history__line { position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(180deg,transparent 0,#ff5b1f 8%,#ff5b1f 90%,transparent);opacity:.72; }
+.employment-history__line { position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(180deg,transparent 0,#9b3214 8%,#ff5b1f 58%,#ffad68 92%,transparent);opacity:.9;box-shadow:0 0 18px rgba(255,91,31,.22); }
 .employment-history__item { position:relative;display:grid;grid-template-columns:1fr 74px 1fr;align-items:start;min-height:230px; }
 .employment-history__item time { color:#fff;font-size:clamp(45px,5vw,72px);font-weight:800;line-height:1;letter-spacing:-.05em; }
-.employment-history__item i { position:relative;display:block;width:19px;height:19px;margin:12px auto 0;border:4px solid #07090d;border-radius:50%;background:#ff5b1f;box-shadow:0 0 0 1px rgba(255,91,31,.55),0 0 30px rgba(255,91,31,.38); }
+.employment-history__item i { position:relative;display:block;width:19px;height:19px;margin:12px auto 0;border:4px solid #0b0a0d;border-radius:50%;background:#ff5b1f;box-shadow:0 0 0 1px rgba(255,119,68,.72),0 0 34px rgba(255,91,31,.48); }
 .employment-history__item>div { max-width:440px;padding-top:5px; }
 .employment-history__item small { color:#ff6b33;font:800 10px/1 var(--font-mono);letter-spacing:.16em; }
 .employment-history__item h3 { margin-top:11px;color:#fff;font-size:clamp(23px,2.5vw,34px);line-height:1.22; }
-.employment-history__item p { margin-top:12px;color:rgba(255,255,255,.48);line-height:1.7; }
+.employment-history__item p { margin-top:12px;color:rgba(255,255,255,.6);line-height:1.7; }
 .employment-history__item.is-left time { grid-column:1;text-align:right; }
 .employment-history__item.is-left i { grid-column:2; }
 .employment-history__item.is-left>div { grid-column:3; }
 .employment-history__item.is-right time { grid-column:3;grid-row:1;text-align:left; }
 .employment-history__item.is-right i { grid-column:2;grid-row:1; }
 .employment-history__item.is-right>div { grid-column:1;grid-row:1;justify-self:end;text-align:right; }
-.employment-history__item--now time,.employment-history__item--now h3 { color:#ff6a31; }
+.employment-history__item--now time,.employment-history__item--now h3 { color:#ff7a40;text-shadow:0 0 34px rgba(255,91,31,.2); }
 .employment-history__closing { display:flex;align-items:end;justify-content:space-between;gap:30px;margin-top:40px;padding-top:48px;border-top:1px solid rgba(255,255,255,.18); }
 .employment-history__closing p { max-width:720px;color:#fff;font-size:clamp(25px,3vw,40px);font-weight:750;line-height:1.35; }
 .employment-history__closing a { flex:none;color:#ff6a31;font-size:14px;font-weight:750; }
