@@ -1,0 +1,124 @@
+<!doctype html>
+<!-- 실행환경 관제 — LXP-013(개인 컨테이너·오토스케일링).
+     관리자 공통 헤더·사이드바를 쓰고, 요약은 KPI 대시보드 카드가 아니라
+     운영 화면과 같은 .proctor-summary 한 줄 요약으로 낮춘다.
+     컨테이너 목록은 .proctor-table, 노드는 카드, 증설 단계는 상태 배지의 확장이다.
+     실제 인프라를 호출하지 않는다.
+
+     페이지 루트 클래스 .execution-infra-page 는 <body> 에 붙는다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/css/common-style.css">
+<link rel="stylesheet" href="/static/css/sidebar-style.css">
+<link rel="stylesheet" href="/static/css/btn-style.css">
+<link rel="stylesheet" href="/v2/assets/exam.css">
+<title>Samsung Academy LXP - 관리자</title>
+</head>
+<body class="execution-infra-page">
+
+<main class="main-content">
+
+  <p class="demo-flash">
+    <b>이 화면은 운영 인프라와 연결되지 않은 프론트엔드 시뮬레이션입니다.</b>
+    증설 버튼은 실제 컨테이너나 노드를 만들지 않으며, 표시되는 수치는 선택한 시나리오의 모의 값입니다.
+  </p>
+
+  <section class="online-header">
+    <h2>부하 상황</h2>
+    <div class="student-list" id="scenarioList"></div>
+  </section>
+
+  <p class="hint-text mb-12" id="scenarioDesc"></p>
+
+  <!-- 요약 줄 -->
+  <div class="proctor-summary">
+    <span>활성 응시자 <strong id="kpiActive">0</strong></span>
+    <span>실행 대기열 <strong id="kpiQueue">0</strong></span>
+    <span>가동 컨테이너 <strong id="kpiRunning">0</strong></span>
+    <span>평균 실행시간 <strong id="kpiAvg">0ms</strong></span>
+    <span class="sep" aria-hidden="true"></span>
+    <a class="btn btn-secondary" href="/v2/admin/proctor.html">실시간 감독관제</a>
+  </div>
+
+  <!-- 자동 증설 -->
+  <div class="admin-card">
+    <div class="row-between mb-12">
+      <div>
+        <h3>자동 증설</h3>
+        <p class="hint-text" id="advice" aria-live="polite"></p>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-primary" id="scaleBtn">증설 시뮬레이션</button>
+        <button type="button" class="btn btn-secondary" id="retryBtn" hidden>재시도</button>
+      </div>
+    </div>
+
+    <div class="scale-steps" id="scaleSteps" aria-live="polite">
+      <span class="scale-step" data-step="queue">1. 대기</span>
+      <span class="scale-step" data-step="provision">2. 프로비저닝</span>
+      <span class="scale-step" data-step="ready">3. 준비 완료</span>
+    </div>
+
+    <p class="hint-text mt-12" id="scaleMsg" aria-live="polite"></p>
+
+    <h3 class="sub-head">증설 이력</h3>
+    <ul class="scale-history" id="scaleHistory">
+      <li><span class="t">—</span><span>아직 증설 기록이 없습니다</span></li>
+    </ul>
+  </div>
+
+  <!-- 노드 -->
+  <div class="admin-card">
+    <h3>노드</h3>
+    <div class="node-grid" id="nodeGrid"></div>
+  </div>
+
+  <!-- 컨테이너 -->
+  <div class="admin-card">
+    <h3>실행 컨테이너</h3>
+
+    <div class="search-container">
+      <label class="sr-only" for="boxSearch">컨테이너 검색</label>
+      <input type="search" id="boxSearch" placeholder="컨테이너 ID 또는 응시자 검색">
+
+      <label class="sr-only" for="stateFilter">상태 필터</label>
+      <select id="stateFilter">
+        <option value="all">상태 전체</option>
+        <option value="running">가동</option>
+        <option value="idle">대기</option>
+        <option value="provisioning">프로비저닝</option>
+        <option value="failed">실패</option>
+      </select>
+
+      <label class="sr-only" for="langFilter">언어 필터</label>
+      <select id="langFilter">
+        <option value="all">언어 전체</option>
+        <option value="Python 3.11">Python 3.11</option>
+        <option value="Java 17">Java 17</option>
+        <option value="JavaScript">JavaScript</option>
+      </select>
+    </div>
+
+    <p class="hint-text mb-12" id="boxCount" aria-live="polite"></p>
+
+    <div class="table-scroll">
+      <table class="proctor-table">
+        <thead>
+          <tr><th>컨테이너</th><th>응시자</th><th>언어</th><th>상태</th><th>CPU</th><th>메모리</th><th>마지막 실행</th><th>노드</th></tr>
+        </thead>
+        <tbody id="boxBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<script src="/v2/assets/exam-legacy-shell.js"></script>
+<script src="/v2/assets/exam-demo-data.js"></script>
+<script src="/v2/assets/exam-common.js"></script>
+<script src="/v2/assets/execution-infra.js"></script>
+<script>ExamShell.admin({ active: "eval-infra-demo", title: "평가 관리 > 평가 모니터링 > 실행환경 관제(데모)" });</script>
+</body>
+</html>

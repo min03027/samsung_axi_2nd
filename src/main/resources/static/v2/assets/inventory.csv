@@ -39,8 +39,8 @@ TR-05,LXP 수강생,콘텐츠 플레이어(문서),/v2/lxp/trainee/player-doc.ht
 TR-06,LXP 수강생,콘텐츠 플레이어(실습 IDE),/v2/lxp/trainee/player-ide.html,LXP-110~115 LXP-126 LXP-131,P2,D3,
 TR-07,LXP 수강생,과제 목록,/v2/lxp/trainee/assignments.html,LXP-098 LXP-099,P1,D3,
 TR-08,LXP 수강생,과제 상세·제출,/v2/lxp/trainee/assignment-detail.html,LXP-098 LXP-099 LXP-100,P1,D3,
-TR-09,LXP 수강생,시험 목록,/v2/lxp/trainee/exams.html,LXP-002 LXP-007,P1,D3,
-TR-10,LXP 수강생,시험 응시(감독 포함),/v2/lxp/trainee/exam-attempt.html,LXP-011 LXP-018~021 LXP-015,P0,D3,
+TR-09,LXP 수강생,시험 목록,/v2/lxp/trainee/exams.html,LXP-002 LXP-007,P1,D3,완료
+TR-10,LXP 수강생,시험 응시(감독 포함),/v2/lxp/trainee/exam-workspace.html,LXP-009 LXP-010,P0,D3,완료
 TR-11,LXP 수강생,시험 결과,/v2/lxp/trainee/exam-result.html,LXP-022 LXP-023 LXP-089,P2,D3,
 TR-12,LXP 수강생,출결 현황,/v2/lxp/trainee/attendance.html,LXP-060 LXP-136~139,P1,D3,
 TR-13,LXP 수강생,이수 관리·이수증,/v2/lxp/trainee/completion.html,LXP-080~083 LXP-102~105,P1,D3,
@@ -76,7 +76,7 @@ AD-18,관리자,시험 관리,/v2/admin/exams.html,LXP-002 LXP-024,P0,D4,
 AD-19,관리자,문항 은행,/v2/admin/questions.html,LXP-002 LXP-009,P1,D4,
 AD-20,관리자,채점(시험·과제),/v2/admin/grading.html,LXP-022~025 LXP-006 LXP-098 LXP-099,P0,D4,
 AD-21,관리자,과제 관리,/v2/admin/assignments.html,LXP-098 LXP-100,P1,D4,
-AD-22,관리자,시험 감독 모니터링,/v2/admin/proctor.html,LXP-003~005 LXP-015~021,P0,D4,
+AD-22,관리자,시험 감독 모니터링,/v2/admin/proctor.html,LXP-003~005 LXP-015~021,P0,D4,완료
 AD-23,관리자,공지사항 관리,/v2/admin/notices.html,LXP-121~123,P1,D4,
 AD-24,관리자,알림 발송,/v2/admin/notifications.html,LXP-043 LXP-044 LXP-122 LXP-123,P1,D4,
 AD-25,관리자,리마인더 설정,/v2/admin/reminder.html,LXP-045 LXP-069 LXP-070,P1,D4,
@@ -96,4 +96,8 @@ AD-38,관리자,시스템 설정,/v2/admin/settings.html,LXP-082 LXP-104,P1,D4,
 AD-39,관리자,감사 로그,/v2/admin/audit-log.html,LXP-137 LXP-139,P1,D4,
 AD-40,관리자,오늘 브리핑,/v2/admin/briefing.html,비즈-057 LXP-053,P2,D4,
 AD-41,관리자,내 정보,/v2/admin/my-info.html,-,P2,D4,
+TR-25,LXP 수강생,응시환경 사전점검,/v2/lxp/trainee/exam-precheck.html,LXP-015 LXP-018 LXP-019,P0,D3,완료
+TR-26,LXP 수강생,모바일 신분증 제출,/v2/lxp/trainee/exam-id-upload.html,LXP-015 LXP-016,P0,D3,완료
+AD-42,관리자,시험 사후 검토,/v2/admin/proctor-review.html,LXP-016 LXP-020,P0,D4,완료
+AD-43,관리자,실행환경 관제,/v2/admin/execution-infra.html,LXP-013,P1,D4,완료
 IX-01,공통,전체 화면 인덱스·211항목 매핑,/v2/_index.html,전체,P0,D5,완료
