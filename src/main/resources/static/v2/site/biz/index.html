@@ -7,7 +7,7 @@
 <meta name="description" content="AI를 배우는 조직에서 AI로 일하는 조직으로. 조직 진단부터 정착까지 설계합니다.">
 <link rel="stylesheet" href="/v2/assets/tokens.css">
 <link rel="stylesheet" href="/v2/assets/base.css">
-<link rel="stylesheet" href="/v2/assets/components.css">
+<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64">
 </head>
 <body>
 
@@ -50,7 +50,7 @@
 </section>
 
 <!-- 비즈-047 AX 진단 -->
-<section class="section">
+<section class="section" id="org-diagnosis">
   <div class="container">
     <div class="section-head" style="max-width:var(--w-narrow)">
       <span class="eyebrow">DIAGNOSIS</span>
@@ -74,7 +74,7 @@
 </section>
 
 <!-- 비즈-048 AX Flow -->
-<section class="section section--tint">
+<section class="section section--tint" id="change-flow">
   <div class="container">
     <div class="section-head">
       <span class="eyebrow">AX FLOW</span>
@@ -94,7 +94,7 @@
 </section>
 
 <!-- 비즈-049 직무별 / 비즈-050 시간 구성 -->
-<section class="section">
+<section class="section" id="job-programs">
   <div class="container">
     <div class="row row--between row--wrap section-head">
       <div><span class="eyebrow">PROGRAMS</span><h2>직무에 맞춰 다르게 배웁니다</h2></div>
@@ -131,7 +131,7 @@
 </section>
 
 <!-- 비즈-053 사례 -->
-<section class="section section--tint">
+<section class="section section--tint" id="company-cases">
   <div class="container">
     <div class="row row--between row--wrap section-head">
       <div><span class="eyebrow">CASES</span><h2>교육 당일, 직원들은 무엇을 했나</h2></div>
@@ -158,7 +158,7 @@
 </section>
 
 <!-- 비즈-055 지원 + 비즈-058 문의 -->
-<section class="section">
+<section class="section" id="biz-contact">
   <div class="container">
     <div class="grid grid-2" style="gap:var(--sp-10)">
       <div>
@@ -202,7 +202,7 @@
 </section>
 
 <script src="/v2/assets/brand.js"></script>
-<script src="/v2/assets/shell.js"></script>
-<script>Shell.site({ service: "biz", nav: null });</script>
+<script src="/v2/assets/page-section-navigation.js"></script>
+<script>Shell.site({service:"biz",sections:[{href:"#org-diagnosis",label:"조직 진단"},{href:"#change-flow",label:"변화 경로"},{href:"#job-programs",label:"직무별 과정"},{href:"#company-cases",label:"기업 사례"},{href:"#biz-contact",label:"도입 문의"}]});</script>
 </body>
 </html>

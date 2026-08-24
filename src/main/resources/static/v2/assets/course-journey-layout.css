@@ -1,0 +1,88 @@
+/* 과정 상세 전용: 좁은 화면에서도 오른쪽 네비게이터를 유지하고 햄버거는 숨긴다. */
+.sales-course .sitebar,
+.sales-course .sidenav,
+.sales-course .sidenav-scrim {
+  display: none !important;
+}
+
+.sales-course .course-journey {
+  display: grid !important;
+  right: 12px;
+  width: 112px;
+  max-height: calc(100vh - 16px);
+  padding: 8px 6px;
+  overflow-y: auto;
+  border-radius: 16px;
+  scrollbar-width: none;
+}
+
+.sales-course .course-journey::-webkit-scrollbar { display: none; }
+
+.sales-course .course-journey a {
+  grid-template-columns: 7px minmax(0, 1fr);
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 8px;
+  border-radius: 7px;
+  font-size: .65rem;
+  text-align: left;
+}
+
+.sales-course .course-journey i {
+  grid-column: 1;
+  justify-self: center;
+}
+
+.sales-course .course-journey span {
+  grid-column: 2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.sales-course .course-journey a:hover,
+.sales-course .course-journey a[aria-current="step"] {
+  color: #fff;
+  background: rgba(255, 255, 255, .07);
+  transform: none;
+}
+
+@media (max-width: 1199px) {
+  .sales-course .course-journey {
+    right: 6px;
+    width: 96px;
+    padding: 7px 5px;
+    border-radius: 14px;
+  }
+
+  .sales-course .course-journey a {
+    grid-template-columns: 6px minmax(0, 1fr);
+    gap: 5px;
+    min-height: 34px;
+    padding: 0 6px;
+    font-size: .59rem;
+  }
+
+  .sales-course .course-journey i { width: 6px; height: 6px; }
+  .sales-course .course-journey a[aria-current="step"] i { height: 28px; }
+}
+
+@media (max-width: 699px) {
+  .sales-course .course-journey {
+    right: 4px;
+    width: 84px;
+    padding: 6px 4px;
+    border-radius: 13px;
+  }
+
+  .sales-course .course-journey a {
+    gap: 4px;
+    min-height: 31px;
+    padding: 0 5px;
+    font-size: .54rem;
+  }
+
+  .sales-course .course-journey a[aria-current="step"] i { height: 24px; }
+}

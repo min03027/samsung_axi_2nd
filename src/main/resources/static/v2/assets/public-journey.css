@@ -1,0 +1,114 @@
+/* 공개 서비스 공통: 첫 화면은 상단 카테고리, 이후는 오른쪽 네비게이터 */
+body.has-public-journey .sitebar,
+body.has-public-journey .sidenav,
+body.has-public-journey .sidenav-scrim {
+  display: none !important;
+}
+
+body.has-public-journey .home-categorybar,
+body.has-public-journey .public-journey {
+  transition: opacity .28s ease, transform .34s ease, visibility .28s ease;
+}
+
+body.has-public-journey .public-journey {
+  --course-accent: #ff641f;
+  display: grid !important;
+  right: 12px;
+  width: 112px;
+  max-height: calc(100vh - 16px);
+  padding: 8px 6px;
+  overflow-y: auto;
+  border-color: rgba(255, 100, 31, .38);
+  border-radius: 16px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(32px);
+  scrollbar-width: none;
+}
+
+body.has-public-journey .public-journey::-webkit-scrollbar { display: none; }
+
+body.has-public-journey .public-journey a {
+  grid-template-columns: 7px minmax(0, 1fr);
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 8px;
+  border-radius: 7px;
+  font-size: .65rem;
+  text-align: left;
+}
+
+body.has-public-journey .public-journey i { grid-column: 1; }
+body.has-public-journey .public-journey span {
+  grid-column: 2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  white-space: nowrap;
+}
+
+body.has-public-journey .public-journey a:hover,
+body.has-public-journey .public-journey a[aria-current="step"] {
+  color: #fff;
+  background: rgba(255, 255, 255, .07);
+  transform: none;
+}
+
+body.has-public-journey[data-public-nav-phase="content"] .home-categorybar {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-100%);
+}
+
+body.has-public-journey[data-public-nav-phase="content"] .public-journey {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+}
+
+@media (max-width: 1199px) {
+  body.has-public-journey .public-journey {
+    right: 6px;
+    width: 96px;
+    padding: 7px 5px;
+    border-radius: 14px;
+  }
+
+  body.has-public-journey .public-journey a {
+    grid-template-columns: 6px minmax(0, 1fr);
+    gap: 5px;
+    min-height: 34px;
+    padding: 0 6px;
+    font-size: .59rem;
+  }
+
+  body.has-public-journey .public-journey i { width: 6px; height: 6px; }
+  body.has-public-journey .public-journey a[aria-current="step"] i { height: 28px; }
+}
+
+@media (max-width: 699px) {
+  body.has-public-journey .public-journey {
+    right: 4px;
+    width: 84px;
+    padding: 6px 4px;
+    border-radius: 13px;
+  }
+
+  body.has-public-journey .public-journey a {
+    gap: 4px;
+    min-height: 31px;
+    padding: 0 5px;
+    font-size: .54rem;
+  }
+
+  body.has-public-journey .public-journey a[aria-current="step"] i { height: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.has-public-journey .home-categorybar,
+  body.has-public-journey .public-journey { transition: none; }
+}

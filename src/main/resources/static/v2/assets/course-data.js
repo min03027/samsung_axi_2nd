@@ -45,8 +45,17 @@
   Object.keys(storyProfiles).forEach(profileKey => Object.assign(courses[profileKey], storyProfiles[profileKey]));
   const key = new URLSearchParams(location.search).get('course') || 'data';
   const highschoolKeys = ['cooking','game','design','mobility','system'];
+  const rollingKeys = ['adsp','sqld','bigdata-cert','engineer'];
   const isHighschool = highschoolKeys.includes(key);
-  const data = Object.assign({}, common, courses[key] || courses.data);
+  const course = courses[key] || courses.data;
+  const deadline = /^\d{4}\.\d{2}\.\d{2}/.test(course.period) ? course.period.slice(0, 10).replaceAll('.', '-') : '';
+  const adminStatus = isHighschool ? 'pre-recruiting' : rollingKeys.includes(key) ? 'rolling' : 'recruiting';
+  const statusEngine = window.AXI_RECRUITMENT_STATUS || {
+    derive: ({ adminStatus: currentStatus }) => currentStatus === 'rolling' ? 'rolling' : currentStatus === 'pre-recruiting' ? 'pre-recruiting' : 'open',
+    labels: { open:'모집중', rolling:'수시모집', 'pre-recruiting':'사전모집' }
+  };
+  const recruitmentStatus = statusEngine.derive({ adminStatus, deadline });
+  const data = Object.assign({}, common, course, { status: statusEngine.labels[recruitmentStatus] });
   window.COURSE_CATALOG = courses;
   window.COURSE_KEY = key;
   window.COURSE_CURRENT = data;
@@ -77,12 +86,51 @@
     engineer:['정보처리 산업기사·기사 취득을 준비하는 분','소프트웨어 개발자 · 정보시스템 실무자',['필기 이론','실기 핵심','기출 문제','모의 시험']]
   };
   const guide = courseGuides[key] || courseGuides.data;
+  const curriculumProfiles = {
+    factory:{total:'교과 640시간 · 프로젝트 470시간',phases:[
+      ['교과','스마트팩토리 제어 기초','PLC 제어와 센서·액추에이터의 동작 원리를 이해합니다.',['PLC 입출력과 제어 로직','아두이노 기반 센서 데이터 수집','설비 안전 제어 시나리오'],['PLC','Arduino','Sensor'],'PLC 제어 프로그램'],
+      ['교과','ERP·MES 생산정보 연결','생산계획부터 실적까지 ERP와 MES의 데이터 흐름을 설계합니다.',['생산·자재·품질 업무 흐름','ERP 기준정보와 생산계획','MES 공정실적·설비데이터 연동'],['ERP','MES','SQL'],'생산정보 연결 맵'],
+      ['프로젝트','환경에너지 공학 IoT 프로젝트','환경 데이터를 수집하고 탄소·에너지 관점의 개선 모델을 만듭니다.',['환경센서 데이터 수집','온실가스 감축·자원순환 모델링','실시간 환경지표 시각화'],['IoT','ESG','Dashboard'],'환경에너지 IoT 모델'],
+      ['프로젝트','생산시설 자동화 시스템 구축','ERP·MES·PLC를 연결한 공정 자동화 시스템을 팀 프로젝트로 완성합니다.',['기업 요구사항 분석','설비 제어와 생산정보 통합','통합 시연과 개선 보고'],['ERP','MES','PLC'],'스마트 공정 자동화 데모']
+    ]},
+    aiot:{total:'교과 690시간 · 프로젝트 400시간',phases:[
+      ['교과','데이터 분석과 AI 기초','Python과 R로 산업 데이터를 다루고 통계·AI 기초를 익힙니다.',['Python 프로그래밍','R 기반 기초 통계','데이터 전처리와 시각화'],['Python','R','Pandas'],'산업 데이터 분석 노트'],
+      ['교과','웹·DB 기반 산업 데이터 처리','데이터베이스와 웹 기술로 수집 데이터를 서비스 구조에 연결합니다.',['DB 모델링과 SQL','Java·JSP 웹 프로그래밍','AI 데이터 처리 파이프라인'],['SQL','Java','JSP'],'산업 데이터 웹 서비스'],
+      ['교과','AI 영상처리와 오픈플랫폼','산업 이미지와 센서 데이터를 AI 모델로 분석하고 검증합니다.',['영상처리 기초','딥러닝 모델 학습·평가','AI 오픈플랫폼 활용'],['Python','Deep Learning','Open API'],'산업 이상탐지 모델'],
+      ['프로젝트','AIoT 산업솔루션 프로젝트','센서 수집부터 AI 분석, 운영 화면까지 하나의 산업솔루션으로 완성합니다.',['문제정의와 데이터 설계','AIoT 분석 기능 구현','운영 대시보드와 최종 발표'],['AIoT','Big Data','Dashboard'],'AIoT 산업 분석 솔루션']
+    ]},
+    robot:{total:'교과 680시간 · 프로젝트 400시간',phases:[
+      ['교과','로봇 제어와 영상 인식 기초','로봇 구동과 카메라 영상처리의 핵심 원리를 실습합니다.',['Python·C 기반 제어 기초','카메라 캘리브레이션','객체 인식 모델 기초'],['Python','OpenCV','Robot'],'로봇 비전 인식 모듈'],
+      ['교과','LiDAR·Depth Camera 환경 인식','거리·깊이 센서를 결합해 주행 공간과 장애물을 구분합니다.',['LiDAR 포인트 데이터 처리','Depth 영상 분석','센서 융합과 경로 데이터 생성'],['LiDAR','Depth Camera','ROS2'],'주행 환경 인식 맵'],
+      ['프로젝트','로봇팔·그리퍼 안전 제어','이동·회전·각도 제어와 충돌 회피를 포함한 로봇 동작을 구현합니다.',['로봇팔·그리퍼 설계','제어 알고리즘 최적화','충돌 회피·긴급 정지'],['Robot Arm','Gripper','PID'],'안전 제어 로봇 데모'],
+      ['프로젝트','ROS2 자율주행 딥러닝 시뮬레이션','센서 수집과 딥러닝을 연결해 자율주행 로봇을 시뮬레이션합니다.',['ROS2 센서 데이터 처리','차선·객체 인식 모델 학습','시뮬레이션 검증과 발표'],['ROS2','Deep Learning','Raspberry Pi'],'자율주행 협동로봇 데모']
+    ]},
+    cloud:{total:'교과 730시간 · 프로젝트 360시간',phases:[
+      ['교과','Java·MVC 웹 애플리케이션','프로그래밍 기초부터 MVC 구조의 웹 서비스까지 구현합니다.',['Java 객체지향 프로그래밍','HTML·CSS·JavaScript','MVC Model2 웹 애플리케이션'],['Java','JavaScript','MVC'],'MVC 웹 애플리케이션'],
+      ['교과','Spring 기반 기업형 서비스','전자정부프레임워크와 Spring으로 백엔드 서비스를 구축합니다.',['Spring MVC와 REST API','데이터베이스 연동','전자정부프레임워크 활용'],['Spring','REST API','SQL'],'기업형 웹 애플리케이션'],
+      ['프로젝트','클라우드 배포와 보안','컨테이너 기반으로 서비스를 배포하고 보안 기준을 적용합니다.',['Docker 이미지·컨테이너','클라우드 서버 구축','인증·권한과 시큐어 코딩'],['Docker','Cloud','Security'],'클라우드 배포 파이프라인'],
+      ['프로젝트','실전 프로젝트와 포트폴리오','기업 요구사항을 바탕으로 팀별 서비스를 완성하고 채용형 포트폴리오로 정리합니다.',['요구사항·화면·DB 설계','개발·테스트·배포','코드리뷰와 최종 발표'],['Java','Docker','Git'],'풀스택 서비스 포트폴리오']
+    ]},
+    video:{total:'총 240시간',phases:[
+      ['교과','영상편집 기초','영상 제작 흐름과 편집 도구의 기본 조작을 익힙니다.',['편집 환경과 미디어 관리','컷 편집·자막·오디오','프리미어·애프터이펙트 기초'],['Premiere Pro','After Effects'],'기초 편집 영상','24시간'],
+      ['교과','그래픽 · 포토샵 & 일러스트','영상에 필요한 이미지와 타이포그래피 에셋을 직접 제작합니다.',['이미지 보정·합성·마스킹','타이포·그래피·패턴','썸네일·자막·인트로 디자인'],['Photoshop','Illustrator'],'영상 그래픽 에셋','48시간'],
+      ['교과','영상편집 핵심 · 다빈치 리졸브','편집·색보정·사운드·모션그래픽을 실무 흐름으로 연결합니다.',['컷편집과 트랜지션','컬러그레이딩','Fusion 모션그래픽 기초'],['DaVinci Resolve','Fusion'],'브랜드 프로모션 영상','60시간'],
+      ['교과','AI 영상편집 실무 활용','생성형 AI를 활용해 기획과 제작, 자막·더빙을 자동화합니다.',['아이디어·기획안·대본 자동화','AI 영상·이미지 생성','AI 자막·더빙과 품질 검증'],['Generative AI','AI Caption','AI Dubbing'],'AI 활용 숏폼 콘텐츠','48시간'],
+      ['프로젝트','실전 프로젝트 & 포트폴리오','채널 운영을 고려한 실제 영상을 제작하고 포트폴리오를 완성합니다.',['SNS·유튜브 채널 운영 기초','광고·지역소개 영상 제작','업로드·배포와 최종 발표'],['Premiere Pro','DaVinci Resolve','AI'],'영상 제작 포트폴리오','60시간']
+    ]},
+    uiux:{phases:[
+      ['교과','사용자 리서치와 문제 정의','사용자 행동과 시장 자료를 바탕으로 해결할 문제를 명확히 정의합니다.',['사용자 인터뷰·데스크 리서치','페르소나와 고객여정','문제정의와 디자인 가설'],['FigJam','Generative AI','Research'],'사용자 리서치 리포트'],
+      ['교과','정보구조와 UI 설계','핵심 사용자 흐름과 일관된 화면 구조를 설계합니다.',['정보구조와 사용자 흐름','와이어프레임','UI 컴포넌트와 디자인 시스템'],['Figma','Design System','AI'],'서비스 UI 설계안'],
+      ['프로젝트','AI 활용 인터랙티브 프로토타입','AI로 아이디어를 빠르게 탐색하고 실제로 눌러볼 수 있는 화면을 만듭니다.',['생성형 AI 아이데이션','고해상도 UI 제작','프로토타입·사용성 테스트'],['Figma','Prototype','Generative AI'],'인터랙티브 프로토타입'],
+      ['프로젝트','UX 케이스 스터디 완성','문제부터 검증까지 디자인 판단의 근거를 포트폴리오로 정리합니다.',['테스트 결과와 개선','케이스 스터디 스토리텔링','발표·피드백·최종 보완'],['Figma','Portfolio','Presentation'],'AI 활용 UX 제품 포트폴리오']
+    ]}
+  };
   document.body.dataset.courseCategory = category;
   document.body.dataset.courseKey = key;
   const hero = document.querySelector('.sales-hero');
   if (!hero) return;
   document.title = data.title + ' — ' + (window.BRAND?.name || '내일의AI');
-  hero.querySelector('.sales-chip').textContent = data.cat + ' · 모집중';
+  hero.querySelector('.sales-chip').textContent = data.cat + ' · ' + data.status;
   hero.querySelector('h1').innerHTML = data.hero;
   hero.querySelector('.sales-hero__copy>p:nth-of-type(2)').textContent = data.desc;
   const intro = document.querySelector('.sales-info__intro');
@@ -93,7 +141,14 @@
   const emblem = intro.querySelector('[data-course-emblem]');
   emblem.querySelector('img').src = '/v2/assets/outcome-icons/' + key + '.png';
   const rows = [...document.querySelectorAll('.sales-info__table>div')];
-  rows[0].querySelector('dd').innerHTML = '<strong>' + data.status + '</strong><small>정원 충원 시 조기 마감</small>';
+  const statusNotes = {
+    closing:'개강 7일 전부터 자동 표시됩니다.',
+    open:'관리자가 모집을 시작한 과정입니다.',
+    rolling:'일정 협의 후 수시로 시작할 수 있습니다.',
+    'pre-recruiting':'정식 모집 전 상담을 접수합니다.',
+    closed:'현재 신청이 마감된 과정입니다.'
+  };
+  rows[0].querySelector('dd').innerHTML = '<strong>' + data.status + '</strong><small>' + statusNotes[recruitmentStatus] + '</small>';
   rows[1].querySelector('dd').innerHTML = data.period;
   rows[2].querySelector('dd').innerHTML = data.time + '<small>' + data.days + '</small>';
   rows[3].querySelector('dd').innerHTML = data.method + '<small>실습 · 프로젝트 · 피드백 중심</small>';
@@ -151,12 +206,175 @@
   curriculum.querySelector('[data-course-career]').textContent = guide[1];
   curriculum.querySelector('[data-course-result]').textContent = data.deliverable;
   const phaseTitles = [tools[0] + ' 기초와 문제 정의',(tools[1] || tools[0]) + ' 실무 적용',(tools[2] || tools[tools.length - 1]) + ' 결과물 구현',data.deliverable + ' 완성과 발표'];
-  curriculum.querySelectorAll('.curriculum-list article').forEach((item,index) => {
-    item.querySelector('h3').textContent = phaseTitles[index];
-    item.querySelector('p').textContent = index < 3 ? data.outcomes[index][1] : '결과물을 시연하고 선택의 근거와 개선 과정을 포트폴리오로 정리합니다.';
-    item.querySelector('b').textContent = guide[2][index];
+  const fallbackPhases = phaseTitles.map((title,index) => [
+    index === phaseTitles.length - 1 ? '프로젝트' : '교과',
+    title,
+    index < 3 ? data.outcomes[index][1] : '결과물을 시연하고 선택의 근거와 개선 과정을 포트폴리오로 정리합니다.',
+    index < 3 ? [data.outcomes[index][1],tools[index] + ' 핵심 기능 실습','피드백을 반영한 단계별 개선'] : ['최종 결과물 통합','시연과 검증','포트폴리오 정리와 발표'],
+    [tools[index] || tools[tools.length - 1]],
+    index < 3 ? data.outcomes[index][0] : data.deliverable
+  ]);
+  const curriculumProfile = curriculumProfiles[key] || {phases:fallbackPhases};
+  const curriculumList = curriculum.querySelector('[data-curriculum-list]');
+  const curriculumTotal = curriculum.querySelector('[data-curriculum-total]');
+  curriculumTotal.hidden = !curriculumProfile.total;
+  curriculumTotal.replaceChildren();
+  if (curriculumProfile.total) {
+    const totalTime = document.createElement('span');
+    const totalOutcome = document.createElement('strong');
+    totalTime.textContent = curriculumProfile.total.replace(' · ', '과 ') + '이면,';
+    totalOutcome.textContent = '배운 기술을 실무 결과물로 완성할 수 있습니다.';
+    curriculumTotal.append(totalTime,totalOutcome);
+  }
+  const selector = document.createElement('div');
+  selector.className = 'curriculum-phase-selector';
+  const tabList = document.createElement('div');
+  tabList.className = 'curriculum-phase-tabs';
+  tabList.setAttribute('role','tablist');
+  tabList.setAttribute('aria-label','커리큘럼 단계 선택');
+  const viewer = document.createElement('div');
+  viewer.className = 'curriculum-phase-view';
+  const curriculumRows = curriculumProfile.phases.map((phase,index) => {
+    const [type,title,description,learning,phaseTools,output,hours] = phase;
+    const phaseNumber = String(index + 1).padStart(2,'0');
+    const tabId = 'curriculum-tab-' + (index + 1);
+    const panelId = 'curriculum-panel-' + (index + 1);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.id = tabId;
+    button.className = 'curriculum-phase-tab';
+    button.setAttribute('role','tab');
+    button.setAttribute('aria-selected',String(index === 0));
+    button.setAttribute('aria-controls',panelId);
+    button.tabIndex = index === 0 ? 0 : -1;
+    const tabNumber = document.createElement('span');
+    tabNumber.textContent = 'PHASE ' + phaseNumber;
+    const tabTitle = document.createElement('strong');
+    tabTitle.textContent = title;
+    const tabPeriod = document.createElement('small');
+    tabPeriod.textContent = guide[2][index] || '단계별 운영';
+    button.append(tabNumber,tabTitle,tabPeriod);
+
+    const panel = document.createElement('section');
+    panel.id = panelId;
+    panel.className = 'curriculum-phase-panel';
+    panel.setAttribute('role','tabpanel');
+    panel.setAttribute('aria-labelledby',tabId);
+    panel.tabIndex = 0;
+    panel.hidden = index !== 0;
+    const panelHead = document.createElement('header');
+    const panelMeta = document.createElement('span');
+    panelMeta.textContent = 'PHASE ' + phaseNumber + ' · ' + (guide[2][index] || '단계별 운영');
+    const panelTitle = document.createElement('h3');
+    panelTitle.textContent = title;
+    const panelType = document.createElement('small');
+    panelType.textContent = type + (hours ? ' · ' + hours : '');
+    panelHead.append(panelMeta,panelTitle,panelType);
+    const panelBody = document.createElement('div');
+    panelBody.className = 'curriculum-phase-panel__body';
+    const descriptionNode = document.createElement('p');
+    descriptionNode.className = 'curriculum-phase-panel__lead';
+    descriptionNode.textContent = description;
+    const detail = document.createElement('div');
+    detail.className = 'curriculum-phase__detail';
+    const learningSection = document.createElement('section');
+    learningSection.innerHTML = '<h4>학습 내용</h4><ul></ul>';
+    learning.forEach(item => { const li = document.createElement('li'); li.textContent = item; learningSection.querySelector('ul').append(li); });
+    const toolsSection = document.createElement('section');
+    toolsSection.innerHTML = '<h4>사용 도구</h4><div class="curriculum-phase__chips"></div>';
+    phaseTools.forEach(item => { const chip = document.createElement('span'); chip.textContent = item; toolsSection.querySelector('div').append(chip); });
+    const outputSection = document.createElement('section');
+    outputSection.innerHTML = '<h4>단계 산출물</h4><p class="curriculum-phase__output"></p>';
+    outputSection.querySelector('p').textContent = output;
+    detail.append(learningSection,toolsSection,outputSection);
+    panelBody.append(descriptionNode,detail);
+    panel.append(panelHead,panelBody);
+    tabList.append(button);
+    viewer.append(panel);
+    return {button,panel};
   });
+  const activatePhase = (index,focus = false) => {
+    curriculumRows.forEach((row,rowIndex) => {
+      const selected = rowIndex === index;
+      row.button.setAttribute('aria-selected',String(selected));
+      row.button.tabIndex = selected ? 0 : -1;
+      row.panel.hidden = !selected;
+    });
+    if (focus) curriculumRows[index].button.focus();
+  };
+  curriculumRows.forEach((row,index) => {
+    row.button.addEventListener('click',() => activatePhase(index));
+    row.button.addEventListener('keydown',event => {
+      const last = curriculumRows.length - 1;
+      const next = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? (index === last ? 0 : index + 1)
+        : event.key === 'ArrowUp' || event.key === 'ArrowLeft' ? (index === 0 ? last : index - 1)
+        : event.key === 'Home' ? 0
+        : event.key === 'End' ? last
+        : null;
+      if (next === null) return;
+      event.preventDefault();
+      activatePhase(next,true);
+    });
+  });
+  selector.append(tabList,viewer);
+  curriculumList.append(selector);
+  activatePhase(0);
   document.querySelector('.sales-info').insertAdjacentElement('afterend', curriculum);
+  const faqFocus = {
+    data:['코딩이나 데이터 분석 경험이 없어도 시작할 수 있나요?','기초 데이터 처리부터 단계적으로 진행합니다. 처음 시작하더라도 수업과 실습을 따라갈 수 있지만, 숫자와 데이터를 근거로 문제를 해결해 보고 싶은 관심은 필요합니다.'],
+    factory:['PLC·MES·ERP 경험이 없어도 괜찮나요?','스마트팩토리 제어 기초부터 생산정보 연결과 통합 프로젝트까지 이어집니다. 관련 경험이 없더라도 시작할 수 있으며, 제조 데이터와 공정 자동화에 대한 관심이 있으면 좋습니다.'],
+    aiot:['Python과 IoT 장비를 모두 다뤄야 하나요?','Python·데이터 분석과 센서 수집을 기초부터 연결해 학습합니다. 특정 장비나 언어를 미리 숙련하지 않아도 되며, 실습을 통해 AI와 IoT의 연결 구조를 익힙니다.'],
+    robot:['로봇이나 전자공학 전공자만 지원할 수 있나요?','전공보다 센서·영상·제어를 직접 다뤄 보려는 의지가 중요합니다. 로봇 제어 기초부터 LiDAR·Depth Camera와 ROS2 프로젝트까지 단계적으로 진행합니다.'],
+    cloud:['Java를 처음 배우는 사람도 지원할 수 있나요?','Java 기초와 웹 구조부터 시작해 Spring, 데이터베이스, Docker 배포까지 확장합니다. 개발 경험이 있으면 도움이 되지만 필수 조건은 아니며 현재 수준은 상담에서 함께 확인합니다.'],
+    video:['영상 편집 프로그램을 처음 사용해도 괜찮나요?','편집 환경과 컷 편집부터 시작해 그래픽, 색보정, AI 활용, 포트폴리오로 확장합니다. 개인 장비와 사용 프로그램의 준비 여부는 개강 안내에서 확인해 드립니다.'],
+    uiux:['디자인 전공이나 Figma 경험이 꼭 필요한가요?','전공보다 사용자 문제를 관찰하고 화면으로 해결해 보려는 관심이 중요합니다. 리서치와 정보구조부터 Figma 프로토타입, UX 케이스 스터디까지 단계적으로 진행합니다.'],
+    japan:['일본어 수준과 개발 경험은 어느 정도 필요하나요?','Java 개발과 일본 취업 준비를 함께 진행하지만 선발에 필요한 언어 수준과 선수 역량은 개인 상황에 따라 달라질 수 있습니다. 지원 전 과정 상담에서 현재 수준을 확인해 주세요.'],
+    usa:['영어와 마케팅 경험이 없어도 지원할 수 있나요?','데이터 분석과 글로벌 마케팅을 함께 배우는 과정입니다. 취업 준비에 필요한 영어 수준과 기존 경험은 개인별로 다르므로 상담에서 현재 수준과 준비 계획을 확인합니다.'],
+    china:['중국어와 PM 경험이 꼭 필요한가요?','AI 제품 기획과 중국 시장 이해를 함께 다룹니다. 언어 수준과 기획 경험에 따른 준비 방법이 달라질 수 있어 지원 전에 목표 직무와 현재 수준을 상담합니다.'],
+    cooking:['일반고 위탁교육 지원 대상은 어떻게 되나요?','일반계 고등학교 3학년 위탁교육을 준비하는 학생을 위한 과정입니다. 학교별 지원 절차와 위탁 가능 여부는 담임교사 및 과정 사전상담을 통해 최종 확인해야 합니다.'],
+    game:['일반고 위탁교육과 자격 준비를 함께 할 수 있나요?','게임 콘텐츠 제작 실무와 프로그램기능사 준비를 함께 진행합니다. 학교별 위탁 절차와 자격 응시 조건은 사전상담에서 확인해 드립니다.'],
+    design:['디자인 경험이 없어도 일반고 위탁과정을 시작할 수 있나요?','디지털디자인과 영상광고 제작의 기초부터 시작합니다. 학교별 위탁 절차와 컴퓨터그래픽기능사 준비 방법은 사전상담에서 현재 수준에 맞춰 안내합니다.'],
+    mobility:['로봇 제작 경험이 없어도 일반고 위탁과정에 참여할 수 있나요?','AI 로봇과 자율주행 응용SW의 기초부터 진행합니다. 학교별 위탁 절차와 필요한 준비 사항은 학생·보호자 사전상담에서 확인합니다.'],
+    system:['프로그래밍을 처음 배우는 학생도 참여할 수 있나요?','정보시스템과 프로그래밍의 기초부터 구축·운영 실무로 이어집니다. 학교별 위탁 절차와 자격 준비 계획은 사전상담에서 확인합니다.'],
+    adsp:['ADsP와 ADP를 함께 준비해야 하나요?','목표 자격과 현재 데이터 분석 수준에 따라 학습 범위가 달라집니다. 시험 일정과 준비 기간을 확인한 뒤 본인에게 필요한 자격과 학습 순서를 상담에서 안내받을 수 있습니다.'],
+    sqld:['SQL을 처음 배우는데 SQLD부터 준비해도 되나요?','데이터 모델링과 SQL 기초부터 문제 유형으로 확장합니다. SQLP까지의 학습 여부는 현재 수준과 목표 일정에 맞춰 상담에서 결정하는 것이 좋습니다.'],
+    'bigdata-cert':['필기와 실기를 한 과정에서 준비할 수 있나요?','필기 핵심 이론과 분석 실습, 기출 문제를 연결해 준비합니다. 실제 시험 일정과 응시 자격은 접수 전 공식 공고와 상담을 통해 함께 확인해 주세요.'],
+    engineer:['산업기사와 기사 중 어떤 자격을 준비해야 하나요?','학력·경력에 따른 응시 자격과 목표 직무에 따라 적합한 시험이 달라집니다. 공식 응시 조건을 확인한 뒤 상담에서 준비 과정을 선택할 수 있습니다.']
+  };
+  const faqNames = {
+    data:'데이터 예측 자동화 과정',factory:'스마트 환경공정 제어 과정',aiot:'AIoT 산업솔루션 과정',robot:'자율주행·협동로봇 과정',cloud:'클라우드 웹&앱 개발 과정',video:'AI 영상편집 과정',uiux:'AI UI/UX 과정',japan:'일본 Java 취업 과정',usa:'미국 국제마케터 과정',china:'중국 글로벌 PM 과정',cooking:'한식·양식 조리 과정',game:'게임콘텐츠 제작 과정',design:'디지털디자인 과정',mobility:'스마트모빌리티 SW 과정',system:'정보시스템 구축 과정',adsp:'ADsP·ADP 과정',sqld:'SQLD·SQLP 과정','bigdata-cert':'빅데이터 분석기사 과정',engineer:'정보처리 자격 과정'
+  };
+  const faqItems = [
+    ['이 과정은 어떤 분에게 잘 맞나요?', guide[0] + '에게 적합합니다. 수료할 때는 ' + data.deliverable + ' 중심의 결과물로 배운 내용을 증명할 수 있게 구성합니다.'],
+    faqFocus[key] || faqFocus.data,
+    ['교육 일정과 비용은 어떻게 되나요?', '교육 기간은 ' + data.period + ', 교육 시간은 ' + data.time + '입니다. 수강료는 ' + data.tuition + ', 본인부담금은 ' + data.self + '이며 지원금과 적용 조건은 상담에서 최종 확인합니다.'],
+    ['수료할 때 어떤 결과물이 남나요?', data.outcomes.map(item => item[0]).join(' · ') + '을 단계별로 만듭니다. 최종 결과물은 ' + data.deliverable + '로 연결해 시연과 포트폴리오에 활용할 수 있도록 정리합니다.'],
+    [isHighschool ? '사전상담에서는 무엇을 확인하나요?' : '지원 전에 무엇을 상담할 수 있나요?', (isHighschool ? '위탁교육 지원 대상과 학교별 절차, 교육 일정, 자격 준비 계획을 확인합니다. ' : '국민내일배움카드 적용 여부, 교육 일정, 기숙사·숙식, 현재 수준과 과정 적합도를 확인합니다. ') + '현재 보고 있는 과정명이 상담 폼에 자동 입력되어 같은 내용을 반복해서 설명하지 않아도 됩니다.']
+  ];
+  const faqRoot = document.querySelector('[data-course-faq]');
+  const faqCourseName = document.querySelector('[data-faq-course-name]');
+  if (faqRoot && faqCourseName) {
+    faqCourseName.textContent = faqNames[key] || data.title;
+    faqRoot.replaceChildren(...faqItems.map(([question,answer],index) => {
+      const details = document.createElement('details');
+      details.className = 'sales-faq__item';
+      details.open = index === 0;
+      const summary = document.createElement('summary');
+      const number = document.createElement('small');
+      const title = document.createElement('strong');
+      const icon = document.createElement('i');
+      number.textContent = String(index + 1).padStart(2,'0');
+      title.textContent = question;
+      icon.setAttribute('aria-hidden','true');
+      summary.append(number,title,icon);
+      const body = document.createElement('div');
+      const copy = document.createElement('p');
+      copy.textContent = answer;
+      body.append(copy);
+      details.append(summary,body);
+      return details;
+    }));
+  }
   document.querySelectorAll('a[href^="/v2/site/class/apply.html"]').forEach(a => {
     a.href = isHighschool ? '/v2/site/campus/counsel.html?course=' + key : '/v2/site/class/apply.html?course=' + key;
     if (isHighschool) a.textContent = '사전상담 신청';
@@ -176,7 +394,9 @@
     ['why-course','.sales-question','과정 목표'],
     ['outcome','.sales-outcome','완성 결과물'],
     ['project-flow','.sales-stack','기술 흐름'],
-    ['learning-experience','.sales-proof','학습 경험']
+    ['facility','.sales-facility','학습 공간'],
+    ['learning-experience','.sales-proof','학습 경험'],
+    ['faq','.sales-faq','FAQ']
   ].map(item => {
     const section = document.querySelector(item[1]);
     if (section) { section.id = item[0]; section.classList.add('course-scene'); }

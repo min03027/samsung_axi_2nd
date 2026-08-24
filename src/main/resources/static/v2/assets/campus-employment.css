@@ -1,0 +1,218 @@
+.employment-campus {
+  --brand-700:#c8370b;
+  --brand-600:#ef4814;
+  --brand-500:#ff5b1f;
+  --brand-100:#ffe1d5;
+  --brand-50:#fff5f0;
+  --text-brand:#ef4814;
+  --text-link:#ef4814;
+  --border-brand:#ff5b1f;
+  background:#fff;
+}
+
+.employment-campus .hero {
+  padding-block:clamp(86px,9vw,132px);
+  background:#090909;
+}
+.employment-campus .hero::before {
+  background:
+    radial-gradient(750px 520px at 82% 12%,rgba(255,91,31,.25),transparent 66%),
+    linear-gradient(122deg,#090909 20%,#140b07 100%);
+}
+.employment-campus .hero h1 { max-width:900px;font-size:clamp(50px,6.4vw,92px);line-height:1.04;letter-spacing:-.055em; }
+.employment-campus .hero__sub { max-width:670px;color:rgba(255,255,255,.62);line-height:1.75; }
+.employment-campus .hero__stats { grid-template-columns:repeat(4,minmax(0,1fr)); }
+.employment-campus .hero__stat b { color:#ff5b1f;font-size:clamp(27px,3vw,42px); }
+.employment-campus .hero__stat span { color:rgba(255,255,255,.52); }
+
+/* 기관·기업 로고가 끊김 없이 왼쪽으로 순환하는 파트너 네트워크 */
+.employment-partners { overflow:hidden;padding:clamp(72px,8vw,118px) 0;background:#090b0b;color:#fff; }
+.employment-partners__panel { position:relative;overflow:hidden;padding:clamp(38px,5vw,68px) 0 clamp(32px,4vw,54px);border:1px solid rgba(255,255,255,.055);border-radius:32px;background:linear-gradient(145deg,rgba(255,255,255,.034),rgba(255,255,255,.012));box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 28px 80px rgba(0,0,0,.24); }
+.employment-partners__panel::before { content:"";position:absolute;z-index:0;left:50%;bottom:-170px;width:min(720px,66vw);height:340px;transform:translateX(-50%);background:radial-gradient(ellipse at center,rgba(255,91,31,.18),rgba(255,91,31,.035) 45%,transparent 72%);filter:blur(8px);pointer-events:none; }
+.employment-partners__panel::after { content:"";position:absolute;z-index:0;left:50%;bottom:-3px;width:min(580px,60vw);height:180px;transform:translateX(-50%);opacity:.22;background-image:linear-gradient(rgba(255,91,31,.24) 1px,transparent 1px),linear-gradient(90deg,rgba(255,91,31,.24) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to top,#000,transparent 88%);pointer-events:none; }
+.employment-partners__head { position:relative;z-index:2;text-align:center; }
+.employment-partners__head span { color:#ff6d36;font:850 10px/1 var(--font-mono);letter-spacing:.19em; }
+.employment-partners__head h2 { margin-top:12px;color:#fff;font-size:clamp(25px,2.5vw,36px);letter-spacing:-.04em; }
+.employment-partners__viewport { position:relative;z-index:2;overflow:hidden;margin-top:clamp(34px,4.4vw,58px);mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%); }
+.employment-partners__track { display:flex;width:max-content;will-change:transform; }
+.employment-partners__viewport[data-ready="true"] .employment-partners__track { animation:employment-partner-marquee 30s linear infinite; }
+.employment-partners__group { display:flex;flex:none;align-items:center;gap:clamp(54px,6.2vw,108px);min-width:max-content;padding-right:clamp(54px,6.2vw,108px); }
+.employment-partner-wordmark { display:flex;flex:none;align-items:center;justify-content:center;min-width:clamp(180px,15vw,250px);min-height:78px;color:rgba(255,255,255,.78);white-space:nowrap; }
+.employment-partner-wordmark span { font-size:clamp(21px,2.1vw,32px);font-weight:820;letter-spacing:-.045em; }
+.employment-partner-wordmark small { display:block;margin-left:12px;color:#ff6b33;font:750 9px/1.25 var(--font-mono);letter-spacing:.08em; }
+.employment-partner-wordmark--image img { display:block;width:auto;max-width:235px;height:auto;max-height:58px;object-fit:contain; }
+.employment-partner-wordmark--government img { filter:grayscale(1) brightness(0) invert(1);opacity:.76; }
+.employment-partner-wordmark--hrd img { max-width:224px;max-height:64px; }
+.employment-partner-wordmark--samsung img { max-width:178px;max-height:66px;filter:brightness(1.28) saturate(.72); }
+.employment-partner-wordmark--creative img { max-width:240px;max-height:55px; }
+.employment-partner-wordmark--hrd { align-items:flex-start;flex-direction:column; }
+.employment-partner-wordmark--hrd small { margin:6px 0 0;color:rgba(255,255,255,.34);letter-spacing:.22em; }
+.employment-partner-wordmark--samsung { align-items:flex-start;flex-direction:column; }
+.employment-partner-wordmark--samsung span { font-family:Arial,sans-serif;font-weight:900;letter-spacing:-.055em; }
+.employment-partner-wordmark--samsung small { margin:5px 0 0;color:#ff6b33;font-size:10px;letter-spacing:.04em; }
+.employment-partner-wordmark--kaist span { font-family:Arial,sans-serif;font-size:clamp(27px,2.8vw,42px);font-weight:900;letter-spacing:-.07em; }
+.employment-partner-wordmark--woowa span { font-weight:900;letter-spacing:-.08em; }
+@keyframes employment-partner-marquee {
+  to { transform:translateX(-50%); }
+}
+
+.employment-course-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px; }
+.employment-course-card { min-width:0;display:flex;flex-direction:column;overflow:hidden;border:0;border-radius:26px;background:#f4511e;box-shadow:0 20px 55px rgba(65,28,14,.18); }
+.employment-course-card__top { display:flex;align-items:center;justify-content:space-between;padding:22px 22px 0; }
+.employment-course-card__index { color:#fff;font:800 12px/1 var(--font-mono);letter-spacing:.13em; }
+.employment-course-card__status { padding:7px 11px;border-radius:999px;background:#e5f7ee;color:#08734f;font-size:12px;font-weight:800; }
+.employment-course-card[data-status="closing"] .employment-course-card__status { background:#fff0e9;color:#d34210; }
+.employment-course-card[data-status="pre-recruiting"] .employment-course-card__status { background:#eee9ff;color:#6144be; }
+.employment-course-card[data-status="rolling"] .employment-course-card__status { background:#e8f1ff;color:#2365b5; }
+.employment-course-card__visual { display:grid;place-items:center;height:210px;margin:14px 14px 0;border-radius:18px;background:radial-gradient(circle at 50% 65%,rgba(255,91,31,.18),transparent 51%),#101010; }
+.employment-course-card__visual img { width:min(72%,230px);max-height:180px;object-fit:contain;filter:drop-shadow(0 16px 24px rgba(0,0,0,.32)); }
+.employment-course-card__body { display:flex;flex:1;flex-direction:column;margin:14px 10px 0;padding:24px 20px 18px;border-radius:20px 20px 0 0;background:#fff; }
+.employment-course-card__body>p { color:#df4615;font-size:11px;font-weight:900;letter-spacing:.13em; }
+.employment-course-card__body h3 { min-height:4.1em;margin-top:12px;font-size:clamp(21px,1.8vw,27px);line-height:1.38;letter-spacing:-.035em; }
+.employment-course-card__body dl { display:grid;gap:9px;margin-top:28px;padding-top:18px;border-top:1px solid #ece9e6; }
+.employment-course-card__body dl div { display:grid;grid-template-columns:76px 1fr;gap:10px;font-size:12px;line-height:1.55; }
+.employment-course-card__body dt { color:#9c948e; }
+.employment-course-card__body dd { color:#4b4541;font-weight:600; }
+.employment-course-card footer { display:flex;gap:8px;margin:0 10px 10px;padding:0 20px 20px;border-radius:0 0 20px 20px;background:#fff; }
+.employment-course-card footer .btn { flex:1; }
+
+.employment-support-preview { display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.55fr);gap:18px; }
+.employment-support-preview__rail { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));counter-reset:employment-step;border:1px solid #dedbd8;border-radius:26px;background:#fff;overflow:hidden; }
+.employment-support-preview__rail li { min-height:170px;padding:25px;border-right:1px solid #ece9e6;border-bottom:1px solid #ece9e6;counter-increment:employment-step; }
+.employment-support-preview__rail li:nth-child(3n) { border-right:0; }
+.employment-support-preview__rail li:nth-child(n+4) { border-bottom:0; }
+.employment-support-preview__rail li::before { content:counter(employment-step,decimal-leading-zero);display:block;margin-bottom:28px;color:#ff5b1f;font:800 12px/1 var(--font-mono);letter-spacing:.12em; }
+.employment-support-preview__rail b,.employment-support-preview__rail span { display:block; }
+.employment-support-preview__rail b { font-size:18px; }
+.employment-support-preview__rail span { margin-top:8px;color:#77706b;font-size:13px;line-height:1.55; }
+.employment-support-preview__result { display:flex;flex-direction:column;justify-content:flex-end;padding:30px;border-radius:26px;background:#0b0b0b;color:#fff; }
+.employment-support-preview__result>span { color:#ff713d;font:800 11px/1 var(--font-mono);letter-spacing:.13em; }
+.employment-support-preview__result strong { margin-top:22px;color:#fff;font-size:24px;line-height:1.35; }
+.employment-support-preview__result p { margin-top:16px;color:rgba(255,255,255,.52);font-size:13px;line-height:1.65; }
+
+.employment-campus .section--tint { background:#f6f5f4; }
+.employment-campus .cta-band { background:#0a0a0a; }
+.employment-campus .campus-facility-teaser__copy h2 { color:#fff; }
+.employment-campus .campus-facility-teaser__copy>p { color:rgba(255,255,255,.72); }
+
+/* 실제 공개 연혁을 핵심 시점 중심의 스크롤 타임라인으로 구성 */
+.employment-history { position:relative;overflow:hidden;padding:clamp(110px,12vw,180px) 0;background:#07090d;color:#fff; }
+.employment-history::after { content:"";position:absolute;inset:auto 0 0;height:38%;background:linear-gradient(180deg,transparent,rgba(9,43,86,.54));pointer-events:none; }
+.employment-history__intro,.employment-history__timeline,.employment-history__closing { position:relative;z-index:1; }
+.employment-history__intro { text-align:center; }
+.employment-history__intro>span { color:#ff5b1f;font:850 12px/1 var(--font-mono);letter-spacing:.2em; }
+.employment-history__intro h2 { max-width:1050px;margin:24px auto 0;color:#fff;font-size:clamp(48px,6.4vw,92px);line-height:1.05;letter-spacing:-.06em; }
+.employment-history__intro p { max-width:650px;margin:30px auto 0;color:rgba(255,255,255,.55);font-size:17px;line-height:1.75; }
+.employment-history__timeline { margin-top:clamp(90px,12vw,160px);padding-block:20px; }
+.employment-history__line { position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(180deg,transparent 0,#ff5b1f 8%,#ff5b1f 90%,transparent);opacity:.72; }
+.employment-history__item { position:relative;display:grid;grid-template-columns:1fr 74px 1fr;align-items:start;min-height:230px; }
+.employment-history__item time { color:#fff;font-size:clamp(45px,5vw,72px);font-weight:800;line-height:1;letter-spacing:-.05em; }
+.employment-history__item i { position:relative;display:block;width:19px;height:19px;margin:12px auto 0;border:4px solid #07090d;border-radius:50%;background:#ff5b1f;box-shadow:0 0 0 1px rgba(255,91,31,.55),0 0 30px rgba(255,91,31,.38); }
+.employment-history__item>div { max-width:440px;padding-top:5px; }
+.employment-history__item small { color:#ff6b33;font:800 10px/1 var(--font-mono);letter-spacing:.16em; }
+.employment-history__item h3 { margin-top:11px;color:#fff;font-size:clamp(23px,2.5vw,34px);line-height:1.22; }
+.employment-history__item p { margin-top:12px;color:rgba(255,255,255,.48);line-height:1.7; }
+.employment-history__item.is-left time { grid-column:1;text-align:right; }
+.employment-history__item.is-left i { grid-column:2; }
+.employment-history__item.is-left>div { grid-column:3; }
+.employment-history__item.is-right time { grid-column:3;grid-row:1;text-align:left; }
+.employment-history__item.is-right i { grid-column:2;grid-row:1; }
+.employment-history__item.is-right>div { grid-column:1;grid-row:1;justify-self:end;text-align:right; }
+.employment-history__item--now time,.employment-history__item--now h3 { color:#ff6a31; }
+.employment-history__closing { display:flex;align-items:end;justify-content:space-between;gap:30px;margin-top:40px;padding-top:48px;border-top:1px solid rgba(255,255,255,.18); }
+.employment-history__closing p { max-width:720px;color:#fff;font-size:clamp(25px,3vw,40px);font-weight:750;line-height:1.35; }
+.employment-history__closing a { flex:none;color:#ff6a31;font-size:14px;font-weight:750; }
+
+@media (max-width:1050px) {
+  .employment-course-grid { grid-template-columns:1fr; }
+  .employment-course-card { display:grid;grid-template-columns:220px 1fr; }
+  .employment-course-card__top { grid-column:1/-1; }
+  .employment-course-card__visual { height:auto;min-height:220px;margin-bottom:24px; }
+  .employment-course-card__body h3 { min-height:0; }
+  .employment-course-card footer { grid-column:2; }
+  .employment-support-preview { grid-template-columns:1fr; }
+  .employment-campus .hero__stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+
+@media (max-width:720px) {
+  .employment-campus .hero h1 { font-size:clamp(43px,12vw,68px); }
+  .employment-campus .hero__stats { grid-template-columns:1fr 1fr;gap:22px 14px; }
+  .employment-course-card { display:flex; }
+  .employment-course-card__visual { height:190px;margin-bottom:0; }
+  .employment-course-card footer { grid-column:auto; }
+  .employment-support-preview__rail { grid-template-columns:1fr; }
+  .employment-support-preview__rail li,.employment-support-preview__rail li:nth-child(3n),.employment-support-preview__rail li:nth-child(n+4) { min-height:0;border-right:0;border-bottom:1px solid #ece9e6; }
+  .employment-support-preview__rail li:last-child { border-bottom:0; }
+  .employment-support-preview__rail li::before { margin-bottom:12px; }
+  .employment-history__intro { text-align:left; }
+  .employment-history__intro h2,.employment-history__intro p { margin-left:0; }
+  .employment-history__line { left:30px; }
+  .employment-history__item { grid-template-columns:60px 1fr;min-height:0;padding-bottom:64px; }
+  .employment-history__item time,.employment-history__item.is-left time,.employment-history__item.is-right time { grid-column:2;grid-row:1;text-align:left;font-size:42px; }
+  .employment-history__item i,.employment-history__item.is-left i,.employment-history__item.is-right i { grid-column:1;grid-row:1;margin-top:8px; }
+  .employment-history__item>div,.employment-history__item.is-left>div,.employment-history__item.is-right>div { grid-column:2;grid-row:2;justify-self:start;text-align:left;padding-top:17px; }
+  .employment-history__closing { align-items:flex-start;flex-direction:column; }
+  .employment-partners { padding:58px 0; }
+  .employment-partners>.container { padding-inline:14px; }
+  .employment-partners__panel { border-radius:24px; }
+  .employment-partners__viewport { mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%); }
+  .employment-partners__group { gap:44px;padding-right:44px; }
+  .employment-partner-wordmark { min-width:174px; }
+  .employment-partners__viewport[data-ready="true"] .employment-partners__track { animation-duration:23s; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .employment-partners__viewport { overflow-x:auto;mask-image:none;scrollbar-width:thin; }
+  .employment-partners__viewport[data-ready="true"] .employment-partners__track { animation:none; }
+  .employment-partners__group[aria-hidden="true"] { display:none; }
+}
+
+/* 취업지원 상세 */
+.employment-support-page { background:#0a0a0a; }
+.employment-support-page .footer { background:#080808; }
+.employment-support-hero { min-height:82vh;display:grid;align-items:end;padding:clamp(150px,17vw,250px) 0 clamp(90px,11vw,150px);color:#fff;background:radial-gradient(700px 520px at 82% 22%,rgba(255,91,31,.24),transparent 67%),#090909; }
+.employment-support-hero span,.employment-support-intro span,.employment-section-head span,.employment-support-proof header span,.employment-support-cta span { color:#ff5b1f;font:850 12px/1 var(--font-mono);letter-spacing:.18em; }
+.employment-support-hero h1 { max-width:1100px;margin-top:24px;color:#fff;font-size:clamp(54px,7.3vw,108px);line-height:1.02;letter-spacing:-.065em; }
+.employment-support-hero p { max-width:690px;margin-top:32px;color:rgba(255,255,255,.6);font-size:18px;line-height:1.75; }
+.employment-support-hero__actions { display:flex;gap:10px;margin-top:42px; }
+.employment-support-hero .btn--outline { color:#fff;border-color:rgba(255,255,255,.28); }
+.employment-support-intro { padding:clamp(90px,10vw,145px) 0;background:#fff; }
+.employment-support-intro__layout { display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end; }
+.employment-support-intro h2 { margin-top:20px;font-size:clamp(42px,5.1vw,76px);line-height:1.08;letter-spacing:-.055em; }
+.employment-support-intro p { color:#69635f;font-size:18px;line-height:1.8; }
+.employment-process { padding:clamp(100px,11vw,160px) 0;background:#f5f4f2; }
+.employment-section-head h2,.employment-support-proof h2,.employment-support-cta h2 { margin-top:20px;font-size:clamp(42px,5vw,72px);line-height:1.08;letter-spacing:-.052em; }
+.employment-process__list { margin-top:70px;border-top:1px solid #222; }
+.employment-process__list li { display:grid;grid-template-columns:90px minmax(0,1.2fr) minmax(330px,.8fr);gap:36px;padding:42px 0;border-bottom:1px solid #d4d0cc; }
+.employment-process__number { color:#ff5b1f;font:800 13px/1 var(--font-mono); }
+.employment-process__copy small { color:#9c958f;font:800 10px/1 var(--font-mono);letter-spacing:.17em; }
+.employment-process__copy h3 { margin-top:10px;font-size:clamp(28px,3vw,42px); }
+.employment-process__copy p { max-width:620px;margin-top:16px;color:#706964;line-height:1.7; }
+.employment-process__list dl { display:grid;align-content:start;gap:17px;padding:21px 24px;border-radius:18px;background:rgba(255,255,255,.72);box-shadow:inset 0 1px 0 #fff,0 14px 34px rgba(27,21,17,.05); }
+.employment-process__list dl div { display:grid;grid-template-columns:86px 1fr;gap:12px;font-size:13px;line-height:1.55; }
+.employment-process__list dt { color:#9c958f; }
+.employment-process__list dd { color:#3b3531;font-weight:650; }
+.employment-support-proof { padding:clamp(100px,11vw,160px) 0;background:#0a0a0a;color:#fff; }
+.employment-support-proof h2 { color:#fff; }
+.employment-support-proof__layout { display:grid;grid-template-columns:.85fr 1.15fr;gap:80px; }
+.employment-support-proof__grid { display:grid;gap:10px; }
+.employment-support-proof__grid article { padding:28px;border:1px solid rgba(255,255,255,.13);border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.025));backdrop-filter:blur(18px); }
+.employment-support-proof__grid small { color:#ff6d36;font:800 10px/1 var(--font-mono);letter-spacing:.14em; }
+.employment-support-proof__grid strong { display:block;margin-top:19px;color:#fff;font-size:25px; }
+.employment-support-proof__grid p { margin-top:8px;color:rgba(255,255,255,.5);font-size:14px;line-height:1.65; }
+.employment-support-cta { padding:clamp(95px,10vw,145px) 0;background:#fff; }
+.employment-support-cta>.container { display:grid;grid-template-columns:1.15fr .85fr;gap:80px;align-items:end; }
+.employment-support-cta p { color:#706964;line-height:1.75; }
+.employment-support-cta .btn { margin-top:28px; }
+
+@media (max-width:950px) {
+  .employment-support-intro__layout,.employment-support-proof__layout,.employment-support-cta>.container { grid-template-columns:1fr;gap:38px; }
+  .employment-process__list li { grid-template-columns:54px 1fr; }
+  .employment-process__list dl { grid-column:2; }
+}
+@media (max-width:650px) {
+  .employment-support-hero { min-height:0; }
+  .employment-support-hero__actions { align-items:stretch;flex-direction:column; }
+  .employment-process__list li { grid-template-columns:1fr;gap:18px; }
+  .employment-process__list dl { grid-column:auto; }
+}
