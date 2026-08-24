@@ -26,13 +26,8 @@
       <a class="btn btn--lg btn--outline" style="color:var(--white);border-color:rgba(255,255,255,.3)" href="/v2/site/campus/counsel.html">1:1 상담 신청</a>
     </div>
 
-    <!-- 공개 화면에서 현재 확인할 수 있는 서비스 범위 -->
-    <div class="hero__stats">
-      <div class="hero__stat"><b class="num">19개</b><span>현재 공개된 전체 과정</span></div>
-      <div class="hero__stat"><b class="num">3가지</b><span>모집중·사전모집·수시모집 구분</span></div>
-      <div class="hero__stat"><b class="num">6단계</b><span>진단부터 취업 후 관리까지</span></div>
-      <div class="hero__stat"><b class="num">1:1</b><span>과정 선택·국비·시설 상담</span></div>
-    </div>
+    <!-- 취업-012 대표 성과: 연혁 데이터와 같은 단일 콘텐츠 소스에서 렌더링 -->
+    <div class="hero__stats" data-campus-stats></div>
   </div>
 </section>
 
@@ -70,39 +65,12 @@
 <!-- 취업-013 기관 연혁 -->
 <section class="employment-history" id="campus-history">
   <div class="container employment-history__intro">
-    <span>OUR HISTORY · 1982—2026</span>
+    <span>OUR HISTORY · <b data-brand="heritage">1982 세종교육</b> → 2026 <b data-brand="name">내일의AI</b></span>
     <h2>AI가 일상이 되기 전부터<br>기술로 일하는 사람을 준비했습니다.</h2>
     <p>한 번의 유행이 아니라, 직업교육의 변화에 맞춰 과정과 실습 환경을 계속 확장해 온 기록입니다.</p>
   </div>
-  <div class="container employment-history__timeline">
+  <div class="container employment-history__timeline" data-campus-history>
     <div class="employment-history__line" aria-hidden="true"></div>
-    <article class="employment-history__item is-left">
-      <time>1982</time><i></i><div><small>BEGINNING</small><h3>(주)세종교육 설립</h3><p>성남에서 직업교육의 첫걸음을 시작했습니다.</p></div>
-    </article>
-    <article class="employment-history__item is-right">
-      <time>1992</time><i></i><div><small>LOCAL TRUST</small><h3>성남시 최우수 IT교육기관상</h3><p>지역의 정보화 교육을 이끄는 교육기관으로 인정받았습니다.</p></div>
-    </article>
-    <article class="employment-history__item is-left">
-      <time>2009</time><i></i><div><small>NEW TRAINING</small><h3>국내 최초 전산교사양성 과정 개발</h3><p>고용노동부 지정 실업자 직업훈련으로 새로운 직무교육을 열었습니다.</p></div>
-    </article>
-    <article class="employment-history__item is-right">
-      <time>2013</time><i></i><div><small>FOUNDATION</small><h3>교육법인 등록과 국가고시 시험장 선정</h3><p>(주)세종교육 교육법인 등록, 세종경영관광학원 설립과 ITQ 국가고시 시험장 선정을 이어갔습니다.</p></div>
-    </article>
-    <article class="employment-history__item is-left">
-      <time>2017</time><i></i><div><small>QUALITY</small><h3>직업훈련 우수훈련기관 선정</h3><p>3년 인증을 획득하고 일반고 특화·정보시스템 과정의 운영 기반을 넓혔습니다.</p></div>
-    </article>
-    <article class="employment-history__item is-right">
-      <time>2022</time><i></i><div><small>RECOGNITION</small><h3>직업능력개발훈련 부문 대상</h3><p>대한민국 No.1 교육대상에서 직업능력개발훈련 부문 대상을 수상했습니다.</p></div>
-    </article>
-    <article class="employment-history__item is-left">
-      <time>2023</time><i></i><div><small>K-DIGITAL</small><h3>K-디지털 트레이닝 훈련기관 선정</h3><p>AI·데이터 실무와 기업 프로젝트 중심의 KDT 과정 운영을 시작했습니다.</p></div>
-    </article>
-    <article class="employment-history__item is-right">
-      <time>2025</time><i></i><div><small>PARTNERSHIP</small><h3>삼성SDS Brity 협력</h3><p>산업 자동화와 AI 실무교육의 접점을 넓히며 새로운 협력 기반을 만들었습니다.</p></div>
-    </article>
-    <article class="employment-history__item employment-history__item--now is-left">
-      <time>2026</time><i></i><div><small>NOW</small><h3>삼성AXI로 새로운 출발</h3><p>사명 변경과 팀AXI 판교지사 오픈을 통해 AI 전환 교육의 다음 단계를 시작했습니다.</p></div>
-    </article>
   </div>
   <div class="container employment-history__closing">
     <p>기술은 바뀌어도, 배운 것을 일로 연결하는 교육은 계속됩니다.</p>
@@ -245,7 +213,7 @@
     <div class="cta-band">
       <span class="eyebrow" style="color:var(--brand-500)">1분이면 됩니다</span>
       <h2>내 조건으로 전체 과정을 좁혀보세요</h2>
-      <p>전체 과정에서 사용하는 기존 추천 기준으로 관심분야·현재수준·기간·숙식·재직상태를 비교합니다.</p>
+      <p>희망직무·경력·학력·지역·숙식·국비·희망일정·관심분야를 함께 비교합니다.</p>
       <div class="btn-group">
         <a class="btn btn--lg btn--inverse" href="/v2/site/campus/recommend.html">과정 추천 시작하기</a>
         <a class="btn btn--lg btn--outline" style="color:var(--white);border-color:rgba(255,255,255,.35)" href="/v2/site/campus/counsel.html">상담 신청</a>
@@ -255,6 +223,7 @@
 </section>
 
 <script src="/v2/assets/brand.js"></script>
+<script src="/v2/assets/campus-content.js?v=20260824-01"></script>
 <script src="/v2/assets/recruitment-status.js?v=20260824-01"></script>
 <script src="/v2/assets/course-data.js?v=20260824-01"></script>
 <script src="/v2/assets/campus-employment.js?v=20260824-03"></script>

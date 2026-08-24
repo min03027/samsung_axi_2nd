@@ -34,11 +34,14 @@
   let recommendation = null;
   try { recommendation = JSON.parse(sessionStorage.getItem('axi-course-recommendation') || 'null'); } catch (_) { recommendation = null; }
   const queryLabels = {
-    interest:{data:'데이터 분석·AI',factory:'스마트팩토리·AIoT',robot:'로봇·자율주행',cloud:'웹·클라우드 개발',creative:'디자인·콘텐츠',global:'글로벌·기획'},
-    level:{beginner:'처음 시작',basic:'기초 학습 경험',project:'프로젝트 경험'},
-    duration:{short:'3개월 이내',medium:'4~6개월',long:'7개월 이상',any:'기간 상관없음'},
+    career:{'data-ai':'데이터·AI','smart-factory':'스마트팩토리·AIoT',robot:'로봇·자율주행',developer:'웹·클라우드 개발',content:'디자인·콘텐츠',global:'글로벌 취업·기획'},
+    experience:{none:'관련 경험 없음',learning:'학습·자격 준비 경험',project:'프로젝트 경험',work:'관련 실무 경험'},
+    education:{'highschool-current':'일반고 재학 중','highschool-graduate':'고교 졸업·검정고시',college:'대학 재학·졸업',graduate:'대학원·기타'},
+    region:{seongnam:'경기 성남',capital:'서울·경기 수도권',any:'지역 무관',consult:'지역 상담 필요'},
     lodging:{needed:'숙식 필요','not-needed':'숙식 불필요',undecided:'숙식 미정'},
-    status:{job:'구직·취업 준비 중',worker:'재직 중',student:'일반고 3학년'}
+    funding:{required:'국비지원 필수',preferred:'가능하면 국비 희망','not-needed':'국비 무관',undecided:'국비 상담 후 결정'},
+    schedule:{immediate:'가능한 빨리',within3:'3개월 이내',later:'3개월 이후',flexible:'일정 상담'},
+    field:{ai:'생성형AI·산업AI',data:'데이터 분석',automation:'자동화·제조',software:'SW·클라우드',creative:'디자인·영상',global:'해외취업',certificate:'자격증'}
   };
   function applyRecommendation(nextRecommendation, nextCourseKey) {
     if (!nextRecommendation) return;
@@ -64,13 +67,17 @@
       tags.append(li);
     });
     form.querySelector('[data-recommendation-value]').value = Object.values(answerLabels).join(' · ');
+    form.querySelectorAll('[data-recommendation-field]').forEach(input => {
+      input.value = answers[input.dataset.recommendationField] || '';
+    });
     if (answers.lodging === 'needed') form.elements.dorm.value = '필요';
     if (answers.lodging === 'not-needed') form.elements.dorm.value = '불필요';
     if (answers.lodging === 'undecided') form.elements.dorm.value = '미정';
     form.elements.type.value = '과정 선택';
   }
 
-  const queryAnswers = Object.fromEntries(['interest','level','duration','lodging','status'].map(name => [name, params.get(name)]).filter(([,value]) => value));
+  const recommendationFields = ['career','experience','education','region','lodging','funding','schedule','field'];
+  const queryAnswers = Object.fromEntries(recommendationFields.map(name => [name, params.get(name)]).filter(([,value]) => value));
   if (fromRecommendation) {
     applyRecommendation(recommendation || {
       answers:queryAnswers,
