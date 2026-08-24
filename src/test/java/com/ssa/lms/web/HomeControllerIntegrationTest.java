@@ -63,6 +63,7 @@ class HomeControllerIntegrationTest {
     void publicLandingLinksIntegratedTeamPagesAndSections() throws IOException {
         String campus = resourceText("static/v2/site/campus/index.html");
         String biz = resourceText("static/v2/site/biz/index.html");
+        String bizEducationTypes = resourceText("static/v2/assets/biz-education-types.js");
         String navigation = resourceText("static/v2/assets/page-section-navigation.js");
 
         assertFalse(campus.contains("/v2/assets/shell.js"));
@@ -74,10 +75,14 @@ class HomeControllerIntegrationTest {
                 "campus-network", "campus-courses", "career-support", "graduate-reviews", "campus-facilities")) {
             assertTrue(campus.contains("id=\"" + id + "\""), () -> "취업캠퍼스 섹션 누락: " + id);
         }
-        for (String id : List.of("education-types", "ax-execution", "org-diagnosis",
-                "change-flow", "job-programs", "company-cases", "biz-contact")) {
+        for (String id : List.of("education-types", "ax-execution", "ax-diagnosis",
+                "job-programs", "company-cases", "biz-contact")) {
             assertTrue(biz.contains("id=\"" + id + "\""), () -> "비즈워크넥트 섹션 누락: " + id);
         }
+        assertTrue(biz.contains("id=\"biz-diagnosis-form\""), "AX 간편 진단 폼 누락");
+        assertTrue(biz.contains("id=\"biz-diagnosis-result\""), "AX 간편 진단 결과 영역 누락");
+        assertTrue(bizEducationTypes.contains("getElementById(\"biz-diagnosis-form\")"), "AX 간편 진단 동작 누락");
+        assertTrue(bizEducationTypes.contains("href=\\\"#biz-contact\\\""), "진단 결과의 도입 문의 연결 누락");
     }
 
     private String resourceText(String path) throws IOException {
