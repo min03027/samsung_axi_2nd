@@ -86,6 +86,38 @@
     engineer:['정보처리 산업기사·기사 취득을 준비하는 분','소프트웨어 개발자 · 정보시스템 실무자',['필기 이론','실기 핵심','기출 문제','모의 시험']]
   };
   const guide = courseGuides[key] || courseGuides.data;
+  const prerequisiteProfiles = {
+    data:'기본적인 PC 활용 · 숫자와 표 데이터에 대한 관심 · Python 경험 불필요',
+    factory:'기본적인 PC 활용 · 제조 공정과 자동화에 대한 관심 · PLC 경험 불필요',
+    aiot:'기본적인 PC 활용 · 센서와 데이터에 대한 관심 · Python·장비 경험 불필요',
+    robot:'기본적인 PC 활용 · 로봇과 센서에 대한 관심 · 전공·ROS 경험 불필요',
+    cloud:'파일 관리와 웹 사용 기초 · 논리적 문제 해결에 대한 관심 · Java 경험 불필요',
+    video:'파일 관리와 PC 기본 활용 · 영상 콘텐츠에 대한 관심 · 편집 경험 불필요',
+    uiux:'기본적인 PC 활용 · 사용자 문제를 관찰하는 습관 · Figma 경험 불필요',
+    japan:'기본적인 PC 활용 · 개발과 일본 취업에 대한 관심 · 언어 수준은 상담 확인',
+    usa:'문서·스프레드시트 기본 활용 · 글로벌 마케팅에 대한 관심 · 영어 수준은 상담 확인',
+    china:'문서·협업 도구 기본 활용 · AI 제품과 중국 시장에 대한 관심 · 언어 수준은 상담 확인',
+    cooking:'일반고 위탁 지원 대상 확인 · 조리와 위생에 대한 관심 · 조리 경험 불필요',
+    game:'일반고 위탁 지원 대상 확인 · 기본적인 PC 활용 · 게임 제작 경험 불필요',
+    design:'일반고 위탁 지원 대상 확인 · 기본적인 PC 활용 · 디자인 도구 경험 불필요',
+    mobility:'일반고 위탁 지원 대상 확인 · 기본적인 PC 활용 · 로봇 제작 경험 불필요',
+    system:'일반고 위탁 지원 대상 확인 · 기본적인 PC 활용 · 프로그래밍 경험 불필요',
+    adsp:'데이터 분석 기초 용어에 대한 관심 · 목표 자격과 응시 조건 사전 확인',
+    sqld:'데이터베이스 기초 용어에 대한 관심 · 목표 자격과 응시 조건 사전 확인',
+    'bigdata-cert':'기초 통계와 데이터 처리에 대한 관심 · 시험 응시 자격 사전 확인',
+    engineer:'컴퓨터와 소프트웨어 기초 용어에 대한 관심 · 시험 응시 자격 사전 확인'
+  };
+  const mentorProfiles = {
+    data:[['김하린','전담 강사','데이터 분석·머신러닝 교육 8년','데이터 분석 · AIoT'],['오준혁','프로젝트 멘토','AI 서비스 기획·개발 9년','데이터 분석 · 자격 과정']],
+    factory:[['정우진','전담 강사','스마트팩토리·공정 자동화 11년','스마트팩토리 · 모빌리티'],['박도윤','프로젝트 멘토','산업 IoT·클라우드 구축 10년','스마트팩토리 · AIoT']],
+    aiot:[['김하린','전담 강사','데이터 분석·머신러닝 교육 8년','AIoT · 데이터 분석'],['정우진','프로젝트 멘토','스마트팩토리·공정 자동화 11년','AIoT · 로봇 AI']],
+    robot:[['정우진','전담 강사','로봇 제어·스마트모빌리티 11년','로봇 AI · 모빌리티'],['오준혁','프로젝트 멘토','컴퓨터비전·AI 서비스 개발 9년','로봇 AI · AIoT']],
+    cloud:[['박도윤','전담 강사','Java·클라우드 서비스 개발 10년','클라우드 · 정보시스템'],['최서윤','프로젝트 멘토','제품 개발·기술 포트폴리오 8년','클라우드 · 해외취업']],
+    video:[['이서현','전담 강사','영상 콘텐츠·브랜드 디자인 9년','AI 영상 · 디지털디자인'],['최서윤','프로젝트 멘토','콘텐츠 전략·포트폴리오 8년','AI 영상 · UI/UX']],
+    uiux:[['이서현','전담 강사','프로덕트 디자인·UX 리서치 9년','UI/UX · 디지털디자인'],['최서윤','프로젝트 멘토','제품 전략·포트폴리오 8년','UI/UX · 글로벌 PM']],
+    cooking:[['한지수','전담 강사','한식·양식 조리 및 교육 12년','조리실무'],['이서현','취업 멘토','서비스 현장 포트폴리오 9년','조리실무 · 취업준비']]
+  };
+  const defaultMentors = mentorProfiles.cloud;
   const curriculumProfiles = {
     factory:{total:'교과 640시간 · 프로젝트 470시간',phases:[
       ['교과','스마트팩토리 제어 기초','PLC 제어와 센서·액추에이터의 동작 원리를 이해합니다.',['PLC 입출력과 제어 로직','아두이노 기반 센서 데이터 수집','설비 안전 제어 시나리오'],['PLC','Arduino','Sensor'],'PLC 제어 프로그램'],
@@ -203,6 +235,7 @@
   curriculum.querySelector('.sales-section-head h2').innerHTML = '배우는 데서 멈추지 않고<br><em>' + data.deliverable + '까지 완성합니다</em>';
   curriculum.querySelector('[data-learning-summary]').textContent = data.source + '에서 시작해 ' + data.outcomes.map(item => item[0]).join(', ') + '를 직접 만들고 연결합니다. 수료할 때는 설명이 아니라 시연 가능한 결과물로 역량을 보여줍니다.';
   curriculum.querySelector('[data-course-audience]').textContent = guide[0];
+  curriculum.querySelector('[data-course-prerequisite]').textContent = prerequisiteProfiles[key] || prerequisiteProfiles.data;
   curriculum.querySelector('[data-course-career]').textContent = guide[1];
   curriculum.querySelector('[data-course-result]').textContent = data.deliverable;
   const phaseTitles = [tools[0] + ' 기초와 문제 정의',(tools[1] || tools[0]) + ' 실무 적용',(tools[2] || tools[tools.length - 1]) + ' 결과물 구현',data.deliverable + ' 완성과 발표'];
@@ -226,57 +259,37 @@
     totalOutcome.textContent = '배운 기술을 실무 결과물로 완성할 수 있습니다.';
     curriculumTotal.append(totalTime,totalOutcome);
   }
-  const selector = document.createElement('div');
-  selector.className = 'curriculum-phase-selector';
-  const tabList = document.createElement('div');
-  tabList.className = 'curriculum-phase-tabs';
-  tabList.setAttribute('role','tablist');
-  tabList.setAttribute('aria-label','커리큘럼 단계 선택');
-  const viewer = document.createElement('div');
-  viewer.className = 'curriculum-phase-view';
+  const controls = document.createElement('div');
+  controls.className = 'curriculum-controls';
+  controls.innerHTML = '<p><b>단계별 커리큘럼</b><span>주차와 학습 내용, 도구, 산출물을 구분해 확인하세요.</span></p><div><button type="button" data-expand-all>전체 펼치기</button><button type="button" data-collapse-all>전체 접기</button></div>';
   const curriculumRows = curriculumProfile.phases.map((phase,index) => {
     const [type,title,description,learning,phaseTools,output,hours] = phase;
     const phaseNumber = String(index + 1).padStart(2,'0');
-    const tabId = 'curriculum-tab-' + (index + 1);
     const panelId = 'curriculum-panel-' + (index + 1);
+    const row = document.createElement('article');
+    row.className = 'curriculum-phase';
     const button = document.createElement('button');
     button.type = 'button';
-    button.id = tabId;
-    button.className = 'curriculum-phase-tab';
-    button.setAttribute('role','tab');
-    button.setAttribute('aria-selected',String(index === 0));
+    button.className = 'curriculum-phase__button';
+    button.setAttribute('aria-expanded',String(index === 0));
     button.setAttribute('aria-controls',panelId);
-    button.tabIndex = index === 0 ? 0 : -1;
-    const tabNumber = document.createElement('span');
-    tabNumber.textContent = 'PHASE ' + phaseNumber;
-    const tabTitle = document.createElement('strong');
-    tabTitle.textContent = title;
-    const tabPeriod = document.createElement('small');
-    tabPeriod.textContent = guide[2][index] || '단계별 운영';
-    button.append(tabNumber,tabTitle,tabPeriod);
+    button.innerHTML = '<span class="curriculum-phase__number">PHASE ' + phaseNumber + '</span><span class="curriculum-phase__title"><small>' + type + (hours ? ' · ' + hours : '') + '</small><strong></strong></span><span class="curriculum-phase__period">' + (guide[2][index] || '단계별 운영') + '</span><span class="curriculum-phase__toggle" aria-hidden="true">+</span>';
+    button.querySelector('strong').textContent = title;
 
-    const panel = document.createElement('section');
+    const panel = document.createElement('div');
     panel.id = panelId;
-    panel.className = 'curriculum-phase-panel';
-    panel.setAttribute('role','tabpanel');
-    panel.setAttribute('aria-labelledby',tabId);
-    panel.tabIndex = 0;
+    panel.className = 'curriculum-phase__panel';
     panel.hidden = index !== 0;
-    const panelHead = document.createElement('header');
-    const panelMeta = document.createElement('span');
-    panelMeta.textContent = 'PHASE ' + phaseNumber + ' · ' + (guide[2][index] || '단계별 운영');
-    const panelTitle = document.createElement('h3');
-    panelTitle.textContent = title;
-    const panelType = document.createElement('small');
-    panelType.textContent = type + (hours ? ' · ' + hours : '');
-    panelHead.append(panelMeta,panelTitle,panelType);
-    const panelBody = document.createElement('div');
-    panelBody.className = 'curriculum-phase-panel__body';
     const descriptionNode = document.createElement('p');
-    descriptionNode.className = 'curriculum-phase-panel__lead';
+    descriptionNode.className = 'curriculum-phase__lead';
     descriptionNode.textContent = description;
     const detail = document.createElement('div');
     detail.className = 'curriculum-phase__detail';
+    const weekSection = document.createElement('section');
+    weekSection.className = 'curriculum-phase__week';
+    weekSection.innerHTML = '<h4>학습 주차</h4><strong></strong><small></small>';
+    weekSection.querySelector('strong').textContent = guide[2][index] || '단계별 운영';
+    weekSection.querySelector('small').textContent = type + (hours ? ' · ' + hours : '');
     const learningSection = document.createElement('section');
     learningSection.innerHTML = '<h4>학습 내용</h4><ul></ul>';
     learning.forEach(item => { const li = document.createElement('li'); li.textContent = item; learningSection.querySelector('ul').append(li); });
@@ -284,42 +297,37 @@
     toolsSection.innerHTML = '<h4>사용 도구</h4><div class="curriculum-phase__chips"></div>';
     phaseTools.forEach(item => { const chip = document.createElement('span'); chip.textContent = item; toolsSection.querySelector('div').append(chip); });
     const outputSection = document.createElement('section');
-    outputSection.innerHTML = '<h4>단계 산출물</h4><p class="curriculum-phase__output"></p>';
+    outputSection.className = 'curriculum-phase__result';
+    outputSection.innerHTML = '<h4>완성 산출물</h4><p class="curriculum-phase__output"></p>';
     outputSection.querySelector('p').textContent = output;
-    detail.append(learningSection,toolsSection,outputSection);
-    panelBody.append(descriptionNode,detail);
-    panel.append(panelHead,panelBody);
-    tabList.append(button);
-    viewer.append(panel);
+    detail.append(weekSection,learningSection,toolsSection,outputSection);
+    panel.append(descriptionNode,detail);
+    row.append(button,panel);
+    curriculumList.append(row);
     return {button,panel};
   });
-  const activatePhase = (index,focus = false) => {
-    curriculumRows.forEach((row,rowIndex) => {
-      const selected = rowIndex === index;
-      row.button.setAttribute('aria-selected',String(selected));
-      row.button.tabIndex = selected ? 0 : -1;
-      row.panel.hidden = !selected;
-    });
-    if (focus) curriculumRows[index].button.focus();
+  const setPhase = (row,expanded) => {
+    row.button.setAttribute('aria-expanded',String(expanded));
+    row.panel.hidden = !expanded;
   };
-  curriculumRows.forEach((row,index) => {
-    row.button.addEventListener('click',() => activatePhase(index));
-    row.button.addEventListener('keydown',event => {
-      const last = curriculumRows.length - 1;
-      const next = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? (index === last ? 0 : index + 1)
-        : event.key === 'ArrowUp' || event.key === 'ArrowLeft' ? (index === 0 ? last : index - 1)
-        : event.key === 'Home' ? 0
-        : event.key === 'End' ? last
-        : null;
-      if (next === null) return;
-      event.preventDefault();
-      activatePhase(next,true);
-    });
+  curriculumRows.forEach(row => {
+    row.button.addEventListener('click',() => setPhase(row,row.button.getAttribute('aria-expanded') !== 'true'));
   });
-  selector.append(tabList,viewer);
-  curriculumList.append(selector);
-  activatePhase(0);
+  controls.querySelector('[data-expand-all]').addEventListener('click',() => curriculumRows.forEach(row => setPhase(row,true)));
+  controls.querySelector('[data-collapse-all]').addEventListener('click',() => curriculumRows.forEach(row => setPhase(row,false)));
+  curriculumList.before(controls);
   document.querySelector('.sales-info').insertAdjacentElement('afterend', curriculum);
+
+  const teamGrid = document.querySelector('[data-course-team-grid]');
+  const profileSet = mentorProfiles[key] || (['robot','mobility','factory'].includes(key) ? mentorProfiles.robot : ['video','uiux','design','usa','china'].includes(key) ? mentorProfiles.uiux : defaultMentors);
+  profileSet.forEach((profile,index) => {
+    const [name,role,career,expertise] = profile;
+    const card = document.createElement('article');
+    card.className = 'course-team-card';
+    card.innerHTML = '<div class="course-team-card__photo course-team-card__photo--' + (index + 1) + '" role="img" aria-label="' + name + ' 예시 프로필 이미지"><span></span></div><div><small>' + role + ' · 예시 프로필</small><h3>' + name + '</h3><dl><div><dt>경력</dt><dd>' + career + '</dd></div><div><dt>전문 영역</dt><dd>' + expertise + '</dd></div><div><dt>담당 과정</dt><dd></dd></div></dl></div>';
+    card.querySelector('dl div:last-child dd').textContent = data.title;
+    teamGrid.append(card);
+  });
   const faqFocus = {
     data:['코딩이나 데이터 분석 경험이 없어도 시작할 수 있나요?','기초 데이터 처리부터 단계적으로 진행합니다. 처음 시작하더라도 수업과 실습을 따라갈 수 있지만, 숫자와 데이터를 근거로 문제를 해결해 보고 싶은 관심은 필요합니다.'],
     factory:['PLC·MES·ERP 경험이 없어도 괜찮나요?','스마트팩토리 제어 기초부터 생산정보 연결과 통합 프로젝트까지 이어집니다. 관련 경험이 없더라도 시작할 수 있으며, 제조 데이터와 공정 자동화에 대한 관심이 있으면 좋습니다.'],
@@ -391,6 +399,8 @@
   const journeySections = [
     ['overview','.sales-info','과정 정보'],
     ['curriculum','.sales-curriculum','커리큘럼'],
+    ['instructor-mentor','.sales-team','강사·멘토'],
+    ['day-flow','.sales-day','하루의 몰입'],
     ['why-course','.sales-question','과정 목표'],
     ['outcome','.sales-outcome','완성 결과물'],
     ['project-flow','.sales-stack','기술 흐름'],

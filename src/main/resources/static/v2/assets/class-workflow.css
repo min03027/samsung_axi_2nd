@@ -359,6 +359,149 @@
   font:800 .72rem var(--font-body);
   cursor:pointer;
 }
+
+/* Course detail: prerequisites, expandable curriculum, example teaching team and daily flow */
+.sales-course .curriculum-overview { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.sales-course .curriculum-overview article { min-height:190px; }
+.sales-course .curriculum-overview article:nth-child(2) {
+  border-color:rgba(255,103,42,.42);
+  background:#fff8f4;
+}
+.sales-course .curriculum-overview article:nth-child(2) strong { font-size:clamp(1.08rem,1.65vw,1.48rem); }
+.sales-course .curriculum-list { border-top:1px solid rgba(255,255,255,.2); }
+.sales-course .curriculum-phase { border-bottom-color:rgba(255,255,255,.2); }
+.sales-course .curriculum-phase__button { color:#fff; }
+.sales-course .curriculum-phase__title small,
+.sales-course .curriculum-phase__period { color:rgba(255,255,255,.56); }
+.sales-course .curriculum-phase__title strong { color:#fff; }
+.sales-course .curriculum-phase__toggle { color:#17110e; background:#fff; }
+.sales-course .curriculum-phase__button[aria-expanded="true"] .curriculum-phase__toggle { color:#fff; background:#ff641f; }
+.sales-course .curriculum-phase__panel { padding-top:0; }
+.curriculum-phase__lead {
+  margin:0 0 14px;
+  padding:22px 24px;
+  color:#403a36;
+  border-radius:14px;
+  background:#fff;
+  font-size:.95rem;
+  line-height:1.7;
+}
+.sales-course .curriculum-phase__detail {
+  grid-template-columns:minmax(150px,.55fr) minmax(0,1.45fr) minmax(190px,.8fr);
+  gap:1px;
+  overflow:hidden;
+  padding:1px;
+  border:0;
+  border-radius:16px;
+  background:#d8d0cb;
+}
+.sales-course .curriculum-phase__detail section {
+  min-height:180px;
+  padding:24px;
+  background:#fff;
+}
+.sales-course .curriculum-phase__detail section:first-child { grid-row:auto; }
+.sales-course .curriculum-phase__detail h4 {
+  color:#df4811;
+  font-size:.68rem;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.curriculum-phase__week strong,
+.curriculum-phase__week small { display:block; }
+.curriculum-phase__week strong { margin-top:18px; color:#17110e; font-size:1.25rem; line-height:1.35; }
+.curriculum-phase__week small { margin-top:9px; color:#827872; font-size:.75rem; font-weight:700; }
+.sales-course .curriculum-phase__detail .curriculum-phase__result {
+  color:#fff;
+  background:#231d1a;
+}
+.sales-course .curriculum-phase__detail .curriculum-phase__result h4 { color:#ff7a45; }
+.sales-course .curriculum-phase__detail .curriculum-phase__result .curriculum-phase__output {
+  margin-top:20px;
+  color:#fff;
+  font-size:1.18rem;
+  line-height:1.45;
+}
+
+.sales-team,
+.sales-day { padding:clamp(100px,12vw,170px) 0; }
+.sales-team { color:#fff; background:#101010; }
+.sales-team .sales-section-head,
+.sales-day .sales-section-head { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(280px,.65fr); gap:28px 70px; align-items:end; }
+.sales-team .sales-section-head>span,
+.sales-day .sales-section-head>span { grid-column:1/-1; color:var(--course-accent,#ff5b1f); font:800 .73rem var(--font-mono); letter-spacing:.13em; }
+.sales-team .sales-section-head h2,
+.sales-day .sales-section-head h2 { margin:0; font-size:clamp(2.5rem,4.8vw,4.8rem); line-height:1.08; letter-spacing:-.055em; }
+.sales-team .sales-section-head h2 em,
+.sales-day .sales-section-head h2 em { color:var(--course-accent,#ff5b1f); font-style:normal; }
+.sales-team .sales-section-head p,
+.sales-day .sales-section-head p { color:rgba(255,255,255,.6); line-height:1.8; }
+.course-team-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-top:clamp(50px,6vw,78px); }
+.course-team-card { display:grid; grid-template-columns:minmax(180px,.78fr) minmax(0,1.2fr); min-height:330px; overflow:hidden; border:1px solid rgba(255,255,255,.16); border-radius:22px; background:#191919; }
+.course-team-card__photo { position:relative; overflow:hidden; min-height:330px; background:linear-gradient(155deg,#f0d6cb,#8f9caf); }
+.course-team-card__photo::before {
+  content:'';
+  position:absolute;
+  width:44%;
+  aspect-ratio:1;
+  left:28%;
+  top:17%;
+  border-radius:50%;
+  background:linear-gradient(145deg,#f4c7ae,#b97963);
+  box-shadow:0 0 0 12px rgba(255,255,255,.12);
+}
+.course-team-card__photo::after {
+  content:'';
+  position:absolute;
+  width:78%;
+  height:55%;
+  left:11%;
+  bottom:-13%;
+  border-radius:48% 48% 10% 10%;
+  background:#273447;
+}
+.course-team-card__photo span::before {
+  content:'';
+  position:absolute;
+  z-index:1;
+  width:46%;
+  height:22%;
+  left:27%;
+  top:14%;
+  border-radius:60% 55% 40% 20%;
+  background:#28211e;
+}
+.course-team-card__photo--2 { background:linear-gradient(155deg,#dce7e3,#889b98); }
+.course-team-card__photo--2::after { background:#493c47; }
+.course-team-card>div:last-child { align-self:center; padding:30px; }
+.course-team-card small { color:#ff7a45; font-size:.72rem; font-weight:900; letter-spacing:.08em; }
+.course-team-card h3 { margin-top:14px; font-size:clamp(1.75rem,2.7vw,2.5rem); }
+.course-team-card dl { display:grid; gap:16px; margin-top:32px; padding-top:22px; border-top:1px solid rgba(255,255,255,.16); }
+.course-team-card dl div { display:grid; grid-template-columns:72px 1fr; gap:12px; }
+.course-team-card dt { color:rgba(255,255,255,.44); font-size:.76rem; }
+.course-team-card dd { color:rgba(255,255,255,.82); font-size:.88rem; font-weight:700; line-height:1.5; }
+.course-team-note,
+.course-day-note { margin-top:22px; color:rgba(255,255,255,.46); font-size:.75rem; line-height:1.7; }
+
+.sales-day { color:#fff; background:#171310; }
+.course-day-flow { position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:clamp(52px,7vw,86px); background:rgba(255,255,255,.16); }
+.course-day-flow li { min-height:270px; display:grid; align-content:space-between; padding:28px; background:#171310; }
+.course-day-flow time { color:#ff6a2f; font:800 1.45rem var(--font-mono); }
+.course-day-flow small { display:block; color:rgba(255,255,255,.4); font:800 .65rem var(--font-mono); letter-spacing:.13em; }
+.course-day-flow strong { display:block; margin-top:10px; color:#fff; font-size:1.2rem; line-height:1.4; }
+.course-day-flow p { margin-top:13px; color:rgba(255,255,255,.58); font-size:.85rem; line-height:1.7; }
+
+@media(max-width:900px){
+  .sales-course .curriculum-overview{grid-template-columns:1fr}.sales-course .curriculum-overview article{min-height:170px}
+  .sales-course .curriculum-phase__detail{grid-template-columns:1fr 1fr}.sales-course .curriculum-phase__detail section{min-height:0}
+  .sales-team .sales-section-head,.sales-day .sales-section-head{grid-template-columns:1fr}.sales-team .sales-section-head>span,.sales-day .sales-section-head>span{grid-column:auto}
+  .course-team-grid{grid-template-columns:1fr}.course-day-flow{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:620px){
+  .sales-course .curriculum-phase__detail{grid-template-columns:1fr}.sales-course .curriculum-phase__detail section{padding:22px}
+  .course-team-card{grid-template-columns:1fr;min-height:0}.course-team-card__photo{min-height:300px}.course-team-card>div:last-child{padding:26px}
+  .course-day-flow{grid-template-columns:1fr}.course-day-flow li{min-height:220px}
+}
 .application-draft-bar button:hover,.application-draft-bar button:focus-visible { color:#fff; border-color:#17110e; background:#17110e; }
 .application-file-note { margin-top:9px; color:#887e78; font-size:.76rem; line-height:1.5; }
 .application-panel .form-actions--triple { display:grid; grid-template-columns:1fr auto auto; align-items:center; }
