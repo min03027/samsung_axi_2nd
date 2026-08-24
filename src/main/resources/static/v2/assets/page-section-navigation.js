@@ -131,8 +131,8 @@
     ]},
     { group: "공개사이트 CMS", items: [
       { key: "cms-courses",  label: "과정 마스터", href: null /* 화면 미구현 */, level: "L2" },
-      { key: "cms-reviews",  label: "후기 관리",   href: null /* 화면 미구현 */, level: "L2" },
-      { key: "cms-partners", label: "기업·기관",   href: null /* 화면 미구현 */, level: "L2" },
+      { key: "cms-reviews",  label: "후기 관리",   href: "/admin/reviews", level: "L2" },
+      { key: "cms-partners", label: "기업·기관",   href: "/admin/organizations", level: "L2" },
       { key: "cms-inquiry",  label: "문의 통합",   href: null /* 화면 미구현 */, level: "L2" },
       { key: "cms-site",     label: "메뉴·배너",   href: null /* 화면 미구현 */, level: "L2" },
       { key: "cms-seo",      label: "검색·SEO",    href: null /* 화면 미구현 */, level: "L1" }
@@ -358,7 +358,7 @@
         '</div>' +
         '<div class="footer__bottom">' +
           '<span>© <span data-brand="legalName"></span></span>' +
-          '<span><a href="/v2/site/terms.html">이용약관</a> · <a href="/v2/site/privacy.html">개인정보처리방침</a></span>' +
+          '<span><a href="/terms">이용약관</a> · <a href="/privacy">개인정보처리방침</a></span>' +
         '</div>' +
       '</div></footer>'
     );

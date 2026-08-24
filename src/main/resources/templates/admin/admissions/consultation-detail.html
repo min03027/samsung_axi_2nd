@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상담 상세 | Samsung Academy LXP</title>
+    <link rel="stylesheet" href="/static/css/common-style.css"><link rel="stylesheet" href="/static/css/sidebar-style.css"><link rel="stylesheet" href="/static/css/admission-management.css">
+    <script src="/static/js/sidebar-function.js" defer></script>
+</head>
+<body>
+<header th:replace="~{fragments/management :: header('상담 상세')}"></header>
+<th:block th:replace="~{fragments/management :: sidebar('admissions')}"></th:block>
+<main class="main-content admission-main"><div class="admission-shell">
+    <a class="admission-back" href="/admin/admissions/consultations">← 사전상담 목록</a>
+    <div class="admission-head"><div><h2 th:text="${consultation.requesterName + ' 상담 신청'}">상담 신청</h2><p th:text="${'접수번호 ' + consultation.receiptNumber}">접수번호</p></div></div>
+    <div class="admission-flash ok" th:if="${message}" th:text="${message}"></div><div class="admission-flash error" th:if="${error}" th:text="${error}"></div>
+    <div class="admission-detail-grid">
+        <section class="admission-panel"><h3>접수 정보</h3><dl class="admission-info">
+            <dt>관심 과정</dt><dd th:text="${consultation.course != null ? consultation.course.courseName : '과정 선택 상담'}">과정</dd>
+            <dt>접수일</dt><dd th:text="${#temporals.format(consultation.submittedAt, 'yyyy-MM-dd HH:mm')}">접수일</dd>
+            <dt>이름</dt><dd th:text="${consultation.requesterName}">이름</dd>
+            <dt>연락처</dt><dd th:text="${consultation.phone}">연락처</dd>
+            <dt>이메일</dt><dd th:text="${consultation.email}">이메일</dd>
+            <dt>상담 유형</dt><dd th:text="${consultation.consultationType}">상담 유형</dd>
+            <dt>희망 일정</dt><dd th:text="${#temporals.format(consultation.preferredDate, 'yyyy-MM-dd') + ' · ' + consultation.preferredTime}">희망 일정</dd>
+            <dt>연락 방법</dt><dd th:text="${consultation.contactMethod}">연락 방법</dd>
+            <dt>기숙사 상담</dt><dd th:text="${consultation.dormitoryInterest}">기숙사</dd>
+            <dt>문의 내용</dt><dd th:text="${consultation.message ?: '-'}">문의 내용</dd>
+            <dt>개인정보 동의</dt><dd th:text="${#temporals.format(consultation.privacyConsentAt, 'yyyy-MM-dd HH:mm') + ' · ' + consultation.privacyConsentVersion}">동의</dd>
+            <dt>중복 확인</dt><dd th:text="${consultation.duplicateCandidate ? '동일 연락처 또는 기존 계정 확인 필요' : '중복 징후 없음'}">중복</dd>
+            <dt>연결 계정</dt><dd th:text="${consultation.matchedUser != null ? consultation.matchedUser.name + ' (' + consultation.matchedUser.loginId + ')' : '자동 연결 없음'}">계정</dd>
+        </dl></section>
+        <section class="admission-panel"><h3>상담 및 후속조치</h3>
+            <form class="admission-form" th:action="@{/admin/admissions/consultations/{id}(id=${consultation.id})}" method="post">
+                <label>상담 상태<select name="status" required><option th:each="status : ${consultationStatuses}" th:value="${status}" th:text="${status.label}" th:selected="${status == consultation.status}"></option></select></label>
+                <label>담당자<select name="assigneeId"><option value="">미배정</option><option th:each="user : ${assignees}" th:value="${user.id}" th:text="${user.name + ' (' + user.loginId + ')'}" th:selected="${consultation.assignedTo != null and user.id == consultation.assignedTo.id}"></option></select></label>
+                <label>상담·처리 메모<textarea name="processingNote" maxlength="4000" th:text="${consultation.processingNote}"></textarea></label>
+                <label>후속조치 예정일<input type="date" name="followUpDate" th:value="${consultation.followUpDate}"></label>
+                <label>최종 결과<textarea name="finalResult" maxlength="4000" th:text="${consultation.finalResult}"></textarea></label>
+                <button class="admission-submit" type="submit">상담 정보 저장</button>
+            </form>
+            <p class="admission-sub" style="margin-top:14px;line-height:1.6">입학 전 상담 기록이며 학생 다이어리와는 분리되어 있습니다.</p>
+        </section>
+    </div>
+</div></main>
+</body></html>

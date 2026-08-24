@@ -190,7 +190,7 @@ git push origin main
 git push origin v0.1.x-draft     # ⚠️ 태그는 별도 push. 빼먹으면 서버가 태그를 못 찾음
 ```
 
-**`mina-old` 리모트(mina-2026-ai/samsung-lxp)에는 절대 push 금지.**
+**푸시 대상은 min03027/samsung_axi_2nd 하나뿐이다.** 예전 저장소 리모트가 남아 있으면 제거할 것.
 
 push 후 `git status` 가 `up to date with 'origin/main'` 인지 확인.
 
@@ -245,7 +245,7 @@ cloudflared는 재시작되지 않으므로 app만 올라오면 즉시 반영.
 ## 8. 절대 금지
 
 - **`docker compose down -v`** — 볼륨(DB·업로드 전체) 삭제. 중지는 `docker compose down` 까지만
-- **`mina-old` 리모트에 push**
+- **min03027/samsung_axi_2nd 외의 저장소로 push**
 - **서버 PC에서 8080 쓰는 다른 프로세스 실행** (선점 사고 이력)
 - **`LMS_CRYPTO_SECRET` 변경** — 기존 개인정보 복호화 불가
 
@@ -369,7 +369,7 @@ GitHub 호스트 러너: ./gradlew test  (실패 시 배포 중단)
    mkdir ~/actions-runner && cd ~/actions-runner
    curl -o runner.tar.gz -L <화면의 다운로드 URL>
    tar xzf runner.tar.gz
-   ./config.sh --url https://github.com/woongscoding/axi_project --token <토큰> \
+   ./config.sh --url https://github.com/min03027/samsung_axi_2nd --token <토큰> \
      --name lxp-server --labels lxp --unattended
    sudo ./svc.sh install sejong     # systemd 서비스 등록 (재부팅 생존)
    sudo ./svc.sh start

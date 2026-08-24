@@ -1,12 +1,32 @@
-(() => {
+(async () => {
   const form = document.querySelector('[data-application-form]');
   if (!form) return;
-
-  const catalog = window.COURSE_CATALOG || {};
+  const catalog = {...(window.COURSE_CATALOG || {})};
   const kind = form.dataset.applicationForm;
   const params = new URLSearchParams(location.search);
+  const requestedCourseId = params.get('courseId');
   const requestedKey = params.get('course');
-  const initialKey = requestedKey && catalog[requestedKey] ? requestedKey : '';
+  const toCatalogCourse = course => ({
+    id: course.id,
+    cat: course.categoryLabel + ' · ' + (course.category || '과정'),
+    title: course.courseName,
+    period: `${course.educationStartDate} — ${course.educationEndDate}`,
+    time: course.educationTime || '상담 시 안내',
+    capacity: course.capacity + '명',
+    requiredDocuments: course.requiredDocuments || '담당자 확인 후 안내'
+  });
+  try {
+    const response = await fetch('/v2/api/courses', {headers: {Accept: 'application/json'}});
+    if (response.ok) {
+      const courses = await response.json();
+      courses.forEach(course => { catalog['cms-' + course.id] = toCatalogCourse(course); });
+    }
+  } catch (error) {
+    console.error('신청 가능한 과정 정보를 불러오지 못했습니다.', error);
+  }
+  const initialKey = requestedCourseId && catalog['cms-' + requestedCourseId]
+    ? 'cms-' + requestedCourseId
+    : (requestedKey && catalog[requestedKey] ? requestedKey : '');
   const draftKey = `tomorrow-ai-${kind}-draft`;
   const submittedKey = `tomorrow-ai-${kind}-submitted`;
   const picker = form.querySelector('[data-course-picker]');
@@ -14,6 +34,17 @@
   const recommendNote = form.querySelector('[data-recommend-note]');
   const routeInputs = [...form.querySelectorAll('input[name="applicationRoute"]')];
   const courseInput = form.querySelector('[data-course-value]');
+  const courseIdInput = form.querySelector('[data-course-id]');
+  const postJson = async (url, payload) => {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(body.message || '접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+    return body;
+  };
   const attachment = form.elements.attachment;
   const attachmentNote = form.querySelector('[data-attachment-note]');
   const draftState = form.querySelector('[data-draft-state]');
@@ -66,6 +97,7 @@
       ? '경험 · 목표 · 가능 일정을 확인해 추천'
       : (course ? `${course.period || '일정 상담'} · 정원 ${course.capacity || '상담 시 안내'}` : '과정별 일정과 정원을 확인해 안내합니다.');
     courseInput.value = recommendation ? '과정 추천 요청' : (course?.title || '');
+    if (courseIdInput) courseIdInput.value = recommendation ? '' : (course?.id || '');
     document.querySelectorAll('[data-course-title]').forEach(el => { el.textContent = title; });
     document.querySelectorAll('[data-course-cat]').forEach(el => { el.textContent = cat; });
     document.querySelectorAll('[data-course-meta]').forEach(el => { el.textContent = meta; });
@@ -79,6 +111,7 @@
     const summaryLabel = form.querySelector('[data-summary-label]');
     const summaryDescription = form.querySelector('[data-summary-description]');
     const submitLabel = form.querySelector('[data-submit-label]');
+    const requiredDocuments = form.querySelector('[data-required-documents]');
     if (summaryLabel) summaryLabel.textContent = recommendation ? '요청 내용' : '신청 과정';
     if (summaryDescription) summaryDescription.textContent = recommendation
       ? '제출 후 담당자가 현재 상황과 목표를 확인하고 가장 적합한 과정을 추천해 드립니다.'
@@ -86,6 +119,7 @@
     if (submitLabel) submitLabel.textContent = mode === 'supplement'
       ? '보완 내용 재제출'
       : (recommendation ? '추천 상담 요청' : '신청서 제출');
+    if (requiredDocuments) requiredDocuments.textContent = course?.requiredDocuments || '담당자 확인 후 안내';
   }
 
   function setRoute(route) {
@@ -93,6 +127,8 @@
     pickerWrap.hidden = route !== 'course';
     recommendNote.hidden = route !== 'recommend';
     picker.required = route === 'course';
+    const firstNext = steps?.[0]?.querySelector('[data-step-next]') || form.querySelector('[data-step-next]');
+    if (firstNext) firstNext.textContent = route === 'recommend' ? '사전상담으로 이동 →' : '기본 정보 입력하기 →';
     displayCourse();
   }
 
@@ -359,6 +395,10 @@
     if (next) {
       const required = [...steps[current].querySelectorAll('[required]')];
       if (!required.every(input => input.reportValidity())) return;
+      if (current === 0 && selectedRoute() === 'recommend') {
+        location.href = '/v2/site/campus/counsel.html';
+        return;
+      }
       show(current + 1);
       saveDraft(false);
     }
@@ -407,31 +447,59 @@
     show(2);
   });
 
-  form.addEventListener('submit', event => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!form.reportValidity()) return;
-    const now = new Date().toISOString();
-    const previous = submittedRecord?.data ? submittedRecord : null;
-    const receipt = previous?.receipt || `AXI-${now.slice(2, 10).replaceAll('-', '')}-${String(Date.now()).slice(-4)}`;
-    const statusHistory = [...(previous?.history || [])];
-    const status = mode === 'supplement' ? 'resubmitted' : 'submitted';
-    statusHistory.push({ status, at: now });
-    const record = {
-      version: 2,
-      data: collectData(),
-      receipt,
-      status,
-      submittedAt: previous?.submittedAt || now,
-      updatedAt: now,
-      revision: mode === 'supplement' ? (previous?.revision || 0) + 1 : (previous?.revision || 0),
-      supplement: mode === 'supplement' ? { ...(previous?.supplement || {}), resolvedAt: now } : (previous?.supplement || null),
-      history: statusHistory
-    };
-    localStorage.setItem(submittedKey, JSON.stringify(record));
-    localStorage.removeItem(draftKey);
-    mode = 'new';
-    window.history.replaceState(null, '', `${location.pathname}?status=1`);
-    showStatus(record);
+    const message = document.querySelector('[data-save-message]');
+    const submit = form.querySelector('[type="submit"]');
+    if (!courseIdInput?.value) {
+      if (message) message.textContent = '현재 모집 중인 과정을 선택해 주세요. 과정 추천은 사전상담을 이용해 주세요.';
+      return;
+    }
+    if (submit) submit.disabled = true;
+      if (message) message.textContent = '신청서를 안전하게 접수하고 있습니다.';
+    try {
+      const result = await postJson('/v2/api/public/applications', {
+        courseId: Number(courseIdInput.value),
+        name: form.elements.name.value,
+        birth: form.elements.birth.value,
+        email: form.elements.email.value,
+        phone: form.elements.phone.value,
+        employment: form.elements.employment.value,
+        job: form.elements.job.value,
+        motivation: form.elements.motivation.value,
+        career: form.elements.career.value,
+        skills: form.elements.skills.value,
+        card: form.elements.card.value,
+        dorm: form.elements.dorm.value,
+        privacy: form.elements.privacy.checked,
+        truth: form.elements.truth.checked
+      });
+      const now = new Date().toISOString();
+      const previous = submittedRecord?.data ? submittedRecord : null;
+      const statusHistory = [...(previous?.history || [])];
+      const status = mode === 'supplement' ? 'resubmitted' : 'submitted';
+      statusHistory.push({ status, at: now });
+      const record = {
+        version: 2,
+        data: collectData(),
+        receipt: result.receiptNumber,
+        status,
+        submittedAt: previous?.submittedAt || now,
+        updatedAt: now,
+        revision: mode === 'supplement' ? (previous?.revision || 0) + 1 : (previous?.revision || 0),
+        supplement: mode === 'supplement' ? { ...(previous?.supplement || {}), resolvedAt: now } : (previous?.supplement || null),
+        history: statusHistory
+      };
+      localStorage.setItem(submittedKey, JSON.stringify(record));
+      localStorage.removeItem(draftKey);
+      mode = 'new';
+      window.history.replaceState(null, '', `${location.pathname}?status=1`);
+      showStatus(record);
+    } catch (error) {
+      if (message) message.textContent = error.message;
+      if (submit) submit.disabled = false;
+    }
   });
 
   const draftRecord = readStorage(draftKey);

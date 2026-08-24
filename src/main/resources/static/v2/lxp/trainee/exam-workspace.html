@@ -1,0 +1,177 @@
+<!doctype html>
+<!-- 코딩 시험장 — LXP-009(조절 가능한 레이아웃), LXP-010(개발환경형 시험 UI).
+     운영 trainee/do-test.html 을 시각 기준으로 삼는다:
+       셸(GNB·푸터) 없이 .main-content-top + .main-wrap 로 시작하고,
+       상단은 .exam-top / .exam-title / .exam-notice / .stat 문법을 쓴다.
+     코드 실행은 프론트엔드 시뮬레이션이며 서버에서 컴파일되지 않는다.
+
+     페이지 루트 클래스 .exam-workspace 는 <body> 에 붙는다 —
+     모달·토스트가 본문 바깥에 있기 때문이다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/css/basic-form-trainee.css">
+<link rel="stylesheet" href="/static/css/btn-style.css">
+<link rel="stylesheet" href="/v2/assets/exam.css">
+<title>Samsung Academy LXP</title>
+</head>
+<body class="exam-workspace">
+
+<main>
+  <section class="main-content-top">
+    <div class="main-wrap"><h2>시험/과제 &gt; 온라인 시험 &gt; 코딩 시험장</h2></div>
+  </section>
+
+  <section class="main-content main-wrap">
+    <div class="ws-body">
+
+      <!-- 상단 요약 — do-test 의 .exam-top -->
+      <section class="exam-top">
+        <div>
+          <h2 class="exam-title" id="examTitle">산업 데이터 분석 4기 — 2차 코딩 역량평가</h2>
+          <p class="exam-badges">
+            <span class="demo-chip">프론트엔드 시뮬레이션</span>
+          </p>
+          <p class="exam-notice">
+            제한시간 내에 답안을 제출하세요. 코드 실행 결과는 데모용 시뮬레이션이며 서버에서 컴파일되지 않습니다.
+          </p>
+          <p class="exam-notice conn-row">
+            <span class="conn"><span class="dot" id="proctorDot"></span>감독 연결됨 (모의)</span>
+            <span class="conn"><span class="dot" id="netDot"></span>네트워크 정상</span>
+          </p>
+        </div>
+        <div class="exam-top-right">
+          <div class="stat">
+            <div class="stat-label">남은시간</div>
+            <div class="stat-value" id="remainTime" data-warn="none">00:00</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">통과 문항</div>
+            <div class="stat-value"><span id="solvedCount">0</span> / <span id="totalCount">0</span></div>
+          </div>
+          <div class="stat stat-action">
+            <button type="button" class="btn btn-primary" id="submitBtn">제출하기</button>
+          </div>
+        </div>
+      </section>
+      <span class="sr-only" id="clockAlert" role="status" aria-live="polite"></span>
+
+      <!-- 좁은 화면 전용 탭 -->
+      <nav class="pane-tabs" id="paneTabs" hidden aria-label="영역 전환">
+        <button type="button" class="is-active" data-pane="paneList">문제</button>
+        <button type="button" data-pane="paneDesc">설명</button>
+        <button type="button" data-pane="paneCode">코드</button>
+      </nav>
+
+      <!-- 3분할 본문 -->
+      <div class="split" id="split">
+
+        <section class="pane is-active" id="paneList" aria-label="문제 목록">
+          <h3 class="pane-title">문제</h3>
+          <div class="q-list" id="questionList" role="list"></div>
+        </section>
+
+        <button class="split__sep" id="sepA" type="button"
+                role="separator" aria-orientation="vertical"
+                aria-label="문제 목록 너비 조절" aria-valuemin="16" aria-valuemax="46" aria-valuenow="24"></button>
+
+        <section class="pane" id="paneDesc" aria-label="문제 설명">
+          <div class="q-body" id="questionBody"></div>
+        </section>
+
+        <button class="split__sep" id="sepB" type="button"
+                role="separator" aria-orientation="vertical"
+                aria-label="문제 설명 너비 조절" aria-valuemin="24" aria-valuemax="60" aria-valuenow="36"></button>
+
+        <section class="pane" id="paneCode" aria-label="코드 편집과 실행 결과">
+          <div class="editor">
+
+            <div class="editor-bar">
+              <label class="sr-only" for="langSelect">언어 선택</label>
+              <select id="langSelect">
+                <option value="python">Python 3.11</option>
+                <option value="java">Java 17</option>
+                <option value="javascript">JavaScript (Node 20)</option>
+              </select>
+
+              <label class="sr-only" for="scenarioSelect">실행 결과 시나리오</label>
+              <select id="scenarioSelect" title="데모 실행 결과를 고릅니다">
+                <option value="pass">데모: 전체 성공</option>
+                <option value="partial">데모: 일부 실패</option>
+                <option value="compile">데모: 컴파일 오류</option>
+              </select>
+
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-gray" id="resetCode">초기 코드</button>
+              <button type="button" class="btn btn-primary" id="runBtn">실행</button>
+            </div>
+
+            <p class="hint-text">
+              코드 실행은 프론트엔드 시뮬레이션이며 서버에서 컴파일되지 않습니다. 결과는 위 선택 상자의 시나리오대로 표시됩니다.
+            </p>
+
+            <div class="code-box">
+              <div class="code-gutter" id="codeGutter" aria-hidden="true">1</div>
+              <label class="sr-only" for="codeArea">코드 편집기</label>
+              <textarea class="code-area" id="codeArea" spellcheck="false" wrap="off"
+                        autocomplete="off" autocapitalize="off" autocorrect="off"></textarea>
+            </div>
+
+            <div>
+              <h3 class="pane-title">테스트 케이스</h3>
+              <div id="testcases" aria-live="polite"></div>
+            </div>
+
+            <div>
+              <h3 class="pane-title">콘솔</h3>
+              <pre class="console-box" id="consoleBox" aria-live="polite">실행 버튼을 누르면 결과가 표시됩니다.</pre>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- 제출 확인 -->
+<div class="modal-backdrop" id="submitModal" hidden role="dialog" aria-modal="true" aria-labelledby="submitTitle">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 class="modal-title" id="submitTitle">답안을 제출할까요?</h3>
+      <button type="button" class="icon-btn" data-close-modal aria-label="닫기">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="submitSummary"></p>
+      <p class="hint-text">제출한 뒤에는 답안을 변경할 수 없습니다. (데모 화면이며 서버로 전송되지 않습니다)</p>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-gray" data-close-modal>돌아가기</button>
+      <button type="button" class="btn btn-primary" id="submitConfirm" data-autofocus>제출</button>
+    </div>
+  </div>
+</div>
+
+<!-- 시간 종료 -->
+<div class="modal-backdrop" id="timeupModal" hidden role="dialog" aria-modal="true" aria-labelledby="timeupTitle">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 class="modal-title" id="timeupTitle">시험 시간이 종료되었습니다</h3>
+    </div>
+    <div class="modal-body">
+      <p>작성한 답안이 자동으로 제출되었습니다. (데모 시뮬레이션)</p>
+    </div>
+    <div class="modal-foot">
+      <a class="btn btn-primary" href="/v2/lxp/trainee/exams.html" data-autofocus>시험 목록으로</a>
+    </div>
+  </div>
+</div>
+
+<script src="/v2/assets/exam-demo-data.js"></script>
+<script src="/v2/assets/exam-common.js"></script>
+<script src="/v2/assets/exam-workspace.js"></script>
+</body>
+</html>

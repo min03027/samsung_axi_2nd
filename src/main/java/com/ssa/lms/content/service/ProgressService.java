@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -97,6 +98,20 @@ public class ProgressService {
         return contents.stream()
                 .map(c -> LearningContentView.of(c, byContent.get(c.getId())))
                 .toList();
+    }
+
+    /**
+     * 과정 안에서 바로 이어서 볼 실제 콘텐츠.
+     *
+     * <p>진행 중인 콘텐츠를 먼저 이어 보고, 없으면 배치 순서상 첫 미완료 콘텐츠를 고른다.
+     * 모든 콘텐츠를 마쳤거나 활성 콘텐츠가 없으면 빈 값을 돌려 가짜 대상을 만들지 않는다.</p>
+     */
+    public Optional<LearningContentView> nextLearningContent(Long userId, Long courseId) {
+        List<LearningContentView> contents = learningContents(userId, courseId);
+        return contents.stream()
+                .filter(content -> !content.completed() && content.progressRate() > 0)
+                .findFirst()
+                .or(() -> contents.stream().filter(content -> !content.completed()).findFirst());
     }
 
     /**

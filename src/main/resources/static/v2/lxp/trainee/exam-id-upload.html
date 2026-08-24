@@ -1,0 +1,91 @@
+<!doctype html>
+<!-- 모바일 신분증 제출 — LXP-015.
+     휴대폰에서 단독으로 여는 화면이라 운영 do-test.html 과 마찬가지로 셸(GNB·사이드바)
+     없이 단독 렌더한다. 브랜드·색상·폰트·버튼은 운영 화면과 동일하게 쓴다.
+     기준폭 390px. 파일은 브라우저 안에서만 미리보기하고 전송하지 않는다.
+
+     페이지 루트 클래스 .exam-id-page 는 <body> 에 붙는다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/static/css/basic-form-trainee.css">
+<link rel="stylesheet" href="/static/css/btn-style.css">
+<link rel="stylesheet" href="/v2/assets/exam.css">
+<title>Samsung Academy LXP</title>
+</head>
+<body class="exam-id-page">
+
+<main>
+  <div class="id-wrap">
+
+    <div class="id-head">
+      <img src="/static/img/logo-white.png" alt="Samsung Academy LXP">
+      <p>산업 데이터 분석 4기 · 신분 확인</p>
+    </div>
+
+    <div class="demo-warn mb-12">
+      <strong>프론트엔드 데모 화면입니다.</strong>
+      선택한 이미지는 이 브라우저를 벗어나지 않으며 서버로 전송·저장되지 않습니다. 심사 결과도 데모용 자동 승인입니다.
+    </div>
+
+    <section class="id-card">
+      <div class="row-between">
+        <h2>신분증 앞면 제출</h2>
+        <span class="state-badge" id="idStatusBadge">미제출</span>
+      </div>
+
+      <ol class="id-steps">
+        <li>신분증 앞면 전체가 보이도록 촬영하세요.</li>
+        <li>빛 반사와 가림이 없어야 합니다.</li>
+        <li>주민등록번호 뒷자리는 가리고 촬영하세요.</li>
+      </ol>
+
+      <div class="id-preview" id="idPreview">
+        <span id="idPreviewEmpty">아직 선택된 이미지가 없습니다</span>
+      </div>
+
+      <div>
+        <label class="field-label" for="idFile">신분증 이미지</label>
+        <input type="file" id="idFile" accept="image/jpeg,image/png,image/webp" capture="environment">
+        <p class="field-hint">JPG · PNG · WEBP, 최대 10MB</p>
+        <p class="field-error" id="idError" hidden role="alert"></p>
+      </div>
+
+      <div class="btn-row-inline">
+        <button type="button" class="btn btn-gray" id="idClear" disabled>삭제</button>
+      </div>
+    </section>
+
+    <section class="id-card">
+      <h2>개인정보 수집 안내</h2>
+      <div class="privacy-note">
+        <b>수집 항목</b> 신분증 앞면 이미지(성명·생년월일 확인 목적)<br>
+        <b>이용 목적</b> 온라인 시험 응시자 본인 확인<br>
+        <b>보관 기간</b> 시험 종료 후 즉시 파기<br>
+        <b>거부 권리</b> 제출을 거부할 수 있으나, 이 경우 감독 시험에 응시할 수 없습니다.<br>
+        <span class="warn-line">주민등록번호 뒷자리는 수집하지 않습니다. 반드시 가리고 촬영하세요.</span>
+      </div>
+
+      <label class="consent">
+        <input type="checkbox" id="idConsent">
+        <span>위 내용을 확인했으며 신분 확인을 위한 이미지 제출에 동의합니다. (데모 화면이며 실제 수집되지 않습니다)</span>
+      </label>
+
+      <button type="button" class="btn btn-primary" id="idSubmit" disabled>제출하기</button>
+      <p class="field-hint" id="idResult" aria-live="polite"></p>
+    </section>
+
+    <div class="back-row">
+      <a class="btn btn-gray" href="/v2/lxp/trainee/exam-precheck.html?exam=frontend-2026">사전점검 화면으로 돌아가기</a>
+    </div>
+
+  </div>
+</main>
+
+<script src="/v2/assets/exam-demo-data.js"></script>
+<script src="/v2/assets/exam-common.js"></script>
+<script src="/v2/assets/exam-id-upload.js"></script>
+</body>
+</html>

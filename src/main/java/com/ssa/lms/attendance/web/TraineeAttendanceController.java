@@ -2,7 +2,6 @@ package com.ssa.lms.attendance.web;
 
 import com.ssa.lms.attendance.service.AttendanceService;
 import com.ssa.lms.auth.LoginUser;
-import com.ssa.lms.demo.SampleScreenData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -22,15 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TraineeAttendanceController {
 
     private final AttendanceService attendanceService;
-    private final SampleScreenData sampleScreenData;
 
     @GetMapping
     public String attendance(@AuthenticationPrincipal LoginUser user, Model model) {
-        var filled = sampleScreenData.fill(
-                attendanceService.traineeAttendance(user.getId()),
-                sampleScreenData::attendance);
-        model.addAttribute("courses", filled.rows());
-        model.addAttribute("sampleData", filled.sample());
+        model.addAttribute("courses", attendanceService.traineeAttendance(user.getId()));
         return "trainee/attendance";
     }
 }

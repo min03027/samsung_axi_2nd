@@ -17,6 +17,11 @@
         .content-title { flex:1; min-width:0; }
         .course-select-bar { display:flex; align-items:center; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
         .course-progress-pill { margin-left:auto; font-weight:600; color:var(--color-primary); }
+        .continue-card { display:flex; align-items:center; gap:18px; margin-bottom:20px; padding:20px 22px; border:1px solid var(--gray-200); border-radius:12px; background:var(--gray-50); }
+        .continue-card-copy { flex:1; min-width:0; }
+        .continue-card-kicker { display:block; margin-bottom:5px; color:var(--color-primary); font-size:14px; font-weight:700; }
+        .continue-card-title { display:block; font-size:18px; line-height:1.45; }
+        .continue-card-meta { margin-top:5px; color:var(--gray-500); font-size:14px; }
 
         /* 좁은 폭 — 한 줄에 [아이콘][제목][진도][상태][버튼] 5개가 몰리면 제목만 짓눌린다.
            고정 요소가 약 264px(아이콘 40 + 진도 44 + 상태배지 50 + 버튼 82 + gap)라
@@ -34,6 +39,7 @@
             .accordion-content { padding: 8px 12px 14px; }
             .course-select-bar select { max-width: 100%; }
             .course-progress-pill { margin-left: 0; }   /* 줄바꿈되면 오른쪽 끝에 떠 보인다 */
+            .continue-card { align-items:flex-start; flex-direction:column; }
         }
     </style>
 </head>
@@ -49,7 +55,6 @@
 
         <section class="main-content">
             <section class="main-content-inner main-wrap">
-                <div th:replace="${sampleData} ? ~{fragments/trainee :: sampleNotice} : ~{}"></div>
                 <!-- 과정 선택 -->
                 <form method="get" th:action="@{/trainee/learning}" class="course-select-bar">
                     <label>과정 선택</label>
@@ -60,6 +65,24 @@
                     </select>
                     <span class="course-progress-pill">전체 진도율 <span th:text="${courseProgress}">0</span>%</span>
                 </form>
+
+                <section class="continue-card" th:if="${nextLearning != null}">
+                    <div class="continue-card-copy">
+                        <span class="continue-card-kicker">이어서 학습</span>
+                        <strong class="continue-card-title" th:text="${nextLearning.title}">다음 콘텐츠</strong>
+                        <div class="continue-card-meta">
+                            <span th:text="${nextLearning.sessionName}">차시</span>
+                            <span> · 현재 </span><span th:text="${nextLearning.progressRate} + '%'">0%</span>
+                        </div>
+                    </div>
+                    <a class="btn btn-primary"
+                       th:href="@{/trainee/contents/{id}/play(id=${nextLearning.contentId})}">바로 이어서 학습</a>
+                </section>
+
+                <p th:if="${selectedCourseId != null and nextLearning == null and not #lists.isEmpty(groups)}"
+                   style="margin:0 0 20px;color:var(--gray-500);">
+                    이 과정의 등록된 학습 콘텐츠를 모두 완료했어요.
+                </p>
 
                 <p th:if="${#lists.isEmpty(courses)}" style="color:var(--gray-500);">학습 중인(승인된) 과정이 없습니다.</p>
                 <p th:if="${selectedCourseId != null and #lists.isEmpty(groups)}" style="color:var(--gray-500);">

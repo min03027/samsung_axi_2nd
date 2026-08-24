@@ -1,10 +1,25 @@
-(() => {
+(async () => {
   const form = document.querySelector('[data-counsel-form]');
   if (!form) return;
   const params = new URLSearchParams(location.search);
   const catalog = window.COURSE_CATALOG || {};
+  const requestedCourseId = params.get('courseId');
   let courseKey = params.get('course');
   let course = courseKey && catalog[courseKey] ? catalog[courseKey] : null;
+  if (requestedCourseId) {
+    try {
+      const response = await fetch('/v2/api/public/consultations/courses/' + encodeURIComponent(requestedCourseId), {
+        headers: {Accept: 'application/json'}
+      });
+      if (response.ok) {
+        const cmsCourse = await response.json();
+        courseKey = 'cms-' + cmsCourse.id;
+        course = {id: cmsCourse.id, title: cmsCourse.courseName};
+      }
+    } catch (error) {
+      console.error('상담 과정 정보를 불러오지 못했습니다.', error);
+    }
+  }
   const fromRecommendation = params.get('from') === 'recommend';
   const shell = document.querySelector('[data-form-shell]');
   const complete = document.querySelector('[data-form-complete]');
@@ -12,6 +27,7 @@
   const courseTitle = document.querySelector('[data-course-title]');
   const courseValue = form.querySelector('[data-course-value]');
   const courseKeyValue = form.querySelector('[data-course-key-value]');
+  const courseIdValue = form.querySelector('[data-course-id]');
   const courseDisplay = form.querySelector('[data-course-display]');
   let hasRecommendation = false;
   let activeAnswers = {};
@@ -21,6 +37,7 @@
     courseTitle.textContent = selectedTitle;
     courseValue.value = title || '';
     courseKeyValue.value = key || '';
+    if (courseIdValue) courseIdValue.value = course?.id || '';
     courseDisplay.value = title || '상담에서 함께 선택합니다';
     courseDisplay.closest('.form-course-lock')?.classList.toggle('is-selected', Boolean(title));
     if (title && !form.elements.type.value) form.elements.type.value = '과정 선택';
@@ -96,20 +113,49 @@
   try { submitted = JSON.parse(localStorage.getItem('tomorrow-ai-counsel-submitted') || 'null'); } catch (_) { submitted = null; }
   if (params.get('status') === '1' && submitted?.receipt) showComplete(submitted);
 
-  form.addEventListener('submit', event => {
+  form.elements.date.min = new Date().toISOString().slice(0, 10);
+  form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!form.reportValidity()) return;
-    const now = new Date();
-    const record = {
-      data:Object.fromEntries(new FormData(form).entries()),
-      courseKey,
-      recommendation:hasRecommendation ? { answers:activeAnswers, labels:activeAnswerLabels } : null,
-      submittedAt:now.toISOString(),
-      receipt:`AXI-C-${now.toISOString().slice(2,10).replaceAll('-','')}-${String(Date.now()).slice(-4)}`
-    };
-    localStorage.setItem('tomorrow-ai-counsel-submitted', JSON.stringify(record));
-    showComplete(record);
-    history.replaceState(null, '', `${location.pathname}?status=1`);
-    window.scrollTo({ top:0, behavior:'smooth' });
+    const submit = form.querySelector('[type="submit"]');
+    const message = form.querySelector('[data-save-message]');
+    submit.disabled = true;
+    if (message) message.textContent = '상담 신청을 안전하게 접수하고 있습니다.';
+    try {
+      const response = await fetch('/v2/api/public/consultations', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+        body: JSON.stringify({
+          courseId: courseIdValue?.value ? Number(courseIdValue.value) : null,
+          name: form.elements.name.value,
+          phone: form.elements.phone.value,
+          email: form.elements.email.value,
+          type: form.elements.type.value,
+          date: form.elements.date.value,
+          time: form.elements.time.value,
+          contact: form.elements.contact.value,
+          dorm: form.elements.dorm.value,
+          message: form.elements.message.value,
+          privacy: form.elements.privacy.checked
+        })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.message || '접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+      const now = new Date();
+      const record = {
+        data:Object.fromEntries(new FormData(form).entries()),
+        courseKey,
+        recommendation:hasRecommendation ? { answers:activeAnswers, labels:activeAnswerLabels } : null,
+        submittedAt:now.toISOString(),
+        receipt:result.receiptNumber
+      };
+      localStorage.setItem('tomorrow-ai-counsel-submitted', JSON.stringify(record));
+      showComplete(record);
+      history.replaceState(null, '', `${location.pathname}?status=1`);
+      window.scrollTo({ top:0, behavior:'smooth' });
+    } catch (error) {
+      if (message) message.textContent = error.message;
+      submit.disabled = false;
+    }
   });
 })();

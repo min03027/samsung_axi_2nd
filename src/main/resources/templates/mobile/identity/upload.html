@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>신분증 제출</title>
+  <!-- CSRF 는 meta 로 내려보낸다. th:inline JS 안에서 _csrf 를 쓰면
+       표현식 오류 시 응답이 200 인 채로 잘려 나간다(CLAUDE.md 규칙 3). -->
+  <meta name="_csrf" th:content="${_csrf} != null ? ${_csrf.token} : ''">
+  <meta name="_csrf_header" th:content="${_csrf} != null ? ${_csrf.headerName} : ''">
+  <!-- btn-style.css 의 .btn-* 는 :root 변수(--color-primary 등)를 쓴다.
+       변수를 정의한 운영 CSS 를 먼저 불러야 버튼 배경이 나온다. -->
+  <link rel="stylesheet" href="/static/css/basic-form-trainee.css">
+  <link rel="stylesheet" href="/static/css/btn-style.css">
+  <link rel="stylesheet" href="/static/css/mobile-identity.css">
+</head>
+<body class="mobile-identity-page">
+
+<header class="m-header">
+  <p class="m-brand">SAMSUNG <span>AXI LXP</span></p>
+  <p class="m-sub" th:text="${blocked} ? '신분 확인' : ${examTitle} + ' · 신분 확인'">신분 확인</p>
+</header>
+
+<!-- 토큰이 유효하지 않을 때: 업로드 폼을 아예 주지 않는다 -->
+<main class="m-main" th:if="${blocked}">
+  <section class="m-card blocked">
+    <p class="blocked-icon" aria-hidden="true">!</p>
+    <h1 class="blocked-title">제출할 수 없습니다</h1>
+    <p class="blocked-message" th:text="${message}">유효하지 않은 주소입니다.</p>
+    <p class="m-hint">PC 화면에서 QR을 다시 확인하거나 새로 발급한 뒤 스캔해 주세요.</p>
+  </section>
+</main>
+
+<main class="m-main" th:unless="${blocked}">
+
+  <section class="m-card">
+    <div class="m-card-head">
+      <div>
+        <h1 class="m-title">신분증 앞면 제출</h1>
+        <p class="m-who" th:text="${traineeName}">훈련생</p>
+      </div>
+      <span class="state-badge" id="statusBadge" th:text="${statusLabel}"
+            th:classappend="${status == 'APPROVED'} ? ' ok' : (${status == 'REJECTED'} ? ' risk' : ' warn')">미제출</span>
+    </div>
+
+    <p class="reject-box" th:if="${decisionReason != null and status == 'REJECTED'}"
+       th:text="'반려 사유 — ' + ${decisionReason}">반려 사유</p>
+
+    <ol class="m-guide">
+      <li>신분증 <b>앞면 전체</b>가 보이도록 촬영하세요.</li>
+      <li>빛 반사와 가림이 없어야 합니다.</li>
+      <li><b>주민등록번호 뒷자리는 가리고</b> 촬영하세요.</li>
+    </ol>
+
+    <div class="preview" id="preview">
+      <p class="preview-empty" id="previewEmpty">아직 선택된 이미지가 없습니다</p>
+    </div>
+
+    <p class="err-box" id="errorBox" hidden></p>
+
+    <div class="m-actions">
+      <!-- capture="environment": 휴대폰에서 바로 후면 카메라가 열린다 -->
+      <label class="btn btn-primary file-btn">
+        신분증 촬영하기
+        <input type="file" id="idFile" accept="image/jpeg,image/png" capture="environment" hidden>
+      </label>
+      <label class="btn btn-secondary file-btn">
+        앨범에서 선택
+        <input type="file" id="idPick" accept="image/jpeg,image/png" hidden>
+      </label>
+      <button type="button" class="btn btn-gray" id="clearBtn" disabled>삭제</button>
+    </div>
+    <p class="m-hint">JPG · PNG, 최대 10MB</p>
+  </section>
+
+  <section class="m-card">
+    <p class="consent-title">개인정보 수집·이용 안내</p>
+    <dl class="consent-list">
+      <dt>수집 항목</dt><dd>신분증 앞면 이미지 (성명·생년월일 확인 목적)</dd>
+      <dt>이용 목적</dt><dd>온라인 시험 응시자 본인 확인</dd>
+      <dt>보관 기간</dt><dd>운영 정책에 따른 보존기간 경과 후 파기</dd>
+      <dt>열람 범위</dt><dd>권한 있는 운영진만 열람하며 열람 이력이 기록됩니다</dd>
+    </dl>
+    <label class="consent-check">
+      <input type="checkbox" id="consent"> 위 내용을 확인했으며 수집·이용에 동의합니다
+    </label>
+    <button type="button" class="btn btn-primary m-submit" id="submitBtn" disabled>제출하기</button>
+    <div class="progress" id="progress" hidden><div class="bar" id="progressBar"></div></div>
+    <p class="result-box" id="resultBox" aria-live="polite"></p>
+  </section>
+
+  <p class="m-foot">
+    제출 후에는 <b>운영진 검토</b>가 진행됩니다. 자동으로 승인되지 않습니다.
+    이 화면을 열어 두면 결과가 자동으로 표시됩니다.
+  </p>
+</main>
+
+<div id="mobileIdConfig" th:unless="${blocked}" th:data-token="${token}" hidden></div>
+<script src="/static/js/mobile-identity.js" th:unless="${blocked}"></script>
+</body>
+</html>

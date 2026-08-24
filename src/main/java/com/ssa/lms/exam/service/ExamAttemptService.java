@@ -14,6 +14,7 @@ import com.ssa.lms.exam.repository.AnswerRepository;
 import com.ssa.lms.exam.repository.ExamAttemptRepository;
 import com.ssa.lms.exam.repository.ExamRefRepository;
 import com.ssa.lms.exam.repository.ExamTakeRepository;
+import com.ssa.lms.identity.policy.PrecheckPolicy;
 import com.ssa.lms.proctor.entity.ExamEventLog;
 import com.ssa.lms.proctor.service.ExamEventLogService;
 import com.ssa.lms.user.entity.User;
@@ -72,6 +73,15 @@ public class ExamAttemptService {
     private final CourseQueryService courseQueryService;
     private final IdentityVerificationService identityVerificationService;
     private final ExamEventLogService examEventLogService;
+
+    /**
+     * 사전점검 게이트 — <b>필수 주입</b>.
+     *
+     * <p>optional 로 두면 "빈이 없으면 건너뛴다" 는 fail-open 이 되어, 빈 누락 하나로
+     * 모든 감독 시험이 무방비로 열린다. 필수로 두어 <b>애플리케이션 기동 자체가 실패</b>하게 한다
+     * — 조용히 열리는 것보다 뜨지 않는 편이 안전하다.</p>
+     */
+    private final ExamStartGate startGate;
     private final AutoGrader autoGrader;
 
     /* ===================== 목록 ===================== */
@@ -129,6 +139,19 @@ public class ExamAttemptService {
     @Transactional
     public Long start(Long examId, Long userId, String verifyMethod, String credential,
                       String ip, String userAgent) {
+        return start(examId, userId, verifyMethod, credential, ip, userAgent, null);
+    }
+
+    /**
+     * 사전점검(신분확인 + 웹캠)을 거친 시험의 입장.
+     *
+     * <p>{@code precheckSessionId} 가 있으면 {@link ExamStartGate} 로 서버 검증을 한 번 더 한다.
+     * 화면의 배지·URL 파라미터는 믿지 않는다 — 게이트는 여기서만 통과한다.
+     * 통과 후 attempt 생성 → ENTER 기록 <b>순서는 그대로</b> 두고, 세션 연결만 뒤에 붙인다.</p>
+     */
+    @Transactional
+    public Long start(Long examId, Long userId, String verifyMethod, String credential,
+                      String ip, String userAgent, Long precheckSessionId) {
         LocalDateTime now = LocalDateTime.now();
 
         Exam exam = examTakeRepository.findWithExamQuestions(examId)
@@ -165,16 +188,49 @@ public class ExamAttemptService {
             if (inProgress.isExpired(now)) {
                 finish(inProgress, now, AttemptStatus.AUTO_SUBMITTED, ip);
             } else {
-                VerifyOutcome resume = verifyIdentity(userId, verifyMethod, credential,
-                        exam.isRequireIdentityVerification());
-                if (resume.at() != null) {
-                    inProgress.markIdentityVerified(resume.at(), resume.method());
+                /* 감독+QR 시험의 이어하기는 최초 입장 때 통과한 QR 승인을 그대로 인정한다.
+                   여기서 비밀번호를 다시 물으면 네트워크가 끊겼다 돌아온 응시자가 막힌다.
+
+                   ★ 그리고 <b>본인확인 시각을 건드리지 않는다</b> (P1).
+                   이어하기는 신분증을 다시 검토하지도, 게이트를 다시 통과하지도 않는다.
+                   그런데 예전에는 markIdentityVerified(now, ID_CARD_QR) 로 현재 시각을 덮어써서
+                   ① 실제 최초 본인확인 시각이 사라지고
+                   ② 재검증한 적 없는데 방금 검증한 것처럼 감사 데이터가 남고
+                   ③ 이어갈 때마다 시각이 갱신돼 증거로서 의미를 잃었다.
+                   최초 attempt 생성 때 저장된 값이 진짜 근거이므로 그대로 보존한다.
+                   (스냅샷 시각을 복사해 채워 넣지도 않는다 — 그것도 사실이 아니다.)
+
+                   비밀번호 인증 시험은 이어하기 때 실제로 재확인을 수행하므로
+                   기존 verifyIdentity() 와 갱신 동작을 그대로 둔다. */
+                if (!requiresGate(exam)) {
+                    VerifyOutcome resume = verifyIdentity(userId, verifyMethod, credential,
+                            exam.isRequireIdentityVerification());
+                    if (resume.at() != null) {
+                        inProgress.markIdentityVerified(resume.at(), resume.method());
+                    }
                 }
                 examEventLogService.append(inProgress, ExamEventLog.EventType.RESUME,
                         "이어하기 (회차 " + inProgress.getAttemptNo() + ")", ip);
                 return inProgress.getId();
             }
         }
+
+        /* ★ 서버 입장 게이트 (LXP-015/018) — <b>새 회차를 만들 때만</b> 실행한다 (P0-B).
+           신분확인 승인·유효시간·웹캠 점검 신선도를 서버가 확인한다.
+           실패하면 여기서 끝난다 — attempt 를 만들지 않는다.
+
+           <b>왜 진행 회차 처리 뒤인가</b><br>
+           게이트가 앞에 있으면, 최초 입장 때 이미 승인을 통과해 정상 응시 중이던 사람이
+           네트워크가 끊겼다 돌아왔을 때 "승인 30분 만료" 나 "웹캠 점검 15분 경과" 로
+           <b>이미 진행 중인 자기 회차</b>까지 막혔다. 시험 도중 쫓겨나는 셈이다.
+           이어하기의 본인확인 근거는 최초 입장 때 통과한 승인이고, 그 증거는
+           ExamIdentityVerification 스냅샷에 이미 남아 있다.
+
+           위 이어하기 분기는 살아 있는 IN_PROGRESS 회차에서만 return 하므로,
+           만료돼 AUTO_SUBMITTED 로 닫힌 회차나 제출이 끝난 회차는 여기로 내려와
+           <b>새 회차로서 게이트를 다시 탄다</b>. 회차 조회는 (examId, userId) 로 한정되어
+           남의 회차나 다른 시험의 회차를 이어받을 수 없다. */
+        startGate.check(examId, userId, precheckSessionId);
 
         long used = examAttemptRepository.countByExamIdAndUserId(examId, userId);
         int max = maxAttempts(exam);
@@ -186,11 +242,19 @@ public class ExamAttemptService {
                             : "재응시가 허용되지 않는 시험입니다.");
         }
 
-        VerifyOutcome verified = verifyIdentity(userId, verifyMethod, credential,
-                exam.isRequireIdentityVerification());
-        if (exam.isRequireIdentityVerification() && verified.at() == null) {
-            // verifyIdentity 가 이미 막지만, 요건이 요건인 만큼 마지막 방어선을 하나 더 둔다.
-            throw ExamTakeException.identityRequired("응시 전 본인인증이 필요합니다.");
+        /* 감독 + QR 신분확인 대상 시험은 <b>운영진이 승인한 QR 신분확인</b>이 본인확인 근거다.
+           여기서 비밀번호를 또 요구하면 QR 흐름을 다 마친 응시자가 입장하지 못한다.
+           그 외 시험은 기존 비밀번호 재확인 흐름을 그대로 쓴다. */
+        VerifyOutcome verified;
+        if (requiresGate(exam)) {
+            verified = new VerifyOutcome(LocalDateTime.now(), METHOD_ID_CARD);
+        } else {
+            verified = verifyIdentity(userId, verifyMethod, credential,
+                    exam.isRequireIdentityVerification());
+            if (exam.isRequireIdentityVerification() && verified.at() == null) {
+                // verifyIdentity 가 이미 막지만, 요건이 요건인 만큼 마지막 방어선을 하나 더 둔다.
+                throw ExamTakeException.identityRequired("응시 전 본인인증이 필요합니다.");
+            }
         }
 
         User user = examRefRepository.findUser(userId)
@@ -219,6 +283,11 @@ public class ExamAttemptService {
         examEventLogService.append(attempt, ExamEventLog.EventType.ENTER,
                 "응시 시작 (회차 " + attempt.getAttemptNo() + ", 문제세트 " + assignedSetNo
                         + ", 본인인증=" + (verified.method() == null ? "면제" : verified.method()) + ")", ip);
+
+        /* attempt 가 생긴 뒤에 신분확인 세션을 연결한다 (LXP-016 조회용).
+           세션을 먼저 attempt 에 묶으려 하면 "attempt 를 만들려면 세션이 필요하고
+           세션을 묶으려면 attempt 가 필요한" 순환이 된다. */
+        startGate.linkAttempt(precheckSessionId, attempt);
         return attempt.getId();
     }
 
@@ -541,7 +610,39 @@ public class ExamAttemptService {
         }
     }
 
+    /** QR 신분확인으로 본인확인을 대신한 경우의 수단 코드 (ExamAttempt.identityVerifyMethod). */
+    private static final String METHOD_ID_CARD = "ID_CARD_QR";
+
     private record VerifyOutcome(LocalDateTime at, String method) {
+    }
+
+    /**
+     * 사전점검 게이트 포트.
+     *
+     * <p>exam 모듈이 identity 모듈을 직접 알지 않도록 인터페이스로 끊는다.
+     * 구현이 없으면(null) 기존 흐름 그대로 — 비감독 시험과 기존 비밀번호 확인은 영향받지 않는다.</p>
+     */
+    /**
+     * 게이트가 반드시 필요한 시험인가.
+     * 판정은 {@link PrecheckPolicy} 한 곳에만 둔다 — 목록 DTO·게이트·서비스가 어긋나면
+     * "목록은 사전점검으로 보내는데 게이트는 통과시키는" 구멍이 생긴다.
+     */
+    private static boolean requiresGate(Exam exam) {
+        return PrecheckPolicy.requiresPrecheck(exam);
+    }
+
+    /** 화면·컨트롤러가 같은 판정을 쓰도록 노출한다. 판정 로직을 컨트롤러에 복제하지 않는다. */
+    @Transactional(readOnly = true)
+    public boolean requiresPrecheck(Long examId) {
+        return examTakeRepository.findWithExamQuestions(examId)
+                .map(PrecheckPolicy::requiresPrecheck).orElse(false);
+    }
+
+    public interface ExamStartGate {
+        /** 통과하지 못하면 {@link ExamTakeException} 을 던진다. */
+        void check(Long examId, Long userId, Long precheckSessionId);
+
+        void linkAttempt(Long precheckSessionId, ExamAttempt attempt);
     }
 
     /**
@@ -625,6 +726,7 @@ public class ExamAttemptService {
                 status,
                 exam.getNote(),
                 exam.isRequireIdentityVerification(),
+                PrecheckPolicy.requiresPrecheck(exam),
                 inProgress == null ? null : String.valueOf(inProgress.getId()),
                 lastFinished == null ? null : String.valueOf(lastFinished.getId()),
                 ready,

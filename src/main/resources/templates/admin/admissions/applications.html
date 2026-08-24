@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>과정 지원자 관리 | Samsung Academy LXP</title>
+    <link rel="stylesheet" href="/static/css/common-style.css">
+    <link rel="stylesheet" href="/static/css/sidebar-style.css">
+    <link rel="stylesheet" href="/static/css/admission-management.css">
+    <script src="/static/js/sidebar-function.js" defer></script>
+</head>
+<body>
+<header th:replace="~{fragments/management :: header('모집·신청 관리')}"></header>
+<th:block th:replace="~{fragments/management :: sidebar('admissions')}"></th:block>
+<main class="main-content admission-main">
+    <div class="admission-shell">
+        <div class="admission-head">
+            <div><h2>과정 지원자</h2><p>공개 홈페이지에서 접수된 지원서를 검토하고 후속 처리를 관리합니다.</p></div>
+            <nav class="admission-tabs"><a class="active" href="/admin/admissions/applications">과정 지원</a><a href="/admin/admissions/consultations">사전상담</a></nav>
+        </div>
+        <section class="admission-card">
+            <table class="admission-table">
+                <thead><tr><th>과정</th><th>신청자</th><th>연락처</th><th>접수일</th><th>상태</th><th>담당자</th><th>확인</th></tr></thead>
+                <tbody>
+                <tr th:each="item : ${applications}">
+                    <td><strong th:text="${item.course.courseName}">과정명</strong><span class="admission-sub" th:text="${item.course.cohort ?: '-'}">기수</span></td>
+                    <td><span th:text="${item.applicantName}">신청자</span><span class="admission-badge warn" th:if="${item.duplicateCandidate}">중복·계정 확인</span></td>
+                    <td><span th:text="${item.phone}">연락처</span><span class="admission-sub" th:text="${item.email}">이메일</span></td>
+                    <td th:text="${#temporals.format(item.submittedAt, 'yyyy-MM-dd HH:mm')}">접수일</td>
+                    <td><span class="admission-badge" th:text="${item.status.label}">상태</span></td>
+                    <td th:text="${item.assignedTo != null ? item.assignedTo.name : '미배정'}">미배정</td>
+                    <td><a th:href="@{/admin/admissions/applications/{id}(id=${item.id})}">상세 보기 →</a></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(applications)}"><td class="admission-empty" colspan="7">접수된 과정 지원서가 없습니다.</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</main>
+</body>
+</html>

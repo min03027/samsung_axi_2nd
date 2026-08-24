@@ -76,12 +76,12 @@
     </form>
 
     <div class="row row--between row--wrap" style="margin-bottom:var(--sp-4)">
-      <p class="small muted">조건에 맞는 과정 <b class="strong num">16</b>개</p>
+      <p class="small muted">현재 공개 모집 과정 <b class="strong num" data-public-course-count>0</b>개</p>
       <a class="btn btn--outline btn--sm" href="/v2/site/campus/recommend.html">어떤 과정이 맞는지 모르겠다면 →</a>
     </div>
 
     <!-- 몰입-028 과정 카드 / 몰입-029 상세·신청 -->
-    <div class="grid grid-auto">
+    <div class="grid grid-auto" data-public-course-grid aria-busy="true">
 
       <article class="course-card">
         <div class="course-card__thumb"><span class="badge badge--accent">모집중 · D-05</span></div>
@@ -338,6 +338,7 @@
 <script src="/v2/assets/course-recommend.js?v=20260824-02"></script>
 <script src="/v2/assets/page-section-navigation.js"></script>
 <script src="/v2/assets/recruitment-status.js?v=20260823-25"></script>
+<script src="/v2/assets/public-course-cms.js"></script>
 <script src="/v2/assets/course-filter.js?v=20260823-25"></script>
 <script src="/v2/assets/infinite-track-carousel.js"></script>
 <script>Shell.site({service:"class",hideSectionLabel:true,ctaLabel:"과정 추천받기",ctaHref:"#course-match",sections:[{href:"#track",label:"KDT 대표 과정"},{href:"#course-list-all",label:"과정 유형 선택"},{href:"#all-courses",label:"전체 모집 과정"},{href:"#course-match",label:"과정 추천받기"}]});</script>

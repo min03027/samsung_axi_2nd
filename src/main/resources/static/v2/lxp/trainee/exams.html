@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- 시험 허브 — 운영 trainee/online-test.html 의 확장 화면.
+     상단 GNB·본문 폭·카드·배지·버튼은 전부 운영 훈련생 UI 문법을 그대로 쓴다.
+     체크리스트 대응: 감독 방식 안내(LXP-005/020), 사전점검 진입(LXP-018/019).
+
+     페이지 루트 클래스 .exam-demo-page 는 <body> 에 붙는다 —
+     GNB·푸터·모달·토스트가 본문 바깥에 삽입되므로 body 가 아니면 감쌀 수 없다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/css/basic-form-trainee.css">
+<link rel="stylesheet" href="/static/css/btn-style.css">
+<link rel="stylesheet" href="/v2/assets/exam.css">
+<title>Samsung Academy LXP</title>
+</head>
+<body class="exam-demo-page">
+
+<main>
+  <section class="main-content main-wrap">
+
+    <div class="page-header">
+      <p class="page-desc">응시 전 환경 점검을 마쳐야 시험장에 입장할 수 있습니다.</p>
+      <div class="demo-warn">
+        <strong>프론트엔드 데모 화면입니다.</strong>
+        시험 목록과 상태는 브라우저 세션에만 저장되는 가상 데이터이며, 서버에 저장되거나 전송되지 않습니다.
+      </div>
+    </div>
+
+    <div class="row-between mb-12">
+      <span class="hint-text" id="listHint">전체 0건</span>
+      <button type="button" class="btn btn-gray" id="resetDemo">데모 상태 초기화</button>
+    </div>
+
+    <div class="card-list" id="cardList"></div>
+
+    <div class="note-box">
+      <p class="note-title">응시 절차</p>
+      <div class="note-body">
+        <ol>
+          <li><b>응시환경 사전점검</b> — 카메라, 화면 공유, 전체화면, 다중 모니터, 신분 확인의 다섯 항목을 통과해야 합니다.</li>
+          <li><b>모바일 신분 확인</b> — 데스크톱에 표시된 주소로 휴대폰에서 접속해 신분증 앞면을 제출합니다.</li>
+          <li><b>시험장 입장</b> — 다섯 항목이 모두 통과되면 입장 버튼이 열립니다. 시험 중 권한이 해제되면 감독관에게 즉시 기록됩니다.</li>
+        </ol>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<!-- 데모 초기화 확인 -->
+<div class="modal-backdrop" id="resetModal" hidden role="dialog" aria-modal="true" aria-labelledby="resetTitle">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 class="modal-title" id="resetTitle">데모 상태를 초기화할까요?</h3>
+      <button type="button" class="icon-btn" data-close-modal aria-label="닫기">✕</button>
+    </div>
+    <div class="modal-body">
+      <p>사전점검 결과, 신분 확인 상태, 작성한 코드, 감독 기록이 모두 처음 상태로 돌아갑니다. 되돌릴 수 없습니다.</p>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-gray" data-close-modal>취소</button>
+      <button type="button" class="btn btn-primary" id="resetConfirm" data-autofocus>초기화</button>
+    </div>
+  </div>
+</div>
+
+<script src="/v2/assets/exam-legacy-shell.js"></script>
+<script src="/v2/assets/exam-demo-data.js"></script>
+<script src="/v2/assets/exam-common.js"></script>
+<script src="/v2/assets/exam-hub.js"></script>
+<script>ExamShell.trainee({ active: "test", title: "시험/과제 > 온라인 시험" });</script>
+</body>
+</html>

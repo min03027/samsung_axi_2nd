@@ -333,6 +333,11 @@
   font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--text-muted);
   white-space: nowrap;
 }
+.organization-public__item { min-width:140px; min-height:58px; display:flex; justify-content:center; align-items:center; text-decoration:none; }
+.organization-public__item img { display:block; width:118px; height:38px; object-fit:contain; }
+.organization-public__fallback { display:block; max-width:190px; overflow:hidden; text-overflow:ellipsis; }
+.organization-public__empty { width:100%; padding:var(--sp-5); color:var(--text-muted); text-align:center; }
+[data-public-organizations][aria-busy="true"]::before { content:"기업·기관 정보를 불러오는 중입니다."; width:100%; padding:var(--sp-5); color:var(--text-muted); text-align:center; }
 
 /* ------------------------------------------------------------
    후기 카드 — 수료생 인터뷰
@@ -348,6 +353,30 @@
 .review__who { display: flex; align-items: center; gap: var(--sp-3); margin-top: auto; }
 .review__meta b { display: block; color: var(--text-strong); font-size: var(--fs-sm); }
 .review__meta span { font-size: var(--fs-xs); color: var(--text-muted); }
+.public-review-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--sp-6); }
+.public-review-card { min-width:0; }
+.public-review-card__image { width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:var(--r-md); margin-bottom:var(--sp-3); }
+.public-review-card__title { margin-top:var(--sp-3); font-size:var(--fs-h4); }
+.public-review-card__links { display:flex; justify-content:space-between; gap:var(--sp-3); flex-wrap:wrap; margin-top:var(--sp-4); padding-top:var(--sp-3); border-top:1px solid var(--border-subtle); }
+.public-review-card__links a { font-size:var(--fs-xs); }
+.public-review-empty { grid-column:1/-1; width:100%; padding:var(--sp-10); color:var(--text-muted); text-align:center; }
+.public-review-filter { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--sp-3); margin:var(--sp-8) 0; }
+.public-review-filter label { color:var(--text-muted); font-size:var(--fs-sm); font-weight:var(--fw-semibold); }
+.public-review-filter select { width:100%; margin-top:var(--sp-2); }
+.public-review-detail__hero { padding:clamp(120px,14vw,190px) 0 clamp(70px,8vw,110px); background:linear-gradient(145deg,#100b09,#291006); color:var(--white); }
+.public-review-detail__hero h1 { max-width:900px; margin-top:var(--sp-4); color:var(--white); font-size:var(--fs-display); }
+.public-review-detail__hero>div>p { max-width:760px; margin-top:var(--sp-5); color:rgba(255,255,255,.75); font-size:var(--fs-h4); line-height:1.7; }
+.public-review-detail__hero>div>div { display:flex; gap:var(--sp-3); margin-top:var(--sp-6); color:rgba(255,255,255,.7); }
+.public-review-detail__hero img { display:block; width:min(100%,760px); max-height:480px; object-fit:cover; margin-top:var(--sp-8); border-radius:var(--r-xl); }
+.public-review-detail__hero .btn { margin-top:var(--sp-5); color:var(--white); border-color:rgba(255,255,255,.3); }
+.public-review-detail__story { max-width:820px; }
+.public-review-detail__story article { padding:var(--sp-8) 0; border-bottom:1px solid var(--border); }
+.public-review-detail__story article span { color:var(--brand-600); font-size:var(--fs-xs); font-weight:var(--fw-bold); letter-spacing:.16em; }
+.public-review-detail__story article h2 { margin-top:var(--sp-2); }
+.public-review-detail__story article p { margin-top:var(--sp-4); color:var(--text-muted); font-size:var(--fs-body-lg); line-height:1.8; }
+.public-review-detail__story>.btn { margin-top:var(--sp-8); }
+@media(max-width:900px){.public-review-grid{grid-template-columns:1fr 1fr}.public-review-filter{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.public-review-grid,.public-review-filter{grid-template-columns:1fr}}
 
 .avatar {
   width: 40px; height: 40px; border-radius: var(--r-full); flex: none;
@@ -1953,6 +1982,18 @@ body[data-sidenav="open"] { overflow: hidden; }
 .pg-cta h2 { font-size: var(--fs-h1); letter-spacing:-.025em; }
 .pg-cta p { margin-top: var(--sp-4); color: rgba(255,255,255,.66); }
 .pg-cta .pg-hero__actions { justify-content:center; }
+/* 관리자 과정 CMS의 실제 공개 데이터를 불러오는 동안 기존 정적 카드가 보이지 않게 한다. */
+[data-public-course-grid][aria-busy="true"] > *,
+[data-public-course-grid-all][aria-busy="true"] > * { display:none; }
+[data-public-course-grid][aria-busy="true"]::before,
+[data-public-course-grid-all][aria-busy="true"]::before {
+  content:"공개 과정 정보를 불러오는 중입니다.";
+  display:block;
+  padding:var(--sp-8);
+  color:var(--muted);
+  text-align:center;
+}
+.public-course-empty { grid-column:1 / -1; padding:var(--sp-10); text-align:center; color:var(--muted); }
 
 /* ------------------------------------------------------------
    Course-linked facility presentation

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/static/css/btn-style.css" />
     <link rel="stylesheet" href="/static/css/play-grading.css">
     <link rel="stylesheet" href="/static/css/play.css">
+    <link rel="stylesheet" href="/static/css/exam-workspace-enhancements.css">
 
     <meta name="_csrf" th:content="${_csrf.token}" content="">
     <meta name="_csrf_header" th:content="${_csrf.headerName}" content="">
@@ -133,8 +134,21 @@
                         </div>
                     </section>
 
+                    <!-- 응시 무결성 UI (LXP-014/017/021) — JS 가 채운다 -->
+                    <div id="integrityMount" th:if="${result == null}"></div>
+
+                    <!-- 레이아웃 도구 (LXP-009). 1023px 이하에서는 CSS 가 숨긴다. -->
+                    <div class="layout-tools" id="layoutTools" th:if="${result == null}">
+                        <button class="btn btn-gray" type="button" id="layoutResetBtn">레이아웃 초기화</button>
+                        <span class="layout-hint">구분선을 끌거나, 구분선에 포커스를 두고
+                            <kbd>←</kbd><kbd>→</kbd> 2%, <kbd>Shift</kbd>+방향키 10% 로 조절합니다.</span>
+                    </div>
+
+                    <!-- 좁은 화면 전용 영역 전환 탭 (LXP-009) -->
+                    <div class="pane-tabs" id="paneTabs" th:if="${result == null}"></div>
+
                     <!-- 본문: 좌측 네비 + 우측 문항 -->
-                    <section class="exam-body" th:if="${result == null}">
+                    <section class="exam-body" id="examLayout" th:if="${result == null}">
                         <!-- 좌측: 문항 네비 -->
                         <aside class="exam-nav card">
                         <div class="nav-head">
@@ -154,7 +168,10 @@
                             -->
                         </div>
                         </aside>
-            
+
+                        <!-- 패널 폭 조절 구분선 (LXP-009). 속성은 JS 가 채운다. -->
+                        <button type="button" class="pane-sep" id="navSep"></button>
+
                         <!-- 우측: 문항 영역 -->
                         <article class="exam-question card">
                         <div class="q-head">
@@ -210,6 +227,12 @@
     <div th:if="${message}" class="toast-message" th:text="${message}"
          style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--gray-800);color:#fff;padding:12px 20px;border-radius:6px;z-index:9999;"></div>
 
+    <!-- 응시 작업공간 확장 (LXP-009 / 010 / 014 / 017 / 021).
+         기존 인라인 스크립트보다 먼저 로드해 window.ExamLayout / ExamCoding / ExamIntegrity 를 준비한다. -->
+    <script src="/static/js/exam-workspace-layout.js"></script>
+    <script src="/static/js/exam-coding-workspace.js"></script>
+    <script src="/static/js/exam-integrity-controls.js"></script>
+
     <script th:inline="javascript">
       /*<![CDATA[*/
       window._serverAttempt = /*[[${attempt}]]*/ null;
@@ -252,6 +275,9 @@
       const csrfToken  = (document.querySelector('meta[name="_csrf"]') || {}).content;
       const csrfHeader = (document.querySelector('meta[name="_csrf_header"]') || {}).content;
 
+      /* LXP-010 코드 작업공간 핸들. 문항을 옮길 때 저장 타이머를 정리한다. */
+      let codingWs = null;
+
       function esc(s) {
         return String(s == null ? '' : s)
           .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
@@ -293,6 +319,12 @@
         qNo.textContent = 'Q' + q.no + ' (' + q.typeLabel + ' · ' + q.score + '점)';
         qStem.textContent = q.text;
 
+        /* LXP-009/010 (P1-2) — 이전 문항의 코딩 작업공간을 먼저 정리한다.
+           문항 유형과 무관하게 정리해야 한다. CODING → 객관식으로 이동할 때
+           정리하지 않으면 레이아웃 등록과 분리된 DOM 이 계속 쌓인다.
+           answerArea 를 덮어쓰기 <b>전에</b> 호출한다. */
+        if (codingWs) { codingWs.dispose(); codingWs = null; }
+
         if (q.type === 'MULTIPLE_CHOICE') {
           answerArea.innerHTML = (q.choices || []).map(c =>
             '<label class="choice-row" style="display:block;padding:6px 0;">' +
@@ -305,6 +337,17 @@
               q.savedChoiceId = r.value;
               save(q, { questionId: q.questionId, choiceId: r.value });
             });
+          });
+        } else if (window.ExamCoding && window.ExamCoding.handles(q)) {
+          /* LXP-010 — CODING 문항만 코드 작업공간을 쓴다.
+             저장은 기존 save(q, {questionId, answerText}) 계약을 그대로 재사용한다. */
+          answerArea.innerHTML = '';
+          codingWs = window.ExamCoding.render(answerArea, q, {
+            onDirty: function () { saveState.textContent = '저장 대기…'; },
+            onSave: function (text) {
+              q.savedText = text;
+              save(q, { questionId: q.questionId, answerText: text });
+            }
           });
         } else {
           answerArea.innerHTML =
@@ -439,6 +482,50 @@
       saveState.textContent = '자동 저장됨';
       renderQuestion();
       tick();
+
+      // ---------- LXP-009 레이아웃 ----------
+      (function initLayout() {
+        const root = document.getElementById('examLayout');
+        const sep  = document.getElementById('navSep');
+        if (!root || !sep || !window.ExamLayout) return;
+
+        root.setAttribute('data-layout-root', '1');
+        window.ExamLayout.register({
+          key: 'navPane',
+          root: root,
+          sep: sep,
+          cssVar: '--pane-nav',
+          axis: 'vertical',
+          min: 14,
+          max: 45,
+          def: 22,
+          label: '문항 목록과 문제 영역 폭 조절'
+        });
+
+        const resetBtn = document.getElementById('layoutResetBtn');
+        if (resetBtn) {
+          resetBtn.addEventListener('click', function () {
+            window.ExamLayout.reset();
+          });
+        }
+
+        /* 1023px 이하에서는 구분선이 숨겨지므로 탭으로 전환한다. */
+        window.ExamLayout.setupTabs(root, document.getElementById('paneTabs'), [
+          { view: 'question', label: '문제·답안' },
+          { view: 'nav',      label: '문항 목록' }
+        ]);
+      })();
+
+      // ---------- LXP-014 / 017 / 021 무결성 UI ----------
+      if (window.ExamIntegrity) {
+        window.ExamIntegrity.init({
+          attempt: attempt,
+          eventsUrl: urls.events,
+          post: post,
+          mount: document.getElementById('integrityMount'),
+          isSubmitting: function () { return submitting; }
+        });
+      }
     })();
     </script>
 

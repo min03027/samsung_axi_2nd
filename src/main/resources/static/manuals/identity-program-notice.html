@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>인증 환경 사전 고지 — 삼성 아카데미 LXP</title>
+  <link rel="stylesheet" href="/static/css/auth-guide.css">
+</head>
+<body>
+
+<header class="guide-header">
+  <div class="guide-header__inner">
+    <p class="eyebrow">LXP-148 · 인증 전 안내</p>
+    <h1>인증 환경 사전 고지</h1>
+    <p class="meta">문서 버전 1.0 · 기준일 2026-08-24 · 대상: 온라인 시험에 응시하는 훈련생</p>
+  </div>
+</header>
+
+<main class="guide-main">
+
+  <div class="notice notice--info">
+    <strong>지금 필요한 준비물은 웹 브라우저와 스마트폰뿐입니다.</strong>
+    별도 프로그램을 설치하지 않습니다. 아래 안내는 <em>외부 OTP 연동 전</em> 현재 운영 기준입니다.
+  </div>
+
+  <nav class="toc" aria-label="목차">
+    <strong>목차</strong>
+    <ol>
+      <li><a href="#env">1. 지원 환경</a></li>
+      <li><a href="#install">2. 설치가 필요한 프로그램</a></li>
+      <li><a href="#permission">3. 허용해야 하는 권한</a></li>
+      <li><a href="#network">4. 네트워크와 보안 연결</a></li>
+      <li><a href="#privacy">5. 개인정보 수집·이용 안내</a></li>
+      <li><a href="#trouble">6. 문제가 생겼을 때</a></li>
+      <li><a href="#contact">7. 문의</a></li>
+    </ol>
+  </nav>
+
+  <!-- ============================================ -->
+  <section class="card" id="env">
+    <h2>1. 지원 환경</h2>
+
+    <div class="table-wrap">
+      <table>
+        <caption class="no-print" style="text-align:left;padding-bottom:6px;font-size:13px;color:#767676;">
+          기기별 지원 브라우저
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">기기</th>
+            <th scope="col">권장 브라우저</th>
+            <th scope="col">확인된 제약</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>PC (Windows / macOS)</td>
+            <td>Chrome 최신, Edge 최신</td>
+            <td>웹캠·화면 공유·모니터 확인 모두 사용 가능</td>
+          </tr>
+          <tr>
+            <td>PC (macOS)</td>
+            <td>Safari</td>
+            <td>화면 공유와 확장 디스플레이 확인이 제한될 수 있습니다</td>
+          </tr>
+          <tr>
+            <td>PC</td>
+            <td>Firefox</td>
+            <td>화면 공유 선택 화면과 전체화면 동작이 Chrome과 다릅니다</td>
+          </tr>
+          <tr>
+            <td>스마트폰 (iPhone)</td>
+            <td>Safari</td>
+            <td>신분증 촬영·앨범 선택용입니다. 시험 응시는 PC로 합니다</td>
+          </tr>
+          <tr>
+            <td>스마트폰 (Android)</td>
+            <td>Chrome</td>
+            <td>동일</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>브라우저 확인 불가 항목</h3>
+    <p>
+      확장 디스플레이(듀얼 모니터) 확인은 <code>screen.isExtended</code> 기능을 쓰는데,
+      이 기능을 지원하지 않는 브라우저에서는 <strong>「확인 불가」</strong>로 표시됩니다.
+      확인 불가는 통과로 처리하지 않으며, 감독관이 직접 확인합니다.
+    </p>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="install">
+    <h2>2. 설치가 필요한 프로그램</h2>
+
+    <p><strong>현재 흐름 — 설치 없음</strong></p>
+    <p>
+      신분 확인은 <strong>QR 코드로 열리는 웹 페이지</strong>에서 진행합니다.
+      스마트폰에 앱을 설치하지 않고, PC에도 감독용 프로그램을 설치하지 않습니다.
+      필요한 것은 브라우저와 카메라뿐입니다.
+    </p>
+
+    <div class="notice notice--warn">
+      <strong>외부 OTP 인증은 아직 연동되지 않았습니다.</strong>
+      OTP 사업자가 선정되면 전용 앱 설치나 문자 인증 절차가 추가될 수 있습니다.
+      현재는 사업자와 앱이 확정되지 않았으므로 이 문서에 특정 앱 이름을 적지 않습니다.
+      연동 시점에 이 문서가 갱신되며, 갱신 전에는 QR 방식만 사용합니다.
+    </div>
+
+    <h3>현재와 향후 절차 비교</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">단계</th>
+            <th scope="col">현재</th>
+            <th scope="col">외부 OTP 연동 후</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>본인 확인 수단</td>
+            <td><span class="badge badge--now">운영 중</span> 신분증 사진 + 얼굴 사진</td>
+            <td><span class="badge badge--later">예정</span> 휴대폰 본인인증 또는 OTP 추가</td>
+          </tr>
+          <tr>
+            <td>확인 주체</td>
+            <td><span class="badge badge--now">운영 중</span> 운영진이 직접 대조·승인</td>
+            <td><span class="badge badge--later">예정</span> 외부 기관 인증 결과 병행</td>
+          </tr>
+          <tr>
+            <td>필요 프로그램</td>
+            <td><span class="badge badge--now">운영 중</span> 없음 (브라우저만)</td>
+            <td><span class="badge badge--later">예정</span> 사업자 정책에 따라 결정</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="permission">
+    <h2>3. 허용해야 하는 권한</h2>
+
+    <p>브라우저가 아래 권한을 물어봅니다. 거부하면 해당 단계를 진행할 수 없습니다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">권한</th>
+            <th scope="col">사용 기기</th>
+            <th scope="col">쓰이는 곳</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>카메라</td>
+            <td>스마트폰</td>
+            <td>신분증 촬영</td>
+          </tr>
+          <tr>
+            <td>사진 / 앨범</td>
+            <td>스마트폰</td>
+            <td>미리 찍어 둔 신분증 사진 선택</td>
+          </tr>
+          <tr>
+            <td>카메라</td>
+            <td>PC</td>
+            <td>웹캠 연결 확인, 입장 직전 얼굴 사진 1장 촬영</td>
+          </tr>
+          <tr>
+            <td>화면 공유</td>
+            <td>PC</td>
+            <td>화면 공유 가능 여부 확인 (공유 대상은 직접 선택)</td>
+          </tr>
+          <tr>
+            <td>팝업 / 새 창</td>
+            <td>PC</td>
+            <td>이 안내 문서와 매뉴얼 열기</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>권한을 잘못 거부했다면</h3>
+    <ol>
+      <li>브라우저 주소창 왼쪽의 자물쇠(또는 아이콘)를 누릅니다.</li>
+      <li>「사이트 설정」에서 카메라·화면 공유 권한을 <strong>초기화</strong>합니다.</li>
+      <li>페이지를 새로 고치고 다시 시도하면 권한 요청이 다시 나타납니다.</li>
+    </ol>
+
+    <div class="notice notice--info">
+      웹캠 영상은 <strong>서버로 전송되지 않습니다.</strong> 브라우저에서 연결 여부만 확인하고,
+      서버에는 «확인한 시각»만 기록합니다. 녹화하지 않습니다.
+      제출되는 사진은 훈련생이 <strong>직접 촬영 버튼을 눌러 동의한 얼굴 사진 1장</strong>뿐입니다.
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="network">
+    <h2>4. 네트워크와 보안 연결</h2>
+
+    <ul>
+      <li>시험 도중 네트워크가 끊겨도 <strong>답안과 남은 시간은 유지</strong>됩니다. 다시 접속하면 같은 회차로 이어집니다.</li>
+      <li>스마트폰과 PC가 <strong>같은 Wi-Fi</strong>에 있어야 QR로 연 페이지가 열립니다.</li>
+      <li>스마트폰에서 <code>localhost</code> 주소는 PC가 아니라 스마트폰 자신을 뜻합니다. QR에 담긴 주소를 그대로 사용하세요.</li>
+    </ul>
+
+    <h3>HTTP와 HTTPS 차이</h3>
+    <p>
+      브라우저는 카메라·화면 공유를 <strong>보안 연결(HTTPS)</strong> 또는 <code>localhost</code>에서만 허용합니다.
+      일반 <code>http://</code> 주소로 접속하면 브라우저가 카메라를 차단하며, 이는 오류가 아니라 정상 보안 정책입니다.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">접속 주소</th>
+            <th scope="col">PC 카메라·화면 공유</th>
+            <th scope="col">스마트폰 신분증 촬영</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>https://</code> 운영 주소</td>
+            <td>사용 가능</td>
+            <td>사용 가능</td>
+          </tr>
+          <tr>
+            <td><code>http://localhost</code></td>
+            <td>사용 가능</td>
+            <td>해당 없음 (PC 전용)</td>
+          </tr>
+          <tr>
+            <td><code>http://</code> 사내망 IP</td>
+            <td><strong>차단됨</strong> — 정상 정책</td>
+            <td>대체로 사용 가능</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="privacy">
+    <h2>5. 개인정보 수집·이용 안내</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">항목</th>
+            <th scope="col">내용</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">수집 항목</th>
+            <td>신분증 사진 1장, 입장 직전 얼굴 사진 1장, 제출 시각, 제출 기기의 IP</td>
+          </tr>
+          <tr>
+            <th scope="row">수집 목적</th>
+            <td>온라인 시험 응시자 본인 확인 및 부정응시 방지</td>
+          </tr>
+          <tr>
+            <th scope="row">보관 방법</th>
+            <td>웹에서 직접 접근할 수 없는 비공개 저장소에 보관합니다.
+              촬영 위치·기기 정보(EXIF)는 저장 전에 제거합니다.</td>
+          </tr>
+          <tr>
+            <th scope="row">열람 범위</th>
+            <td>운영 관리자, 그리고 <strong>해당 시험을 담당하는 강사</strong>만 열람할 수 있습니다.
+              담당하지 않는 강사는 접근이 거부됩니다. 열람 사실은 감사 기록에 남습니다.</td>
+          </tr>
+          <tr>
+            <th scope="row">보관 기간</th>
+            <td>기관이 정한 보관 기간이 지나면 파일이 자동 파기됩니다.
+              파기 후에는 조회할 수 없습니다.
+              <strong>구체적인 보관 일수는 기관 정책으로 확정한 뒤 이 문서에 반영합니다.</strong></td>
+          </tr>
+          <tr>
+            <th scope="row">제3자 제공</th>
+            <td>제공하지 않습니다. 외부 OTP 사업자 연동 시에는 연동 전에 별도 고지합니다.</td>
+          </tr>
+          <tr>
+            <th scope="row">동의 거부</th>
+            <td>동의하지 않으면 신분 확인을 진행할 수 없고, 감독이 필요한 시험에 응시할 수 없습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notice notice--danger">
+      <strong>주민등록번호는 수집하지 않습니다.</strong>
+      신분증을 촬영할 때 주민등록번호 뒷자리가 보이면 <strong>가린 뒤</strong> 촬영해 주세요.
+      QR 주소에도 이름·주민등록번호·사용자 번호가 들어가지 않습니다.
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="trouble">
+    <h2>6. 문제가 생겼을 때</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">증상</th>
+            <th scope="col">확인할 것</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>QR을 스캔했는데 페이지가 열리지 않음</td>
+            <td>PC와 스마트폰이 같은 Wi-Fi인지 확인하세요. QR은 10분 뒤 만료되므로 다시 발급하세요.</td>
+          </tr>
+          <tr>
+            <td>QR이 만료됨</td>
+            <td>신분증 제출 전이라면 「QR 재발급」으로 새 QR을 받으세요. 이미 제출했다면 재발급이 필요하지 않습니다.</td>
+          </tr>
+          <tr>
+            <td>PC에서 카메라가 켜지지 않음</td>
+            <td>주소가 <code>https://</code> 또는 <code>localhost</code>인지 확인하세요. 다른 프로그램이 카메라를 쓰고 있으면 종료하세요.</td>
+          </tr>
+          <tr>
+            <td>실수로 권한을 거부함</td>
+            <td>위 3장의 「권한을 잘못 거부했다면」 절차를 따르세요.</td>
+          </tr>
+          <tr>
+            <td>얼굴 사진 제출이 실패함</td>
+            <td>네트워크를 확인하고 다시 제출하세요. 실패해도 다시 촬영·제출할 수 있습니다.</td>
+          </tr>
+          <tr>
+            <td>확장 디스플레이 확인이 「확인 불가」</td>
+            <td>브라우저가 이 기능을 지원하지 않습니다. 감독관에게 모니터 구성을 직접 확인받으세요.</td>
+          </tr>
+          <tr>
+            <td>운영진 승인이 오래 걸림</td>
+            <td>제출 후 운영진이 직접 대조합니다. 승인 후 30분 안에 입장해야 합니다. 지나면 다시 확인받아야 합니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="contact">
+    <h2>7. 문의</h2>
+    <p>
+      본인 확인 절차와 개인정보 처리에 관한 문의는
+      <strong>담당 강사 또는 교육 운영 담당자</strong>에게 해 주세요.
+      LXP 화면의 「고객 지원」 메뉴에서도 문의를 남길 수 있습니다.
+    </p>
+    <p>
+      문의할 때 아래 정보를 함께 알려 주시면 확인이 빠릅니다.
+    </p>
+    <ul>
+      <li>시험명과 응시 예정 시각</li>
+      <li>사용한 기기와 브라우저 (예: Windows Chrome, iPhone Safari)</li>
+      <li>화면에 표시된 안내 문구 그대로</li>
+    </ul>
+    <div class="notice notice--warn">
+      문의할 때 <strong>신분증 사진을 첨부하지 마세요.</strong>
+      개인정보를 가린 화면 사진만 보내 주세요.
+    </div>
+  </section>
+
+  <div class="actions no-print">
+    <button type="button" class="btn btn--primary" onclick="window.print()">인쇄 / PDF 저장</button>
+    <a class="btn" href="/static/manuals/otp-auth-manual.html">OTP 인증 매뉴얼 보기</a>
+    <a class="btn" href="/static/manuals/identity-onboarding.html">본인인증 안내 보기</a>
+  </div>
+
+</main>
+
+<footer class="guide-footer">
+  <div class="guide-footer__inner">
+    <p>삼성 아카데미 LXP · 인증 환경 사전 고지 v1.0 · 기준일 2026-08-24</p>
+    <p>이 문서는 외부 OTP 사업자 연동 전 기준으로 작성되었습니다. 연동 시 갱신됩니다.</p>
+  </div>
+</footer>
+
+</body>
+</html>

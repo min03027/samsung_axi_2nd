@@ -1,0 +1,513 @@
+/* =============================================================
+   응시 작업공간 확장 (LXP-009 / LXP-010)
+
+   기존 play-grading.css 의 .exam-body 그리드를 <b>대체하지 않고</b> 확장한다.
+   레이아웃 루트에 data-layout-root 가 붙었을 때만 컬럼 정의를 덮어쓰므로,
+   JS 가 실패해도 기존 260px + 1fr 그리드가 그대로 남는다.
+
+   색상·간격은 운영 UI 의 CSS 변수(--gray-*, --navy-*)를 그대로 쓴다.
+   새 팔레트를 만들지 않는다.
+   ============================================================= */
+
+/* ---------- 레이아웃 루트 ---------- */
+
+.exam-body[data-layout-root] {
+  /* --pane-nav 는 JS 가 % 로 넣는다. 값이 없으면 기존 260px 로 동작한다. */
+  grid-template-columns: var(--pane-nav, 260px) var(--pane-sep-size, 10px) minmax(0, 1fr);
+  gap: 0;
+}
+
+/* gap 을 0 으로 만든 대신 separator 가 간격을 만든다 — 드래그 영역이 곧 여백이다. */
+.exam-body[data-layout-root] > .exam-nav {
+  margin-right: 0;
+}
+
+/* ---------- 구분선 ---------- */
+
+.pane-sep {
+  /* 버튼처럼 보이지 않게, 그러나 잡을 수 있게. */
+  position: relative;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  align-self: stretch;
+  justify-self: stretch;
+  cursor: col-resize;
+  touch-action: none;          /* 포인터 드래그가 스크롤로 새지 않게 */
+  min-width: 10px;
+}
+
+.pane-sep[aria-orientation="horizontal"] {
+  cursor: row-resize;
+  min-width: 0;
+  min-height: 12px;
+  width: 100%;
+}
+
+/* 얇은 손잡이. ::before 는 넓은 히트 영역, ::after 는 보이는 선. */
+.pane-sep::before {
+  content: "";
+  position: absolute;
+  inset: 0 -4px;
+}
+
+.pane-sep[aria-orientation="horizontal"]::before {
+  inset: -4px 0;
+}
+
+.pane-sep::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  transform: translateX(-50%);
+  border-radius: 3px;
+  background: var(--gray-300, #d5d9e0);
+  transition: background .12s ease;
+}
+
+.pane-sep[aria-orientation="horizontal"]::after {
+  left: 12px;
+  right: 12px;
+  top: 50%;
+  bottom: auto;
+  width: auto;
+  height: 3px;
+  transform: translateY(-50%);
+}
+
+.pane-sep:hover::after,
+.pane-sep[data-dragging="true"]::after {
+  background: var(--navy-500, #2f4b7c);
+}
+
+/* 키보드 포커스는 반드시 보여야 한다 — 방향키로 조절하는 컨트롤이다. */
+.pane-sep:focus-visible {
+  outline: 2px solid var(--navy-500, #2f4b7c);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 드래그 중 텍스트 선택·iframe 히트를 막는다. */
+body[data-pane-dragging="true"] {
+  user-select: none;
+  cursor: col-resize;
+}
+
+body[data-pane-dragging="row"] {
+  cursor: row-resize;
+}
+
+/* ---------- 레이아웃 도구 막대 ---------- */
+
+.layout-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 10px;
+}
+
+.layout-tools .layout-hint {
+  font-size: 12px;
+  color: var(--gray-600, #6b7280);
+}
+
+.layout-tools .layout-hint kbd {
+  font: inherit;
+  border: 1px solid var(--gray-300, #d5d9e0);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 0 5px;
+  background: #fff;
+}
+
+/* ---------- 좁은 화면: separator 를 숨기고 탭으로 전환 ---------- */
+
+.pane-tabs {
+  display: none;
+  gap: 6px;
+  margin: 0 0 10px;
+}
+
+.pane-tabs button {
+  flex: 1 1 0;
+  min-height: 44px;             /* 터치 영역 */
+  border: 1px solid var(--gray-300, #d5d9e0);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--gray-700, #414755);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pane-tabs button[aria-selected="true"] {
+  background: var(--navy-500, #2f4b7c);
+  border-color: var(--navy-500, #2f4b7c);
+  color: #fff;
+}
+
+.pane-tabs button:focus-visible {
+  outline: 2px solid var(--navy-500, #2f4b7c);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1023px) {
+  /* 좁은 화면에서는 픽셀 조절이 무의미하다 — 한 칼럼으로 세우고 탭으로 전환한다. */
+  .exam-body[data-layout-root] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .exam-body[data-layout-root] > .pane-sep {
+    display: none;
+  }
+
+  .layout-tools {
+    display: none;
+  }
+
+  .pane-tabs {
+    display: flex;
+  }
+
+  /* 탭이 켜져 있으면 선택된 패널만 보인다. 탭 JS 가 없으면 둘 다 보인다(안전한 기본값). */
+  .exam-body[data-pane-view="nav"] > .exam-question,
+  .exam-body[data-pane-view="question"] > .exam-nav {
+    display: none;
+  }
+}
+
+/* =============================================================
+   LXP-010 코딩 작업공간
+   ============================================================= */
+
+.code-ws {
+  display: grid;
+  grid-template-rows:
+      auto
+      var(--code-editor, 46%)
+      12px
+      minmax(0, 1fr);
+  gap: 0;
+  min-height: 420px;
+}
+
+.code-ws__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 0 0 8px;
+}
+
+.code-ws__bar label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gray-700, #414755);
+}
+
+.code-ws__bar select {
+  min-height: 34px;
+  padding: 4px 8px;
+  border: 1px solid var(--gray-300, #d5d9e0);
+  border-radius: 6px;
+  background: #fff;
+  font-size: 13px;
+}
+
+/* 실제 실행이 아니라는 표시. 항상 보이며 숨기지 않는다. */
+.sim-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid #d29200;
+  background: #fff6e0;
+  color: #8a6100;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.sim-badge::before {
+  content: "●";
+  font-size: 8px;
+}
+
+/* ---------- 편집기 ---------- */
+
+.code-editor {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  border: 1px solid var(--gray-300, #d5d9e0);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fbfcfd;
+  min-height: 160px;
+}
+
+.code-gutter {
+  margin: 0;
+  padding: 10px 8px;
+  border-right: 1px solid var(--gray-200, #e6e9ee);
+  background: var(--gray-100, #f4f6f8);
+  color: var(--gray-500, #8b909c);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: right;
+  overflow: hidden;
+  user-select: none;
+  white-space: pre;
+  min-width: 3ch;
+}
+
+.code-input {
+  border: 0;
+  outline: none;
+  resize: none;
+  padding: 10px 12px;
+  background: transparent;
+  color: var(--gray-900, #1f2430);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+}
+
+.code-input:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--navy-500, #2f4b7c);
+}
+
+/* ---------- 아래 패널 (테스트케이스 / 실행 / 콘솔) ---------- */
+
+.code-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 1px solid var(--gray-300, #d5d9e0);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.code-panel__tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--gray-200, #e6e9ee);
+  background: var(--gray-100, #f4f6f8);
+}
+
+.code-panel__tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  padding: 9px 14px;
+  min-height: 40px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gray-600, #6b7280);
+  cursor: pointer;
+}
+
+.code-panel__tabs button[aria-selected="true"] {
+  color: var(--navy-600, #24395f);
+  border-bottom-color: var(--navy-500, #2f4b7c);
+  background: #fff;
+}
+
+.code-panel__tabs button:focus-visible {
+  outline: 2px solid var(--navy-500, #2f4b7c);
+  outline-offset: -2px;
+}
+
+.code-panel__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px;
+}
+
+.code-panel__body[hidden] {
+  display: none;
+}
+
+.code-console {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--gray-800, #2c313c);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.code-note {
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d29200;
+  background: #fff6e0;
+  color: #7a5600;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.code-note strong {
+  font-weight: 800;
+}
+
+.tc-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.tc-list li {
+  border: 1px solid var(--gray-200, #e6e9ee);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+}
+
+.tc-list dt {
+  font-weight: 800;
+  color: var(--gray-700, #414755);
+  margin: 0 0 2px;
+}
+
+.tc-list dd {
+  margin: 0 0 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--gray-800, #2c313c);
+  white-space: pre-wrap;
+}
+
+@media (max-width: 1023px) {
+  .code-ws {
+    /* 좁은 화면에서는 비율 조절을 끄고 자연 높이로 세운다. */
+    grid-template-rows: auto auto 0 auto;
+    min-height: 0;
+  }
+
+  .code-ws > .pane-sep {
+    display: none;
+  }
+
+  .code-editor {
+    min-height: 240px;
+  }
+}
+
+/* =============================================================
+   LXP-014 / 017 / 021 응시 무결성 UI
+   ============================================================= */
+
+.integrity-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--gray-200, #e6e9ee);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.integrity-bar__title {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--gray-700, #414755);
+  margin: 0;
+}
+
+.integrity-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--gray-300, #d5d9e0);
+  background: var(--gray-100, #f4f6f8);
+  color: var(--gray-700, #414755);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.integrity-flag[data-state="on"] {
+  border-color: #1f7a4d;
+  background: #e8f6ee;
+  color: #16603c;
+}
+
+.integrity-flag[data-state="off"] {
+  border-color: #b4341f;
+  background: #fdecea;
+  color: #8d2718;
+}
+
+/* 상태를 색으로만 전하지 않는다 — 접두 기호를 함께 넣는다. */
+.integrity-flag[data-state="on"]::before { content: "✓"; }
+.integrity-flag[data-state="off"]::before { content: "!"; }
+.integrity-flag[data-state="unknown"]::before { content: "?"; }
+
+.integrity-warn {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #b4341f;
+  background: #fdecea;
+  color: #8d2718;
+  font-size: 13px;
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.integrity-warn[hidden] {
+  display: none;
+}
+
+.integrity-warn__msg {
+  flex: 1 1 220px;
+  margin: 0;
+}
+
+.integrity-limits {
+  margin: 10px 0 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--gray-600, #6b7280);
+}
+
+/* 토스트는 화면 하단 고정. 기존 .toast-message 와 겹치지 않게 위로 띄운다. */
+.integrity-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 76px;
+  transform: translateX(-50%);
+  z-index: 9998;
+  display: grid;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.integrity-toast > div {
+  background: var(--gray-800, #2c313c);
+  color: #fff;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
+}

@@ -24,7 +24,6 @@
         </section>
         <section class="main-content">
             <section class="main-content-inner main-wrap">
-                <div th:replace="${sampleData} ? ~{fragments/trainee :: sampleNotice} : ~{}"></div>
                 <div class="content-header">
                     <div class="content-breadcrumb">
                         <div class="breadcrumb-item">
@@ -49,8 +48,7 @@
                      th:attr="data-content-id=${content.id},
                               data-file-url=${content.fileUrl},
                               data-page-count=${content.pageCount != null ? content.pageCount : 0},
-                              data-resume-page=${progress.maxPageReached != null ? progress.maxPageReached : 0},
-                              data-sample=${sampleData}">
+                              data-resume-page=${progress.maxPageReached != null ? progress.maxPageReached : 0}">
                     <div class="document-viewer">
                         <div class="document-controls">
                             <div class="nav-buttons">
