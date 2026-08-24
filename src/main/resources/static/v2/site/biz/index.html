@@ -7,7 +7,7 @@
 <meta name="description" content="AI를 배우는 조직에서 AI로 일하는 조직으로. 조직 진단부터 정착까지 설계합니다.">
 <link rel="stylesheet" href="/v2/assets/tokens.css">
 <link rel="stylesheet" href="/v2/assets/base.css">
-<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/biz-pages.css?v=20260824-96">
+<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/biz-pages.css?v=20260824-97">
 </head>
 <body>
 
@@ -21,8 +21,8 @@
       실행과 정착까지 함께 갑니다.
     </p>
     <div class="hero__cta">
-      <a class="btn btn--lg btn--inverse" href="/v2/site/biz/diagnosis.html">1분 조직 진단 시작</a>
-      <a class="btn btn--lg btn--outline" style="color:var(--white);border-color:rgba(255,255,255,.3)" href="/v2/site/biz/contact.html">도입 문의</a>
+      <a class="btn btn--lg btn--inverse" href="/v2/site/biz/programs.html">직무별 과정 보기</a>
+      <a class="btn btn--lg btn--outline" style="color:var(--white);border-color:rgba(255,255,255,.3)" href="#biz-contact">도입 문의</a>
     </div>
     <div class="hero__stats">
       <div class="hero__stat"><b class="num">6개</b><span>직무군별 과정</span></div>
@@ -73,7 +73,7 @@
       <div class="card card--pad"><span class="eyebrow">06</span><h4>데이터</h4><p class="small muted">쓸 수 있는 형태로 쌓이고 있는가</p></div>
       <div class="card card--pad"><span class="eyebrow">07</span><h4>확산</h4><p class="small muted">잘한 사례가 옆 팀으로 번지는가</p></div>
       <div class="card card--pad" style="background:var(--bg-brand-soft);border-color:var(--brand-100);display:grid;place-content:center;text-align:center">
-        <a class="btn btn--primary btn--sm" href="/v2/site/biz/diagnosis.html">진단 시작</a>
+        <a class="btn btn--primary btn--sm" href="#biz-contact">진단 상담</a>
         <p class="xsmall muted" style="margin-top:var(--sp-2)">약 1분</p>
       </div>
     </div>
@@ -96,7 +96,7 @@
       <div class="step"><p class="step__title">운영 정착</p><p class="step__desc">가이드와 템플릿으로 굳힙니다.</p></div>
       <div class="step"><p class="step__title">성과 측정</p><p class="step__desc">시간·품질 변화를 수치로 확인합니다.</p></div>
     </div>
-    <div class="row" style="margin-top:var(--sp-8)"><a class="btn btn--outline" href="/v2/site/biz/flow.html">단계별 자세히 보기</a></div>
+    <div class="row" style="margin-top:var(--sp-8)"><a class="btn btn--outline" href="/v2/site/biz/cases.html">적용 사례 보기</a></div>
   </div>
 </section>
 
@@ -210,7 +210,7 @@
 
 <script src="/v2/assets/brand.js"></script>
 <script src="/v2/assets/page-section-navigation.js"></script>
-<script>Shell.site({service:"biz",sections:[{href:"#org-diagnosis",label:"조직 진단"},{href:"#change-flow",label:"변화 경로"},{href:"#job-programs",label:"직무별 과정"},{href:"#company-cases",label:"기업 사례"},{href:"#biz-contact",label:"도입 문의"}]});</script>
+<script>Shell.site({service:"biz",nav:"home",sections:[{href:"#org-diagnosis",label:"조직 진단"},{href:"#change-flow",label:"변화 경로"},{href:"#job-programs",label:"직무별 과정"},{href:"#company-cases",label:"기업 사례"},{href:"#biz-contact",label:"도입 문의"}]});</script>
 <script>var selectedProgram=new URLSearchParams(location.search).get('program');if(selectedProgram){var issue=document.getElementById('issue');if(issue&&!issue.value){issue.value=selectedProgram+' 직무 과정의 시간·대상·교육 방식을 문의합니다.'}}</script>
 </body>
 </html>

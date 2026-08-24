@@ -48,7 +48,7 @@
       { key: "flow",      label: "AX Flow",     href: "/v2/site/biz/flow.html", todo: true },
       { key: "programs",  label: "직무별 과정", href: "/v2/site/biz/programs.html" },
       { key: "cases",     label: "기업 사례",   href: "/v2/site/biz/cases.html" },
-      { key: "contact",   label: "도입 문의",   href: "/v2/site/biz/contact.html", todo: true }
+      { key: "contact",   label: "도입 문의",   href: "/v2/site/biz/index.html#biz-contact" }
     ]
   };
 
@@ -164,6 +164,20 @@
     }).join("");
 
     var sectionBlock = "";
+    var serviceQuickbar = "";
+    if (svc === "biz") {
+      var bizQuickLinks = [
+        { key: "home", label: "비즈워크래프트 홈", href: "/v2/site/biz/index.html" },
+        { key: "programs", label: "직무별 과정", href: "/v2/site/biz/programs.html" },
+        { key: "cases", label: "기업교육 사례", href: "/v2/site/biz/cases.html" },
+        { key: "contact", label: "도입 문의", href: "/v2/site/biz/index.html#biz-contact" }
+      ];
+      serviceQuickbar = '<nav class="biz-quickbar" aria-label="비즈워크래프트 빠른 이동"><div class="container">' +
+        bizQuickLinks.map(function (item) {
+          var current = item.key === (opts.nav || "home");
+          return '<a href="' + item.href + '"' + (current ? ' aria-current="page"' : '') + '>' + esc(item.label) + '</a>';
+        }).join("") + '</div></nav>';
+    }
     if (sections.length) {
       sectionBlock =
         '<div>' + (opts.hideSectionLabel ? '' : '<p class="sidenav__label">이 페이지</p>') + '<div class="sidenav__list">' +
@@ -193,7 +207,7 @@
       '<a class="skip-link" href="#main">본문 바로가기</a>' +
       '<nav class="home-categorybar" aria-label="서비스 카테고리"><div class="container home-categorybar__inner">' +
         '<strong><span data-brand="name"></span></strong><div>' + serviceLinks + '</div>' +
-      '</div></nav>' +
+      '</div></nav>' + serviceQuickbar +
       '<div class="sitebar">' +
         '<a class="sitebar__brand" href="/v2/index.html"><span data-brand="name"></span></a>' +
         '<button class="sitebar__toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="sidenav"><i></i><i></i><i></i></button>' +
@@ -331,7 +345,7 @@
           '</ul></div>' +
           '<div><h4>지원</h4><ul class="stack-sm">' +
             '<li><a href="/v2/site/campus/counsel.html">상담 신청</a></li>' +
-            '<li><a href="/v2/site/biz/contact.html">기업교육 문의</a></li>' +
+            '<li><a href="/v2/site/biz/index.html#biz-contact">기업교육 문의</a></li>' +
             '<li><a href="/v2/site/faq.html">자주 묻는 질문</a></li>' +
             '<li><a href="/v2/site/search.html">통합 검색</a></li>' +
           '</ul></div>' +
