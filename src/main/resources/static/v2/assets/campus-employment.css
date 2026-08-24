@@ -57,9 +57,9 @@
 }
 
 .employment-course-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px; }
-.employment-course-card { min-width:0;display:flex;flex-direction:column;overflow:hidden;border:0;border-radius:26px;background:#f4511e;box-shadow:0 20px 55px rgba(65,28,14,.18); }
+.employment-course-card { min-width:0;display:flex;flex-direction:column;overflow:hidden;border:0;border-radius:26px;background:#ffe0d0;box-shadow:0 20px 55px rgba(105,49,25,.13); }
 .employment-course-card__top { display:flex;align-items:center;justify-content:space-between;padding:22px 22px 0; }
-.employment-course-card__index { color:#fff;font:800 12px/1 var(--font-mono);letter-spacing:.13em; }
+.employment-course-card__index { color:#bc3f16;font:800 12px/1 var(--font-mono);letter-spacing:.13em; }
 .employment-course-card__status { padding:7px 11px;border-radius:999px;background:#e5f7ee;color:#08734f;font-size:12px;font-weight:800; }
 .employment-course-card[data-status="closing"] .employment-course-card__status { background:#fff0e9;color:#d34210; }
 .employment-course-card[data-status="pre-recruiting"] .employment-course-card__status { background:#eee9ff;color:#6144be; }
