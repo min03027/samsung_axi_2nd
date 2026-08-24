@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>신분 확인 검토</title>
+  <link rel="stylesheet" href="/static/css/common-style.css">
+  <link rel="stylesheet" href="/static/css/sidebar-style.css">
+  <link rel="stylesheet" href="/static/css/btn-style.css">
+  <link rel="stylesheet" href="/static/css/admin-identity.css">
+</head>
+<body class="admin-identity-page">
+
+<div th:replace="~{fragments/admin :: header('평가 관리 > 신분 확인 > 검토')}"></div>
+<div th:replace="~{fragments/admin :: sidebar('eval-monitoring')}"></div>
+
+<main class="main-content">
+  <section class="main-content-inner">
+
+  <div class="detail-head">
+    <a class="btn btn-gray btn-sm" th:href="@{/admin/evaluation/identity}">← 대기열</a>
+    <div>
+      <h2 class="detail-title" th:text="${row.traineeName}">훈련생</h2>
+      <p class="detail-sub">
+        <span th:text="${row.examTitle}">시험명</span> ·
+        <span class="mono" th:text="${row.loginId}">아이디</span> ·
+        제출 <span class="mono" th:text="${row.submittedAt}">--</span>
+      </p>
+    </div>
+    <span class="state-badge" th:classappend="${row.tone}" th:text="${row.statusLabel}">상태</span>
+    <form method="post" th:if="${row.status == 'SUBMITTED'}"
+          th:action="@{'/admin/evaluation/identity/' + ${row.sessionId} + '/review'}">
+      <button type="submit" class="btn btn-secondary btn-sm">검토 시작</button>
+    </form>
+  </div>
+
+  <p class="flash err" th:if="${error}" th:text="${error}"></p>
+
+  <p class="page-note">
+    두 이미지를 나란히 비교해 <b>동일인 여부를 육안으로</b> 판단합니다.
+    오른쪽은 <b>실시간 영상이 아니라</b> 훈련생이 입장 직전에 직접 촬영해 제출한 <b>정지 이미지</b>입니다.
+  </p>
+
+  <div class="compare-row">
+
+    <section class="admin-card compare-card">
+      <div class="compare-head">
+        <h3>① 제출된 신분증</h3>
+        <span class="tag">모바일 QR 제출</span>
+      </div>
+      <div class="compare-body">
+        <img th:if="${idDocId != null}" class="doc-image" data-doc-image
+             th:src="@{'/admin/evaluation/identity/document/' + ${idDocId} + '/image'}"
+             th:attr="data-doc-id=${idDocId}"
+             alt="제출된 신분증 이미지">
+        <p class="doc-error" hidden></p>
+        <p th:if="${idDocId == null}" class="doc-empty">제출된 신분증이 없습니다</p>
+      </div>
+      <p class="hint-text">주민등록번호 뒷자리는 훈련생이 가리고 촬영하도록 안내됩니다.</p>
+    </section>
+
+    <section class="admin-card compare-card">
+      <div class="compare-head">
+        <h3>② 입장 직전 얼굴 확인</h3>
+        <span class="tag">사전점검 시 본인 촬영</span>
+      </div>
+      <div class="compare-body">
+        <img th:if="${faceDocId != null}" class="doc-image" data-doc-image
+             th:src="@{'/admin/evaluation/identity/document/' + ${faceDocId} + '/image'}"
+             th:attr="data-doc-id=${faceDocId}"
+             alt="입장 직전 얼굴 확인용 이미지">
+        <p class="doc-error" hidden></p>
+        <p th:if="${faceDocId == null}" class="doc-empty">
+          아직 제출되지 않았습니다<br>
+          <span class="hint-text">훈련생이 웹캠 점검을 마치고 직접 촬영·제출해야 표시됩니다</span>
+        </p>
+      </div>
+      <p class="hint-text">
+        실시간 영상이 아닙니다. 훈련생이 사전점검에서 직접 촬영·제출한 정지 이미지이며,
+        웹캠 점검 결과 역시 브라우저가 확인한 값입니다(서버는 통과 시각만 기록).
+      </p>
+    </section>
+  </div>
+
+  <!-- 응시 증거와 판정 정보 (LXP-016).
+       모델에 있는 값만 표시한다. 없는 값은 추측하지 않고 확인 경로를 안내한다. -->
+  <section class="admin-card">
+    <h3 class="verdict-title">응시 · 판정 정보</h3>
+    <dl class="fact-grid">
+      <dt>제출 시각</dt>
+      <dd class="mono" th:text="${row.submittedAt}">--</dd>
+
+      <dt>대기 시간</dt>
+      <dd th:text="${row.waited}">--</dd>
+
+      <dt>현재 상태</dt>
+      <dd><span class="state-badge" th:classappend="${row.tone}" th:text="${row.statusLabel}">상태</span></dd>
+
+      <dt>재제출 횟수</dt>
+      <dd><span th:text="${row.resubmitCount}">0</span> / <span th:text="${maxResubmit}">3</span></dd>
+
+      <dt>응시 회차 연결</dt>
+      <dd th:if="${row.attemptId != null}" class="mono">
+        attempt #<span th:text="${row.attemptId}">-</span>
+        <span class="hint-text">— 이 회차가 이 신분확인을 근거로 입장했습니다</span>
+      </dd>
+      <dd th:if="${row.attemptId == null}" class="hint-text">
+        아직 시험에 입장하지 않았습니다. 입장하면 회차가 연결됩니다.
+      </dd>
+
+      <dt>검토 시각 · 검토자</dt>
+      <dd class="hint-text">
+        아래 <b>감사 이력</b>의 <code>OPEN_REVIEW</code> · <code>APPROVE</code> ·
+        <code>REJECT</code> 행에서 확인하세요.
+        이 화면 모델에는 별도 필드가 없어 임의로 표시하지 않습니다.
+      </dd>
+
+      <dt>승인 주기</dt>
+      <dd class="hint-text">
+        회차별 승인 주기 번호는 서버에 기록되어 있으나 이 화면 모델에 포함되어 있지 않습니다.
+        <b>조회 연동 필요</b>.
+      </dd>
+    </dl>
+
+    <p class="hint-text">
+      시험 <b>중</b>과 <b>종료 후</b> 모두 같은 화면·같은 권한으로 이 정보를 확인합니다.
+      상태가 바뀌어도 표시 문법은 동일합니다.
+    </p>
+  </section>
+
+  <!-- 후속 화면 연결 (LXP-016). 실제 URL 이 없으면 비활성 링크 대신 사유를 적는다. -->
+  <section class="admin-card">
+    <h3 class="verdict-title">후속 검토 연결</h3>
+    <dl class="fact-grid">
+      <dt>녹화 재생</dt>
+      <dd class="hint-text">
+        <b>연동 필요</b> — 이 회차의 녹화 파일이 저장되어야 재생할 수 있습니다.
+        현재 실시간 송출·녹화 저장이 연결되지 않아 재생 주소가 없습니다.
+      </dd>
+      <dt>사후 검토 화면</dt>
+      <dd class="hint-text">
+        <b>연동 필요</b> — 시험 종료 후 이벤트·녹화를 함께 보는 화면은 부분 구현입니다.
+        현재는 실시간 감독 화면의 이벤트 로그로 확인하세요.
+      </dd>
+    </dl>
+  </section>
+
+  <section class="admin-card verdict-card">
+    <h3 class="verdict-title">판정</h3>
+    <p class="flash err" th:if="${row.status == 'REJECTED'}">
+      최종 반려된 세션입니다. 훈련생은 더 이상 제출할 수 없습니다.
+    </p>
+    <p class="flash err" th:if="${row.status == 'RESUBMIT_REQUIRED'}">
+      재제출을 요청한 상태입니다. 훈련생이 다시 제출하면 목록에 올라옵니다.
+    </p>
+    <p class="hint-text" th:if="${row.resubmitCount > 0}">
+      재제출 횟수 <b th:text="${row.resubmitCount}">0</b> / <span th:text="${maxResubmit}">3</span>
+    </p>
+
+    <div class="verdict-actions">
+      <form method="post" th:action="@{'/admin/evaluation/identity/' + ${row.sessionId} + '/approve'}">
+        <button type="submit" class="btn btn-primary"
+                th:disabled="${idDocId == null or faceDocId == null}">승인</button>
+      </form>
+
+      <form method="post" class="reject-form"
+            th:action="@{'/admin/evaluation/identity/' + ${row.sessionId} + '/reject'}">
+        <label class="sr-only" for="reason">반려 사유</label>
+        <input type="text" id="reason" name="reason" maxlength="500" required
+               placeholder="반려 사유 (필수) — 예: 글자가 흐려 확인 불가">
+        <label class="resubmit-check">
+          <input type="checkbox" name="resubmit" value="true" checked> 재제출 요청
+        </label>
+        <button type="submit" class="btn btn-danger" th:disabled="${idDocId == null}">반려</button>
+      </form>
+    </div>
+    <p class="hint-text">
+      승인은 <b>신분증과 얼굴 확인용 사진이 모두 제출된 뒤에만</b> 가능합니다.
+      반려 사유는 필수이며 훈련생 휴대폰 화면에 그대로 표시됩니다.
+      <b>재제출 요청</b>을 체크하면 훈련생이 다시 올릴 수 있고, 체크하지 않으면 <b>최종 반려</b>입니다.
+    </p>
+  </section>
+
+  <section class="admin-card">
+    <h3 class="verdict-title">감사 이력</h3>
+    <p class="hint-text">누가 언제 이 자료를 열람하고 판정했는지 기록입니다. 이미지가 파기돼도 이 기록은 남습니다.</p>
+    <table class="admin-table">
+      <thead>
+      <tr><th>시각</th><th>행위</th><th>행위자</th><th>권한</th><th>사유</th><th>IP</th></tr>
+      </thead>
+      <tbody>
+      <tr th:each="a : ${auditTrail}">
+        <td class="nowrap mono" th:text="${#temporals.format(a.occurredAt, 'MM-dd HH:mm:ss')}">--</td>
+        <td class="nowrap" th:text="${a.action}">행위</td>
+        <td class="nowrap mono" th:text="${a.actorUserId}">--</td>
+        <td class="nowrap" th:text="${a.actorRole}">--</td>
+        <td th:text="${a.reason}"></td>
+        <td class="nowrap mono" th:text="${a.ip}">--</td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(auditTrail)}">
+        <td colspan="6" class="hint-text">기록이 없습니다.</td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <p class="limit-note">
+    신분증 확인만으로 대리응시가 완전히 방지되지는 않습니다. 운영진의 신분증 검토와
+    입장 직전 얼굴 육안 확인, 그리고 시험 중 기록을 함께 확인해야 위험을 낮출 수 있습니다.
+  </p>
+  </section>
+</main>
+
+<script>
+/* 이미지 로딩 실패를 <b>빈 이미지로 숨기지 않는다</b> (LXP-016).
+   파기 완료(410)·권한 없음(403)·네트워크 오류를 구분해 안내한다.
+   img 의 onerror 만으로는 상태 코드를 알 수 없으므로 HEAD 로 한 번 확인한다. */
+(function () {
+  document.querySelectorAll("img[data-doc-image]").forEach(function (img) {
+    var note = img.parentNode.querySelector(".doc-error");
+    if (!note) return;
+
+    img.addEventListener("error", function () {
+      img.hidden = true;
+      note.hidden = false;
+      note.textContent = "이미지를 불러오지 못했습니다. 상태를 확인하는 중…";
+
+      fetch(img.getAttribute("src"), { method: "HEAD", credentials: "same-origin" })
+        .then(function (res) {
+          if (res.status === 410) {
+            note.textContent =
+              "보존 기간이 지나 이 자료는 파기되었습니다(410). 감사 이력은 아래에 남아 있습니다.";
+          } else if (res.status === 403) {
+            note.textContent =
+              "이 자료를 볼 권한이 없습니다(403). 담당 시험이 아닌 경우 열람이 거부됩니다.";
+          } else if (res.status === 404) {
+            note.textContent = "자료를 찾을 수 없습니다(404).";
+          } else {
+            note.textContent = "이미지를 표시할 수 없습니다. (HTTP " + res.status + ")";
+          }
+        })
+        .catch(function () {
+          note.textContent =
+            "네트워크 오류로 이미지를 불러오지 못했습니다. 새로 고쳐 다시 시도해 주세요.";
+        });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

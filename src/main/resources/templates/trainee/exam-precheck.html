@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>응시환경 사전점검</title>
+  <meta name="_csrf" th:content="${_csrf} != null ? ${_csrf.token} : ''">
+  <meta name="_csrf_header" th:content="${_csrf} != null ? ${_csrf.headerName} : ''">
+  <link rel="stylesheet" href="/static/css/basic-form-trainee.css">
+  <link rel="stylesheet" href="/static/css/btn-style.css">
+  <link rel="stylesheet" href="/static/css/exam-precheck.css">
+</head>
+<body class="exam-precheck-page">
+
+<div th:replace="~{fragments/trainee :: header('test')}"></div>
+
+<main class="precheck-main">
+
+  <div class="page-head">
+    <h2 class="page-title">응시환경 사전점검</h2>
+    <p class="page-sub" th:text="${examTitle}">시험명</p>
+  </div>
+
+  <p class="notice-box">
+    <b>신분 확인과 웹캠 연결을 마쳐야 시험에 입장할 수 있습니다.</b>
+    신분증은 <b>휴대폰</b>에서만 제출합니다. 이 화면에는 파일을 올리지 않습니다.
+  </p>
+
+  <!-- ================= 1. 신분 확인 (QR) ================= -->
+  <section class="check-card" id="identityCard" data-state="idle">
+    <div class="check-head">
+      <div>
+        <p class="check-step">STEP 1</p>
+        <h3 class="check-title">신분 확인</h3>
+        <p class="check-desc">휴대폰으로 QR을 스캔해 신분증 앞면을 제출하면 운영진이 확인합니다.</p>
+      </div>
+      <span class="state-badge" id="idBadge">신분증 · 얼굴 사진 모두 미제출</span>
+    </div>
+
+    <div class="id-body">
+      <div class="qr-area">
+        <!-- 실제 스캔되는 QR. 서버가 발급한 일회용 토큰 URL 만 담는다. -->
+        <div class="qr-box" id="qrBox">
+          <p class="qr-empty" id="qrEmpty">아래 버튼을 눌러 QR을 발급하세요</p>
+        </div>
+        <p class="qr-expire" id="qrExpire" hidden>남은 시간 <b id="qrCountdown">--:--</b></p>
+        <button type="button" class="btn btn-secondary" id="issueQrBtn">QR 발급</button>
+      </div>
+
+      <div class="id-guide">
+        <p class="guide-title">진행 방법</p>
+        <ol class="guide-list">
+          <li>휴대폰 카메라로 왼쪽 QR을 스캔합니다.</li>
+          <li>열린 화면에서 신분증 앞면을 촬영해 제출합니다.</li>
+          <li><b>주민등록번호 뒷자리는 가리고</b> 촬영하세요.</li>
+          <li>운영진 승인이 끝나면 이 화면이 자동으로 바뀝니다.</li>
+        </ol>
+        <p class="hint-text" id="idMessage" aria-live="polite">휴대폰으로 QR을 스캔해 신분증을 제출하세요. QR은 10분 뒤 만료되며, 제출 전이라면 다시 발급할 수 있습니다.</p>
+        <p class="reject-reason" id="idReason" hidden></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 2. 웹캠 연결 확인 ================= -->
+  <section class="check-card" id="webcamCard" data-state="idle">
+    <div class="check-head">
+      <div>
+        <p class="check-step">STEP 2</p>
+        <h3 class="check-title">웹캠 연결 확인</h3>
+        <p class="check-desc">사용할 카메라를 선택하고 실제 화면이 보이는지 확인합니다.</p>
+      </div>
+      <span class="state-badge" id="camBadge">미확인</span>
+    </div>
+
+    <!-- 브라우저 권한창은 페이지가 만들 수 없다. 인라인 안내만 띄우고 실제 창은 브라우저가 띄운다. -->
+    <p class="permission-hint" id="permHint" hidden>
+      브라우저 상단에 <b>카메라 사용 권한</b>을 묻는 창이 나타납니다. <b>허용</b>을 눌러 주세요.
+    </p>
+
+    <div class="cam-body">
+      <div class="cam-info">
+        <p class="info-head">카메라 정보</p>
+        <dl class="info-list">
+          <dt>선택된 카메라</dt><dd id="infoName">—</dd>
+          <dt>연결 상태</dt><dd id="infoState">—</dd>
+          <dt>해상도</dt><dd id="infoRes">—</dd>
+          <dt>프레임 레이트</dt><dd id="infoFps">—</dd>
+          <dt>수신 프레임</dt><dd id="infoFrames">—</dd>
+        </dl>
+        <p class="hint-text">
+          미리보기는 이 브라우저 안에서만 재생됩니다. 이번 단계에서는 서버로 영상을 보내지도, 녹화하지도 않습니다.
+          아래 점검 결과는 <b>이 브라우저가 확인한 값</b>이며, 서버에는 <b>점검 통과 시각만</b> 기록됩니다.
+        </p>
+      </div>
+
+      <div class="cam-preview-area">
+        <div class="cam-row">
+          <label class="cam-label" for="camSelect">카메라</label>
+          <select id="camSelect" disabled>
+            <option>목록을 보려면 테스트를 시작하세요</option>
+          </select>
+        </div>
+
+        <div class="preview-box">
+          <video id="camPreview" class="mirrored" playsinline muted hidden></video>
+          <p class="preview-empty" id="previewEmpty">웹캠 테스트를 시작하면 여기에 화면이 보입니다</p>
+        </div>
+
+        <div class="cam-actions">
+          <button type="button" class="btn btn-primary" id="camStartBtn">웹캠 테스트 시작</button>
+          <button type="button" class="btn btn-gray" id="camStopBtn" disabled>연결 끊기</button>
+          <button type="button" class="btn btn-secondary" id="retryWebcam" hidden>서버 기록 다시 시도</button>
+          <label class="mirror-toggle">
+            <input type="checkbox" id="mirrorToggle" checked> 좌우반전(보기 전용)
+          </label>
+        </div>
+        <p class="check-msg" id="camMessage" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <!-- 얼굴 확인용 사진 — 사용자가 직접 눌러야만 촬영된다 -->
+    <div class="face-check" id="faceCheckArea" hidden>
+      <p class="face-title">입장 직전 얼굴 확인</p>
+      <p class="hint-text">
+        운영진이 제출된 신분증과 대조할 <b>사진 한 장</b>을 찍습니다.
+        자동으로 촬영되지 않으며, 확인 후 직접 제출해야 저장됩니다.
+        저장된 사진은 신분증과 같은 기준으로 보관·파기됩니다.
+      </p>
+      <div class="face-row">
+        <div class="face-shot">
+          <canvas id="faceCanvas" hidden></canvas>
+          <p class="face-empty" id="faceEmpty">촬영 전</p>
+        </div>
+        <div class="face-actions">
+          <button type="button" class="btn btn-secondary" id="faceShotBtn">얼굴 확인용 사진 촬영</button>
+          <button type="button" class="btn btn-gray" id="faceRetakeBtn" hidden>다시 촬영</button>
+          <label class="consent-line" id="faceConsentLine" hidden>
+            <input type="checkbox" id="faceConsent"> 위 안내를 확인했으며 제출에 동의합니다
+          </label>
+          <button type="button" class="btn btn-primary" id="faceSubmitBtn" hidden disabled>이 사진 제출</button>
+          <p class="check-msg" id="faceMessage" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 입장 게이트 ================= -->
+  <!-- ============ STEP 3. 화면 공유 확인 (LXP-018) ============ -->
+  <section class="check-card" id="shareCard" data-state="idle">
+    <div class="card-head">
+      <div>
+        <span class="step-no">STEP 3</span>
+        <h2 class="card-title">화면 공유 확인</h2>
+        <p class="card-desc">시험 중 화면을 공유할 수 있는지 미리 확인합니다.
+          공유 대상은 훈련생이 직접 선택합니다.</p>
+      </div>
+      <span class="state-badge" id="shareBadge">미확인</span>
+    </div>
+
+    <div class="card-body">
+      <div class="cam-grid">
+        <div class="cam-info">
+          <dl class="info-list">
+            <dt>공유 상태</dt><dd id="shareState">—</dd>
+            <dt>공유 대상</dt><dd id="shareTarget">—</dd>
+            <dt>해상도</dt><dd id="shareRes">—</dd>
+          </dl>
+        </div>
+        <div class="cam-preview">
+          <video id="sharePreview" playsinline muted hidden></video>
+          <p class="preview-empty" id="shareEmpty">화면 공유를 시작하면 여기에 미리보기가 보입니다</p>
+        </div>
+      </div>
+      <div class="cam-actions">
+        <button type="button" class="btn btn-primary" id="shareStartBtn">화면 공유 시작</button>
+        <button type="button" class="btn btn-gray" id="shareStopBtn" disabled>공유 중지</button>
+      </div>
+      <p class="check-msg" id="shareMessage" aria-live="polite"></p>
+      <p class="hint-text">이 단계는 <b>브라우저에서만</b> 확인합니다. 서버가 공유 화면을 받거나
+        검증하지는 않으므로, 실제 강제는 실시간 송출 연동이 필요합니다.</p>
+    </div>
+  </section>
+
+  <!-- ============ STEP 4. 모니터 구성 확인 (LXP-019) ============ -->
+  <section class="check-card" id="monitorCard" data-state="idle">
+    <div class="card-head">
+      <div>
+        <span class="step-no">STEP 4</span>
+        <h2 class="card-title">모니터 구성 확인</h2>
+        <p class="card-desc">확장 디스플레이(듀얼 모니터) 사용 여부를 확인합니다.</p>
+      </div>
+      <span class="state-badge" id="monitorBadge">미확인</span>
+    </div>
+
+    <div class="card-body">
+      <dl class="info-list">
+        <dt>확장 디스플레이</dt><dd id="monitorExtended">—</dd>
+        <dt>확인 방법</dt><dd id="monitorSource">—</dd>
+      </dl>
+      <div class="cam-actions">
+        <button type="button" class="btn btn-primary" id="monitorCheckBtn">모니터 확인</button>
+      </div>
+      <p class="check-msg" id="monitorMessage" aria-live="polite"></p>
+      <p class="hint-text">브라우저가 <code>screen.isExtended</code>를 지원하지 않으면
+        <b>확인 불가</b>로 표시합니다. 확인 불가를 통과로 처리하지 않습니다.</p>
+    </div>
+  </section>
+
+  <!-- 프론트 확인 단계 한계 고지 (한 번만) -->
+  <p class="hint-text" id="precheckLimits">
+    화면 공유와 모니터 구성은 <b>프론트 확인 단계</b>입니다. 서버에는 이 두 항목을 검증하는 API가
+    없으므로 서버 강제는 연동이 필요합니다. 신분 확인 승인과 웹캠 점검 기록만 서버가 확인합니다.
+  </p>
+
+  <!-- 안내 문서 링크 (LXP-148 / 149 / 143 / 145) -->
+  <section class="check-card" id="guideCard">
+    <div class="card-head">
+      <div>
+        <h2 class="card-title">안내 문서</h2>
+        <p class="card-desc">인증 전에 준비할 사항과 매뉴얼입니다. 새 창에서 열립니다.</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="cam-actions">
+        <a class="btn btn-gray" id="noticeLink" target="_blank" rel="noopener"
+           href="/static/manuals/identity-program-notice.html">인증 환경 사전 고지</a>
+        <a class="btn btn-gray" id="otpManualLink" target="_blank" rel="noopener"
+           href="/static/manuals/otp-auth-manual.html">OTP 인증 매뉴얼</a>
+        <a class="btn btn-gray" id="onboardingLink" target="_blank" rel="noopener"
+           href="/static/manuals/identity-onboarding.html">본인인증 안내</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="gate-box">
+    <div>
+      <p class="gate-title">시험장 입장</p>
+      <p class="gate-msg" id="gateMsg">신분 확인 승인과 웹캠 연결을 모두 마쳐야 입장할 수 있습니다.</p>
+    </div>
+    <form id="startForm" method="post" th:action="@{'/trainee/exam/' + ${examId} + '/start'}">
+      <input type="hidden" name="precheckSessionId" th:value="${sessionId}">
+      <button type="submit" class="btn btn-secondary" id="enterBtn" disabled>시험 시작</button>
+    </form>
+  </section>
+
+  <p class="limit-note">
+    이번 단계는 <b>장치 연결 확인</b>입니다. 실시간 영상 송출·녹화·자동 얼굴 대조는 포함되어 있지 않습니다.
+    웹캠 점검 결과는 <b>브라우저가 수행한 확인</b>이고 서버는 그 <b>통과 시각만</b> 기록합니다 —
+    서버가 실제 영상 프레임을 검증하거나 시험 도중 카메라 화면을 보고 있지는 않습니다.
+  </p>
+</main>
+
+<div id="precheckConfig" th:data-session-id="${sessionId}" th:data-exam-id="${examId}" hidden></div>
+<script src="/static/vendor/qrcode/qrcode.js"></script>
+<script src="/static/js/exam-precheck.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+/* 모바일 신분증 제출 — 390px 단일 흐름. GNB 가 없는 것이 의도된 구조다. */
+
+.mobile-identity-page {
+    background: var(--gray-50, #FAFAFA);
+    -webkit-text-size-adjust: 100%;
+}
+
+.mobile-identity-page .m-header {
+    background: var(--color-deep-primary, #131D41); color: #fff;
+    padding: 16px 18px calc(14px + env(safe-area-inset-bottom, 0px));
+}
+.mobile-identity-page .m-brand { font-size: 17px; font-weight: 800; letter-spacing: .04em; }
+.mobile-identity-page .m-brand span { font-weight: 400; opacity: .85; }
+.mobile-identity-page .m-sub { font-size: 12px; opacity: .8; margin-top: 4px; }
+
+.mobile-identity-page .m-main { padding: 14px; max-width: 520px; margin: 0 auto; }
+
+.mobile-identity-page .m-card {
+    background: #fff; border: 1px solid var(--color-line-gray, #E5E5E5);
+    border-radius: 12px; padding: 16px; margin-bottom: 12px;
+}
+.mobile-identity-page .m-card-head {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px;
+}
+.mobile-identity-page .m-title { font-size: 17px; font-weight: 700; color: var(--gray-900, #1a1a1a); }
+.mobile-identity-page .m-who { font-size: 13px; color: var(--gray-600, #666); margin-top: 3px; }
+
+.mobile-identity-page .state-badge {
+    display: inline-block; padding: 4px 12px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; white-space: nowrap;
+    background: var(--gray-100, #F2F2F2); color: var(--gray-700, #4d4d4d);
+}
+.mobile-identity-page .state-badge.ok   { background: var(--color-success-bg, #E8F5E9); color: var(--color-success, #2E7D32); }
+.mobile-identity-page .state-badge.warn { background: var(--color-warning-bg, #FFF3E0); color: var(--color-warning, #B45309); }
+.mobile-identity-page .state-badge.risk { background: var(--color-danger-bg, #FDECEA); color: var(--color-danger, #C62828); }
+
+.mobile-identity-page .m-guide { padding-left: 18px; font-size: 13px; color: var(--gray-700, #4d4d4d); line-height: 2; margin-bottom: 12px; }
+.mobile-identity-page .m-hint { font-size: 12px; color: var(--gray-600, #666); margin-top: 8px; line-height: 1.7; }
+
+.mobile-identity-page .preview {
+    aspect-ratio: 3 / 2; border: 1px dashed var(--gray-300, #CCC); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+    background: var(--gray-100, #F2F2F2); margin-bottom: 10px;
+}
+.mobile-identity-page .preview img { width: 100%; height: 100%; object-fit: contain; }
+.mobile-identity-page .preview-empty { font-size: 13px; color: var(--gray-500, #808080); }
+
+.mobile-identity-page .err-box {
+    background: var(--color-danger-bg, #FDECEA); color: var(--color-danger, #C62828);
+    border-radius: 8px; padding: 10px 12px; font-size: 13px; margin-bottom: 10px; line-height: 1.6;
+}
+.mobile-identity-page .reject-box {
+    background: var(--color-danger-bg, #FDECEA); color: var(--color-danger, #C62828);
+    border-radius: 8px; padding: 10px 12px; font-size: 13px; margin-bottom: 12px; line-height: 1.6;
+}
+
+.mobile-identity-page .m-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.mobile-identity-page .m-actions .btn { flex: 1; min-width: 120px; min-height: 46px; display: flex; align-items: center; justify-content: center; }
+.mobile-identity-page .file-btn { cursor: pointer; }
+.mobile-identity-page .file-btn.is-disabled { opacity: .5; pointer-events: none; }
+
+.mobile-identity-page .consent-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--gray-900, #1a1a1a); }
+.mobile-identity-page .consent-list {
+    display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 12px;
+    background: var(--gray-50, #FAFAFA); border-radius: 8px; padding: 12px; line-height: 1.6;
+}
+.mobile-identity-page .consent-list dt { color: var(--gray-600, #666); white-space: nowrap; }
+.mobile-identity-page .consent-list dd { color: var(--gray-800, #333); }
+.mobile-identity-page .consent-check {
+    display: flex; align-items: center; gap: 8px; font-size: 13px;
+    color: var(--gray-800, #333); margin: 14px 0; line-height: 1.5;
+}
+.mobile-identity-page .m-submit { width: 100%; min-height: 50px; font-size: 15px; }
+
+.mobile-identity-page .progress { height: 6px; background: var(--gray-200, #E5E5E5); border-radius: 999px; margin-top: 10px; overflow: hidden; }
+.mobile-identity-page .progress .bar { height: 100%; width: 0; background: var(--color-primary, #0069FF); transition: width .2s; }
+.mobile-identity-page .result-box { font-size: 13px; margin-top: 10px; line-height: 1.7; min-height: 18px; }
+.mobile-identity-page .result-box.ok  { color: var(--color-success, #2E7D32); }
+.mobile-identity-page .result-box.err { color: var(--color-danger, #C62828); }
+
+.mobile-identity-page .m-foot { font-size: 12px; color: var(--gray-600, #666); line-height: 1.8; padding: 4px 4px 20px; }
+
+/* 토큰이 막혔을 때 */
+.mobile-identity-page .m-card.blocked { text-align: center; padding: 32px 20px; }
+.mobile-identity-page .blocked-icon {
+    width: 44px; height: 44px; line-height: 44px; border-radius: 50%; margin: 0 auto 14px;
+    background: var(--color-danger-bg, #FDECEA); color: var(--color-danger, #C62828);
+    font-size: 24px; font-weight: 700;
+}
+.mobile-identity-page .blocked-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--gray-900, #1a1a1a); }
+.mobile-identity-page .blocked-message { font-size: 13px; color: var(--gray-700, #4d4d4d); line-height: 1.8; }

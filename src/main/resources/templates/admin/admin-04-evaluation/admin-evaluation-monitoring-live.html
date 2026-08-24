@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/static/css/common-style.css">
     <link rel="stylesheet" href="/static/css/sidebar-style.css">
     <link rel="stylesheet" href="/static/css/btn-style.css">
+    <link rel="stylesheet" href="/static/css/proctor-enhancements.css">
     
     <script src="/static/js/sidebar-function.js" defer></script>
     <script src="/static/js/common-funtion.js" defer></script>
@@ -275,7 +276,7 @@
                 <button type="button" class="student-btn all active" onclick="filterStudent(null, this)"><span>전체보기</span></button>
                 <button type="button" class="student-btn" th:each="row : ${monitor.rows}"
                         th:classappend="${row.live} ? '' : 'inactive'"
-                        th:attr="onclick=|filterStudent('${row.attemptId}', this)|"
+                        th:attr="onclick=|filterStudent('${row.attemptId}', this)|,data-attempt-id=${row.attemptId}"
                         th:title="${row.statusLabel}">
                     <span class="status-dot" th:style="${row.live} ? 'background:#00ff00' : 'background:var(--gray-400);box-shadow:none'"></span>
                     <span th:text="${row.traineeName}">응시자</span>
@@ -296,6 +297,9 @@
             <button type="button" class="btn btn-secondary" onclick="location.reload()">새로고침</button>
             <a th:href="${monitor.listUrl}" class="btn btn-secondary">목록</a>
         </div>
+
+        <!-- 검색·필터·위험도 요약 (LXP-020). JS 가 채운다. -->
+        <div id="proctorToolsMount"></div>
 
         <!--
           카메라 그리드.
@@ -377,6 +381,9 @@
                 </tr>
             </tbody>
         </table>
+
+        <!-- 실행환경 패널 (LXP-013). 새 백엔드 라우트를 만들지 않고 이 화면 안에 둔다. -->
+        <div id="runtimePanelMount"></div>
     </main>
 
     <!-- 입·퇴장 / 이상행위 로그 모달 -->
@@ -398,6 +405,11 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         const EVENTS_PREFIX = /*[[${monitor.attemptUrlPrefix}]]*/ '';
+
+        /* 확장 스크립트가 쓰는 계약. 서버가 준 행을 그대로 넘긴다 —
+           화면에서 값을 만들어내지 않기 위해서다. */
+        window._proctorRows = /*[[${monitor.rows}]]*/ [];
+        window._proctorUrls = { attemptPrefix: EVENTS_PREFIX };
         /*]]>*/
 
         // 남은 시간은 서버가 expiresAt 으로 계산해 내려준 값에서 출발한다.
@@ -458,5 +470,9 @@
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEvents(); });
     </script>
+    <!-- 감독 화면 확장 (LXP-003 / 005 / 013 / 020).
+         기존 showEvents·filterStudent 정의 뒤에 로드해 그 함수를 재사용한다. -->
+    <script src="/static/js/proctor-enhancements.js"></script>
+
 </body>
 </html>

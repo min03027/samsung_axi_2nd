@@ -1,0 +1,390 @@
+/* =============================================================
+   본인인증 안내 문서 공용 스타일 (LXP-143 / 145 / 148 / 149)
+
+   이 문서들은 Thymeleaf fragment 에 의존하지 않는 <b>독립 정적 HTML</b> 이다.
+   따라서 common-style.css 를 불러오지 않고, 브랜드 토큰만 여기서 다시 선언한다.
+   값은 common-style.css 의 :root 와 같은 것을 쓴다 — 새 팔레트를 만들지 않는다.
+
+   외부 CDN·원격 폰트·원격 이미지를 쓰지 않는다. 오프라인에서 열려야 한다.
+   ============================================================= */
+
+:root {
+  --color-primary: #0069FF;
+  --color-primary-hover: #0056CC;
+  --color-primary-light: #E6F0FF;
+  --color-light-primary: #F0F7FF;
+  --color-deep-primary: #131D41;
+
+  --color-success: #2E7D32;
+  --color-success-bg: #E8F5E9;
+  --color-warning: #B45309;
+  --color-warning-bg: #FFF3E0;
+  --color-danger: #C62828;
+  --color-danger-bg: #FDECEA;
+
+  --gray-50: #FAFAFA;
+  --gray-100: #F2F2F2;
+  --gray-200: #E6E6E6;
+  --gray-300: #D6D6D6;
+  --gray-500: #767676;
+  --gray-700: #4A4A4A;
+  --gray-900: #222222;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  /* Pretendard 가 설치돼 있으면 쓰고, 없으면 시스템 폰트로 떨어진다.
+     원격 폰트를 불러오지 않으므로 오프라인에서도 깨지지 않는다. */
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+               system-ui, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--gray-900);
+  background: var(--gray-100);
+}
+
+/* ---------- 셸 ---------- */
+
+.guide-header {
+  background: var(--color-deep-primary);
+  color: #fff;
+  padding: 22px 20px;
+}
+
+.guide-header__inner,
+.guide-main,
+.guide-footer__inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.guide-header .eyebrow {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: #b9c6e8;
+}
+
+.guide-header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.guide-header .meta {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: #cfd8ee;
+}
+
+.guide-main {
+  padding: 24px 20px 48px;
+}
+
+.guide-footer {
+  border-top: 1px solid var(--gray-200);
+  background: #fff;
+  padding: 18px 20px 40px;
+}
+
+.guide-footer__inner {
+  font-size: 12px;
+  color: var(--gray-500);
+}
+
+/* ---------- 카드 ---------- */
+
+.card {
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin: 0 0 16px;
+}
+
+.card > h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--gray-900);
+}
+
+.card > h3 {
+  margin: 18px 0 8px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--gray-900);
+}
+
+.card p { margin: 0 0 10px; }
+.card p:last-child { margin-bottom: 0; }
+
+.card ul, .card ol {
+  margin: 0 0 10px;
+  padding-left: 22px;
+}
+
+.card li { margin: 0 0 6px; }
+
+/* ---------- 고지 박스 ---------- */
+
+.notice {
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.7;
+  border: 1px solid;
+}
+
+.notice strong { font-weight: 800; }
+
+.notice--warn {
+  border-color: var(--color-warning);
+  background: var(--color-warning-bg);
+  color: #7a3c06;
+}
+
+.notice--info {
+  border-color: var(--color-primary);
+  background: var(--color-light-primary);
+  color: #0b3f8f;
+}
+
+.notice--danger {
+  border-color: var(--color-danger);
+  background: var(--color-danger-bg);
+  color: #8d1f1f;
+}
+
+/* 상태를 색으로만 전하지 않는다 — 접두 기호를 붙인다. */
+.notice--warn::before  { content: "! "; font-weight: 900; }
+.notice--info::before  { content: "i "; font-weight: 900; font-style: italic; }
+.notice--danger::before{ content: "× "; font-weight: 900; }
+
+/* ---------- 표 ---------- */
+
+.table-wrap {
+  /* 좁은 화면에서 본문 대신 표만 스크롤되게 한다 — 페이지 가로 넘침 금지. */
+  overflow-x: auto;
+  margin: 0 0 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 460px;
+}
+
+th, td {
+  border: 1px solid var(--gray-200);
+  padding: 9px 11px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: var(--gray-50);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ---------- 배지 ---------- */
+
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.badge--now {
+  border-color: var(--color-success);
+  background: var(--color-success-bg);
+  color: #1c5e20;
+}
+
+.badge--later {
+  border-color: var(--gray-300);
+  background: var(--gray-100);
+  color: var(--gray-700);
+}
+
+/* ---------- 단계 목록 ---------- */
+
+.steps {
+  counter-reset: step;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.steps > li {
+  counter-increment: step;
+  position: relative;
+  padding: 0 0 0 40px;
+  margin: 0 0 16px;
+}
+
+.steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+
+.steps > li > strong {
+  display: block;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+
+/* ---------- 버튼 ---------- */
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;              /* 터치 영역 */
+  padding: 0 18px;
+  border-radius: 8px;
+  border: 1px solid var(--gray-300);
+  background: #fff;
+  color: var(--gray-900);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:hover { background: var(--gray-50); }
+
+.btn--primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ---------- 목차 ---------- */
+
+.toc {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 0 0 20px;
+  font-size: 14px;
+}
+
+.toc ol { margin: 6px 0 0; }
+.toc a { color: var(--color-primary); }
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .92em;
+  background: var(--gray-100);
+  border: 1px solid var(--gray-200);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* ---------- 반응형 ---------- */
+
+@media (max-width: 480px) {
+  .guide-header h1 { font-size: 20px; }
+  .card { padding: 16px; }
+  .guide-main { padding: 16px 14px 36px; }
+}
+
+/* ---------- 인쇄 / PDF 저장 ---------- */
+
+@media print {
+  body {
+    background: #fff;
+    font-size: 11.5pt;
+    line-height: 1.6;
+  }
+
+  /* 화면 전용 요소는 인쇄하지 않는다. */
+  .actions,
+  .no-print { display: none !important; }
+
+  .guide-header {
+    background: #fff;
+    color: #000;
+    border-bottom: 2px solid #000;
+    padding: 0 0 10pt;
+  }
+
+  .guide-header .eyebrow,
+  .guide-header .meta { color: #444; }
+
+  .guide-main { padding: 12pt 0; }
+
+  .card {
+    border: 1px solid #999;
+    border-radius: 0;
+    padding: 10pt 12pt;
+    margin: 0 0 10pt;
+    /* 카드가 페이지 경계에서 잘리지 않게 한다. */
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .card > h2 { break-after: avoid; page-break-after: avoid; }
+
+  .notice {
+    border: 1px solid #666;
+    background: #fff;
+    color: #000;
+    break-inside: avoid;
+  }
+
+  table { min-width: 0; }
+  .table-wrap { overflow: visible; }
+  tr, th, td { break-inside: avoid; page-break-inside: avoid; }
+
+  a { color: #000; text-decoration: underline; }
+  /* 링크 주소를 인쇄물에 남겨 오프라인에서도 확인할 수 있게 한다. */
+  a[href^="http"]::after,
+  a[href^="/"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; }
+
+  .guide-footer { border-top: 1px solid #999; padding: 8pt 0 0; }
+}

@@ -1,0 +1,492 @@
+/* =============================================================
+   실시간 감독 화면 확장 (LXP-003 / 005 / 013 / 020)
+
+   기존 admin-evaluation-monitoring-live.html 의 .proctor-summary, .video-grid,
+   .proctor-table, .event-modal 문법을 <b>유지</b>하고 그 위에 얹는다.
+   공용 common-style.css / sidebar-style.css 를 수정하지 않는다.
+   ============================================================= */
+
+/* ---------- 도구 막대 ---------- */
+
+.proctor-tools {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 0 14px;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid var(--gray-200, #E6E6E6);
+  border-radius: 10px;
+}
+
+.proctor-tools .field {
+  display: grid;
+  gap: 4px;
+}
+
+.proctor-tools label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gray-700, #4A4A4A);
+}
+
+.proctor-tools input[type="search"],
+.proctor-tools select {
+  min-height: 38px;
+  padding: 6px 10px;
+  border: 1px solid var(--gray-300, #D6D6D6);
+  border-radius: 6px;
+  background: #fff;
+  font-size: 13px;
+}
+
+.proctor-tools input[type="search"] { min-width: 200px; }
+
+.proctor-tools .spacer { flex: 1 1 auto; }
+
+.proctor-tools .result-count {
+  font-size: 12px;
+  color: var(--gray-500, #767676);
+  padding-bottom: 9px;
+}
+
+/* ---------- 상태 요약 ---------- */
+
+.risk-summary {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0 0 14px;
+}
+
+.risk-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--gray-300, #D6D6D6);
+  background: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gray-700, #4A4A4A);
+  cursor: pointer;
+  min-height: 38px;
+}
+
+.risk-chip b {
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.risk-chip[aria-pressed="true"] {
+  border-color: var(--color-primary, #0069FF);
+  background: var(--color-primary-light, #E6F0FF);
+  color: #0b3f8f;
+}
+
+.risk-chip:focus-visible {
+  outline: 2px solid var(--color-primary, #0069FF);
+  outline-offset: 2px;
+}
+
+/* 색 외에 기호로도 구분한다. */
+.risk-chip[data-risk="ok"]::before       { content: "✓"; }
+.risk-chip[data-risk="warn"]::before     { content: "!"; }
+.risk-chip[data-risk="critical"]::before { content: "▲"; }
+.risk-chip[data-risk="offline"]::before  { content: "⃠"; }
+.risk-chip[data-risk="all"]::before      { content: "≡"; }
+
+.risk-chip[data-risk="warn"]     { border-color: var(--color-warning, #B45309); }
+.risk-chip[data-risk="critical"] { border-color: var(--color-danger, #C62828); }
+
+/* ---------- 3면 감독 타일 ---------- */
+
+.video-item[hidden] { display: none !important; }
+
+/* 기존 .video-placeholder 를 3분할로 감싼다. */
+.tri-sources {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0 0 8px;
+}
+
+.tri-src {
+  border: 1px solid var(--gray-300, #D6D6D6);
+  border-radius: 8px;
+  background: var(--gray-50, #FAFAFA);
+  padding: 8px 6px;
+  min-height: 86px;
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  text-align: center;
+}
+
+.tri-src__name {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--gray-700, #4A4A4A);
+}
+
+.tri-src__icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.tri-src__state {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 999px;
+  border: 1px solid;
+  justify-self: center;
+  white-space: nowrap;
+}
+
+/* 상태를 색과 텍스트로 함께 전달한다. */
+.tri-src[data-state="connected"] .tri-src__state {
+  border-color: var(--color-success, #2E7D32);
+  background: var(--color-success-bg, #E8F5E9);
+  color: #1c5e20;
+}
+
+.tri-src[data-state="connecting"] .tri-src__state {
+  border-color: var(--color-warning, #B45309);
+  background: var(--color-warning-bg, #FFF3E0);
+  color: #7a3c06;
+}
+
+.tri-src[data-state="offline"] .tri-src__state,
+.tri-src[data-state="denied"] .tri-src__state {
+  border-color: var(--color-danger, #C62828);
+  background: var(--color-danger-bg, #FDECEA);
+  color: #8d1f1f;
+}
+
+.tri-src[data-state="unsupported"] .tri-src__state {
+  border-color: var(--gray-300, #D6D6D6);
+  background: var(--gray-100, #F2F2F2);
+  color: var(--gray-700, #4A4A4A);
+}
+
+.tri-src__note {
+  font-size: 9px;
+  line-height: 1.4;
+  color: var(--gray-500, #767676);
+}
+
+/* 확대 */
+.video-item[data-zoom="true"] {
+  grid-column: 1 / -1;
+}
+
+.video-item[data-zoom="true"] .tri-src {
+  min-height: 200px;
+}
+
+.tile-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.tile-actions .btn { font-size: 11px; padding: 5px 10px; min-height: 32px; }
+
+/* ---------- 경고 모달 ---------- */
+
+.warn-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .45);
+  display: none;
+  place-items: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.warn-modal[data-open="true"] { display: grid; }
+
+.warn-modal__box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 22px 24px;
+  width: min(520px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.warn-modal__box h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.warn-modal__target {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--gray-700, #4A4A4A);
+}
+
+.warn-modal__box label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 0 0 5px;
+}
+
+.warn-modal__box textarea {
+  width: 100%;
+  min-height: 88px;
+  padding: 10px;
+  border: 1px solid var(--gray-300, #D6D6D6);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  resize: vertical;
+}
+
+.warn-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.warn-modal__box .btn { min-height: 44px; }
+
+.warn-modal__msg {
+  margin: 10px 0 0;
+  font-size: 12px;
+  min-height: 18px;
+}
+
+.warn-modal__msg[data-tone="err"] { color: var(--color-danger, #C62828); font-weight: 700; }
+.warn-modal__msg[data-tone="ok"]  { color: var(--color-success, #2E7D32); font-weight: 700; }
+
+/* ---------- 토스트 ---------- */
+
+.proctor-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 10001;
+  display: grid;
+  gap: 8px;
+  max-width: 340px;
+}
+
+.proctor-toast > div {
+  padding: 11px 15px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .2);
+}
+
+.proctor-toast > div[data-tone="ok"]  { background: #1c5e20; }
+.proctor-toast > div[data-tone="err"] { background: #8d1f1f; }
+
+/* ---------- LXP-013 실행환경 패널 ---------- */
+
+.runtime-panel {
+  margin: 18px 0 0;
+  background: #fff;
+  border: 1px solid var(--gray-200, #E6E6E6);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.runtime-panel__tabs {
+  display: flex;
+  border-bottom: 1px solid var(--gray-200, #E6E6E6);
+  background: var(--gray-50, #FAFAFA);
+}
+
+.runtime-panel__tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  padding: 12px 18px;
+  min-height: 46px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--gray-500, #767676);
+  cursor: pointer;
+}
+
+.runtime-panel__tabs button[aria-selected="true"] {
+  color: var(--color-primary, #0069FF);
+  border-bottom-color: var(--color-primary, #0069FF);
+  background: #fff;
+}
+
+.runtime-panel__tabs button:focus-visible {
+  outline: 2px solid var(--color-primary, #0069FF);
+  outline-offset: -2px;
+}
+
+.runtime-panel__body { padding: 18px 20px 22px; }
+.runtime-panel__body[hidden] { display: none; }
+
+/* 데모 고지 — 항상 보인다. */
+.demo-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+  padding: 11px 14px;
+  border: 1px solid var(--color-warning, #B45309);
+  background: var(--color-warning-bg, #FFF3E0);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #7a3c06;
+}
+
+.demo-banner::before { content: "!"; font-weight: 900; }
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 0 0 16px;
+}
+
+.kpi {
+  border: 1px solid var(--gray-200, #E6E6E6);
+  border-radius: 10px;
+  padding: 13px 15px;
+  background: var(--gray-50, #FAFAFA);
+}
+
+.kpi__label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray-500, #767676);
+  margin: 0 0 5px;
+}
+
+.kpi__value {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--gray-900, #222);
+  margin: 0;
+}
+
+.kpi__value small { font-size: 12px; font-weight: 700; color: var(--gray-500, #767676); }
+
+.kpi[data-tone="warn"] { border-color: var(--color-warning, #B45309); background: var(--color-warning-bg, #FFF3E0); }
+.kpi[data-tone="risk"] { border-color: var(--color-danger, #C62828); background: var(--color-danger-bg, #FDECEA); }
+
+.scenario-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0 0 14px;
+}
+
+.scenario-bar .btn { min-height: 38px; }
+.scenario-bar .btn[aria-pressed="true"] {
+  background: var(--color-primary, #0069FF);
+  border-color: var(--color-primary, #0069FF);
+  color: #fff;
+}
+
+/* 증설 3단계 */
+.provision-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.provision-step {
+  border: 1px solid var(--gray-300, #D6D6D6);
+  border-radius: 8px;
+  padding: 11px 13px;
+  background: #fff;
+}
+
+.provision-step__no {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--gray-500, #767676);
+}
+
+.provision-step__name {
+  font-size: 13px;
+  font-weight: 800;
+  margin: 3px 0 4px;
+}
+
+.provision-step__state { font-size: 11px; font-weight: 700; }
+
+.provision-step[data-state="done"]    { border-color: var(--color-success, #2E7D32); background: var(--color-success-bg, #E8F5E9); }
+.provision-step[data-state="active"]  { border-color: var(--color-primary, #0069FF); background: var(--color-primary-light, #E6F0FF); }
+.provision-step[data-state="failed"]  { border-color: var(--color-danger, #C62828); background: var(--color-danger-bg, #FDECEA); }
+
+.provision-step[data-state="done"]::after   { content: " ✓"; }
+.provision-step[data-state="failed"]::after { content: " ×"; }
+
+.runtime-table th, .runtime-table td { font-size: 12px; }
+
+.node-state {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  border: 1px solid;
+}
+
+.node-state[data-s="healthy"]  { border-color: var(--color-success, #2E7D32); background: var(--color-success-bg, #E8F5E9); color: #1c5e20; }
+.node-state[data-s="busy"]     { border-color: var(--color-warning, #B45309); background: var(--color-warning-bg, #FFF3E0); color: #7a3c06; }
+.node-state[data-s="down"]     { border-color: var(--color-danger, #C62828); background: var(--color-danger-bg, #FDECEA); color: #8d1f1f; }
+.node-state[data-s="starting"] { border-color: var(--color-primary, #0069FF); background: var(--color-primary-light, #E6F0FF); color: #0b3f8f; }
+
+/* ---------- 반응형 ---------- */
+
+@media (max-width: 1024px) {
+  .provision-steps { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .tri-sources { grid-template-columns: 1fr; }
+  .proctor-tools { flex-direction: column; align-items: stretch; }
+  .proctor-tools input[type="search"] { min-width: 0; }
+  .proctor-toast { left: 14px; right: 14px; max-width: none; }
+}
+
+/* ---------- 프론트 상태 미리보기 (데모) — P2-1 ----------
+   실제 타일과 표시 방식을 공유하되(같은 .tri-src), 데모임을 시각적으로도 분리한다. */
+
+.state-demo {
+  margin: 14px 0 0;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px dashed var(--color-warning, #B45309);
+  border-radius: 10px;
+}
+
+.state-demo__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+/* 데모 셀은 점선 테두리로 실제 타일과 구분한다. */
+.state-demo .tri-src[data-demo="true"] {
+  border-style: dashed;
+}
+
+@media (max-width: 768px) {
+  .state-demo__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

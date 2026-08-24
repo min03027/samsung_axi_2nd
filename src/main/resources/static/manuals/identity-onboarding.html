@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>본인인증 안내 — 삼성 아카데미 LXP</title>
+  <link rel="stylesheet" href="/static/css/auth-guide.css">
+</head>
+<body>
+
+<header class="guide-header">
+  <div class="guide-header__inner">
+    <p class="eyebrow">LXP-143 · LXP-145 · 접속 관리와 최초 로그인 안내</p>
+    <h1>본인인증 안내</h1>
+    <p class="meta">문서 버전 1.0 · 기준일 2026-08-24 · 대상: 훈련생, 강사, 운영 관리자</p>
+  </div>
+</header>
+
+<main class="guide-main">
+
+  <div class="notice notice--warn">
+    <strong>이 화면은 안내 문서입니다. 여기서 인증이 완료되지 않습니다.</strong>
+    최초 로그인 시 본인인증을 <em>서버가 강제하는 기능</em>과 외부 인증 식별값 저장은
+    아직 구현되지 않았습니다. 이 문서에는 「인증 완료」 버튼이 없으며,
+    브라우저에 완료 표시를 남겨 인증한 것처럼 보이게 하지도 않습니다.
+  </div>
+
+  <nav class="toc" aria-label="목차">
+    <strong>목차</strong>
+    <ol>
+      <li><a href="#why">1. 왜 본인인증을 하는가</a></li>
+      <li><a href="#when">2. 언제 인증하는가</a></li>
+      <li><a href="#steps">3. 예상 단계</a></li>
+      <li><a href="#collect">4. 수집하는 식별값</a></li>
+      <li><a href="#roles">5. 역할별 접근 범위</a></li>
+      <li><a href="#records">6. 세 가지 기록의 차이</a></li>
+      <li><a href="#fail">7. 실패했을 때</a></li>
+      <li><a href="#gap">8. 아직 연동되지 않은 부분</a></li>
+      <li><a href="#contact">9. 문의</a></li>
+    </ol>
+  </nav>
+
+  <!-- ============================================ -->
+  <section class="card" id="why">
+    <h2>1. 왜 본인인증을 하는가</h2>
+    <p>
+      국비 지원 훈련 과정은 <strong>수강생 본인이 직접 학습하고 응시했다는 사실</strong>을
+      증빙해야 합니다. 대리 수강·대리 응시가 확인되면 훈련 이수와 지원금에 문제가 생깁니다.
+    </p>
+    <p>
+      그래서 LXP는 두 지점에서 본인을 확인합니다.
+    </p>
+    <ul>
+      <li><strong>로그인</strong> — 계정이 본인 것인지 (아이디·비밀번호)</li>
+      <li><strong>시험 입장</strong> — 지금 화면 앞에 앉은 사람이 그 계정의 주인인지 (신분증·얼굴)</li>
+    </ul>
+    <p>
+      로그인만으로는 두 번째를 알 수 없습니다. 계정을 빌려주면 로그인은 통과하기 때문입니다.
+      그래서 감독이 필요한 시험에서는 신분증과 얼굴을 따로 확인합니다.
+    </p>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="when">
+    <h2>2. 언제 인증하는가</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">시점</th>
+            <th scope="col">확인 방법</th>
+            <th scope="col">현재 상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>최초 로그인</td>
+            <td>휴대폰 본인인증 등 외부 수단</td>
+            <td><span class="badge badge--later">서버 강제 미구현</span></td>
+          </tr>
+          <tr>
+            <td>일반 시험 입장</td>
+            <td>비밀번호 재확인 (최근 30분 내 인증 시 면제)</td>
+            <td><span class="badge badge--now">운영 중</span></td>
+          </tr>
+          <tr>
+            <td>감독 시험 입장</td>
+            <td>QR 신분증 + 얼굴 사진 + 운영진 승인</td>
+            <td><span class="badge badge--now">운영 중</span></td>
+          </tr>
+          <tr>
+            <td>시험 중 재접속</td>
+            <td>최초 입장 때 확인한 기록을 그대로 인정</td>
+            <td><span class="badge badge--now">운영 중</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notice notice--info">
+      시험 도중 네트워크가 끊겨 다시 접속하면 <strong>신분 확인을 다시 하지 않습니다.</strong>
+      최초 입장 때의 확인 시각이 그대로 보존되며, 재접속 사실은 별도 기록으로 남습니다.
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="steps">
+    <h2>3. 예상 단계</h2>
+    <p>최초 로그인 본인인증이 연동되면 아래 순서가 될 예정입니다.</p>
+
+    <ol class="steps">
+      <li>
+        <strong>로그인</strong>
+        발급받은 아이디와 비밀번호로 로그인합니다. <span class="badge badge--now">현재 동작</span>
+      </li>
+      <li>
+        <strong>본인인증 안내 확인</strong>
+        수집 항목과 목적을 확인합니다. <span class="badge badge--now">이 문서</span>
+      </li>
+      <li>
+        <strong>외부 본인인증 수행</strong>
+        휴대폰 본인인증 또는 OTP로 실명을 확인합니다.
+        <span class="badge badge--later">사업자 선정 후</span>
+      </li>
+      <li>
+        <strong>인증 결과 저장</strong>
+        인증 기관이 돌려준 식별값을 계정에 연결합니다.
+        <span class="badge badge--later">서버 연동 필요</span>
+      </li>
+      <li>
+        <strong>학습 시작</strong>
+        인증을 마친 계정으로 과정을 수강합니다.
+      </li>
+    </ol>
+
+    <div class="notice notice--warn">
+      3·4단계가 없으므로 <strong>현재는 로그인 직후 바로 학습을 시작할 수 있습니다.</strong>
+      이 문서는 절차를 미리 알려 주는 안내이며, 인증을 대신하지 않습니다.
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="collect">
+    <h2>4. 수집하는 식별값</h2>
+
+    <h3>지금 수집하는 것</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">항목</th>
+            <th scope="col">언제</th>
+            <th scope="col">목적</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>신분증 사진 1장</td>
+            <td>감독 시험 입장 전</td>
+            <td>응시자 본인 확인</td>
+          </tr>
+          <tr>
+            <td>얼굴 사진 1장</td>
+            <td>감독 시험 입장 직전</td>
+            <td>신분증과 대조</td>
+          </tr>
+          <tr>
+            <td>접속 IP·시각</td>
+            <td>로그인·제출·입장 시</td>
+            <td>접속 이력 관리</td>
+          </tr>
+          <tr>
+            <td>본인확인 시각·수단</td>
+            <td>시험 입장 시</td>
+            <td>응시 증빙</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>연동 후 수집이 예상되는 것</h3>
+    <p>
+      외부 본인인증을 연동하면 인증 기관이 발급하는 <strong>연계 식별값</strong>을
+      계정에 저장하게 됩니다. 어떤 값을 어떤 형태로 받을지는 <strong>사업자 선정 후에 확정</strong>되므로
+      지금 구체적으로 적지 않습니다. 확정 시 이 문서와 개인정보 처리방침을 함께 갱신하고,
+      수집 전에 별도 동의를 받습니다.
+    </p>
+
+    <div class="notice notice--danger">
+      <strong>주민등록번호는 수집하지 않습니다.</strong>
+      신분증을 촬영할 때 주민등록번호 뒷자리를 가린 뒤 찍어 주세요.
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="roles">
+    <h2>5. 역할별 접근 범위</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">역할</th>
+            <th scope="col">볼 수 있는 것</th>
+            <th scope="col">볼 수 없는 것</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">훈련생</th>
+            <td>본인의 사전점검 상태, 본인이 제출한 자료의 제출 여부</td>
+            <td><strong>제출한 신분증·얼굴 사진 이미지 자체</strong>, 다른 훈련생의 모든 정보</td>
+          </tr>
+          <tr>
+            <th scope="row">강사</th>
+            <td><strong>본인이 담당하는 시험</strong>의 신분확인 대기열·상세·이미지·판정</td>
+            <td>담당하지 않는 시험의 자료 (접근 시 거부됨)</td>
+          </tr>
+          <tr>
+            <th scope="row">운영 관리자</th>
+            <td>전체 시험의 신분확인 자료와 판정 이력</td>
+            <td>파기된 자료 (보관 기간 경과 후)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>권한 없이 접근하면</h3>
+    <ul>
+      <li>로그인하지 않은 상태로 관리자 주소를 열면 <strong>로그인 화면으로 이동</strong>합니다.</li>
+      <li>담당하지 않는 시험의 상세 주소를 직접 입력하면 <strong>접근 거부 안내 화면</strong>이 표시됩니다.</li>
+      <li>이미지 주소만 알아도 권한 없이 열 수 없습니다. 요청마다 권한을 다시 확인합니다.</li>
+      <li>있는 자료와 없는 자료를 화면에서 구별할 수 없게 처리해, 다른 사람의 자료 존재 여부를 알 수 없습니다.</li>
+    </ul>
+
+    <div class="notice notice--info">
+      운영진이 신분증 이미지를 <strong>열어 본 사실도 기록</strong>됩니다.
+      누가 언제 어떤 자료를 조회했는지 감사 이력으로 남습니다.
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="records">
+    <h2>6. 세 가지 기록의 차이</h2>
+    <p>이름이 비슷해 혼동하기 쉬운 세 가지 기록입니다. 목적과 보존 이유가 다릅니다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">기록</th>
+            <th scope="col">남는 내용</th>
+            <th scope="col">쓰이는 곳</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">접속 기록</th>
+            <td>로그인·로그아웃 시각, 접속 IP, 본인인증 성공 시각</td>
+            <td>계정 도용 확인, 학습 시간 산정 근거</td>
+          </tr>
+          <tr>
+            <th scope="row">신분확인 기록</th>
+            <td>제출한 자료, 제출 시각, 검토자, 승인·반려 시각과 사유</td>
+            <td>응시자가 본인이었음을 증빙</td>
+          </tr>
+          <tr>
+            <th scope="row">부정행위 기록</th>
+            <td>전체화면 해제, 탭 이탈·복귀, 복사·붙여넣기 시도, 재접속</td>
+            <td>응시 환경 이상 여부 판단</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      세 기록은 서로를 대체하지 않습니다. 예를 들어 부정행위 기록에 아무것도 없더라도
+      그것이 «본인이 응시했다»는 증거가 되지는 않습니다 — 그것은 신분확인 기록이 담당합니다.
+    </p>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="fail">
+    <h2>7. 실패했을 때</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">상황</th>
+            <th scope="col">해결</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>비밀번호를 잊었다</td>
+            <td>로그인 화면의 비밀번호 찾기를 사용하거나 운영 담당자에게 초기화를 요청하세요.</td>
+          </tr>
+          <tr>
+            <td>시험 입장 시 「본인인증이 필요합니다」</td>
+            <td>최근 30분 내 인증 이력이 없습니다. 비밀번호를 다시 입력하세요.</td>
+          </tr>
+          <tr>
+            <td>비밀번호를 맞게 넣었는데 실패한다</td>
+            <td>대소문자와 키보드 언어를 확인하세요. 반복 실패 시 담당자에게 문의하세요.</td>
+          </tr>
+          <tr>
+            <td>신분증이 반려되었다</td>
+            <td>반려 사유가 화면에 표시됩니다. 재제출 요청을 받으면 다시 제출할 수 있습니다.</td>
+          </tr>
+          <tr>
+            <td>재제출 횟수를 모두 썼다</td>
+            <td>운영 담당자에게 문의하세요. 추가 재제출은 운영진 판단이 필요합니다.</td>
+          </tr>
+          <tr>
+            <td>계정이 본인 것이 아닌 것 같다</td>
+            <td>즉시 운영 담당자에게 알리고 비밀번호를 변경하세요. 접속 기록으로 확인할 수 있습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="gap">
+    <h2>8. 아직 연동되지 않은 부분</h2>
+    <p>숨기지 않고 그대로 적습니다. 아래는 <strong>현재 동작하지 않습니다.</strong></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">항목</th>
+            <th scope="col">현재</th>
+            <th scope="col">필요한 것</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>최초 로그인 본인인증 강제</td>
+            <td>서버가 강제하지 않음 — 로그인 후 바로 학습 가능</td>
+            <td>서버 인증 게이트와 미인증 계정 차단 로직</td>
+          </tr>
+          <tr>
+            <td>외부 인증 식별값 저장</td>
+            <td>저장 항목·형식 미정</td>
+            <td>인증 사업자 선정과 계정 연결 설계</td>
+          </tr>
+          <tr>
+            <td>휴대폰 본인인증 / OTP</td>
+            <td>미연동</td>
+            <td>외부 사업자 API 계약</td>
+          </tr>
+          <tr>
+            <td>실시간 영상 감독·녹화</td>
+            <td>미연동 — 웹캠은 연결 확인과 사진 1장까지</td>
+            <td>WebRTC 송출·저장 백엔드</td>
+          </tr>
+          <tr>
+            <td>화면 공유 서버 강제</td>
+            <td>브라우저에서만 확인</td>
+            <td>서버 검증 API</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="notice notice--warn">
+      <strong>웹캠에 관하여:</strong> 서버는 영상 프레임을 받지 않습니다.
+      브라우저가 확인한 결과를 <em>서버가 받아 적은 시각</em>만 기록합니다.
+      따라서 이 기록은 「카메라가 켜져 있었다」는 강한 증거가 아니라
+      응시 흐름을 확인하기 위한 것입니다. 감독관 확인과 함께 사용해야 합니다.
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <section class="card" id="contact">
+    <h2>9. 문의</h2>
+    <p>
+      계정·인증·개인정보 처리에 관한 문의는 <strong>교육 운영 담당자</strong>에게,
+      과정 내용과 시험 문항에 관한 문의는 <strong>담당 강사</strong>에게 해 주세요.
+      LXP 화면의 「고객 지원」 메뉴에서도 문의를 남길 수 있습니다.
+    </p>
+    <p>문의 시 아이디와 발생 시각을 알려 주시면 접속 기록으로 빠르게 확인할 수 있습니다.</p>
+    <div class="notice notice--warn">
+      문의할 때 <strong>비밀번호나 신분증 사진을 보내지 마세요.</strong>
+      운영 담당자는 비밀번호를 묻지 않습니다.
+    </div>
+  </section>
+
+  <div class="actions no-print">
+    <button type="button" class="btn btn--primary" onclick="window.print()">인쇄 / PDF 저장</button>
+    <a class="btn" href="/static/manuals/identity-program-notice.html">인증 환경 사전 고지 보기</a>
+    <a class="btn" href="/static/manuals/otp-auth-manual.html">OTP 인증 매뉴얼 보기</a>
+  </div>
+
+</main>
+
+<footer class="guide-footer">
+  <div class="guide-footer__inner">
+    <p>삼성 아카데미 LXP · 본인인증 안내 v1.0 · 기준일 2026-08-24</p>
+    <p>프론트 안내 화면이며, 최초 로그인 강제와 외부 식별값 저장은 서버 연동이 필요합니다.</p>
+  </div>
+</footer>
+
+</body>
+</html>
