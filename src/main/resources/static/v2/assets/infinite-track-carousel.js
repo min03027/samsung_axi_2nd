@@ -1,10 +1,9 @@
 /* ============================================================
-   track-slider.js — KDT 트랙 카드 무한 캐러셀
+   infinite-track-carousel.js — KDT 트랙 카드 무한 캐러셀
 
    맨 끝에서 맨 처음으로 되감기지 않고 계속 같은 방향으로 돈다.
-   방법: 카드 한 벌을 복제해 뒤에 붙여서 "마지막 다음에 첫 카드"가
-   실제로 존재하게 만들고, 복제 구간에 들어가면 스크롤이 멈춘 뒤
-   같은 그림의 원본 위치로 조용히 되돌린다(사용자는 알아채지 못한다).
+   방법: 카드 두 벌씩을 앞뒤에 붙이고 중앙에서 시작한다.
+   버튼·휠·드래그가 멈날 때 같은 카드의 중앙 위치로 조용히 보정한다.
    ============================================================ */
 (() => {
   const deck = document.querySelector('.track-deck');
@@ -19,25 +18,31 @@
   const next = document.querySelector('[data-track-next]');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // 복제본은 보조기기·탭 이동에서 빠지도록 감춘다.
-  originals.forEach(card => {
+  const cloneCard = card => {
     const clone = card.cloneNode(true);
     clone.dataset.clone = 'true';
     clone.setAttribute('aria-hidden', 'true');
     clone.removeAttribute('role');
     clone.querySelectorAll('a,button').forEach(el => el.tabIndex = -1);
-    deck.appendChild(clone);
-  });
+    return clone;
+  };
+  for (let set = 0; set < 2; set += 1) {
+    originals.forEach(card => deck.appendChild(cloneCard(card)));
+    originals.slice().reverse().forEach(card => deck.insertBefore(cloneCard(card), deck.firstChild));
+  }
 
   const cards = [...deck.querySelectorAll('.track-card')];
-  let index = 0;      // cards 기준 위치 (0 ~ 2N-1)
+  const CENTRAL_START = N * 2;
+  const CENTRAL_END = N * 3;
+  let index = CENTRAL_START;
   let silent = false; // 조용한 위치 보정 중 — scroll 리스너가 끼어들지 않게
+  let moving = false;
   let timer;
 
   const posOf = i => cards[i].offsetLeft - (deck.clientWidth - cards[i].clientWidth) / 2;
 
   const paint = () => {
-    const live = index % N;
+    const live = (index % N + N) % N;
     cards.forEach((c, i) => c.classList.toggle('is-active', i % N === live));
     dots.forEach((d, i) => d.classList.toggle('is-active', i === live));
   };
@@ -54,31 +59,31 @@
     setTimeout(run, 700);
   };
 
+  const normalize = () => {
+    // 양쪽 복제 구간에 도착하면 같은 카드인 중앙 원본으로 조용히 옮긴다.
+    if (index < CENTRAL_START) {
+      while (index < CENTRAL_START) index += N;
+    } else if (index >= CENTRAL_END) {
+      while (index >= CENTRAL_END) index -= N;
+    }
+    else return;
+    silent = true;
+    scrollTo(index, 'auto');
+    requestAnimationFrame(() => { silent = false; });
+  };
+
   const settle = () => {
-    // 복제 구간(N 이상)에 있으면 같은 그림의 원본 위치로 되돌린다
-    if (index < N) return;
     afterScroll(() => {
       silent = true;
-      index -= N;
-      scrollTo(index, 'auto');
+      normalize();
+      moving = false;
       requestAnimationFrame(() => { silent = false; });
     });
   };
 
   const advance = step => {
-    if (step < 0 && index === 0) {
-      // 뒤로 갈 때는 먼저 복제 구간의 같은 그림으로 순간이동한 뒤 왼쪽으로 부드럽게
-      silent = true;
-      index = N;
-      scrollTo(index, 'auto');
-      requestAnimationFrame(() => {
-        silent = false;
-        index -= 1;
-        scrollTo(index, 'smooth');
-        paint();
-      });
-      return;
-    }
+    if (moving) return;
+    moving = true;
     index += step;
     scrollTo(index, 'smooth');
     paint();
@@ -86,9 +91,12 @@
   };
 
   const goTo = live => {
-    index = live;
+    if (moving) return;
+    moving = true;
+    index = CENTRAL_START + live;
     scrollTo(index, 'smooth');
     paint();
+    settle();
   };
 
   const stop = () => clearInterval(timer);
@@ -126,6 +134,19 @@
     });
   });
 
+  // 손가락이나 마우스로 직접 끝까지 밀어도 물리적인 끝이 보이기 전에
+  // 같은 카드의 중앙 묶음으로 이동한다. scrollend가 없는 브라우저도 대응한다.
+  let manualSettleTimer;
+  const settleManualScroll = () => {
+    if (moving || silent) return;
+    normalize();
+  };
+  deck.addEventListener('scrollend', settleManualScroll);
+  deck.addEventListener('scroll', () => {
+    clearTimeout(manualSettleTimer);
+    manualSettleTimer = setTimeout(settleManualScroll, 160);
+  }, { passive: true });
+
   deck.addEventListener('mouseenter', stop);
   deck.addEventListener('mouseleave', start);
   deck.addEventListener('focusin', stop);
@@ -133,6 +154,7 @@
   deck.addEventListener('pointerdown', stop);
   deck.addEventListener('pointerup', start);
 
+  scrollTo(index, 'auto');
   paint();
   start();
 })();

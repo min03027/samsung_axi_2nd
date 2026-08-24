@@ -1,0 +1,427 @@
+/* 시설 소개 — LXP 소개와 같은 편집 문법으로 정리한 공개 페이지 전용 스타일 */
+.facility-page {
+  --facility-accent:#ff641f;
+  --facility-accent-soft:#ffbc9c;
+  --facility-black:#080808;
+  --facility-panel:#151413;
+  --facility-line:#e5e7eb;
+  background:#fff;
+}
+
+.facility-page .pg-label {
+  color:#667085;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+
+.facility-page .pg-kicker {
+  margin-bottom:24px;
+  color:var(--facility-accent-soft);
+  font-weight:800;
+}
+
+.facility-page .btn--primary {
+  color:#080808;
+  border-color:var(--facility-accent);
+  background:var(--facility-accent);
+  box-shadow:0 14px 34px rgba(255,100,31,.2);
+  font-weight:800;
+}
+
+.facility-page .btn--primary:hover {
+  color:#080808;
+  border-color:#ff7a3d;
+  background:#ff7a3d;
+}
+
+/* Hero */
+.facility-hero {
+  overflow:hidden;
+  padding:clamp(118px,11vw,164px) 0 clamp(72px,8vw,112px);
+  background:
+    radial-gradient(circle at 78% 30%,rgba(255,100,31,.19),transparent 30%),
+    radial-gradient(circle at 11% 92%,rgba(255,255,255,.055),transparent 23%),
+    linear-gradient(145deg,#050505 0%,#0b0908 62%,#1b0b05 100%);
+}
+
+.facility-hero::before {
+  width:560px;
+  height:560px;
+  right:-300px;
+  top:-310px;
+  border:1px solid rgba(255,115,57,.28);
+  background:transparent;
+}
+
+.facility-hero::after {
+  content:"";
+  position:absolute;
+  width:390px;
+  height:390px;
+  right:-205px;
+  top:-220px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:50%;
+}
+
+.facility-hero__layout {
+  z-index:1;
+  grid-template-columns:minmax(0,.86fr) minmax(510px,1.14fr);
+  gap:clamp(48px,7vw,104px);
+}
+
+.facility-hero__copy { max-width:620px; }
+
+.facility-hero__copy h1 {
+  max-width:none;
+  font-size:clamp(3.15rem,5.3vw,5.15rem);
+  line-height:1.04;
+  letter-spacing:-.06em;
+}
+
+.facility-hero__copy h1 em { color:var(--facility-accent); }
+
+.facility-hero__copy>p {
+  max-width:590px;
+  margin-top:28px;
+  color:#e8dfda;
+  font-size:clamp(1rem,1.4vw,1.2rem);
+  line-height:1.75;
+}
+
+.facility-hero__copy>small {
+  color:#aaa09b;
+  line-height:1.65;
+}
+
+.facility-hero__gallery {
+  min-height:570px;
+  gap:10px;
+  transform:rotate(.65deg);
+}
+
+.facility-hero__photo { border-radius:20px; }
+.facility-hero__photo img { transform:scale(1.015); }
+.facility-hero__photo:hover img { transform:scale(1.04); }
+
+/* 공통 섹션 헤더 */
+.facility-course,
+.facility-gallery-section,
+.facility-dorm,
+.facility-day {
+  padding:clamp(88px,9vw,134px) 0;
+}
+
+.facility-course,
+.facility-gallery-section,
+.facility-dorm { background:#fff; }
+
+.facility-section-head,
+.facility-editorial-head {
+  display:flex;
+  justify-content:space-between;
+  gap:40px;
+  align-items:end;
+  margin-bottom:54px;
+}
+
+.facility-section-head>div>span,
+.facility-editorial-head .pg-label {
+  color:#667085;
+  font:800 11px var(--font-mono);
+  letter-spacing:.15em;
+}
+
+.facility-section-head h2,
+.facility-editorial-head h2 {
+  margin-top:14px;
+  font-size:clamp(2.55rem,4.6vw,4.5rem);
+  line-height:1.08;
+  letter-spacing:-.055em;
+}
+
+.facility-section-head>p,
+.facility-editorial-head>p {
+  max-width:480px;
+  padding-bottom:8px;
+  color:#667085;
+  font-size:1rem;
+  line-height:1.75;
+}
+
+.facility-editorial-head h2 em {
+  color:var(--facility-accent);
+  font-style:normal;
+}
+
+/* 과정별 공간 */
+.facility-course { color:#111; }
+
+.facility-course__panel {
+  border-color:#e5e7eb;
+  border-radius:28px;
+  box-shadow:0 34px 90px rgba(24,13,8,.12);
+}
+
+.facility-course__panel>figure { min-height:590px; }
+.facility-course__content>h3 { font-size:clamp(2.25rem,3.4vw,3.25rem); }
+.facility-course__eyebrow { color:#d84b14; }
+.facility-course__select select { border-color:#d0d5dd; }
+
+/* 하루 몰입 흐름 */
+.facility-day {
+  position:relative;
+  overflow:hidden;
+  color:#fff;
+  background:
+    radial-gradient(circle at 84% 18%,rgba(255,100,31,.16),transparent 25%),
+    linear-gradient(145deg,#080808,#110c0a 64%,#1d0c05);
+}
+
+.facility-day::before {
+  content:"";
+  position:absolute;
+  width:min(54vw,760px);
+  aspect-ratio:1;
+  right:-30%;
+  bottom:-65%;
+  border:1px solid rgba(255,100,31,.18);
+  border-radius:50%;
+}
+
+.facility-day .container { position:relative; z-index:1; }
+.facility-day .pg-label { color:#ff9f75; }
+.facility-day .facility-editorial-head h2 { color:#fff; }
+.facility-day .facility-editorial-head>p { color:#aaa19c; }
+
+.facility-day__scene {
+  overflow:hidden;
+  padding:14px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:28px;
+  background:#0d0c0b;
+  box-shadow:0 34px 90px rgba(0,0,0,.28);
+}
+
+.facility-day__photo {
+  position:relative;
+  min-height:420px;
+  overflow:hidden;
+  border-radius:19px;
+  background:#181513;
+}
+
+.facility-day__photo::before {
+  content:"";
+  position:absolute;
+  z-index:1;
+  inset:0;
+  background:
+    linear-gradient(90deg,rgba(7,6,5,.83) 0%,rgba(7,6,5,.36) 49%,rgba(7,6,5,.08) 100%),
+    linear-gradient(180deg,transparent 55%,rgba(7,6,5,.65));
+}
+
+.facility-day__photo img {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:saturate(.82) contrast(1.04);
+  transition:transform .8s ease,filter .8s ease;
+}
+
+.facility-day__scene:hover .facility-day__photo img {
+  transform:scale(1.025);
+  filter:saturate(.95) contrast(1.05);
+}
+
+.facility-day__photo figcaption {
+  position:absolute;
+  z-index:2;
+  left:clamp(25px,4vw,58px);
+  bottom:clamp(28px,4vw,54px);
+}
+
+.facility-day__photo figcaption span {
+  display:block;
+  color:#ff9f75;
+  font:800 11px var(--font-mono);
+  letter-spacing:.16em;
+}
+
+.facility-day__photo figcaption b {
+  display:block;
+  max-width:650px;
+  margin-top:17px;
+  color:#fff;
+  font-size:clamp(2.5rem,5vw,5.1rem);
+  line-height:1.02;
+  letter-spacing:-.06em;
+}
+
+.facility-day__timeline {
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  margin-top:14px;
+}
+
+.facility-day__timeline::before {
+  content:"";
+  position:absolute;
+  left:9%;
+  right:9%;
+  top:34px;
+  height:1px;
+  background:linear-gradient(90deg,var(--facility-accent),#50443e 48%,rgba(255,100,31,.42));
+}
+
+.facility-day__timeline li {
+  position:relative;
+  min-width:0;
+  min-height:240px;
+  padding:25px 18px 22px;
+  border:1px solid transparent;
+  border-radius:15px;
+  transition:background .24s,border-color .24s,transform .24s;
+}
+
+.facility-day__timeline li:hover,
+.facility-day__timeline li:focus-visible {
+  z-index:2;
+  border-color:rgba(255,100,31,.4);
+  outline:0;
+  background:linear-gradient(145deg,rgba(255,100,31,.2),rgba(255,100,31,.045));
+  transform:translateY(-5px);
+}
+
+.facility-day__timeline time {
+  position:relative;
+  z-index:1;
+  width:58px;
+  height:58px;
+  display:grid;
+  place-items:center;
+  color:#080808;
+  border:1px solid var(--facility-accent);
+  border-radius:50%;
+  background:var(--facility-accent);
+  font:800 10px var(--font-mono);
+  box-shadow:0 0 0 8px #0d0c0b;
+}
+
+.facility-day__timeline li:nth-child(2) time,
+.facility-day__timeline li:nth-child(3) time,
+.facility-day__timeline li:nth-child(4) time {
+  color:#fff;
+  border-color:#50443e;
+  background:#0d0c0b;
+}
+
+.facility-day__timeline li>span {
+  display:block;
+  margin-top:28px;
+  color:#ff9f75;
+  font:800 9px var(--font-mono);
+  letter-spacing:.13em;
+}
+
+.facility-day__timeline h3 {
+  margin-top:10px;
+  color:#fff;
+  font-size:1.25rem;
+  letter-spacing:-.03em;
+}
+
+.facility-day__timeline p {
+  margin-top:10px;
+  color:#928984;
+  font-size:12px;
+  line-height:1.65;
+}
+
+.facility-day__note {
+  margin-top:18px;
+  color:#766d68;
+  font-size:11px;
+  line-height:1.65;
+}
+
+/* 실제 시설 사진 */
+.facility-gallery-section { color:#111; }
+.facility-gallery-section--dark { background:#0a0a0a; }
+.facility-gallery-section--dark .facility-section-head>div>span { color:#ff9f75; }
+.facility-gallery-section--dark .facility-section-head>p { color:#aaa19c; }
+.facility-gallery figure { border-radius:20px; }
+.facility-gallery--commons figure { min-height:440px; }
+
+/* 기숙사 */
+.facility-dorm { color:#111; }
+.facility-dorm__details small { color:#d84b14; }
+.facility-dorm__details article { border-color:#e5e7eb; }
+
+/* 마지막 상담 */
+.facility-page .pg-cta {
+  position:relative;
+  overflow:hidden;
+  padding:clamp(95px,11vw,150px) 0;
+  background:linear-gradient(132deg,#1d0c05,#080808 54%,#080808);
+}
+
+.facility-page .pg-cta::before {
+  content:"";
+  position:absolute;
+  width:520px;
+  height:520px;
+  left:calc(50% - 260px);
+  bottom:-450px;
+  border:60px solid rgba(255,100,31,.15);
+  border-radius:50%;
+}
+
+.facility-page .pg-cta .container { position:relative; z-index:1; }
+.facility-page .pg-cta h2 { font-size:clamp(3rem,5.2vw,5rem); line-height:1.04; }
+.facility-page .pg-cta p { color:#b6aca7; }
+
+@media(max-width:1100px) {
+  .facility-hero__layout { grid-template-columns:1fr; }
+  .facility-hero__copy { max-width:760px; }
+  .facility-hero__gallery { max-width:780px; transform:none; }
+}
+
+@media(max-width:900px) {
+  .facility-section-head,
+  .facility-editorial-head { align-items:start; flex-direction:column; }
+  .facility-day__timeline { grid-template-columns:1fr; }
+  .facility-day__timeline::before { left:46px; right:auto; top:42px; bottom:42px; width:1px; height:auto; }
+  .facility-day__timeline li { min-height:0; display:grid; grid-template-columns:70px 1fr; gap:0 20px; padding:13px 12px; }
+  .facility-day__timeline time { grid-row:1/5; }
+  .facility-day__timeline li>span { margin-top:4px; }
+  .facility-day__timeline h3 { margin-top:6px; }
+  .facility-day__timeline p { padding-bottom:16px; }
+}
+
+@media(max-width:620px) {
+  .facility-hero { padding-top:100px; }
+  .facility-hero__copy h1 { font-size:2.85rem; }
+  .facility-hero__copy>.pg-hero__actions { align-items:stretch; flex-direction:column; }
+  .facility-hero__copy>.pg-hero__actions .btn { width:100%; }
+  .facility-hero__gallery { min-height:430px; }
+  .facility-section-head h2,
+  .facility-editorial-head h2 { font-size:2.45rem; }
+  .facility-day__scene { margin-inline:-12px; padding:8px; border-radius:19px; }
+  .facility-day__photo { min-height:350px; border-radius:14px; }
+  .facility-day__photo figcaption b { font-size:2.75rem; }
+  .facility-day__timeline li { grid-template-columns:58px 1fr; gap:0 12px; padding-inline:4px; }
+  .facility-day__timeline time { width:48px; height:48px; box-shadow:0 0 0 5px #0d0c0b; }
+  .facility-day__timeline::before { left:28px; }
+  .facility-course__panel>figure { min-height:350px; }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .facility-day__photo img,
+  .facility-day__timeline li { transition:none; }
+  .facility-day__scene:hover .facility-day__photo img,
+  .facility-day__timeline li:hover { transform:none; }
+}

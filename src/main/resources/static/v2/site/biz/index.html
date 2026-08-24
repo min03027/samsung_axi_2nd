@@ -3,47 +3,156 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>비즈워크넥트 기업교육 — {brand}</title>
+<title>비즈워크래프트 기업교육 — {brand}</title>
 <meta name="description" content="AI를 배우는 조직에서 AI로 일하는 조직으로. 조직 진단부터 정착까지 설계합니다.">
 <link rel="stylesheet" href="/v2/assets/tokens.css">
 <link rel="stylesheet" href="/v2/assets/base.css">
-<link rel="stylesheet" href="/v2/assets/components.css">
+<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/biz-pages.css?v=20260824-100">
 </head>
 <body>
 
 <!-- 비즈-045 기업 AX 메시지 -->
 <section class="hero">
   <div class="container">
-    <span class="eyebrow" style="color:var(--brand-500)">비즈워크넥트 · 기업교육</span>
+    <span class="eyebrow" style="color:var(--brand-500)">비즈워크래프트 · 기업교육</span>
     <h1>AI를 배우는 조직에서<br>AI로 일하는 조직으로</h1>
     <p class="hero__sub">
       교육 하루로 끝나지 않습니다. 지금 하는 업무를 AI 중심으로 다시 설계하고,
       실행과 정착까지 함께 갑니다.
     </p>
     <div class="hero__cta">
-      <a class="btn btn--lg btn--inverse" href="#diagnosis">조직 진단 항목 보기</a>
-      <a class="btn btn--lg btn--outline" style="color:var(--white);border-color:rgba(255,255,255,.3)" href="#contact">도입 문의 안내</a>
+      <a class="btn btn--lg btn--inverse" href="/v2/site/biz/programs.html">직무별 과정 보기</a>
+      <a class="btn btn--lg btn--outline" style="color:var(--white);border-color:rgba(255,255,255,.3)" href="#biz-contact">도입 문의</a>
     </div>
     <div class="hero__stats">
-      <div class="hero__stat"><b class="num">9개</b><span>직무별 과정</span></div>
+      <div class="hero__stat"><b class="num">6개</b><span>직무군별 과정</span></div>
       <div class="hero__stat"><b class="num">4~40h</b><span>구성 가능 시간</span></div>
-      <div class="hero__stat"><b class="num">120+</b><span>교육 수행 기업</span></div>
-      <div class="hero__stat"><b class="num">정부지원</b><span>환급 과정 운영</span></div>
+      <div class="hero__stat"><b class="num">5종</b><span>시간별 기본 구성</span></div>
+      <div class="hero__stat"><b class="num">맞춤형</b><span>업무·보안 기준 반영</span></div>
     </div>
+  </div>
+</section>
+
+<!-- 조직 유형별 교육 설계 -->
+<section class="biz-education-types" id="education-types" aria-labelledby="education-types-title">
+  <div class="container">
+    <div class="biz-education-types__head">
+      <span class="eyebrow">EDUCATION TYPE</span>
+      <h2 id="education-types-title">조직에 맞는 교육 방식부터 선택하세요</h2>
+      <p>기업의 실무 전환, 공공의 행정·서비스 적용, 조직별 맞춤 설계를 각각 다른 기준으로 구성합니다.</p>
+    </div>
+    <div class="biz-type-tabs" role="tablist" aria-label="교육 유형 선택">
+      <button type="button" role="tab" id="biz-type-tab-company" aria-controls="biz-type-company" aria-selected="true" data-biz-type-tab="company">기업 특화 IT 교육</button>
+      <button type="button" role="tab" id="biz-type-tab-public" aria-controls="biz-type-public" aria-selected="false" tabindex="-1" data-biz-type-tab="public">공공 부문 특화 교육</button>
+      <button type="button" role="tab" id="biz-type-tab-custom" aria-controls="biz-type-custom" aria-selected="false" tabindex="-1" data-biz-type-tab="custom">맞춤형 교육</button>
+    </div>
+
+    <article class="biz-type-panel" id="biz-type-company" role="tabpanel" aria-labelledby="biz-type-tab-company" data-biz-type-panel="company" data-tone="company">
+      <header class="biz-type-panel__intro"><div><span>FOR BUSINESS</span><h3>기업 경쟁력을 만드는 실무 중심 교육</h3></div><p>단순한 도구 학습을 넘어 실제 업무의 효율과 결과물을 개선할 수 있도록 직무별 실습을 설계합니다.</p></header>
+      <div class="biz-type-cards biz-type-cards--three">
+        <div><b>AI 활용 교육</b><p>생성형 AI, 업무 자동화, 콘텐츠·데이터 활용</p></div>
+        <div><b>Cloud·데이터 교육</b><p>클라우드 기초, 배포·운영, 데이터 처리 실습</p></div>
+        <div><b>솔루션·업무자동화 교육</b><p>기업 시스템과 업무 흐름을 반영한 적용 실습</p></div>
+      </div>
+      <ol class="biz-type-process" aria-label="기업교육 진행 과정"><li><b>사전 진단</b><span>업무 환경과 요구 분석</span></li><li><b>교육 설계</b><span>직무별 커리큘럼 구성</span></li><li><b>교육 운영</b><span>실습·프로젝트 중심 진행</span></li><li><b>적용 및 확산</b><span>조직 내 활용과 정착</span></li></ol>
+      <div class="biz-type-panel__cta"><p>교육을 넘어, 조직의 실행력을 만듭니다.</p><a class="btn btn--primary" href="#biz-contact" data-education-type="기업 특화 IT 교육">기업교육 문의</a></div>
+    </article>
+
+    <article class="biz-type-panel" id="biz-type-public" role="tabpanel" aria-labelledby="biz-type-tab-public" data-biz-type-panel="public" data-tone="public" hidden>
+      <header class="biz-type-panel__intro"><div><span>FOR PUBLIC</span><h3>공공 환경에 최적화된 교육 체계</h3></div><p>정책·행정·서비스 업무에 적용할 수 있도록 기관의 목적과 보안 환경을 반영해 운영합니다.</p></header>
+      <div class="biz-type-cards biz-type-cards--three">
+        <div><b>중앙부처 대상</b><p>정책 수립과 행정 업무를 위한 데이터·AI 활용</p></div>
+        <div><b>공기업 대상</b><p>운영 효율과 서비스 품질을 높이는 업무 적용</p></div>
+        <div><b>지자체·교육기관 대상</b><p>지역과 교육 환경에 맞춘 AI 기초·디지털 역량</p></div>
+      </div>
+      <ol class="biz-type-process" aria-label="공공교육 진행 과정"><li><b>사전 진단</b><span>기관 환경과 목적 분석</span></li><li><b>교육 설계</b><span>정책·업무별 과정 구성</span></li><li><b>교육 운영</b><span>사례·실습 중심 진행</span></li><li><b>적용 및 확산</b><span>현업 적용과 운영 지원</span></li></ol>
+      <div class="biz-type-panel__cta"><p>교육을 넘어, 공공의 성장을 함께 설계합니다.</p><a class="btn btn--primary" href="#biz-contact" data-education-type="공공 부문 특화 교육">공공교육 문의</a></div>
+    </article>
+
+    <article class="biz-type-panel" id="biz-type-custom" role="tabpanel" aria-labelledby="biz-type-tab-custom" data-biz-type-panel="custom" data-tone="custom" hidden>
+      <header class="biz-type-panel__intro"><div><span>TAILORED PROGRAM</span><h3>조직에 최적화된 교육 설계</h3></div><p>조직 수준과 직무별 요구를 먼저 분석하고, 일정과 목표에 맞는 교육 방식을 함께 정합니다.</p></header>
+      <div class="biz-type-cards biz-type-cards--two">
+        <div><b>체계적인 교육 설계</b><p>조직 수준과 직무 요구를 분석해 단계별 커리큘럼을 구성합니다.</p></div>
+        <div><b>맞춤 과정 제안</b><p>교육 목적·일정·인원을 반영해 적합한 시간과 운영 방식을 제안합니다.</p></div>
+      </div>
+      <ol class="biz-type-process" aria-label="맞춤교육 진행 과정"><li><b>사전 진단</b><span>조직 환경과 목표 분석</span></li><li><b>교육 설계</b><span>맞춤 커리큘럼 구성</span></li><li><b>교육 운영</b><span>실습·프로젝트 중심 진행</span></li><li><b>적용 및 확산</b><span>성과 연결과 운영 정착</span></li></ol>
+      <div class="biz-type-panel__cta"><p>우리 조직에 가장 적합한 교육을 제안받아보세요.</p><a class="btn btn--primary" href="#biz-contact" data-education-type="맞춤형 교육">맞춤교육 문의</a></div>
+    </article>
+  </div>
+</section>
+
+<!-- AI 도입에서 업무 내재화까지 -->
+<section class="biz-ax" id="ax-execution" aria-labelledby="ax-execution-title">
+  <div class="container">
+    <header class="biz-ax__head">
+      <span class="eyebrow">AX EXECUTION</span>
+      <h2 id="ax-execution-title">AI 도입이 아니라<br>업무 활용까지 설계합니다</h2>
+      <p>도구를 갖추는 것과 조직이 실제로 쓰는 것은 다릅니다. 막히는 지점을 먼저 찾고, 업무에 맞는 실행 방식으로 전환합니다.</p>
+    </header>
+
+    <div class="biz-ax-signals" aria-label="AI 도입이 막히는 대표 상황">
+      <p>데이터는 쌓였는데<br><b>인사이트는 없어요</b></p>
+      <p>자동화했는데<br><b>손은 더 바빠요</b></p>
+      <p>AI는 도입했는데<br><b>아무도 안 써요</b></p>
+      <p>AI는 있는데<br><b>쓸 줄 아는 사람이 없어요</b></p>
+    </div>
+
+    <div class="biz-ax-shift" aria-label="DX에서 AX로의 전환">
+      <div><strong>DX</strong><span>도구와 시스템의 디지털화</span></div>
+      <i aria-hidden="true">→</i>
+      <div><strong>AX</strong><span>AI 기반 업무 실행</span></div>
+    </div>
+
+    <div class="biz-ax-playbook">
+      <div class="biz-ax-playbook__intro"><span>FROM DIAGNOSIS TO ADOPTION</span><h3>AI 도입부터 내재화까지,<br>AX 실행 프로세스</h3><p>현재 업무를 기준으로 문제를 정의하고, 교육과 프로젝트를 거쳐 조직이 반복해서 사용할 수 있는 방식으로 남깁니다.</p></div>
+      <ol>
+        <li><em>01</em><div><b>문제 진단</b><p>업무 병목, 데이터, 도구와 보안 기준을 함께 확인합니다.</p></div></li>
+        <li><em>02</em><div><b>AX 실행팀 통합 전략 설계</b><p>효과가 큰 업무와 사람·AI의 역할을 먼저 정합니다.</p></div></li>
+        <li><em>03</em><div><b>AI 솔루션 구축 실습</b><p>실제 문서와 업무 흐름을 바탕으로 결과물을 만듭니다.</p></div></li>
+        <li><em>04</em><div><b>AI 및 AX 교육</b><p>가이드·템플릿·운영 기준으로 현업 활용을 정착시킵니다.</p></div></li>
+      </ol>
+    </div>
+
+    <div class="biz-ax-proof">
+      <header><span class="eyebrow">WORK PROOF</span><h3>성과는 실제 업무의 변화로 확인합니다</h3></header>
+      <div><article><b>문서 탐색과 답변</b><p>사내 규정과 FAQ를 근거로 필요한 내용을 찾는 흐름</p><span>검색 시간 · 답변 근거 · 재사용률</span></article><article><b>데이터 분석과 보고</b><p>반복 집계부터 보고서 초안까지 이어지는 흐름</p><span>작업 시간 · 오류율 · 보고 주기</span></article><article><b>콘텐츠 제작과 운영</b><p>브랜드 기준을 반영해 초안과 변형안을 만드는 흐름</p><span>제작 시간 · 수정 횟수 · 활용 건수</span></article></div>
+    </div>
+
+    <div class="biz-ax-architecture">
+      <header><span class="eyebrow">ARCHITECTURE</span><h3>검증된 기술 기반의 AX 구조</h3><p>특정 도구 하나에 조직을 맞추지 않고, 보안과 업무 환경에 맞는 조합을 설계합니다.</p></header>
+      <div class="biz-ax-architecture__core"><b>AI Core</b><span>LLM · AI Agent · 업무 자동화</span></div>
+      <div class="biz-ax-architecture__layers"><span>Data &amp; Intelligence<br><b>RAG · Vector DB</b></span><span>Infrastructure<br><b>Cloud · On-premise</b></span><span>Collaboration<br><b>업무 시스템 연동</b></span></div>
+    </div>
+
+    <footer class="biz-ax__cta"><div><span>WHY BIZWORKCRAFT</span><h3>교육과 솔루션을 연결해<br>우리 조직에 남는 결과를 만듭니다</h3></div><ul><li>교육과 솔루션을 한 흐름으로 설계</li><li>실제 업무 기반 프로젝트형 운영</li><li>조직 환경에 맞는 AI 도구와 구조 제안</li><li>도입 이후 활용 가이드와 운영 기준 정리</li></ul><a class="btn btn--primary btn--lg" href="#biz-contact" data-education-type="AX 실행 컨설팅">AX 진단 문의</a></footer>
   </div>
 </section>
 
 <!-- 비즈-046 기업 레퍼런스 롤링 -->
-<section class="section section--sm section--tint">
+<section class="biz-reference" aria-labelledby="biz-reference-title">
   <div class="container">
-    <p class="eyebrow eyebrow--muted" style="text-align:center">CLIENTS</p>
-    <div class="logorow" style="justify-content:center" aria-busy="true"
-         data-public-organizations data-organization-site="BIZ" data-organization-position="CLIENT_ROLLING"></div>
+    <div class="biz-reference__head"><div><span class="eyebrow">EDUCATION RECORDS</span><h2 id="biz-reference-title">관계를 정확히 밝히는 교육 기록</h2></div><p>아래 표기는 공식 파트너십이나 채용 관계가 아니라 기업별 공개 범위에 맞춘 교육 수행·협의 기록입니다.</p></div>
+    <div class="biz-reference__viewport">
+      <div class="biz-reference__track">
+        <div class="biz-reference__group">
+          <a class="biz-reference__item" href="/v2/site/biz/cases.html?industry=제조"><small>교육 수행 · 익명 공개</small><b>제조 A사</b><span>품질·현장 업무 자동화</span></a>
+          <a class="biz-reference__item" href="/v2/site/biz/cases.html?industry=물류"><small>교육 협의 · 익명 공개</small><b>물류 B사</b><span>운영 문서와 데이터 활용</span></a>
+          <a class="biz-reference__item" href="/v2/site/biz/cases.html?industry=금융"><small>PoC 교육 · 익명 공개</small><b>금융 C사</b><span>규정 문서 기반 AI 활용</span></a>
+          <a class="biz-reference__item" href="/v2/site/biz/cases.html?industry=의료"><small>직무교육 · 익명 공개</small><b>의료 D재단</b><span>의료 행정 업무 개선</span></a>
+          <a class="biz-reference__item" href="/v2/site/biz/cases.html?industry=커머스"><small>직무교육 · 익명 공개</small><b>커머스 E사</b><span>마케팅 콘텐츠 자동화</span></a>
+          <a class="biz-reference__item" href="/v2/site/biz/cases.html?industry=공공"><small>교육 수행 · 익명 공개</small><b>공공 F기관</b><span>보고서와 행정 문서 활용</span></a>
+        </div>
+        <div class="biz-reference__group" aria-hidden="true">
+          <a class="biz-reference__item" href="/v2/site/biz/cases.html?industry=제조" tabindex="-1"><small>교육 수행 · 익명 공개</small><b>제조 A사</b><span>품질·현장 업무 자동화</span></a><a class="biz-reference__item" href="/v2/site/biz/cases.html?industry=물류" tabindex="-1"><small>교육 협의 · 익명 공개</small><b>물류 B사</b><span>운영 문서와 데이터 활용</span></a><a class="biz-reference__item" href="/v2/site/biz/cases.html?industry=금융" tabindex="-1"><small>PoC 교육 · 익명 공개</small><b>금융 C사</b><span>규정 문서 기반 AI 활용</span></a><a class="biz-reference__item" href="/v2/site/biz/cases.html?industry=의료" tabindex="-1"><small>직무교육 · 익명 공개</small><b>의료 D재단</b><span>의료 행정 업무 개선</span></a><a class="biz-reference__item" href="/v2/site/biz/cases.html?industry=커머스" tabindex="-1"><small>직무교육 · 익명 공개</small><b>커머스 E사</b><span>마케팅 콘텐츠 자동화</span></a><a class="biz-reference__item" href="/v2/site/biz/cases.html?industry=공공" tabindex="-1"><small>교육 수행 · 익명 공개</small><b>공공 F기관</b><span>보고서와 행정 문서 활용</span></a>
+        </div>
+      </div>
+    </div>
+    <a class="biz-reference__link" href="/v2/site/biz/cases.html">관계 유형과 사례 확인하기 →</a>
   </div>
 </section>
 
 <!-- 비즈-047 AX 진단 -->
-<section class="section" id="diagnosis">
+<section class="section" id="org-diagnosis">
   <div class="container">
     <div class="section-head" style="max-width:var(--w-narrow)">
       <span class="eyebrow">DIAGNOSIS</span>
@@ -59,7 +168,7 @@
       <div class="card card--pad"><span class="eyebrow">06</span><h4>데이터</h4><p class="small muted">쓸 수 있는 형태로 쌓이고 있는가</p></div>
       <div class="card card--pad"><span class="eyebrow">07</span><h4>확산</h4><p class="small muted">잘한 사례가 옆 팀으로 번지는가</p></div>
       <div class="card card--pad" style="background:var(--bg-brand-soft);border-color:var(--brand-100);display:grid;place-content:center;text-align:center">
-        <a class="btn btn--primary btn--sm" href="#contact">진단 상담 문의</a>
+        <a class="btn btn--primary btn--sm" href="#biz-contact">진단 상담</a>
         <p class="xsmall muted" style="margin-top:var(--sp-2)">약 1분</p>
       </div>
     </div>
@@ -67,7 +176,7 @@
 </section>
 
 <!-- 비즈-048 AX Flow -->
-<section class="section section--tint" id="flow">
+<section class="section section--tint" id="change-flow">
   <div class="container">
     <div class="section-head">
       <span class="eyebrow">AX FLOW</span>
@@ -82,12 +191,12 @@
       <div class="step"><p class="step__title">운영 정착</p><p class="step__desc">가이드와 템플릿으로 굳힙니다.</p></div>
       <div class="step"><p class="step__title">성과 측정</p><p class="step__desc">시간·품질 변화를 수치로 확인합니다.</p></div>
     </div>
-    <div class="row" style="margin-top:var(--sp-8)"><a class="btn btn--outline" href="#flow">AX Flow 다시 보기</a></div>
+    <div class="row" style="margin-top:var(--sp-8)"><a class="btn btn--outline" href="/v2/site/biz/cases.html">적용 사례 보기</a></div>
   </div>
 </section>
 
 <!-- 비즈-049 직무별 / 비즈-050 시간 구성 -->
-<section class="section" id="programs">
+<section class="section" id="job-programs">
   <div class="container">
     <div class="row row--between row--wrap section-head">
       <div><span class="eyebrow">PROGRAMS</span><h2>직무에 맞춰 다르게 배웁니다</h2></div>
@@ -124,34 +233,34 @@
 </section>
 
 <!-- 비즈-053 사례 -->
-<section class="section section--tint" id="cases">
+<section class="section section--tint" id="company-cases">
   <div class="container">
     <div class="row row--between row--wrap section-head">
       <div><span class="eyebrow">CASES</span><h2>교육 당일, 직원들은 무엇을 했나</h2></div>
       <a class="btn btn--outline" href="#cases">대표 사례 보기</a>
     </div>
     <div class="grid grid-3">
-      <article class="card card--pad stack" style="color:inherit">
-        <div class="row row--wrap"><span class="badge">제조</span><span class="badge">16시간</span><span class="badge">품질팀 24명</span></div>
-        <h4>검사 리포트 작성 시간 62% 단축</h4>
-        <p class="small muted">현장 검사 결과를 표준 리포트로 자동 정리하는 템플릿을 만들었습니다.</p>
-      </article>
-      <article class="card card--pad stack" style="color:inherit">
-        <div class="row row--wrap"><span class="badge">마케팅</span><span class="badge">8시간</span><span class="badge">32명</span></div>
-        <h4>캠페인 초안 작성 주기 3일 → 반나절</h4>
-        <p class="small muted">브랜드 톤을 학습시킨 프롬프트 세트를 팀 자산으로 남겼습니다.</p>
-      </article>
-      <article class="card card--pad stack" style="color:inherit">
-        <div class="row row--wrap"><span class="badge">금융</span><span class="badge">24시간</span><span class="badge">PoC</span></div>
-        <h4>내부 규정 질의응답 PoC 구축</h4>
-        <p class="small muted">규정 문서를 근거로 답하는 사내 도우미를 시범 운영까지 연결했습니다.</p>
-      </article>
+      <a class="card card--pad card--hover stack" href="/v2/site/biz/cases.html?industry=제조" style="color:inherit">
+        <div class="row row--wrap"><span class="badge">제조</span><span class="badge">교육 수행</span><span class="badge">익명 공개</span></div>
+        <h4>품질 검사 기록과 현장 보고서 자동화</h4>
+        <p class="small muted">반복 문서를 기준으로 입력 항목과 결과물 형식을 정리하는 직무교육 구성입니다.</p>
+      </a>
+      <a class="card card--pad card--hover stack" href="/v2/site/biz/cases.html?industry=커머스" style="color:inherit">
+        <div class="row row--wrap"><span class="badge">커머스</span><span class="badge">직무교육</span><span class="badge">익명 공개</span></div>
+        <h4>브랜드 기준을 반영한 콘텐츠 제작</h4>
+        <p class="small muted">콘텐츠 기획과 카피 변형에 사용할 팀 템플릿을 구성하는 교육입니다.</p>
+      </a>
+      <a class="card card--pad card--hover stack" href="/v2/site/biz/cases.html?industry=금융" style="color:inherit">
+        <div class="row row--wrap"><span class="badge">금융</span><span class="badge">PoC 교육</span><span class="badge">익명 공개</span></div>
+        <h4>내부 규정 문서를 근거로 찾는 업무</h4>
+        <p class="small muted">보안 기준을 전제로 문서 검색·답변 PoC를 설계하는 프로젝트형 교육입니다.</p>
+      </a>
     </div>
   </div>
 </section>
 
 <!-- 비즈-055 지원 + 비즈-058 문의 -->
-<section class="section" id="contact">
+<section class="section" id="biz-contact">
   <div class="container">
     <div class="grid grid-2" style="gap:var(--sp-10)">
       <div>
@@ -196,8 +305,9 @@
 </section>
 
 <script src="/v2/assets/brand.js"></script>
-<script src="/v2/assets/public-organization-cms.js"></script>
-<script src="/v2/assets/shell.js"></script>
-<script>Shell.site({ service: "biz", nav: null });</script>
+<script src="/v2/assets/page-section-navigation.js"></script>
+<script>Shell.site({service:"biz",nav:"home",sections:[{href:"#education-types",label:"교육 유형"},{href:"#ax-execution",label:"AX 실행"},{href:"#org-diagnosis",label:"조직 진단"},{href:"#change-flow",label:"변화 경로"},{href:"#job-programs",label:"직무별 과정"},{href:"#company-cases",label:"기업 사례"},{href:"#biz-contact",label:"도입 문의"}]});</script>
+<script src="/v2/assets/biz-education-types.js?v=20260824-99"></script>
+<script>var selectedProgram=new URLSearchParams(location.search).get('program');if(selectedProgram){var issue=document.getElementById('issue');if(issue&&!issue.value){issue.value=selectedProgram+' 직무 과정의 시간·대상·교육 방식을 문의합니다.'}}</script>
 </body>
 </html>

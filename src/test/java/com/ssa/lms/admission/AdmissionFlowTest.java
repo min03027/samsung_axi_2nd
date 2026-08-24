@@ -17,6 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -176,6 +178,19 @@ class AdmissionFlowTest {
         mvc.perform(get("/admin/admissions/applications")).andExpect(status().isForbidden());
     }
 
+    @Test
+    void 팀_신청상담_UI는_실제_접수_API와_접수번호를_사용한다() throws Exception {
+        String applicationPage = resourceText("static/v2/site/class/apply.html");
+        String applicationFlow = resourceText("static/v2/assets/application-flow.js");
+        String counselPage = resourceText("static/v2/site/campus/counsel.html");
+        String counselFlow = resourceText("static/v2/assets/counsel-flow.js");
+
+        assertThat(applicationPage).contains("data-application-form", "data-course-id");
+        assertThat(applicationFlow).contains("/v2/api/public/applications", "result.receiptNumber");
+        assertThat(counselPage).contains("data-counsel-form", "data-course-id");
+        assertThat(counselFlow).contains("/v2/api/public/consultations", "result.receiptNumber");
+    }
+
     private Course publishedCourse(String code, RecruitmentStatus status, boolean visible) {
         Course course = courseRepository.save(Course.builder()
                 .courseCode(code).courseName(code + " 과정").cohort("1기").category("AI")
@@ -213,5 +228,12 @@ class AdmissionFlowTest {
                  "type":"과정 선택","date":"2026-09-15","time":"14:00–16:00","contact":"전화",
                  "dorm":"미정","message":"과정이 궁금합니다.","privacy":%s}
                 """.formatted(id, privacy);
+    }
+
+    private String resourceText(String path) throws Exception {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(path)) {
+            assertThat(input).as(path).isNotNull();
+            return new String(input.readAllBytes(), StandardCharsets.UTF_8);
+        }
     }
 }

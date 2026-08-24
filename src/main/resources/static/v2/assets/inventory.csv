@@ -1,6 +1,6 @@
 ﻿화면ID,영역,화면명,경로,담는 기능ID,우선순위,제작일,상태
 ST-00,공통,통합 랜딩 홈,/v2/index.html,공통-001,P0,D1,완료
-ST-01,공통,통합 서비스 내비게이션(GNB·푸터),shell.js 공용,공통-001,P0,D1,완료
+ST-01,공통,통합 서비스 내비게이션(GNB·푸터),page-section-navigation.js 공용,공통-001,P0,D1,완료
 ST-02,공통,통합 검색 결과,/v2/site/search.html,공통-008,P1,D2,
 ST-03,공통,자주 묻는 질문,/v2/site/faq.html,몰입-037 공통-010,P2,D2,
 ST-04,공통,이용약관,/v2/site/terms.html,-,P2,D2,

@@ -1,5 +1,5 @@
 /* ============================================================
-   shell.js — 공용 셸(GNB·푸터·사이드바·상단바) 렌더러
+   section-navigation.js — 공용 셸(GNB·푸터·사이드바·상단바) 렌더러
 
    화면 80개가 같은 머리·꼬리 마크업을 반복하지 않게 한다.
    각 화면은 본문만 쓰고 아래 한 줄로 셸을 붙인다.
@@ -31,23 +31,24 @@
      --------------------------------------------------------- */
   var SITE_NAV = {
     campus: [
-      { key: "about",   label: "브랜드 스토리", href: "/v2/site/campus/index.html#heritage" },
-      { key: "outcome", label: "취업 성과",     href: "/v2/site/campus/index.html#outcomes" },
-      { key: "review",  label: "수료생 후기",   href: "/v2/site/campus/index.html#reviews" },
-      { key: "support", label: "취업 지원",     href: "/v2/site/campus/index.html#career-support" },
+      { key: "about",   label: "브랜드 스토리", href: "/v2/site/campus/about.html", todo: true },
+      { key: "outcome", label: "취업 성과",     href: "/v2/site/campus/outcome.html", todo: true },
+      { key: "review",  label: "취업 후기",     href: "/v2/site/class/reviews.html" },
+      { key: "support", label: "취업 지원",     href: "/v2/site/campus/support.html" },
       { key: "facility",label: "캠퍼스·기숙사", href: "/v2/site/campus/facility.html" }
     ],
     class: [
       { key: "catalog", label: "전체 과정",   href: "/v2/site/class/index.html" },
       { key: "detail",  label: "과정 상세",   href: "/v2/site/class/index.html#course-list-all" },
+      { key: "career",  label: "취업클라쓰",  href: "/v2/site/class/reviews.html" },
       { key: "apply",   label: "수강 신청",   href: "/v2/site/class/apply.html" }
     ],
     biz: [
-      { key: "diagnosis", label: "조직 진단",   href: "/v2/site/biz/index.html#diagnosis" },
-      { key: "flow",      label: "AX Flow",     href: "/v2/site/biz/index.html#flow" },
-      { key: "programs",  label: "직무별 과정", href: "/v2/site/biz/index.html#programs" },
-      { key: "cases",     label: "기업 사례",   href: "/v2/site/biz/index.html#cases" },
-      { key: "contact",   label: "도입 문의",   href: "/v2/site/biz/index.html#contact" }
+      { key: "diagnosis", label: "조직 진단",   href: "/v2/site/biz/diagnosis.html", todo: true },
+      { key: "flow",      label: "AX Flow",     href: "/v2/site/biz/flow.html", todo: true },
+      { key: "programs",  label: "직무별 과정", href: "/v2/site/biz/programs.html" },
+      { key: "cases",     label: "기업 사례",   href: "/v2/site/biz/cases.html" },
+      { key: "contact",   label: "도입 문의",   href: "/v2/site/biz/index.html#biz-contact" }
     ]
   };
 
@@ -148,23 +149,39 @@
      공개사이트 셸
      ========================================================= */
   /* ---------------------------------------------------------
-     오른쪽 내비게이션 — 흰 상단바(.servicebar/.landing-nav/.gnb) 대체.
-     우상단에 브랜드와 여는 버튼만 띄우고, 메뉴는 오른쪽 패널에서 연다.
+     공개사이트 내비게이션 — 서비스 카테고리는 상단, 페이지 메뉴는 오른쪽 패널.
      로그인 버튼은 두지 않는다 — 로그인은 LXP 소개 페이지에서만 한다.
      --------------------------------------------------------- */
   function sideNav(opts) {
     opts = opts || {};
     var svc = opts.service || "";
     var sections = opts.sections || [];
+    var usePublicJourney = sections.length && svc !== "home" &&
+      !document.body.matches(".sales-course,.application-page,.recommend-page");
 
     var serviceLinks = B.services.map(function (s) {
-      return '<a href="' + s.href + '"' + (s.key === svc ? ' aria-current="true"' : "") + ">" + esc(s.label) + "</a>";
+      return '<a href="' + s.href + '"' + (s.key === svc ? ' aria-current="page"' : "") + ">" + esc(s.label) + "</a>";
     }).join("");
 
     var sectionBlock = "";
+    var serviceQuickbar = "";
+    if (svc === "biz") {
+      document.body.classList.add("biz-site");
+      var bizQuickLinks = [
+        { key: "home", label: "비즈워크래프트 홈", href: "/v2/site/biz/index.html" },
+        { key: "programs", label: "직무별 과정", href: "/v2/site/biz/programs.html" },
+        { key: "cases", label: "기업교육 사례", href: "/v2/site/biz/cases.html" },
+        { key: "contact", label: "도입 문의", href: "/v2/site/biz/index.html#biz-contact" }
+      ];
+      serviceQuickbar = '<nav class="biz-quickbar" aria-label="비즈워크래프트 빠른 이동"><div class="container">' +
+        bizQuickLinks.map(function (item) {
+          var current = item.key === (opts.nav || "home");
+          return '<a href="' + item.href + '"' + (current ? ' aria-current="page"' : '') + '>' + esc(item.label) + '</a>';
+        }).join("") + '</div></nav>';
+    }
     if (sections.length) {
       sectionBlock =
-        '<div><p class="sidenav__label">이 페이지</p><div class="sidenav__list">' +
+        '<div>' + (opts.hideSectionLabel ? '' : '<p class="sidenav__label">이 페이지</p>') + '<div class="sidenav__list">' +
         sections.map(function (m) {
           if (m.todo) {  // 아직 화면이 없다 — 404 대신 안내 (CLAUDE.md 규칙 8)
             return '<a href="#" onclick="alert(\'준비 중인 기능입니다.\');return false">' + esc(m.label) + "</a>";
@@ -174,8 +191,24 @@
         "</div></div>";
     }
 
+    var journeyBlock = "";
+    if (usePublicJourney) {
+      journeyBlock = '<nav class="course-journey public-journey" aria-label="현재 페이지 빠른 이동">' +
+        sections.map(function (m, index) {
+          var current = (m.key && m.key === opts.nav) || (!opts.nav && index === 0);
+          var attrs = current ? ' aria-current="step"' : '';
+          if (m.todo) {
+            return '<a href="#"' + attrs + ' onclick="alert(\'준비 중인 기능입니다.\');return false"><i></i><span>' + esc(m.label) + '</span></a>';
+          }
+          return '<a href="' + m.href + '"' + attrs + '><i></i><span>' + esc(m.label) + '</span></a>';
+        }).join("") + '</nav>';
+    }
+
     var node = el(
       '<a class="skip-link" href="#main">본문 바로가기</a>' +
+      '<nav class="home-categorybar" aria-label="서비스 카테고리"><div class="container home-categorybar__inner">' +
+        '<strong><span data-brand="name"></span></strong><div>' + serviceLinks + '</div>' +
+      '</div></nav>' + serviceQuickbar +
       '<div class="sitebar">' +
         '<a class="sitebar__brand" href="/v2/index.html"><span data-brand="name"></span></a>' +
         '<button class="sitebar__toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="sidenav"><i></i><i></i><i></i></button>' +
@@ -184,12 +217,24 @@
       '<nav class="sidenav" id="sidenav" aria-label="사이트 메뉴">' +
         '<div class="sidenav__head"><b data-brand="name"></b>' +
           '<button class="sidenav__close" type="button" aria-label="메뉴 닫기">&times;</button></div>' +
-        '<div><p class="sidenav__label">서비스</p><div class="sidenav__list">' + serviceLinks + '</div></div>' +
         sectionBlock +
-        '<div class="sidenav__cta"><a class="btn btn--primary btn--lg btn--block" href="/v2/site/class/index.html">모집 과정 보기</a></div>' +
-      '</nav>'
+        '<div class="sidenav__cta"><a class="btn btn--primary btn--lg btn--block" href="' + esc(opts.ctaHref || '/v2/site/class/index.html') + '">' + esc(opts.ctaLabel || '모집 과정 보기') + '</a></div>' +
+      '</nav>' +
+      journeyBlock
     );
+
+    // 신청서처럼 입력에 집중해야 하는 화면은 상단 서비스 메뉴만 유지하고
+    // 우측 과정 네비게이터와 햄버거 메뉴를 렌더링하지 않는다.
+    if (opts.hideNavigator) {
+      var navigatorSelectors = [".sitebar", ".sidenav-scrim", ".sidenav", ".public-journey"];
+      navigatorSelectors.forEach(function (selector) {
+        var target = node.querySelector(selector);
+        if (target) target.remove();
+      });
+    }
     document.body.insertBefore(node, document.body.firstChild);
+
+    if (opts.hideNavigator) return;
 
     var panel  = document.getElementById("sidenav");
     var scrim  = document.querySelector("[data-sidenav-scrim]");
@@ -216,12 +261,60 @@
       var a = e.target.closest("a");
       if (a && (a.getAttribute("href") || "").charAt(0) === "#") setOpen(false);
     });
+
+    // 오른쪽 네비게이터가 현재 보고 있는 구간을 주황 표시로 따라간다.
+    var localLinks = Array.prototype.slice.call(panel.querySelectorAll('.sidenav__list a[href^="#"]'));
+    if (localLinks.length) {
+      var syncSection = function () {
+        var current = localLinks[0];
+        localLinks.forEach(function (link) {
+          var target = document.querySelector(link.getAttribute("href"));
+          if (target && target.getBoundingClientRect().top <= window.innerHeight * 0.42) current = link;
+        });
+        localLinks.forEach(function (link) {
+          if (link === current) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+      };
+      window.addEventListener("scroll", syncSection, { passive: true });
+      window.addEventListener("resize", syncSection);
+      syncSection();
+    }
+
+    var publicJourney = document.querySelector(".public-journey");
+    if (publicJourney) {
+      document.body.classList.add("has-public-journey");
+      document.body.dataset.publicNavPhase = "intro";
+      var publicLinks = Array.prototype.slice.call(publicJourney.querySelectorAll("a"));
+      var firstSection = document.querySelector("#main section, main section");
+      var syncPublicJourney = function () {
+        document.body.dataset.publicNavPhase = firstSection && firstSection.getBoundingClientRect().bottom <= 72 ? "content" : "intro";
+        var anchorLinks = publicLinks.filter(function (link) {
+          return (link.getAttribute("href") || "").charAt(0) === "#" && link.getAttribute("href").length > 1;
+        });
+        if (!anchorLinks.length) return;
+        var current = anchorLinks[0];
+        anchorLinks.forEach(function (link) {
+          var target = document.querySelector(link.getAttribute("href"));
+          if (target && target.getBoundingClientRect().top <= window.innerHeight * 0.42) current = link;
+        });
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
+          current = anchorLinks[anchorLinks.length - 1];
+        }
+        anchorLinks.forEach(function (link) {
+          link.setAttribute("aria-current", link === current ? "step" : "false");
+        });
+      };
+      window.addEventListener("scroll", syncPublicJourney, { passive: true });
+      window.addEventListener("resize", syncPublicJourney);
+      syncPublicJourney();
+    }
   }
 
   function site(opts) {
     opts = opts || {};
     var svc = opts.service || "campus";
-    var nav = SITE_NAV[svc] || [];
+    var nav = opts.sections || SITE_NAV[svc] || [];
     var home = SITE_HOME[svc] || "/v2/site/index.html";
 
     // 본문을 <main id="main"> 으로 감싼다 (건너뛰기 링크 대상)
@@ -230,34 +323,15 @@
     while (document.body.firstChild) siteMain.appendChild(document.body.firstChild);
     document.body.appendChild(siteMain);
 
-    sideNav({ service: svc, sections: nav, nav: opts.nav });
-
-    // 전체 과정 화면에서는 스크롤 위치에 맞춰 '전체 과정'과 '과정 상세' 표시를 전환한다.
-    if (svc === "class" && /\/site\/class\/index\.html$/.test(location.pathname)) {
-      var courseSection = document.querySelector("#course-list-all");
-      var scrollTicking = false;
-      var syncCourseMenu = function () {
-        var isDetailList = courseSection && courseSection.getBoundingClientRect().top <= 150;
-        document.querySelectorAll(".sidenav__list a").forEach(function (link) {
-          var href = link.getAttribute("href") || "";
-          var active = isDetailList ? href.indexOf("#course-list-all") > -1 : href === "/v2/site/class/index.html";
-          if (active) link.setAttribute("aria-current", "page");
-          else link.removeAttribute("aria-current");
-        });
-      };
-      var requestCourseMenuSync = function () {
-        if (scrollTicking) return;
-        scrollTicking = true;
-        window.requestAnimationFrame(function () {
-          syncCourseMenu();
-          scrollTicking = false;
-        });
-      };
-      window.addEventListener("hashchange", syncCourseMenu);
-      window.addEventListener("scroll", requestCourseMenuSync, { passive: true });
-      window.addEventListener("resize", requestCourseMenuSync);
-      syncCourseMenu();
-    }
+    sideNav({
+      service: svc,
+      sections: nav,
+      nav: opts.nav,
+      hideNavigator: opts.hideNavigator,
+      hideSectionLabel: opts.hideSectionLabel,
+      ctaLabel: opts.ctaLabel,
+      ctaHref: opts.ctaHref
+    });
 
     var footer = el(
       '<footer class="footer"><div class="container">' +
@@ -272,7 +346,9 @@
           '</ul></div>' +
           '<div><h4>지원</h4><ul class="stack-sm">' +
             '<li><a href="/v2/site/campus/counsel.html">상담 신청</a></li>' +
-            '<li><a href="/v2/site/biz/index.html#contact">기업교육 문의</a></li>' +
+            '<li><a href="/v2/site/biz/index.html#biz-contact">기업교육 문의</a></li>' +
+            '<li><a href="/v2/site/faq.html">자주 묻는 질문</a></li>' +
+            '<li><a href="/v2/site/search.html">통합 검색</a></li>' +
           '</ul></div>' +
           '<div><h4>문의</h4><ul class="stack-sm">' +
             '<li><span data-brand="tel"></span></li>' +

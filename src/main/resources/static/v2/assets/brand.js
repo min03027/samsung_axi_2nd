@@ -58,7 +58,7 @@ window.BRAND = {
     { key: "home",    label: "통합 홈",       href: "/v2/index.html" },
     { key: "campus",  label: "취업캠퍼스",     href: "/v2/site/campus/index.html" },
     { key: "class",   label: "몰입클라쓰",     href: "/v2/site/class/index.html" },
-    { key: "biz",     label: "비즈워크넥트",   href: "/v2/site/biz/index.html" },
+    { key: "biz",     label: "비즈워크래프트", href: "/v2/site/biz/index.html" },
     { key: "lxp",     label: "LXP 학습",       href: "/v2/site/lxp/index.html" },
     { key: "facility",label: "시설 소개",      href: "/v2/site/campus/facility.html" }
   ],

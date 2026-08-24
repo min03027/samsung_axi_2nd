@@ -1,1 +1,46 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>수료생 후기 — {brand}</title><meta name="description" content="과정·취업기업·직무·연도별 수료생 인터뷰"><link rel="stylesheet" href="/v2/assets/tokens.css"><link rel="stylesheet" href="/v2/assets/base.css"><link rel="stylesheet" href="/v2/assets/components.css"></head><body class="pg-site"><section class="pg-hero"><div class="container"><span class="pg-kicker">GRADUATE STORIES</span><h1>광고 문장보다<br><em>수료생의 과정</em>을 봅니다</h1><p>훈련 전 상황부터 프로젝트, 취업 준비와 현재 직무까지 확인해 보세요.</p></div></section><main class="section"><div class="container" data-review-catalog><div class="section-head"><span class="eyebrow">FILTER</span><h2>내가 궁금한 후기 찾기</h2></div><div class="public-review-filter"><label>취업 기업<select class="select" data-review-filter-company><option value="">전체 기업</option></select></label><label>직무<select class="select" data-review-filter-job><option value="">전체 직무</option></select></label><label>과정<select class="select" data-review-filter-course><option value="">전체 과정</option></select></label><label>수료 연도<select class="select" data-review-filter-year><option value="">전체 연도</option></select></label></div><div class="public-review-grid" data-review-catalog-grid aria-busy="true"></div></div></main><script src="/v2/assets/brand.js"></script><script src="/v2/assets/public-review-cms.js"></script><script src="/v2/assets/shell.js"></script><script>Shell.site({service:'campus',nav:'review'});</script></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>수료생 전환 인터뷰 — {brand}</title>
+  <meta name="description" content="삼성AXI 수료생 27명의 교육 경험과 커리어 전환 기록을 확인하세요.">
+  <link rel="stylesheet" href="/v2/assets/tokens.css">
+  <link rel="stylesheet" href="/v2/assets/base.css">
+  <link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64">
+  <link rel="stylesheet" href="/v2/assets/campus-reviews.css?v=20260824-01">
+  <link rel="stylesheet" href="/v2/assets/campus-reviews-internal.css?v=20260824-01">
+</head>
+<body class="employment-campus campus-reviews-page">
+<main>
+  <section class="reviews-hero">
+    <div class="container reviews-hero__layout">
+      <div><span>CAREER TRANSITION INTERVIEW</span><h1 style="color:#fff">모두의 AI</h1><a class="btn btn--primary btn--lg" href="/v2/site/class/index.html#all-courses" style="margin-top:28px">진행 과정 보기</a></div>
+      <div><p>수료생 27명의 전환 기록을 모았습니다. 과정에서 무엇을 만들었고, 취업 준비를 어떻게 이어갔는지 원문 인터뷰와 함께 확인하세요.</p><strong><b data-review-total>27</b>개의 공개 인터뷰</strong></div>
+    </div>
+  </section>
+
+  <section class="reviews-featured" aria-labelledby="featured-title">
+    <div class="container" data-featured-review></div>
+  </section>
+
+  <section class="reviews-directory" id="reviews-directory">
+    <div class="container">
+      <header class="reviews-directory__head"><div><span>ALL INTERVIEWS</span><h2 id="featured-title">27명의 선택과 변화</h2></div><p>이름과 제목으로 찾거나 공개된 관심 분야를 기준으로 좁혀보세요.</p></header>
+      <form class="reviews-filter" data-review-filter>
+        <label>인터뷰 검색<input type="search" name="query" placeholder="이름·제목 검색"></label>
+        <label>공개 연도<select name="year"><option value="all">전체 연도</option><option value="2026">2026</option></select></label>
+        <label>관심 분야<select name="field"><option value="all">전체 분야</option><option value="data">데이터</option><option value="ai">AI·로봇</option><option value="web">웹·개발</option><option value="career">커리어 전환</option></select></label>
+        <button class="btn btn--outline" type="reset">초기화</button>
+      </form>
+      <p class="reviews-count" aria-live="polite"><b data-review-count>27</b>개의 인터뷰</p>
+      <div class="reviews-grid" data-review-grid></div>
+      <p class="reviews-empty" data-review-empty hidden>조건에 맞는 인터뷰가 없습니다. 다른 검색어 또는 전체 분야를 선택해 주세요.</p>
+    </div>
+  </section>
+
+  <section class="reviews-next"><div class="container"><div><span>YOUR TURN</span><h2>당신의 전환점도,<br>여기서 시작될 수 있습니다.</h2></div><div><a class="btn btn--primary btn--lg" href="/v2/site/class/index.html">교육과정 알아보기</a><a class="btn btn--outline btn--lg" href="/v2/site/campus/counsel.html">과정 상담하기</a></div></div></section>
+</main>
+<script src="/v2/assets/page-section-navigation.js"></script><script src="/v2/assets/brand.js"></script><script src="/v2/assets/campus-reviews.js?v=20260824-02"></script>
+<script>Shell.site({service:'campus',nav:'reviews',sections:[{href:'#reviews-directory',label:'수료생 인터뷰'}],ctaLabel:'과정 상담',ctaHref:'/v2/site/campus/counsel.html'});window.applyBrand();</script>
+</body></html>

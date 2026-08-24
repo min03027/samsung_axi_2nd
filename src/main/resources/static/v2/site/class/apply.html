@@ -6,7 +6,8 @@
   <title>과정 지원 — {brand}</title>
   <link rel="stylesheet" href="/v2/assets/tokens.css">
   <link rel="stylesheet" href="/v2/assets/base.css">
-  <link rel="stylesheet" href="/v2/assets/components.css">
+  <link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64">
+  <link rel="stylesheet" href="/v2/assets/class-workflow.css?v=20260823-50">
 </head>
 <body class="class-site application-page">
 <main>
@@ -35,6 +36,10 @@
         <input type="hidden" name="course" data-course-value>
         <input type="hidden" name="courseId" data-course-id>
         <p class="hint" role="status">제출된 신청서는 담당자가 확인한 뒤 선발 절차와 준비사항을 개별 안내합니다.</p>
+        <div class="application-draft-bar" data-draft-bar>
+          <span><i aria-hidden="true"></i><b data-draft-state>작성 내용은 이 기기에 자동 저장됩니다.</b></span>
+          <button type="button" data-save-draft>지금 저장</button>
+        </div>
 
         <fieldset data-form-step class="course-choice-step">
           <legend><span class="form-kicker">STEP 01 · CHOOSE A COURSE</span><strong>어떤 과정을<br>신청하시겠어요?</strong></legend>
@@ -66,7 +71,7 @@
             <b>과정을 몰라도 괜찮아요.</b>
             <p>현재 경험, 관심 직무, 가능한 일정을 확인한 뒤 가장 맞는 과정을 담당자가 제안합니다.</p>
           </div>
-          <div class="form-actions"><span></span><button class="btn btn--primary btn--lg" type="button" data-step-next>기본 정보 입력하기 →</button></div>
+          <div class="form-actions form-actions--triple"><span></span><button class="btn btn--ghost btn--lg" type="button" data-save-draft>임시저장</button><button class="btn btn--primary btn--lg" type="button" data-step-next>기본 정보 입력하기 →</button></div>
         </fieldset>
 
         <fieldset data-form-step hidden>
@@ -79,7 +84,7 @@
             <label>현재 상태<select class="select" name="employment" required><option value="">선택하세요</option><option>구직 중</option><option>재직 중</option><option>학생</option><option>기타</option></select></label>
             <label>희망 직무<input class="input" name="job" required placeholder="예: 데이터 분석가"></label>
           </div>
-          <div class="form-actions"><button class="btn btn--outline btn--lg" type="button" data-step-prev>← 과정 다시 선택</button><button class="btn btn--primary btn--lg" type="button" data-step-next>다음 단계 →</button></div>
+          <div class="form-actions form-actions--triple"><button class="btn btn--outline btn--lg" type="button" data-step-prev>← 과정 다시 선택</button><button class="btn btn--ghost btn--lg" type="button" data-save-draft>임시저장</button><button class="btn btn--primary btn--lg" type="button" data-step-next>다음 단계 →</button></div>
         </fieldset>
 
         <fieldset data-form-step hidden>
@@ -91,12 +96,13 @@
           <div class="form-choice"><p>기숙사 상담</p><label><input type="radio" name="dorm" value="필요" required> 필요</label><label><input type="radio" name="dorm" value="불필요"> 불필요</label><label><input type="radio" name="dorm" value="미정"> 아직 미정</label></div>
           <label>필요 서류 <span class="hint" data-required-documents>담당자 확인 후 안내</span></label>
           <p class="hint">파일 첨부는 아직 지원하지 않습니다. 접수 후 담당자가 필요한 제출 방법을 별도로 안내합니다.</p>
-          <div class="form-actions"><button class="btn btn--outline btn--lg" type="button" data-step-prev>← 이전</button><button class="btn btn--primary btn--lg" type="button" data-step-next>내용 확인 →</button></div>
+          <div class="form-actions form-actions--triple"><button class="btn btn--outline btn--lg" type="button" data-step-prev>← 이전</button><button class="btn btn--ghost btn--lg" type="button" data-save-draft>임시저장</button><button class="btn btn--primary btn--lg" type="button" data-step-next>내용 확인 →</button></div>
         </fieldset>
 
         <fieldset data-form-step hidden>
           <legend><span class="form-kicker">STEP 04 · CONFIRM</span><strong>마지막 확인</strong></legend>
           <div class="application-summary"><small data-summary-label>신청 과정</small><b data-course-title></b><p data-summary-description>제출 후 담당자가 신청 내용을 확인하고 선발 절차와 준비사항을 개별 안내합니다.</p></div>
+          <div class="application-review" data-review-grid aria-label="신청서 검토"></div>
           <label class="consent"><input type="checkbox" name="privacy" required> 과정 신청을 위한 개인정보 수집·이용에 동의합니다.</label>
           <label class="consent"><input type="checkbox" name="truth" required> 작성한 내용이 사실과 다름없음을 확인합니다.</label>
           <p class="form-save-message" data-save-message></p>
@@ -106,16 +112,46 @@
     </section>
   </div>
   <section class="application-complete" data-form-complete hidden>
-    <span>APPLICATION COMPLETE</span><h1>신청이<br>접수되었습니다.</h1>
-    <p><b data-course-title></b> 담당자가 확인 후 연락드리겠습니다.</p>
-    <div><small>접수번호</small><strong data-receipt></strong></div>
-    <a class="btn btn--primary btn--lg" href="/v2/site/class/index.html#course-list-all">전체 과정으로 돌아가기</a>
+    <div class="application-status__shell">
+      <header class="application-status__header">
+        <div><span>APPLICATION STATUS</span><strong data-application-status-label>접수 완료</strong></div>
+        <p><small>접수번호</small><b data-receipt></b></p>
+      </header>
+      <div class="application-status__intro">
+        <span data-status-kicker>신청이 정상적으로 접수되었습니다.</span>
+        <h1 data-status-title>제출한 신청서를<br>확인하고 있습니다.</h1>
+        <p data-status-summary></p>
+        <strong class="application-status__growth"><span data-status-motivation-title>모두의 AI와 함께</span><b data-status-motivation-copy>나에게 맞는 배움과 새로운 커리어를 향해 한 발짝 내딛어 봅시다.</b></strong>
+        <small data-submitted-at></small>
+      </div>
+      <ol class="application-status__timeline" aria-label="신청 처리 단계">
+        <li data-status-step="submitted"><i>1</i><span><b>접수 완료</b><small>신청서가 안전하게 저장되었습니다.</small></span></li>
+        <li data-status-step="reviewing"><i>2</i><span><b>전화 상담</b><small>담당자가 내용을 확인하고 전화 상담을 진행합니다.</small></span></li>
+        <li data-status-step="accepted"><i>3</i><span><b>최종 안내</b><small>선발 결과와 다음 일정을 안내합니다.</small></span></li>
+      </ol>
+      <section class="application-supplement" data-supplement-panel hidden>
+        <span>보완 요청</span>
+        <h2>확인이 필요한 내용이 있습니다.</h2>
+        <p data-supplement-message></p>
+        <button class="btn btn--primary" type="button" data-start-supplement>보완 내용 작성하기</button>
+      </section>
+      <details class="application-submitted-detail">
+        <summary>제출한 내용 보기</summary>
+        <div data-submitted-summary></div>
+      </details>
+      <div class="application-status__actions">
+        <button class="btn btn--outline btn--lg" type="button" data-edit-submission>제출 내용 수정</button>
+        <a class="btn btn--primary btn--lg" href="/v2/site/class/index.html#course-list-all">전체 과정으로 돌아가기</a>
+      </div>
+      <p class="application-status__notice">현재 화면은 프론트엔드 보관 상태입니다. 관리자 시스템 연동 후에는 로그인 계정 기준으로 기기와 관계없이 동일한 상태를 확인할 수 있습니다.</p>
+    </div>
   </section>
 </main>
 <script src="/v2/assets/brand.js"></script>
+<script src="/v2/assets/recruitment-status.js?v=20260823-25"></script>
 <script src="/v2/assets/course-data.js"></script>
-<script src="/v2/assets/application-flow.js"></script>
-<script src="/v2/assets/shell.js"></script>
-<script>Shell.site({service:'class',nav:'apply'})</script>
+<script src="/v2/assets/application-flow.js?v=20260823-36"></script>
+<script src="/v2/assets/page-section-navigation.js?v=20260823-28"></script>
+<script>Shell.site({service:'class',nav:'apply',hideNavigator:true})</script>
 </body>
 </html>

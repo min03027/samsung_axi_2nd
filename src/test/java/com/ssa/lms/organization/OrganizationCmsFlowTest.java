@@ -201,14 +201,17 @@ class OrganizationCmsFlowTest {
     }
 
     @Test
-    void 홈페이지는_정적기업목록대신_공개_CMS_영역을_사용한다() throws Exception {
+    void 취업캠퍼스는_팀파트너표현을_유지하고_CMS는_공개_API로_분리한다() throws Exception {
         mvc.perform(get("/v2/site/campus/index.html"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("data-public-organizations")))
-                .andExpect(content().string(not(containsString("<span class=\"logorow__item\">고용노동부</span>"))));
+                .andExpect(content().string(containsString("data-employment-marquee")))
+                .andExpect(content().string(containsString("/v2/assets/partners/samsung-sds.svg")));
         mvc.perform(get("/v2/site/biz/index.html"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("data-organization-site=\"BIZ\"")));
+                .andExpect(content().string(containsString("data-biz-type-tab")));
+        mvc.perform(get("/v2/api/organizations")
+                        .param("site", "CAMPUS").param("position", "PARTNER_ROLLING"))
+                .andExpect(status().isOk());
     }
 
     private Course saveCourse(String code, CourseStatus status) {

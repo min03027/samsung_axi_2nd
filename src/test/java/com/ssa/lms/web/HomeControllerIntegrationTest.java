@@ -28,22 +28,15 @@ class HomeControllerIntegrationTest {
             "/v2/index.html",
             "/v2/site/class/index.html",
             "/v2/site/campus/index.html",
+            "/v2/site/campus/support.html",
             "/v2/site/campus/reviews.html",
             "/v2/site/campus/review-detail.html",
+            "/v2/site/class/reviews.html",
             "/v2/site/biz/index.html",
-            "/v2/site/lxp/index.html",
-            "/v2/login"
-    );
-
-    private static final List<String> RETIRED_PUBLIC_PATHS = List.of(
-            "/v2/site/campus/support.html",
-            "/v2/site/campus/outcome.html",
-            "/v2/site/biz/diagnosis.html",
-            "/v2/site/biz/contact.html",
-            "/v2/site/biz/flow.html",
             "/v2/site/biz/programs.html",
             "/v2/site/biz/cases.html",
-            "/v2/site/biz/case-detail.html"
+            "/v2/site/lxp/index.html",
+            "/v2/login"
     );
 
     @Autowired MockMvc mvc;
@@ -66,20 +59,23 @@ class HomeControllerIntegrationTest {
     }
 
     @Test
-    @DisplayName("공개 랜딩은 미구현 상세 페이지 대신 실제 섹션을 연결한다")
-    void publicLandingDoesNotExposeRetiredPaths() throws IOException {
+    @DisplayName("공개 랜딩은 통합된 팀 페이지와 실제 섹션을 연결한다")
+    void publicLandingLinksIntegratedTeamPagesAndSections() throws IOException {
         String campus = resourceText("static/v2/site/campus/index.html");
         String biz = resourceText("static/v2/site/biz/index.html");
-        String shell = resourceText("static/v2/assets/shell.js");
-        String publicSource = campus + biz + shell;
+        String navigation = resourceText("static/v2/assets/page-section-navigation.js");
 
-        for (String path : RETIRED_PUBLIC_PATHS) {
-            assertFalse(publicSource.contains(path), () -> "미구현 공개 경로가 다시 노출됨: " + path);
-        }
-        for (String id : List.of("outcomes", "heritage", "career-support", "reviews")) {
+        assertFalse(campus.contains("/v2/assets/shell.js"));
+        assertFalse(biz.contains("/v2/assets/shell.js"));
+        assertTrue(navigation.contains("/v2/site/campus/support.html"));
+        assertTrue(navigation.contains("/v2/site/biz/programs.html"));
+        assertTrue(navigation.contains("/v2/site/biz/cases.html"));
+        for (String id : List.of("campus-history", "why-campus", "campus-credentials",
+                "campus-network", "campus-courses", "career-support", "graduate-reviews", "campus-facilities")) {
             assertTrue(campus.contains("id=\"" + id + "\""), () -> "취업캠퍼스 섹션 누락: " + id);
         }
-        for (String id : List.of("diagnosis", "flow", "programs", "cases", "contact")) {
+        for (String id : List.of("education-types", "ax-execution", "org-diagnosis",
+                "change-flow", "job-programs", "company-cases", "biz-contact")) {
             assertTrue(biz.contains("id=\"" + id + "\""), () -> "비즈워크넥트 섹션 누락: " + id);
         }
     }

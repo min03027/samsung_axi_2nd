@@ -201,14 +201,14 @@ class ReviewCmsFlowTest {
     }
 
     @Test
-    void 공개화면은_고정후기대신_CMS_데이터영역을_사용한다() throws Exception {
+    void 취업인터뷰와_CMS후기영역은_각자의_공개경로를_유지한다() throws Exception {
         mvc.perform(get("/v2/index.html")).andExpect(status().isOk())
-                .andExpect(content().string(containsString("data-review-site=\"MAIN\"")))
-                .andExpect(content().string(not(containsString("김지윤 수료생"))));
+                .andExpect(content().string(containsString("story-proof__quote")))
+                .andExpect(content().string(containsString("story-proof__numbers")));
         mvc.perform(get("/v2/site/campus/index.html")).andExpect(status().isOk())
-                .andExpect(content().string(containsString("data-review-position=\"CAMPUS_REVIEWS\"")));
+                .andExpect(content().string(containsString("data-career-carousel")));
         mvc.perform(get("/v2/site/campus/reviews.html")).andExpect(status().isOk())
-                .andExpect(content().string(containsString("data-review-filter-company")));
+                .andExpect(content().string(containsString("data-review-filter")));
         mvc.perform(get("/v2/site/campus/review-detail.html")).andExpect(status().isOk())
                 .andExpect(content().string(containsString("data-review-detail")));
         mvc.perform(get("/v2/site/class/course.html").param("courseId", "1")).andExpect(status().isOk())

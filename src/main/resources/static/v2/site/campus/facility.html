@@ -1,80 +1,182 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>시설 소개 — {brand}</title>
-<meta name="description" content="교육장·기숙사·수영센터까지, 머무는 시간이 그대로 실력이 되도록 준비한 공간을 소개합니다.">
-<link rel="stylesheet" href="/v2/assets/tokens.css"><link rel="stylesheet" href="/v2/assets/base.css"><link rel="stylesheet" href="/v2/assets/components.css"></head>
-<body class="pg-site">
+<meta name="description" content="아침 목표 설정부터 수업·실습·팀 점검·야간 학습까지 이어지는 하루와 과정별 교육장, 공용공간, 기숙사를 실제 시설 사진으로 확인하세요.">
+<link rel="stylesheet" href="/v2/assets/tokens.css">
+<link rel="stylesheet" href="/v2/assets/base.css">
+<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64">
+<link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64">
+<link rel="stylesheet" href="/v2/assets/facility-entry.css?v=20260824-65">
+</head>
+<body class="pg-site facility-page">
 <main id="main">
 
-  <section class="pg-hero">
+  <section class="facility-hero">
+    <div class="container facility-hero__layout">
+      <div class="facility-hero__copy">
+        <span class="pg-kicker">CAMPUS FACILITIES</span>
+        <h1>배움이 이어지는<br><em>공간까지 확인하세요.</em></h1>
+        <p>수업이 열리는 교육장부터 쉬어 갈 공용공간, 통학 부담을 덜어 주는 기숙사까지 실제 공개 사진으로 보여드립니다.</p>
+        <div class="pg-hero__actions">
+          <a class="btn btn--primary btn--lg" href="#course-facility-guide">내 과정 시설 확인</a>
+          <a class="btn btn--outline btn--lg" data-facility-counsel href="/v2/site/campus/counsel.html">시설 상담</a>
+        </div>
+        <small>※ 실제 배정 강의실과 장비 구성, 기숙사 입실 가능 여부는 과정·기수별 안내에서 최종 확정됩니다.</small>
+      </div>
+      <div class="facility-hero__gallery" aria-label="삼성 AXI 실제 시설 사진">
+        <figure class="facility-hero__photo facility-hero__photo--wide"><img src="https://samsungaxi.com/data/facility/fac_x_1776317699.jpg" alt="삼성 AXI 교육장" loading="eager"><figcaption>교육장</figcaption></figure>
+        <figure class="facility-hero__photo"><img src="https://samsungaxi.com/data/facility/fac_x_1776317715.jpg" alt="삼성 AXI 공용 휴게공간" loading="eager"><figcaption>공용 휴게공간</figcaption></figure>
+        <figure class="facility-hero__photo"><img src="https://samsungaxi.com/data/facility/fac_1_1700740164.jpg" alt="삼성 AXI 기숙사 객실" loading="eager"><figcaption>기숙사</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="facility-course" id="course-facility-guide">
     <div class="container">
-      <span class="pg-kicker">CAMPUS FACILITIES</span>
-      <h1>머무는 시간까지<br><em>실력이 되는 곳.</em></h1>
-      <p>교육장에서 기숙사, 수영센터까지<br>하루의 흐름이 끊기지 않도록 한자리에 두었습니다.</p>
+      <div class="facility-section-head">
+        <div><span>COURSE × SPACE</span><h2>신청할 과정의 학습 공간</h2></div>
+        <label class="facility-course__select">과정 선택<select data-facility-course-select aria-label="시설 정보를 확인할 과정 선택"></select></label>
+      </div>
+      <div class="facility-course__panel">
+        <figure><img data-facility-profile-image alt="" loading="lazy" decoding="async"><figcaption>공개된 실제 시설 사진</figcaption></figure>
+        <div class="facility-course__content">
+          <p class="facility-course__eyebrow" data-facility-course-name>데이터 예측 자동화 과정</p>
+          <h3 data-facility-room>전산 실습실</h3>
+          <p class="facility-course__description" data-facility-room-desc></p>
+          <div class="facility-course__equipment"><small>실습 장비·도구</small><div data-facility-equipment></div></div>
+          <div class="facility-course__dorm"><small>기숙사</small><strong data-facility-dorm>상담 가능</strong><p data-facility-dorm-desc></p></div>
+          <div class="facility-course__actions">
+            <a class="btn btn--primary" data-facility-counsel href="/v2/site/campus/counsel.html">이 과정 시설 상담</a>
+            <a class="btn btn--outline" href="#classrooms">전체 시설 보기</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="facility-day" id="daily-learning">
+    <div class="container">
+      <header class="facility-editorial-head">
+        <div>
+          <p class="pg-label">DAILY IMMERSION</p>
+          <h2>하루의 리듬이<br><em>몰입을 만듭니다.</em></h2>
+        </div>
+        <p>목표를 정하고, 배우고, 직접 만들고, 함께 점검합니다. 수업이 끝난 뒤에도 필요한 학습과 질문을 이어갈 수 있도록 하루를 설계합니다.</p>
+      </header>
+
+      <div class="facility-day__scene">
+        <figure class="facility-day__photo">
+          <img src="https://samsungaxi.com/data/facility/fac_x_1776317699.jpg" alt="하루 동안 수업과 실습이 이어지는 삼성 AXI 교육장" loading="lazy">
+          <figcaption><span>08:40 — 21:00</span><b>한 공간에서 이어지는<br>몰입의 하루</b></figcaption>
+        </figure>
+
+        <ol class="facility-day__timeline" aria-label="시간대별 학습 흐름">
+          <li tabindex="0">
+            <time datetime="08:40">08:40</time>
+            <span>01 · START</span>
+            <h3>아침 목표</h3>
+            <p>오늘 완성할 결과와 개인 목표를 확인하고 우선순위를 정합니다.</p>
+          </li>
+          <li tabindex="0">
+            <time datetime="09:00">09:00</time>
+            <span>02 · LEARN</span>
+            <h3>수업</h3>
+            <p>핵심 개념과 실제 사례, 강사의 시연을 통해 문제 해결의 기준을 세웁니다.</p>
+          </li>
+          <li tabindex="0">
+            <time datetime="13:00">13:00</time>
+            <span>03 · BUILD</span>
+            <h3>실습</h3>
+            <p>개인 실습 환경과 과정별 장비를 사용해 배운 내용을 직접 구현합니다.</p>
+          </li>
+          <li tabindex="0">
+            <time datetime="16:30">16:30</time>
+            <span>04 · REVIEW</span>
+            <h3>팀 점검</h3>
+            <p>작업물을 함께 살펴보고 피드백과 다음 행동을 구체적으로 정리합니다.</p>
+          </li>
+          <li tabindex="0">
+            <time datetime="19:00">19:00</time>
+            <span>05 · GROW</span>
+            <h3>야간 학습·튜터링</h3>
+            <p>부족한 부분을 보완하고 남은 질문은 자율학습과 튜터링으로 이어갑니다.</p>
+          </li>
+        </ol>
+      </div>
+      <p class="facility-day__note">※ 하루 흐름을 이해하기 위한 예시이며 실제 수업·실습·튜터링 시간은 과정과 기수에 따라 달라집니다.</p>
+    </div>
+  </section>
+
+  <section class="facility-gallery-section" id="classrooms">
+    <div class="container">
+      <div class="facility-section-head">
+        <div><span>LEARNING SPACE</span><h2>교육장과 실습 환경</h2></div>
+        <p>과정 성격에 맞는 전산 실습실과 장비 환경을 사용합니다. 최종 배정 공간은 개강 안내에서 확인할 수 있습니다.</p>
+      </div>
+      <div class="facility-gallery facility-gallery--classroom">
+        <figure class="facility-gallery__feature"><img src="https://samsungaxi.com/data/facility/fac_x_1776317699.jpg" alt="교육장 1 실제 모습" loading="lazy"><figcaption><b>교육장 1</b><span>강의와 개인 실습을 한 자리에서 이어가는 전산 교육장</span></figcaption></figure>
+        <figure><img src="https://samsungaxi.com/data/facility/fac_x_1776318970.jpg" alt="교육장 2 실제 모습" loading="lazy"><figcaption><b>교육장 2</b><span>과정별로 배정되는 개인 실습 환경</span></figcaption></figure>
+        <figure><img src="https://samsungaxi.com/data/facility/fac_x_1700739994.jpg" alt="장비 실습 공간 실제 모습" loading="lazy"><figcaption><b>장비 실습 공간</b><span>센서·제어·로봇 과정의 실습을 지원하는 공간</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="facility-gallery-section facility-gallery-section--dark" id="commons">
+    <div class="container">
+      <div class="facility-section-head">
+        <div><span>COMMON SPACE</span><h2>수업 사이에도 흐름이 끊기지 않게</h2></div>
+        <p>층별 로비와 휴게공간은 수업 전후 대기, 동료와의 대화, 짧은 휴식을 위한 공용공간입니다.</p>
+      </div>
+      <div class="facility-gallery facility-gallery--commons">
+        <figure><img src="https://samsungaxi.com/data/facility/fac_x_1776317380.png" alt="5층 로비 실제 모습" loading="lazy"><figcaption><b>5층 로비</b><span>수업 전후 이용하는 공용공간</span></figcaption></figure>
+        <figure><img src="https://samsungaxi.com/data/facility/fac_x_1776317389.png" alt="6층 로비 실제 모습" loading="lazy"><figcaption><b>6층 로비</b><span>교육장과 가까운 대기 공간</span></figcaption></figure>
+        <figure><img src="https://samsungaxi.com/data/facility/fac_x_1776317715.jpg" alt="5층 휴게공간 실제 모습" loading="lazy"><figcaption><b>휴게공간</b><span>쉬고 대화할 수 있는 공용공간</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="facility-dorm" id="dorm">
+    <div class="container">
+      <div class="facility-section-head">
+        <div><span>DORMITORY</span><h2>통학 부담을 덜어 주는 기숙사</h2></div>
+        <p>과정 신청 후 기숙사를 별도로 신청하며, 타지역 교육생을 우선으로 입실 가능 여부를 확인합니다.</p>
+      </div>
+      <div class="facility-dorm__layout">
+        <div class="facility-dorm__gallery">
+          <figure class="facility-dorm__main"><img src="https://samsungaxi.com/data/facility/fac_1_1700740164.jpg" alt="기숙사 객실 실제 모습" loading="lazy"><figcaption>객실</figcaption></figure>
+          <figure><img src="https://samsungaxi.com/data/facility/fac_2_1700740164.jpg" alt="기숙사 소형 객실 실제 모습" loading="lazy"><figcaption>객실 유형</figcaption></figure>
+          <figure><img src="https://samsungaxi.com/data/facility/fac_4_1700740164.jpg" alt="기숙사 공용 라운지 실제 모습" loading="lazy"><figcaption>공용 라운지</figcaption></figure>
+        </div>
+        <div class="facility-dorm__details">
+          <article><small>APPLICATION</small><h3>과정 신청 후 별도 신청</h3><p>기숙사 이용을 희망하면 과정 신청 뒤 입실 가능 여부를 확인합니다. 원거리 통학생을 우선으로 안내합니다.</p></article>
+          <article><small>LIVING</small><h3>생활에 필요한 기본 설비</h3><p>원룸형 객실에 개별 화장실, 세탁기·냉장고·Wi‑Fi 등 생활 설비가 마련되어 있습니다. 객실 유형은 배정에 따라 달라집니다.</p></article>
+          <article><small>MEAL &amp; ACCESS</small><h3>두 끼 식사와 도보 이동</h3><p>공개 안내 기준 하루 두 끼와 숙박을 지원하며, 교육시설과 기숙사는 약 10분 거리입니다. 과정별 지원 조건은 상담에서 확인해 주세요.</p></article>
+          <a class="btn btn--primary btn--lg" data-facility-counsel href="/v2/site/campus/counsel.html">기숙사 가능 여부 확인</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pg-cta" id="facility-counsel">
+    <div class="container">
+      <span class="pg-kicker">CHECK BEFORE APPLY</span>
+      <h2>내 과정에 배정되는 공간을<br>신청 전에 확인하세요.</h2>
+      <p>강의실·실습 장비·기숙사 입실 가능 여부를 선택한 과정 기준으로 안내해 드립니다.</p>
       <div class="pg-hero__actions">
-        <a class="btn btn--primary btn--lg" href="/v2/site/campus/counsel.html">시설 상담 신청</a>
-        <a class="btn btn--outline btn--lg" href="#dorm">기숙사 먼저 보기</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="pg-feature">
-    <div class="container">
-      <p class="pg-label">EDUCATION</p>
-      <h2>교육장</h2>
-      <div class="pg-grid">
-        <article><b>실습실</b><h3>1인 1석 실습 환경</h3><p>과정별 장비가 갖춰진 전용 실습실에서 이론과 실습이 같은 자리에서 이어집니다.</p></article>
-        <article><b>프로젝트룸</b><h3>팀 단위 작업 공간</h3><p>스터디룸과 화이트보드를 갖춘 공간에서 팀 프로젝트와 데일리 스크럼을 진행합니다.</p></article>
-        <article><b>발표회장</b><h3>배민스타트업스퀘어</h3><p>프로젝트 발표회와 기업 초청 행사를 여는 공간으로, 수료 프로젝트를 실제로 발표합니다.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <section class="pg-band" id="dorm">
-    <div class="container">
-      <p class="pg-label">DORMITORY</p>
-      <h2>기숙사</h2>
-      <p class="pg-lead">먼 거리 때문에 과정을 포기하지 않도록, 통학이 어려운 훈련생을 위한 생활 공간을 운영합니다.
-        입소 절차와 비용 지원 범위는 과정에 따라 다르므로 상담에서 확인해 주세요.</p>
-      <div class="pg-grid">
-        <article><b>객실</b><h3>생활에 필요한 기본</h3><p>침구·책상·수납이 갖춰진 객실에서 학습과 휴식을 이어갑니다.</p></article>
-        <article><b>식사</b><h3>하루 세 끼</h3><p>교육 일정에 맞춰 식사가 제공되어 이동 시간을 줄입니다.</p></article>
-        <article><b>생활관리</b><h3>안전과 규칙</h3><p>출입 관리와 생활 규칙을 두어 학습에 집중할 수 있는 환경을 유지합니다.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <section class="pg-feature" id="pool">
-    <div class="container">
-      <p class="pg-label">SPORTS CENTER</p>
-      <h2>수영센터</h2>
-      <div class="pg-grid">
-        <article><b>수영장</b><h3>일과 후 회복</h3><p>장시간 앉아 있는 학습 일과의 피로를 풀 수 있도록 수영장을 이용할 수 있습니다.</p></article>
-        <article><b>이용 안내</b><h3>훈련생 이용</h3><p>이용 시간과 조건은 과정·기수에 따라 달라집니다. 상담에서 안내해 드립니다.</p></article>
-        <article><b>부대시설</b><h3>샤워·탈의</h3><p>샤워실과 탈의실을 갖춰 교육 일정 사이에도 이용할 수 있습니다.</p></article>
-      </div>
-    </div>
-  </section>
-
-  <section class="pg-cta">
-    <div class="container">
-      <h2>직접 보고 결정하세요</h2>
-      <p>기숙사 입소 조건과 시설 이용 범위는 과정마다 다릅니다.</p>
-      <div class="pg-hero__actions">
-        <a class="btn btn--primary btn--lg" href="/v2/site/campus/counsel.html">상담 신청하기</a>
-        <a class="btn btn--inverse btn--lg" href="/v2/site/class/index.html">모집 과정 보기</a>
+        <a class="btn btn--primary btn--lg" data-facility-counsel href="/v2/site/campus/counsel.html">시설 상담 신청</a>
+        <a class="btn btn--inverse btn--lg" href="/v2/site/class/index.html">전체 과정 보기</a>
       </div>
     </div>
   </section>
 
 </main>
-<footer class="landing-footer"><div class="container row row--between row--wrap">
-  <div><b data-brand="name"></b><p class="small muted" data-brand="tagline"></p></div>
-  <p class="small muted">© <span data-brand="legalName"></span></p>
-</div></footer>
+<footer class="landing-footer"><div class="container row row--between row--wrap"><div><b data-brand="name"></b><p class="small muted" data-brand="tagline"></p></div><p class="small muted">© <span data-brand="legalName"></span></p></div></footer>
 <script src="/v2/assets/brand.js"></script>
-<script src="/v2/assets/shell.js"></script>
-<script>Shell.nav({service:"facility",sections:[
-  {href:"#main",label:"교육장"},{href:"#dorm",label:"기숙사"},{href:"#pool",label:"수영센터"}]});
-window.applyBrand();</script>
-</body></html>
+<script src="/v2/assets/facility-data.js?v=20260823-62"></script>
+<script src="/v2/assets/page-section-navigation.js"></script>
+<script>Shell.site({service:"facility",sections:[{href:"#course-facility-guide",label:"과정별 시설"},{href:"#daily-learning",label:"하루 학습"},{href:"#classrooms",label:"교육장"},{href:"#commons",label:"공용공간"},{href:"#dorm",label:"기숙사"},{href:"#facility-counsel",label:"시설 상담"}]});window.applyBrand();</script>
+</body>
+</html>

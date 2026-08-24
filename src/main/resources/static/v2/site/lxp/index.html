@@ -2,69 +2,150 @@
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LXP 학습 — {brand}</title>
 <meta name="description" content="오늘 할 일부터 출결·과제·시험·이수까지, 학습의 모든 기록이 한 화면에서 이어지는 학습 관리 시스템.">
-<link rel="stylesheet" href="/v2/assets/tokens.css"><link rel="stylesheet" href="/v2/assets/base.css"><link rel="stylesheet" href="/v2/assets/components.css"></head>
-<body class="pg-site">
+<link rel="stylesheet" href="/v2/assets/tokens.css"><link rel="stylesheet" href="/v2/assets/base.css"><link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/lxp-entry.css?v=20260823-54"></head>
+<body class="pg-site lxp-entry-page">
 <main id="main">
 
-  <section class="pg-hero">
-    <div class="container">
-      <span class="pg-kicker">LEARNING EXPERIENCE PLATFORM</span>
-      <h1>배운 것이 흩어지지 않게,<br><em>기록이 실력이 되도록.</em></h1>
-      <p>오늘 할 일부터 출결·과제·시험·이수증까지<br>학습의 모든 흐름이 하나의 화면에서 이어집니다.</p>
-      <div class="pg-hero__actions">
-        <a class="btn btn--primary btn--lg" href="/signup" data-lxp>회원가입</a>
-        <a class="btn btn--outline btn--lg" href="/v2/login" data-brand-href="lxpLogin">로그인</a>
+  <section class="pg-hero lxp-hero" id="lxp-overview">
+    <div class="container lxp-hero__grid">
+      <div class="lxp-hero__copy">
+        <span class="pg-kicker">LEARNING EXPERIENCE PLATFORM</span>
+        <h1>배운 것이 흩어지지 않게,<br><em>기록이 실력이 되도록.</em></h1>
+        <p>오늘 할 일, 과제 피드백, 출결과 이수 기준까지.<br>학습에 필요한 기록을 한곳에서 이어갑니다.</p>
+        <div class="pg-hero__actions">
+          <a class="btn btn--lg lxp-login" href="/v2/login" data-brand-href="lxpLogin">로그인</a>
+          <a class="lxp-signup-link" href="/signup" data-lxp>처음 이용하시나요? 회원가입 <span aria-hidden="true">→</span></a>
+        </div>
+        <small class="pg-hero__note">수강 중인 훈련생은 로그인 후 배정된 과정과 실제 학습 기록을 확인할 수 있습니다.</small>
+        <ul class="lxp-hero__scope" aria-label="LXP 주요 기능">
+          <li>학습 홈</li><li>과제·피드백</li><li>출결·이수</li><li>AI 도우미</li>
+        </ul>
       </div>
-      <small class="pg-hero__note">이미 수강 중이라면 로그인만 하면 됩니다. 처음이라면 회원가입 후 관리자 승인을 거칩니다.</small>
-    </div>
-  </section>
 
-  <section class="pg-band">
-    <div class="container">
-      <p class="pg-label">WHY LXP</p>
-      <h2>강의는 끝나도<br><em>기록은 남습니다.</em></h2>
-      <p class="pg-lead">출결이 몇 번 빠졌는지, 어떤 피드백을 받았는지, 무엇을 만들었는지 —
-        수료 시점에 증명해야 할 것들이 학습하는 동안 자동으로 쌓입니다.</p>
-    </div>
-  </section>
-
-  <section class="pg-feature">
-    <div class="container">
-      <p class="pg-label">WHAT YOU GET</p>
-      <h2>학습에 필요한 것만,<br>필요한 자리에</h2>
-      <div class="pg-grid">
-        <article><b>01</b><h3>오늘 할 일</h3><p>남은 학습, 마감이 가까운 과제, 새로 온 피드백을 학습 홈에서 먼저 정리해 보여줍니다.</p></article>
-        <article><b>02</b><h3>학습 콘텐츠</h3><p>차시별 영상과 문서를 이어서 볼 수 있고, 어디까지 봤는지 진도가 그대로 남습니다.</p></article>
-        <article><b>03</b><h3>과제와 피드백</h3><p>제출한 과제에 강사가 남긴 코멘트를 과제별로 모아 봅니다. 보완 제출도 같은 자리에서.</p></article>
-        <article><b>04</b><h3>온라인 시험</h3><p>정해진 시간에 응시하고 결과를 바로 확인합니다. 연습 시험은 성적에 반영되지 않습니다.</p></article>
-        <article><b>05</b><h3>출결과 이수</h3><p>일자별 출결과 이수 요건 충족 여부를 직접 확인합니다. 부족하면 미리 알 수 있습니다.</p></article>
-        <article><b>06</b><h3>AI 학습 도우미</h3><p>과정 자료를 근거로 답하는 Q&amp;A, 목표 직무에 맞춘 커리큘럼 추천과 직무 로드맵.</p></article>
+      <div class="lxp-product" aria-label="로그인 후 학습 홈 예시 화면">
+        <div class="lxp-product__bar">
+          <span><i></i><i></i><i></i></span>
+          <b>학습 홈</b>
+          <em>예시 화면</em>
+        </div>
+        <div class="lxp-product__body">
+          <header class="lxp-product__welcome">
+            <div><small>MY LEARNING TODAY</small><h2>다음 학습을<br>바로 이어가세요.</h2></div>
+            <div class="lxp-product__rate"><span>과정 진도</span><b>68<small>%</small></b><i style="--rate:68%"></i></div>
+          </header>
+          <div class="lxp-product__summary">
+            <div><span>오늘 할 일</span><b>3</b><small>남은 항목</small></div>
+            <div><span>새 피드백</span><b>1</b><small>확인 필요</small></div>
+            <div><span>이번 주 출결</span><b>정상</b><small>5일 중 5일</small></div>
+          </div>
+          <div class="lxp-product__risk"><i>!</i><p><b>수료 위험 알림</b><small>평가 기준까지 4점 남았습니다. 보완 가능한 항목을 확인하세요.</small></p><a href="/trainee/completion-management" data-lxp>이수 현황 확인 →</a></div>
+          <div class="lxp-product__focus">
+            <div class="lxp-product__list">
+              <span>TODAY</span>
+              <article class="is-current"><i>01</i><div><b>프로젝트 중간 산출물 제출</b><small>오늘 18:00 마감</small></div><em>진행 중</em></article>
+              <article><i>02</i><div><b>데이터 전처리 실습 이어보기</b><small>진도 72%</small></div><em>이어보기</em></article>
+              <article><i>03</i><div><b>강사 피드백 확인</b><small>새 코멘트 1개</small></div><em>확인</em></article>
+            </div>
+            <aside class="lxp-product__coach"><span>FEEDBACK</span><b>“문제 정의는 좋습니다.<br>지표를 한 번 더 좁혀보세요.”</b><small>프로젝트 담당 강사 · 12분 전</small></aside>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="pg-flow">
-    <div class="container">
-      <p class="pg-label">HOW IT WORKS</p>
-      <h2>가입부터 이수까지</h2>
-      <ol class="pg-steps">
-        <li><span>STEP 1</span><b>회원가입</b><p>훈련생으로 가입하고 개인정보 수집에 동의합니다.</p></li>
-        <li><span>STEP 2</span><b>관리자 승인</b><p>승인 전에는 로그인해도 학습 화면이 열리지 않습니다.</p></li>
-        <li><span>STEP 3</span><b>과정 배정</b><p>신청한 과정에 배정되면 학습 홈에 오늘 할 일이 나타납니다.</p></li>
-        <li><span>STEP 4</span><b>학습과 평가</b><p>콘텐츠·과제·시험·설문을 진행하고 출결이 기록됩니다.</p></li>
-        <li><span>STEP 5</span><b>수료</b><p>이수 요건을 채우면 이수증을 발급받습니다.</p></li>
+  <section class="pg-band lxp-value" id="lxp-value">
+    <div class="container lxp-value__grid">
+      <div class="lxp-value__copy">
+        <p class="pg-label">WHY LXP</p>
+        <h2>학습은 지나가도<br><em>성장의 근거는 남아야 합니다.</em></h2>
+        <p class="pg-lead">얼마나 들었는지가 아니라, 무엇을 끝냈고 어떤 피드백으로 나아졌는지 기록합니다. 수료할 때는 그 기록이 결과물을 설명하는 근거가 됩니다.</p>
+      </div>
+      <ol class="lxp-record" aria-label="학습 기록이 쌓이는 흐름">
+        <li><span>01</span><div><b>놓치지 않게</b><p>오늘 할 일과 가까운 마감을 먼저 확인합니다.</p></div></li>
+        <li><span>02</span><div><b>끊기지 않게</b><p>학습·제출·피드백을 같은 과정 안에서 이어갑니다.</p></div></li>
+        <li><span>03</span><div><b>증명할 수 있게</b><p>진도·출결·평가·이수를 하나의 학습 기록으로 남깁니다.</p></div></li>
       </ol>
     </div>
   </section>
 
-  <section class="pg-cta">
+  <section class="pg-feature lxp-features" id="lxp-features">
     <div class="container">
-      <h2>지금 시작하세요</h2>
-      <p>수강 중이라면 로그인, 처음이라면 회원가입부터.</p>
-      <div class="pg-hero__actions">
-        <a class="btn btn--primary btn--lg" href="/signup" data-lxp>회원가입</a>
-        <a class="btn btn--inverse btn--lg" href="/v2/login" data-brand-href="lxpLogin">로그인</a>
+      <div class="lxp-section-head">
+        <div><p class="pg-label">LXP PREVIEW</p><h2>로그인하면 만나는<br>학습의 여섯 장면</h2></div>
+        <p>아래 화면은 기능 이해를 위한 예시입니다.<br>실제 진도와 제출 기록은 로그인 후 표시됩니다.</p>
       </div>
+
+      <div class="lxp-explorer">
+        <div class="lxp-explorer__tabs" role="tablist" aria-label="LXP 기능 미리보기">
+          <button type="button" role="tab" id="lxp-tab-home" aria-controls="lxp-panel-home" aria-selected="true" data-lxp-tab="home"><span>01</span><b>학습 홈</b><small>오늘의 우선순위</small></button>
+          <button type="button" role="tab" id="lxp-tab-content" aria-controls="lxp-panel-content" aria-selected="false" data-lxp-tab="content"><span>02</span><b>학습 콘텐츠</b><small>이어보기와 진도</small></button>
+          <button type="button" role="tab" id="lxp-tab-assignment" aria-controls="lxp-panel-assignment" aria-selected="false" data-lxp-tab="assignment"><span>03</span><b>과제·피드백</b><small>제출과 보완</small></button>
+          <button type="button" role="tab" id="lxp-tab-exam" aria-controls="lxp-panel-exam" aria-selected="false" data-lxp-tab="exam"><span>04</span><b>온라인 시험</b><small>응시와 결과</small></button>
+          <button type="button" role="tab" id="lxp-tab-completion" aria-controls="lxp-panel-completion" aria-selected="false" data-lxp-tab="completion"><span>05</span><b>출결·설문·이수</b><small>기준과 증명</small></button>
+          <button type="button" role="tab" id="lxp-tab-ai" aria-controls="lxp-panel-ai" aria-selected="false" data-lxp-tab="ai"><span>06</span><b>AI 도우미</b><small>질문과 로드맵</small></button>
+        </div>
+
+        <div class="lxp-explorer__stage">
+          <article class="lxp-scene is-active" role="tabpanel" id="lxp-panel-home" aria-labelledby="lxp-tab-home" data-lxp-panel="home">
+            <div class="lxp-scene__copy"><span>01 · LEARNING HOME</span><h3>지금 해야 할 일을<br>먼저 보여줍니다.</h3><p>남은 학습, 가까운 마감, 새 피드백을 한 화면에서 정리해 다음 행동을 고르기 쉽게 만듭니다.</p><ul><li>오늘 할 일과 다음 학습</li><li>과정별 진도·마감·출결</li><li>수료 위험과 보완 알림</li></ul><div class="lxp-scene__links"><a href="/trainee" data-lxp>실제 학습 홈 열기 <i>→</i></a></div></div>
+            <div class="lxp-scene__visual lxp-scene__visual--home"><header><b>오늘 할 일</b><em>3개 남음</em></header><div class="scene-task is-now"><i></i><p><b>프로젝트 산출물 제출</b><small>오늘 18:00</small></p><span>D-DAY</span></div><div class="scene-task"><i></i><p><b>실습 콘텐츠 이어보기</b><small>진도 72% · 다음 학습</small></p><span>28분</span></div><div class="scene-task"><i></i><p><b>피드백 확인</b><small>새 코멘트 1개</small></p><span>NEW</span></div><div class="scene-risk"><i>!</i><p><b>수료 위험 알림</b><small>평가 점수가 기준보다 4점 부족합니다.</small></p><a href="/trainee/completion-management" data-lxp>보완 항목 보기</a></div></div>
+          </article>
+
+          <article class="lxp-scene" role="tabpanel" id="lxp-panel-content" aria-labelledby="lxp-tab-content" data-lxp-panel="content" hidden>
+            <div class="lxp-scene__copy"><span>02 · CONTENT</span><h3>멈춘 자리에서<br>바로 이어갑니다.</h3><p>차시별 영상과 문서를 보고, 학습한 위치와 완료 여부를 과정 안에 그대로 기록합니다.</p><ul><li>영상·문서 차시 구성</li><li>이어보기와 진도 저장</li><li>완료 항목 자동 표시</li></ul><div class="lxp-scene__links"><a href="/trainee/contents" data-lxp>실제 학습 콘텐츠 열기 <i>→</i></a></div></div>
+            <div class="lxp-scene__visual lxp-scene__visual--content"><div class="scene-player"><span>12:48 / 24:10</span><i></i><b>▶</b></div><ol><li class="is-done"><i>✓</i><p><b>01. 데이터 흐름 이해</b><small>완료</small></p></li><li class="is-now"><i>▶</i><p><b>02. 전처리 실습</b><small>재생 중 · 53%</small></p></li><li><i>03</i><p><b>03. 분석 결과 해석</b><small>학습 전</small></p></li></ol></div>
+          </article>
+
+          <article class="lxp-scene" role="tabpanel" id="lxp-panel-assignment" aria-labelledby="lxp-tab-assignment" data-lxp-panel="assignment" hidden>
+            <div class="lxp-scene__copy"><span>03 · ASSIGNMENT</span><h3>제출로 끝나지 않고<br>보완까지 이어집니다.</h3><p>과제별 제출 파일과 강사 코멘트를 함께 보고, 필요한 경우 같은 자리에서 보완본을 다시 제출합니다.</p><ul><li>과제 파일과 제출 이력</li><li>강사 코멘트 확인</li><li>보완 제출과 변경 기록</li></ul><div class="lxp-scene__links"><a href="/trainee/assignment" data-lxp>실제 과제 화면 열기 <i>→</i></a></div></div>
+            <div class="lxp-scene__visual lxp-scene__visual--assignment"><header><div><small>PROJECT 02</small><b>분석 대시보드 중간 산출물</b></div><em>피드백 도착</em></header><div class="scene-file"><i>PDF</i><p><b>dashboard_v2.pdf</b><small>8월 23일 16:42 제출</small></p><span>제출 완료</span></div><blockquote><b>강사 피드백</b><p>비교 기준이 명확합니다. 핵심 지표가 한눈에 보이도록 첫 화면의 정보량을 줄여보세요.</p></blockquote><a class="scene-login-action" href="/trainee/assignment" data-lxp>로그인 후 보완본 제출하기 <i>→</i></a></div>
+          </article>
+
+          <article class="lxp-scene" role="tabpanel" id="lxp-panel-exam" aria-labelledby="lxp-tab-exam" data-lxp-panel="exam" hidden>
+            <div class="lxp-scene__copy"><span>04 · ONLINE EXAM</span><h3>응시부터 결과까지<br>한 흐름으로 확인합니다.</h3><p>시험 일정과 남은 시간을 확인하고 응시합니다. 공개 방식에 따라 점수와 해설도 같은 화면에서 확인합니다.</p><ul><li>시험 일정과 제한 시간</li><li>답안 임시저장</li><li>결과·해설 공개</li></ul><div class="lxp-scene__links"><a href="/trainee/exam" data-lxp>실제 온라인 시험 열기 <i>→</i></a></div></div>
+            <div class="lxp-scene__visual lxp-scene__visual--exam"><header><div><small>ONLINE TEST</small><b>데이터 분석 중간평가</b></div><time>28:42</time></header><div class="scene-question"><span>QUESTION 04 / 10</span><b>결측값 처리 방법으로 가장 적절한 것은?</b><label><i>A</i>항상 평균으로 대체한다</label><label class="is-checked"><i>B</i>데이터 특성과 목적을 고려해 결정한다</label><label><i>C</i>모든 행을 삭제한다</label></div><footer><span>답안은 자동 저장됩니다.</span><b>4 / 10</b></footer></div>
+          </article>
+
+          <article class="lxp-scene" role="tabpanel" id="lxp-panel-completion" aria-labelledby="lxp-tab-completion" data-lxp-panel="completion" hidden>
+            <div class="lxp-scene__copy"><span>05 · RECORD &amp; COMPLETION</span><h3>출결부터 이수증까지<br>빠짐없이 확인합니다.</h3><p>일자별 출결과 진도·평가 기준을 확인하고, 필수 설문을 마친 뒤 이수증을 발급·보관합니다.</p><ul><li>일자별 출결과 위험 알림</li><li>필수 설문 응답과 제출</li><li>이수 기준·이수증 발급</li></ul><div class="lxp-scene__links lxp-scene__links--multi"><a href="/trainee/attendance" data-lxp>출결</a><a href="/trainee/survey" data-lxp>설문</a><a href="/trainee/completion-management" data-lxp>이수 관리 <i>→</i></a></div></div>
+            <div class="lxp-scene__visual lxp-scene__visual--completion"><header><b>이수 현황</b><em>기준 3개 중 2개 충족</em></header><div class="scene-ring"><i style="--rate:82%"><b>82<small>%</small></b></i><p><b>전체 이수 진행률</b><small>출결과 평가 기준을 반영합니다.</small></p></div><dl><div class="is-ok"><dt>출석률</dt><dd>94% · 충족</dd></div><div class="is-ok"><dt>학습 진도</dt><dd>88% · 충족</dd></div><div><dt>평가 점수</dt><dd>76점 · 4점 필요</dd></div></dl><div class="scene-completion-next"><a href="/trainee/survey" data-lxp><span>필수 설문</span><b>수료 만족도 설문</b><em>응답하기 →</em></a><a href="/trainee/completion-management" data-lxp><span>이수증</span><b>기준 충족 후 발급</b><em>발급 상태 보기 →</em></a></div></div>
+          </article>
+
+          <article class="lxp-scene" role="tabpanel" id="lxp-panel-ai" aria-labelledby="lxp-tab-ai" data-lxp-panel="ai" hidden>
+            <div class="lxp-scene__copy"><span>06 · AI LEARNING ASSISTANT</span><h3>막힌 지점을 묻고<br>다음 역량을 찾습니다.</h3><p>과정 자료를 바탕으로 질문하고, 해결되지 않은 질문은 강사에게 전달합니다. 학습 기록은 목표 직무의 단계별 로드맵과 연결됩니다.</p><ul><li>과정별 자료 기반 AI Q&amp;A</li><li>답변 근거와 강사 전달</li><li>목표 직무·부족역량·단계 로드맵</li></ul><div class="lxp-scene__links lxp-scene__links--multi"><a href="/trainee/ai/qna" data-lxp>AI Q&amp;A</a><a href="/trainee/ai/roadmap" data-lxp>직무 로드맵 <i>→</i></a></div></div>
+            <div class="lxp-scene__visual lxp-scene__visual--ai"><header><b>AI 학습 도우미</b><em>과정 자료 기반</em></header><div class="scene-chat is-user">이 지표가 갑자기 높아진 이유를 어떻게 확인할까요?</div><div class="scene-chat is-ai"><b>AI</b><p>먼저 기간별 분포와 원천 데이터의 수집 조건을 비교해보세요. 현재 과정의 ‘이상치 진단’ 자료도 함께 확인할 수 있습니다.</p></div><div class="scene-ai-handoff"><span>답변이 충분하지 않나요?</span><a href="/trainee/ai/qna" data-lxp>질문과 대화를 강사에게 전달 →</a></div><div class="scene-roadmap"><span>목표 직무 · 데이터 분석가</span><div><i style="--rate:78%"></i><b>SQL 분석</b><em>78%</em></div><div><i style="--rate:56%"></i><b>문제 정의</b><em>56%</em></div><ol><li class="is-done">1. 기초 분석</li><li class="is-now">2. 실무 프로젝트</li><li>3. 포트폴리오 완성</li></ol></div></div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pg-flow lxp-flow" id="lxp-flow">
+    <div class="container">
+      <div class="lxp-section-head">
+        <div><p class="pg-label">ONE LEARNING JOURNEY</p><h2>로그인부터 이수까지<br>끊기지 않게</h2></div>
+        <p>처음 이용하는 훈련생은 회원가입과 관리자 승인 후<br>배정된 과정에서 학습을 시작합니다.</p>
+      </div>
+      <ol class="lxp-journey">
+        <li><span>01</span><div><b>로그인</b><p>배정된 과정과 오늘 할 일을 확인합니다.</p></div></li>
+        <li><span>02</span><div><b>학습</b><p>콘텐츠를 이어보고 진도를 기록합니다.</p></div></li>
+        <li><span>03</span><div><b>제출·평가</b><p>과제와 시험을 진행하고 피드백을 받습니다.</p></div></li>
+        <li><span>04</span><div><b>출결 확인</b><p>출결과 부족한 이수 기준을 미리 확인합니다.</p></div></li>
+        <li><span>05</span><div><b>이수</b><p>완료된 학습 기록과 이수증을 보관합니다.</p></div></li>
+      </ol>
+      <div class="lxp-first-use"><span>FIRST USE</span><p><b>아직 계정이 없다면</b> 회원가입 후 관리자 승인과 과정 배정을 거쳐 이용할 수 있습니다.</p><a href="/signup" data-lxp>회원가입 절차 시작하기 <i aria-hidden="true">→</i></a></div>
+    </div>
+  </section>
+
+  <section class="pg-cta lxp-cta" id="lxp-start">
+    <div class="container">
+      <span>CONTINUE YOUR LEARNING</span>
+      <h2>오늘의 학습을<br>바로 이어가세요.</h2>
+      <p>개인 진도와 제출 기록은 로그인 후 확인할 수 있습니다.</p>
+      <div class="pg-hero__actions">
+        <a class="btn btn--lg lxp-login" href="/v2/login" data-brand-href="lxpLogin">LXP 로그인</a>
+      </div>
+      <a class="lxp-cta__signup" href="/signup" data-lxp>처음 이용하는 훈련생은 회원가입</a>
     </div>
   </section>
 
@@ -74,8 +155,9 @@
   <p class="small muted">© <span data-brand="legalName"></span></p>
 </div></footer>
 <script src="/v2/assets/brand.js"></script>
-<script src="/v2/assets/shell.js"></script>
+<script src="/v2/assets/page-section-navigation.js"></script>
+<script src="/v2/assets/lxp-entry.js?v=20260823-54"></script>
 <script>Shell.nav({service:"lxp",sections:[
-  {href:"#main",label:"LXP 소개"}]});
+  {href:"#lxp-value",label:"기록의 가치"},{href:"#lxp-features",label:"기능 미리보기"},{href:"#lxp-flow",label:"학습 흐름"},{href:"#lxp-start",label:"로그인"}]});
 window.applyBrand();</script>
 </body></html>
