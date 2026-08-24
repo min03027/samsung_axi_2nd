@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="/v2/assets/tokens.css">
 <link rel="stylesheet" href="/v2/assets/base.css">
 <link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64">
-<link rel="stylesheet" href="/v2/assets/campus-employment.css?v=20260824-19">
+<link rel="stylesheet" href="/v2/assets/campus-employment.css?v=20260824-20">
 <link rel="stylesheet" href="/v2/assets/campus-career-preview.css?v=20260824-02">
 <link rel="stylesheet" href="/v2/assets/campus-career-carousel.css?v=20260824-01">
 <style>.career-carousel{width:min(100%,1180px);margin:clamp(42px,6vw,70px) auto 0}.career-feature{height:460px;min-height:0;grid-template-columns:.92fr 1.08fr}.career-feature>img{height:460px}.career-feature>div{padding:40px 46px}.career-feature small{font-size:10px}.career-feature h3{margin-top:22px;font-size:clamp(34px,3.2vw,48px);line-height:1.08}.career-feature p{margin-top:20px;font-size:15px;line-height:1.65}.career-feature dl{margin:24px 0}.career-feature dl div{padding:15px 0}.career-feature dt{font-size:11px}.career-feature dd{margin-top:6px;font-size:14px}.career-feature dd a{display:inline-block;margin-top:6px;color:#e7440d!important;font-size:11px;font-weight:800;text-decoration:none!important}.career-feature dd a+a{margin-left:8px}.career-feature>div>a{padding:13px 18px;font-size:14px}@media(max-width:850px){.career-carousel{width:100%}.career-feature{height:auto;grid-template-columns:1fr}.career-feature>img{height:min(58vw,360px)}.career-feature>div{min-height:400px;padding:34px}.career-feature h3{font-size:clamp(32px,7vw,44px)}}@media(max-width:520px){.career-feature>div{min-height:390px;padding:28px 20px}.career-feature h3{margin-top:18px;font-size:31px}.career-feature p{font-size:14px}.career-feature dl{margin:22px 0}}</style>
@@ -16,22 +16,19 @@
 </head>
 <body class="employment-campus">
 
-<!-- 취업-012 기관 가치·핵심 메시지 -->
+<!-- 취업캠퍼스 페이지 인트로 -->
 <section class="hero">
   <div class="container">
-    <span class="eyebrow" style="color:var(--brand-500)">AI 취업캠퍼스</span>
-    <h1>공부하는 오늘이<br>취업하는 내일이 되도록</h1>
+    <span class="eyebrow" style="color:var(--brand-500)">EMPLOYMENT CAMPUS</span>
+    <h1>배운 기술이<br>실제 일이 되는 곳</h1>
     <p class="hero__sub">
-      처음부터 자신 있던 사람보다, 끝까지 해낸 사람이 많았습니다.
-      머무는 시간까지 실력이 되는 곳에서 다음 커리어를 시작하세요.
+      과정 선택부터 프로젝트, 취업 준비와 수료생의 현재 직무까지.<br>
+      교육이 일로 이어지는 근거와 과정을 한 페이지에서 확인하세요.
     </p>
     <div class="hero__cta">
-      <a class="btn btn--lg btn--inverse" href="/v2/site/class/index.html">개설 과정 보기</a>
-      <a class="btn btn--lg btn--outline" style="color:var(--white);border-color:rgba(255,255,255,.3)" href="/v2/site/campus/counsel.html">1:1 상담 신청</a>
+      <a class="btn btn--lg btn--inverse" href="#why-campus">취업캠퍼스 살펴보기 ↓</a>
+      <a class="btn btn--lg btn--outline" style="color:var(--white);border-color:rgba(255,255,255,.3)" href="#campus-courses">모집 과정 보기</a>
     </div>
-
-    <!-- 취업-012 대표 성과: 연혁 데이터와 같은 단일 콘텐츠 소스에서 렌더링 -->
-    <div class="hero__stats" data-campus-stats></div>
   </div>
 </section>
 
@@ -242,6 +239,6 @@
 <script src="/v2/assets/campus-employment.js?v=20260824-03"></script>
 <script src="/v2/assets/campus-career-carousel.js?v=20260824-01"></script>
 <script src="/v2/assets/page-section-navigation.js"></script>
-<script>Shell.site({service:"campus",sections:[{href:"#why-campus",label:"선택 기준"},{href:"#campus-history",label:"연혁"},{href:"#campus-credentials",label:"성과 기록"},{href:"#campus-network",label:"브랜드 역할"},{href:"#campus-courses",label:"모집 과정"},{href:"#career-support",label:"취업 지원"},{href:"#campus-facilities",label:"시설 소개"}]});</script>
+<script>Shell.site({service:"campus",sections:[{href:"#why-campus",label:"선택 기준"},{href:"#campus-history",label:"연혁"},{href:"#campus-credentials",label:"성과 기록"},{href:"#campus-network",label:"브랜드 역할"},{href:"#campus-courses",label:"모집 과정"},{href:"#career-support",label:"취업 지원"},{href:"#graduate-reviews",label:"취업 후기"},{href:"#campus-facilities",label:"시설 소개"}]});</script>
 </body>
 </html>

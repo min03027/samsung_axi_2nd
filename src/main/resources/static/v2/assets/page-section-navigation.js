@@ -33,7 +33,7 @@
     campus: [
       { key: "about",   label: "브랜드 스토리", href: "/v2/site/campus/about.html", todo: true },
       { key: "outcome", label: "취업 성과",     href: "/v2/site/campus/outcome.html", todo: true },
-      { key: "review",  label: "수료생 후기",   href: "/v2/site/campus/reviews.html", todo: true },
+      { key: "review",  label: "취업 후기",     href: "/v2/site/class/reviews.html" },
       { key: "support", label: "취업 지원",     href: "/v2/site/campus/support.html" },
       { key: "facility",label: "캠퍼스·기숙사", href: "/v2/site/campus/facility.html" }
     ],
