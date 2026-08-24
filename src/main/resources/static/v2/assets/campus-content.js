@@ -34,7 +34,7 @@
       },
       {
         meta:'2025 / 교육 도구 사용',
-        title:'Samsung SDS Brity Automation 교육용 라이선스 사용',
+        title:'Brity Automation 교육용 라이선스 사용',
         description:'Samsung SDS Brity Automation 라이선스를 실습 교육에 사용하는 관계이며, 공동운영·채용보장 또는 공식 파트너십을 뜻하지 않습니다.'
       }
     ],
