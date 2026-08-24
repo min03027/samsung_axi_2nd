@@ -238,3 +238,52 @@
   .biz-ax__head h2{font-size:48px}.biz-ax-shift{justify-content:center;margin-block:70px}.biz-reference__item{min-width:240px}
   .biz-page-hero{padding-top:150px}.biz-page-hero h1{font-size:50px}.biz-program-grid,.biz-case-filters{grid-template-columns:1fr}.biz-program-toolbar{overflow-x:auto;flex-wrap:nowrap}.biz-program-toolbar button{flex:none}.biz-program-card{min-height:0}.biz-case{padding-block:28px}.biz-page-cta{margin-top:64px}
 }
+
+/* 2026-08 trust-blue refinement */
+:root{--biz-accent:#2f5bea;--biz-accent-dark:#2146c7;--biz-accent-soft:#edf2ff}
+.biz-page-hero .eyebrow,.biz-reference__item small,.biz-program-card small,.biz-report-preview>span,.biz-case-count,.biz-case small,.biz-support-steps em{color:var(--biz-accent)}
+.biz-type-tabs button:focus-visible{outline-color:rgba(47,91,234,.28)}
+.biz-site .btn--primary:hover,.biz-site .btn--primary:focus-visible{border-color:var(--biz-accent-dark);background:var(--biz-accent-dark)}
+.biz-site .badge,.biz-site .badge--brand{color:var(--biz-accent-dark);border-color:#cbd7ff;background:#f3f6ff}
+.biz-support-label--conditional{background:var(--biz-accent-soft)}
+.biz-home-hero::after,.biz-page-hero::after{display:none}
+
+.biz-ax .eyebrow,.biz-ax-playbook__intro span,.biz-ax__cta>div>span{color:#84a5ff}
+.biz-ax-signals{gap:18px;background:transparent}
+.biz-ax-signals p{min-height:132px;padding:24px 24px 30px;border:1px solid #33405a;border-radius:14px;background:#171c27;box-shadow:0 14px 34px rgba(0,0,0,.18)}
+.biz-ax-signals p::before{content:"";position:absolute;left:25px;bottom:-13px;width:24px;height:24px;border-right:1px solid #33405a;border-bottom:1px solid #33405a;background:#171c27;transform:rotate(45deg)}
+.biz-ax-signals p::after{display:none}
+.biz-ax-signals p:nth-child(even){transform:translateY(18px)}
+.biz-ax-shift{justify-content:center;text-align:center}
+.biz-ax-shift div{border-color:#405178;background:radial-gradient(circle at 50% 32%,#202c49,#151a25 68%)}
+.biz-ax-shift i{color:#6d92ff}
+.biz-ax-playbook{border-color:#344364;background:linear-gradient(145deg,#111a2b,#151922)}
+.biz-ax-playbook em{background:var(--biz-accent)}
+.biz-diagnosis{border-top-color:var(--biz-accent);background:#f5f7fc}
+.biz-ax__cta{background:#f1f4fb}
+
+.biz-contact-layout{display:grid;grid-template-columns:minmax(0,.82fr) minmax(520px,1.18fr);gap:clamp(48px,7vw,100px);align-items:start}
+.biz-contact-guide{position:sticky;top:160px}
+.biz-contact-guide h2{max-width:460px;font-size:clamp(34px,4vw,54px);line-height:1.1;letter-spacing:-.05em}
+.biz-contact-guide .deflist{display:grid;grid-template-columns:120px 1fr;gap:0;margin-top:34px!important;border-top:2px solid var(--biz-ink)}
+.biz-contact-guide .deflist dt,.biz-contact-guide .deflist dd{margin:0;padding:18px 0;border-bottom:1px solid var(--biz-line);line-height:1.65}
+.biz-contact-guide .deflist dt{color:var(--biz-accent-dark);font-size:13px;font-weight:850}
+.biz-contact-guide .deflist dd{color:#575d69;font-size:14px}
+.biz-contact-guide .notice-box{padding:20px;border:0;border-left:4px solid var(--biz-accent);border-radius:0;background:var(--biz-accent-soft);color:#334a8e;line-height:1.7}
+.biz-site #biz-contact .biz-contact-form{padding:clamp(30px,4vw,52px);border:1px solid #d7dce8;border-top:5px solid var(--biz-accent);border-radius:8px;background:#fff;box-shadow:0 24px 70px rgba(29,49,99,.09)}
+.biz-contact-form__step{display:block;color:var(--biz-accent);font-size:11px;font-weight:900;letter-spacing:.15em}
+.biz-contact-form h3{margin-top:12px;font-size:clamp(30px,3vw,42px);letter-spacing:-.04em}
+.biz-contact-form form{gap:20px!important;margin-top:34px!important}
+.biz-contact-form .label{margin-bottom:8px;color:#252a35;font-size:13px;font-weight:800}
+.biz-contact-form .input,.biz-contact-form .select,.biz-contact-form .textarea{min-height:52px;border:1px solid #cbd2e2;border-radius:5px;background:#fbfcff;transition:border-color .2s,box-shadow .2s}
+.biz-contact-form .textarea{min-height:132px;padding-top:14px}
+.biz-contact-form .input:focus,.biz-contact-form .select:focus,.biz-contact-form .textarea:focus{border-color:var(--biz-accent);box-shadow:0 0 0 3px rgba(47,91,234,.12);outline:0}
+.biz-contact-form .check{padding:16px;border-radius:5px;background:#f5f7fb}
+.biz-contact-form .btn--block{min-height:58px;margin-top:4px;font-size:16px}
+
+@media(max-width:900px){
+  .biz-contact-layout{grid-template-columns:1fr}.biz-contact-guide{position:static}.biz-ax-signals p:nth-child(even){transform:none}
+}
+@media(max-width:560px){
+  .biz-ax-signals{gap:22px}.biz-ax-signals p{min-height:0}.biz-contact-guide .deflist{grid-template-columns:96px 1fr}.biz-site #biz-contact .biz-contact-form{padding:28px 20px}
+}
