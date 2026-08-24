@@ -144,15 +144,22 @@
 .employment-awards strong,.employment-awards span { display:block; }
 .employment-awards strong { font-size:17px;font-weight:650;letter-spacing:-.03em; }
 .employment-awards span { max-width:120px;margin:4px auto 0;font-size:12px;word-break:keep-all; }
-.employment-credentials__grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:hidden;margin-top:20px;border:1px solid rgba(255,108,49,.16);border-radius:26px;background:radial-gradient(circle at 100% 100%,rgba(255,91,31,.1),transparent 35%),#0b0b0c;box-shadow:0 28px 70px rgba(31,22,17,.13);counter-reset:credential; }
-.employment-credentials__grid article { position:relative;min-height:220px;padding:34px 38px;background:transparent;counter-increment:credential;transition:background-color .2s ease; }
-.employment-credentials__grid article:hover { background:rgba(255,116,62,.035); }
+.employment-credentials__grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:hidden;margin-top:20px;border:1px solid rgba(255,108,49,.2);border-radius:28px;background:radial-gradient(circle at 100% 100%,rgba(255,91,31,.1),transparent 35%),#0b0b0c;box-shadow:0 28px 70px rgba(31,22,17,.13);counter-reset:credential; }
+.employment-credentials__grid article { position:relative;display:grid;grid-template-columns:72px minmax(0,1fr);gap:26px;min-height:280px;padding:38px;background:transparent;counter-increment:credential;transition:background-color .2s ease; }
+.employment-credentials__grid article:hover { background:rgba(255,116,62,.045); }
 .employment-credentials__grid article:nth-child(odd) { border-right:1px solid rgba(255,255,255,.1); }
 .employment-credentials__grid article:nth-child(-n+2) { border-bottom:1px solid rgba(255,255,255,.1); }
-.employment-credentials__grid article::after { content:"0" counter(credential);position:absolute;right:34px;top:32px;color:rgba(255,255,255,.18);font:800 11px/1 var(--font-mono);letter-spacing:.14em; }
-.employment-credentials__grid small { display:block;padding-right:52px;color:#ff6b36;font:800 10px/1.35 var(--font-mono);letter-spacing:.14em; }
-.employment-credentials__grid h3 { max-width:520px;margin-top:26px;color:#fff;font-size:clamp(23px,2vw,30px);line-height:1.24;letter-spacing:-.04em;word-break:keep-all; }
-.employment-credentials__grid p { max-width:560px;margin-top:14px;color:rgba(255,255,255,.6);font-size:14px;line-height:1.72;word-break:keep-all; }
+.employment-credentials__grid article::after { content:"0" counter(credential);position:absolute;right:34px;top:32px;color:rgba(255,255,255,.16);font:800 11px/1 var(--font-mono);letter-spacing:.14em; }
+.employment-credential__icon { display:grid;width:72px;height:72px;place-items:center;border:1px solid rgba(255,105,51,.42);border-radius:22px;color:#ff6a31;background:linear-gradient(145deg,rgba(255,106,49,.17),rgba(255,106,49,.035));box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 14px 30px rgba(0,0,0,.2); }
+.employment-credential__icon svg { width:34px;height:34px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round; }
+.employment-credential__copy { display:flex;min-width:0;flex-direction:column; }
+.employment-credentials__grid small { display:block;padding-right:52px;color:#ff7a45;font:800 10px/1.35 var(--font-mono);letter-spacing:.14em; }
+.employment-credentials__grid h3 { max-width:520px;margin-top:22px;color:#fff;font-size:clamp(23px,2vw,30px);line-height:1.24;letter-spacing:-.04em;word-break:keep-all; }
+.employment-credentials__grid p { max-width:560px;margin-top:14px;color:rgba(255,255,255,.62);font-size:14px;line-height:1.72;word-break:keep-all; }
+.employment-credential__record { display:flex;align-items:center;gap:11px;margin-top:auto;padding-top:24px;color:rgba(255,255,255,.72);font-size:12px; }
+.employment-credential__record::before { content:"";width:6px;height:6px;border-radius:50%;background:#ff6a31;box-shadow:0 0 0 5px rgba(255,106,49,.12); }
+.employment-credential__record span { color:rgba(255,255,255,.38);font:750 9px/1 var(--font-mono);letter-spacing:.13em; }
+.employment-credential__record strong { font-weight:700;letter-spacing:-.015em; }
 /* 취업-023: 실제 목적지가 있는 역할 중심 브랜드 네트워크 */
 .employment-network { padding:clamp(95px,10vw,150px) 0;background:#fff; }
 .employment-network__head { max-width:900px; }
@@ -177,6 +184,9 @@
   .employment-campus .hero__stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .employment-credentials__head { grid-template-columns:1fr;gap:28px; }
   .employment-awards { grid-template-columns:repeat(4,minmax(0,1fr));row-gap:32px; }
+  .employment-credentials__grid article { grid-template-columns:58px minmax(0,1fr);gap:20px;padding:30px; }
+  .employment-credential__icon { width:58px;height:58px;border-radius:18px; }
+  .employment-credential__icon svg { width:29px;height:29px; }
 }
 
 @media (max-width:720px) {
@@ -213,6 +223,7 @@
   .employment-partner-wordmark { width:190px;min-width:190px; }
   .employment-partner-wordmark--wide { width:238px;min-width:238px; }
   .employment-partners__viewport[data-ready="true"] .employment-partners__track { animation-duration:30s; }
+  .employment-credential__record { margin-top:28px; }
 }
 
 @media (prefers-reduced-motion:reduce) {

@@ -20,22 +20,30 @@
       {
         meta:'1996 · 2018 / 지자체 감사',
         title:'성남시 감사패 수령',
-        description:'지역 직업교육과 인재 양성에 기여한 공로로 성남시 감사패를 수령한 공개 기록입니다.'
+        description:'지역 직업교육과 인재 양성에 기여한 공로로 성남시 감사패를 수령한 공개 기록입니다.',
+        type:'지자체 수상 기록',
+        icon:'award'
       },
       {
         meta:'과정별 공개 성과',
         title:'취업률 100% 달성 과정 다수',
-        description:'기존 홈페이지에 공개된 개별 과정·기수의 성과입니다. 전체 과정 평균이나 향후 취업 보장을 의미하지 않습니다.'
+        description:'기존 홈페이지에 공개된 개별 과정·기수의 성과입니다. 전체 과정 평균이나 향후 취업 보장을 의미하지 않습니다.',
+        type:'개별 과정·기수 성과',
+        icon:'outcome'
       },
       {
         meta:'2019–2021 / 훈련 품질 평가',
         title:'이수자평가 A등급 획득',
-        description:'해당 연도 이수자평가에서 A등급을 획득한 기관 공개 기록입니다.'
+        description:'해당 연도 이수자평가에서 A등급을 획득한 기관 공개 기록입니다.',
+        type:'훈련 품질 평가 기록',
+        icon:'quality'
       },
       {
         meta:'2025 / 교육 도구 사용',
         title:'Brity Automation 교육용 라이선스 사용',
-        description:'Samsung SDS Brity Automation 라이선스를 실습 교육에 사용하는 관계이며, 공동운영·채용보장 또는 공식 파트너십을 뜻하지 않습니다.'
+        description:'Samsung SDS Brity Automation 라이선스를 실습 교육에 사용하는 관계이며, 공동운영·채용보장 또는 공식 파트너십을 뜻하지 않습니다.',
+        type:'실습 도구 사용 관계',
+        icon:'tool'
       }
     ],
     history: [
@@ -97,15 +105,34 @@
 
   const credentialsRoot = document.querySelector('[data-campus-credentials]');
   if (credentialsRoot) {
+    const credentialIcons = {
+      award:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="m8.6 13.1-1.3 7 4.7-2.5 4.7 2.5-1.3-7"/><path d="m10 9 1.3 1.3L14.5 7"/></svg>',
+      outcome:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-4 3 2 5-6"/><path d="M15 7h4v4"/></svg>',
+      quality:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 19 6v5c0 4.7-2.8 7.9-7 10-4.2-2.1-7-5.3-7-10V6l7-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg>',
+      tool:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/><path d="M10 7h4a3 3 0 0 1 3 3v4"/><path d="m14 12 3 3 3-3"/><path d="M7 10v4a3 3 0 0 0 3 3h4"/></svg>'
+    };
     credentialsRoot.replaceChildren(...content.credentials.map(item => {
       const article = document.createElement('article');
+      const icon = document.createElement('span');
+      icon.className = 'employment-credential__icon';
+      icon.innerHTML = credentialIcons[item.icon] || credentialIcons.quality;
+      const copy = document.createElement('div');
+      copy.className = 'employment-credential__copy';
       const meta = document.createElement('small');
       meta.textContent = item.meta;
       const title = document.createElement('h3');
       title.textContent = item.title;
       const description = document.createElement('p');
       description.textContent = item.description;
-      article.append(meta, title, description);
+      const record = document.createElement('div');
+      record.className = 'employment-credential__record';
+      const recordLabel = document.createElement('span');
+      recordLabel.textContent = '검증 기준';
+      const recordType = document.createElement('strong');
+      recordType.textContent = item.type;
+      record.append(recordLabel, recordType);
+      copy.append(meta, title, description, record);
+      article.append(icon, copy);
       return article;
     }));
   }
