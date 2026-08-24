@@ -344,3 +344,26 @@ body.biz-site.has-public-journey .public-journey a[aria-current="step"] i{backgr
 @media(max-width:620px){
   .biz-ax-signals{grid-template-columns:1fr}.biz-ax-shift{grid-template-columns:1fr;margin-block:64px}.biz-ax-shift div,.biz-ax-shift div:last-child{padding:26px 0}.biz-ax-shift i{min-height:44px;padding:0;border:0;border-block:1px solid #2c3443}.biz-ax-playbook{padding-block:64px}.biz-ax-playbook ol{margin-top:48px}.biz-diagnosis__form{grid-template-columns:1fr}.biz-diagnosis__form .btn{grid-column:1}.biz-ax__cta{padding-block:54px}
 }
+
+/* AX readability and previous benefit panel */
+.biz-ax-signals p{color:#b8c0ce;font-size:15px;line-height:1.65}
+.biz-ax-signals b{color:#fff;font-size:18px}
+.biz-ax-shift small{color:#8fa1c3;font-size:12px}
+.biz-ax-shift span{max-width:310px;color:#c1c8d4;font-size:16px;line-height:1.65}
+.biz-ax-shift i{font-size:13px}
+.biz-ax-playbook__intro>p{color:#bcc5d3;font-size:18px;line-height:1.8}
+.biz-ax-dimensions{gap:12px 18px}
+.biz-ax-dimensions span{margin-right:0;color:#aebbd3;font-size:14px;line-height:1.6}
+.biz-ax-playbook b{font-size:22px}
+.biz-ax-playbook li p{max-width:480px;color:#b7c0cf;font-size:16px;line-height:1.75}
+.biz-ax-playbook em{font-size:14px}
+
+.biz-ax__cta{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center;margin-top:28px;padding:clamp(38px,6vw,72px);border:0;border-radius:0;background:#f1f4fb;color:var(--biz-ink)}
+.biz-ax__cta h3{color:var(--biz-ink);font-size:clamp(30px,3.4vw,48px)}
+.biz-ax__cta li{padding:14px 0;border-bottom:1px solid #d4dbe8;color:#4f596a;font-size:16px;line-height:1.55}
+.biz-ax__cta li::before{color:var(--biz-accent)}
+.biz-ax__cta .btn{grid-column:2;align-self:auto;justify-self:start}
+
+@media(max-width:850px){
+  .biz-ax__cta{grid-template-columns:1fr;gap:32px}.biz-ax__cta .btn{grid-column:1;justify-self:start}
+}
