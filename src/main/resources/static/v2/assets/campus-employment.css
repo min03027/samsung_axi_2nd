@@ -245,6 +245,7 @@
 .employment-process__list dl div { display:grid;grid-template-columns:86px 1fr;gap:12px;font-size:13px;line-height:1.55; }
 .employment-process__list dt { color:#9c958f; }
 .employment-process__list dd { color:#3b3531;font-weight:650; }
+.employment-support-cases{padding:clamp(90px,10vw,140px) 0;background:#fff}.employment-support-cases__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:54px}.employment-support-cases__grid a{min-height:280px;display:flex;flex-direction:column;padding:30px;border:1px solid #ded9d4;border-radius:22px;color:#171717;text-decoration:none}.employment-support-cases__grid small{color:#e7440d;font-weight:800}.employment-support-cases__grid strong{margin-top:26px;font-size:clamp(22px,2.2vw,31px);line-height:1.25}.employment-support-cases__grid span{margin-top:auto;color:#e7440d;font-size:13px;font-weight:800}.employment-support-cases__grid a:hover{border-color:#e7440d}
 .employment-support-proof { padding:clamp(100px,11vw,160px) 0;background:#0a0a0a;color:#fff; }
 .employment-support-proof h2 { color:#fff; }
 .employment-support-proof__layout { display:grid;grid-template-columns:.85fr 1.15fr;gap:80px; }
@@ -262,6 +263,7 @@
   .employment-support-intro__layout,.employment-support-proof__layout,.employment-support-cta>.container { grid-template-columns:1fr;gap:38px; }
   .employment-process__list li { grid-template-columns:54px 1fr; }
   .employment-process__list dl { grid-column:2; }
+  .employment-support-cases__grid{grid-template-columns:1fr}
 }
 @media (max-width:650px) {
   .employment-support-hero { min-height:0; }
