@@ -367,3 +367,18 @@ body.biz-site.has-public-journey .public-journey a[aria-current="step"] i{backgr
 @media(max-width:850px){
   .biz-ax__cta{grid-template-columns:1fr;gap:32px}.biz-ax__cta .btn{grid-column:1;justify-self:start}
 }
+
+/* AX visible readability correction */
+.biz-ax-signals p{font-size:18px!important;line-height:1.65}
+.biz-ax-signals b{font-size:21px!important}
+.biz-ax-shift span{max-width:380px;font-size:20px!important;line-height:1.6}
+.biz-ax-shift i{font-size:16px!important}
+.biz-ax-playbook__intro>p{font-size:20px!important;line-height:1.8}
+.biz-ax-dimensions span{font-size:17px!important}
+.biz-ax-playbook b{font-size:27px!important}
+.biz-ax-playbook li p{font-size:19px!important;line-height:1.75}
+.biz-ax-playbook em{font-size:16px!important}
+.biz-ax__cta{margin:0 0 40px;background:#fff}
+.biz-ax__cta li{font-size:18px!important}
+.biz-diagnosis{margin-top:0}
+@media(max-width:850px){.biz-ax__cta{grid-template-columns:1fr}.biz-ax__cta .btn{grid-column:1}}
