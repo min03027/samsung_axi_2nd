@@ -166,6 +166,7 @@
     var sectionBlock = "";
     var serviceQuickbar = "";
     if (svc === "biz") {
+      document.body.classList.add("biz-site");
       var bizQuickLinks = [
         { key: "home", label: "비즈워크래프트 홈", href: "/v2/site/biz/index.html" },
         { key: "programs", label: "직무별 과정", href: "/v2/site/biz/programs.html" },
