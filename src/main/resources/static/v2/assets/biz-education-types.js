@@ -36,7 +36,16 @@
   document.querySelectorAll("[data-education-type]").forEach(function (link) {
     link.addEventListener("click", function () {
       var issue = document.getElementById("issue");
-      if (issue) issue.value = link.getAttribute("data-education-type") + "의 대상·일정·운영 방식을 문의합니다.";
+      var interest = document.getElementById("interest");
+      var educationType = link.getAttribute("data-education-type");
+      if (issue) issue.value = educationType + "의 대상·일정·운영 방식을 문의합니다.";
+      if (interest) {
+        Array.prototype.some.call(interest.options, function (option) {
+          if (option.value !== educationType) return false;
+          interest.value = educationType;
+          return true;
+        });
+      }
     });
   });
 })();
