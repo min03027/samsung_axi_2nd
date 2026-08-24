@@ -12,7 +12,7 @@
 <body>
 
 <!-- 취업-012 기관 가치·핵심 메시지 -->
-<section class="hero">
+<section class="hero" id="outcomes">
   <div class="container">
     <span class="eyebrow" style="color:var(--brand-500)">AI 취업캠퍼스</span>
     <h1>공부하는 오늘이<br>취업하는 내일이 되도록</h1>
@@ -67,7 +67,7 @@
 </section>
 
 <!-- 취업-013 기관 연혁 -->
-<section class="section">
+<section class="section" id="heritage">
   <div class="container">
     <div class="section-head">
       <span class="eyebrow">HERITAGE</span>
@@ -103,19 +103,8 @@
 <section class="section section--sm section--tint">
   <div class="container">
     <p class="eyebrow eyebrow--muted" style="text-align:center">PARTNERS</p>
-    <div class="logorow" style="justify-content:center">
-      <span class="logorow__item">고용노동부</span>
-      <span class="logorow__item">교육부</span>
-      <span class="logorow__item">직업능력심사평가원</span>
-      <span class="logorow__item">삼성SDS</span>
-      <span class="logorow__item">Brity Automation</span>
-      <span class="logorow__item">경기창조경제혁신센터</span>
-      <span class="logorow__item">KAIST</span>
-      <span class="logorow__item">우아한형제들</span>
-    </div>
-    <p class="hint" style="text-align:center;margin-top:var(--sp-5)">
-      로고 이미지·관계 유형(협약/라이선스/교육/채용/발주)은 관리자 CMS에서 관리됩니다. (공통-004 · 취업-015)
-    </p>
+    <div class="logorow" style="justify-content:center" aria-busy="true"
+         data-public-organizations data-organization-site="CAMPUS" data-organization-position="PARTNER_ROLLING"></div>
   </div>
 </section>
 
@@ -180,7 +169,7 @@
 </section>
 
 <!-- 취업-022 취업지원 프로세스 -->
-<section class="section section--tint">
+<section class="section section--tint" id="career-support">
   <div class="container">
     <div class="section-head">
       <span class="eyebrow">CAREER SUPPORT</span>
@@ -195,45 +184,24 @@
       <div class="step"><p class="step__title">취업 후 관리</p><p class="step__desc">입사 3·6개월 시점에 적응을 확인합니다.</p></div>
     </div>
     <div class="row" style="margin-top:var(--sp-8)">
-      <a class="btn btn--outline" href="/v2/site/campus/support.html">취업지원 자세히 보기</a>
-      <a class="btn btn--ghost" href="/v2/site/campus/outcome.html">성과 데이터 보기</a>
+      <a class="btn btn--outline" href="#career-support">취업지원 내용 다시 보기</a>
+      <a class="btn btn--ghost" href="#outcomes">성과 요약 보기</a>
     </div>
   </div>
 </section>
 
 <!-- 취업-017 수료생 후기 -->
-<section class="section">
+<section class="section" id="reviews">
   <div class="container">
     <div class="row row--between section-head">
       <div>
         <span class="eyebrow">REVIEWS</span>
         <h2>수료생이 직접 말하는 6개월</h2>
       </div>
-      <a class="btn btn--outline" href="/v2/site/campus/reviews.html">후기 전체 보기</a>
+      <a class="btn btn--outline" href="/v2/site/campus/reviews.html">전체 후기 보기</a>
     </div>
-    <div class="grid grid-3">
-      <article class="review">
-        <p class="review__quote">“비전공자라 계속 뒤처진다고 느꼈는데, 매일 회고를 쓰면서 제가 뭘 모르는지가 눈에 보이기 시작했어요.”</p>
-        <div class="review__who">
-          <span class="avatar">김</span>
-          <div class="review__meta"><b>김○민 · 2025 수료</b><span>데이터 분석가 · 제조 대기업</span></div>
-        </div>
-      </article>
-      <article class="review">
-        <p class="review__quote">“팀 프로젝트에서 처음으로 배포까지 해봤습니다. 면접에서 그 얘기만 20분 했어요.”</p>
-        <div class="review__who">
-          <span class="avatar">정</span>
-          <div class="review__meta"><b>정○아 · 2025 수료</b><span>백엔드 개발자 · 커머스 스타트업</span></div>
-        </div>
-      </article>
-      <article class="review">
-        <p class="review__quote">“기숙사에 있으니 퇴근이 없더라고요. 힘들었지만 그 6개월이 제일 밀도 높았습니다.”</p>
-        <div class="review__who">
-          <span class="avatar">이</span>
-          <div class="review__meta"><b>이○현 · 2024 수료</b><span>클라우드 엔지니어 · SI</span></div>
-        </div>
-      </article>
-    </div>
+    <div class="public-review-grid" aria-busy="true" data-public-review-grid
+         data-review-site="CAMPUS" data-review-position="CAMPUS_REVIEWS" data-review-limit="3"></div>
   </div>
 </section>
 
@@ -290,6 +258,8 @@
 </section>
 
 <script src="/v2/assets/brand.js"></script>
+<script src="/v2/assets/public-organization-cms.js"></script>
+<script src="/v2/assets/public-review-cms.js"></script>
 <script src="/v2/assets/shell.js"></script>
 <script>Shell.site({ service: "campus", nav: null });</script>
 </body>

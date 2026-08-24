@@ -2,7 +2,6 @@ package com.ssa.lms.content.web;
 
 import com.ssa.lms.auth.LoginUser;
 import com.ssa.lms.content.service.ProgressService;
-import com.ssa.lms.demo.SampleScreenData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -20,31 +19,23 @@ import org.springframework.web.bind.annotation.*;
 public class ProgressApiController {
 
     private final ProgressService progressService;
-    private final SampleScreenData sampleData;
 
     /** 현재 진도 조회 (이어보기 초기값). */
     @GetMapping("/{contentId}/progress")
     public ProgressResponse getProgress(@PathVariable Long contentId,
                                         @AuthenticationPrincipal LoginUser user) {
-        if (SampleScreenData.isSampleId(contentId)) {
-            return sampleData.contentProgress(contentId);
-        }
         return progressService.getProgress(user.getId(), contentId);
     }
 
     /**
      * 진도 갱신 (재생 위치/도달 페이지 → 진도율·완료 판정).
      *
-     * <p>예시 콘텐츠는 DB 에 쓰지 않고 고정 진도만 돌려준다 — 존재하지 않는 콘텐츠 id 로
-     * 저장하려 들면 500 이 나고, 캡처용 화면이 오류 알림을 띄운다.</p>
+     * <p>실제 등록 콘텐츠의 진도만 저장한다.</p>
      */
     @PostMapping("/{contentId}/progress")
     public ProgressResponse updateProgress(@PathVariable Long contentId,
                                            @RequestBody ProgressRequest request,
                                            @AuthenticationPrincipal LoginUser user) {
-        if (SampleScreenData.isSampleId(contentId)) {
-            return sampleData.contentProgress(contentId);
-        }
         return progressService.record(user.getId(), contentId, request);
     }
 
@@ -52,9 +43,6 @@ public class ProgressApiController {
     @PostMapping("/{contentId}/complete")
     public ProgressResponse complete(@PathVariable Long contentId,
                                      @AuthenticationPrincipal LoginUser user) {
-        if (SampleScreenData.isSampleId(contentId)) {
-            return sampleData.contentProgress(contentId);
-        }
         return progressService.complete(user.getId(), contentId);
     }
 }

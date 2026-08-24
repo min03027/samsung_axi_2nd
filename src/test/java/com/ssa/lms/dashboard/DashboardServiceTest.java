@@ -166,6 +166,11 @@ class DashboardServiceTest {
         assertThat(view.todaySchedule()).isNotNull();
         assertThat(view.coach()).isNotNull();
         assertThat(view.coach().href()).startsWith("/trainee/qna/tutoring");
+        assertThat(view.courses())
+                .as("과정별 이어서 학습은 다른 과정으로 섞이지 않아야 한다")
+                .allSatisfy(course -> assertThat(course.continueHref())
+                        .isNotEqualTo("/trainee/learning")
+                        .matches("/trainee/contents/\\d+/play|/trainee/learning\\?courseId=\\d+"));
     }
 
     /* ===================== 데이터 0건 ===================== */

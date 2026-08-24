@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="fields(editing)">
+    <div class="course-cms-errors" th:if="${#fields.hasAnyErrors()}">
+        <p th:each="error : ${#fields.allErrors()}" th:text="${error}">입력 내용을 확인하세요.</p>
+    </div>
+
+    <section class="course-cms-status">
+        <div>
+            <small>현재 모집 상태</small>
+            <strong th:text="${publicationStatus.label}">사전 상담</strong>
+        </div>
+        <div class="course-cms-readiness">
+            <p>모집 준비도</p>
+            <span class="course-cms-ready" th:if="${readinessMissing.isEmpty()}">필수 정보가 모두 준비됐습니다.</span>
+            <ul th:unless="${readinessMissing.isEmpty()}">
+                <li th:each="item : ${readinessMissing}" th:text="${item}">누락 항목</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="course-cms-section">
+        <h3>1. 기본 정보</h3>
+        <p>내부 과정 식별 정보와 홈페이지에서 과정의 목적을 설명할 공개 정보를 입력합니다.</p>
+        <div class="course-cms-grid">
+            <div class="course-cms-field">
+                <label class="required" for="courseCode">과정 코드</label>
+                <input id="courseCode" type="text" th:field="*{courseCode}" th:disabled="${editing}" placeholder="COURSE-2026-001">
+                <input th:if="${editing}" type="hidden" th:field="*{courseCode}">
+            </div>
+            <div class="course-cms-field">
+                <label for="cohort">기수</label>
+                <input id="cohort" type="text" th:field="*{cohort}" placeholder="예: 1기">
+            </div>
+            <div class="course-cms-field course-cms-field--full">
+                <label class="required" for="courseName">과정명</label>
+                <input id="courseName" type="text" th:field="*{courseName}">
+            </div>
+            <div class="course-cms-field">
+                <label for="category">내부 과정 분류</label>
+                <input id="category" type="text" th:field="*{category}" placeholder="예: AI, 데이터, 웹개발">
+            </div>
+            <div class="course-cms-field">
+                <label for="publicCategory">홈페이지 과정 분류</label>
+                <select id="publicCategory" th:field="*{publicCategory}">
+                    <option value="">선택하세요</option>
+                    <option th:each="category : ${publicCategories}" th:value="${category}" th:text="${category.label}">분류</option>
+                </select>
+            </div>
+            <div class="course-cms-field course-cms-field--full">
+                <label class="required" for="oneLineIntroduction">과정 한줄소개</label>
+                <input id="oneLineIntroduction" type="text" th:field="*{oneLineIntroduction}" maxlength="500" placeholder="과정 카드와 상세 Hero에 표시됩니다.">
+            </div>
+            <div class="course-cms-field course-cms-field--full">
+                <label for="description">내부 과정 설명</label>
+                <textarea id="description" th:field="*{description}"></textarea>
+                <span class="course-cms-help">내부 운영 참고용이며 공개 화면에는 한줄소개와 공개 대상 정보만 사용합니다.</span>
+            </div>
+            <div class="course-cms-field">
+                <label class="required" for="audience">교육 대상</label>
+                <textarea id="audience" th:field="*{audience}" placeholder="누구에게 적합한 과정인지 입력하세요."></textarea>
+            </div>
+            <div class="course-cms-field">
+                <label for="prerequisites">선수지식</label>
+                <textarea id="prerequisites" th:field="*{prerequisites}" placeholder="없으면 ‘선수지식 없음’으로 입력할 수 있습니다."></textarea>
+            </div>
+        </div>
+    </section>
+
+    <section class="course-cms-section">
+        <h3>2. 모집 일정</h3>
+        <p>모집 회차마다 달라지는 날짜입니다. 교육 시작일과 구분해 관리합니다.</p>
+        <div class="course-cms-grid">
+            <div class="course-cms-field"><label class="required" for="recruitmentStartDate">모집 시작일</label><input id="recruitmentStartDate" type="date" th:field="*{recruitmentStartDate}"></div>
+            <div class="course-cms-field"><label class="required" for="applicationDeadline">신청 마감일</label><input id="applicationDeadline" type="date" th:field="*{applicationDeadline}"></div>
+            <div class="course-cms-field"><label for="consultationDate">면접/상담일</label><input id="consultationDate" type="date" th:field="*{consultationDate}"></div>
+            <div class="course-cms-field"><label for="resultAnnouncementDate">합격 발표일</label><input id="resultAnnouncementDate" type="date" th:field="*{resultAnnouncementDate}"></div>
+        </div>
+    </section>
+
+    <section class="course-cms-section">
+        <h3>3. 선발 정보</h3>
+        <p>홈페이지 과정 상세에서 지원자가 확인할 절차와 준비물을 입력합니다.</p>
+        <div class="course-cms-grid">
+            <div class="course-cms-field"><label for="selectionProcess">선발 절차</label><textarea id="selectionProcess" th:field="*{selectionProcess}" placeholder="예: 지원서 → 상담 → 결과 안내"></textarea></div>
+            <div class="course-cms-field"><label for="requiredDocuments">필수 서류</label><textarea id="requiredDocuments" th:field="*{requiredDocuments}" placeholder="예: 지원서, 포트폴리오(선택)"></textarea></div>
+        </div>
+    </section>
+
+    <section class="course-cms-section">
+        <h3>4. 교육 운영</h3>
+        <p>교육 기간·시간·방법을 관리합니다. 주차별 과정은 저장 후 상세 화면의 과목/차시 기능을 그대로 사용합니다.</p>
+        <div class="course-cms-grid">
+            <div class="course-cms-field"><label class="required" for="startDate">교육 시작일</label><input id="startDate" type="date" th:field="*{startDate}"></div>
+            <div class="course-cms-field"><label class="required" for="endDate">교육 종료일</label><input id="endDate" type="date" th:field="*{endDate}"></div>
+            <div class="course-cms-field"><label class="required" for="educationTime">교육 시간</label><input id="educationTime" type="text" th:field="*{educationTime}" placeholder="월–금 09:00–17:40"></div>
+            <div class="course-cms-field"><label class="required" for="educationMethod">교육 방법</label><input id="educationMethod" type="text" th:field="*{educationMethod}" placeholder="오프라인 실습·프로젝트"></div>
+            <div class="course-cms-field"><label class="required" for="capacity">모집 정원</label><input id="capacity" type="number" min="1" th:field="*{capacity}"></div>
+            <div class="course-cms-field"><label for="completionProgressRate">이수 기준 진도율</label><input id="completionProgressRate" type="number" min="0" max="100" th:field="*{completionProgressRate}"></div>
+        </div>
+    </section>
+
+    <section class="course-cms-section">
+        <h3>5. 비용·지원</h3>
+        <p>무료 과정도 빈칸 대신 0원을 입력해야 모집 준비 완료로 판단합니다.</p>
+        <div class="course-cms-grid">
+            <div class="course-cms-field"><label class="required" for="tuitionFee">수강료</label><input id="tuitionFee" type="number" min="0" th:field="*{tuitionFee}"></div>
+            <div class="course-cms-field"><label class="required" for="selfPayment">본인부담금</label><input id="selfPayment" type="number" min="0" th:field="*{selfPayment}"></div>
+            <div class="course-cms-field"><label class="required" for="governmentSupport">정부지원금</label><input id="governmentSupport" type="number" min="0" th:field="*{governmentSupport}"></div>
+            <div class="course-cms-field"><label class="required" for="additionalCost">추가 비용</label><input id="additionalCost" type="number" min="0" th:field="*{additionalCost}"></div>
+        </div>
+    </section>
+
+    <section class="course-cms-section">
+        <h3>6. 강사진</h3>
+        <p>담당 교사는 과정 저장 후 상세 화면에서 실제 INSTRUCTOR 계정을 배정합니다.</p>
+        <div class="course-cms-grid">
+            <div class="course-cms-field course-cms-field--full"><label for="mentors">강사·멘토 소개</label><textarea id="mentors" th:field="*{mentors}" placeholder="외부 멘토나 공개 가능한 강사진 정보를 입력하세요."></textarea></div>
+        </div>
+    </section>
+
+    <section class="course-cms-section">
+        <h3>7. 프로젝트·성과</h3>
+        <p>기업·기관 마스터에 등록된 참여사를 연결합니다. 기존 자유입력 값은 이전 데이터 호환을 위해 보존됩니다.</p>
+        <div class="course-cms-grid">
+            <div class="course-cms-field">
+                <label for="projectPartnerOrganizationIds">기업 프로젝트 참여사</label>
+                <select id="projectPartnerOrganizationIds" th:field="*{projectPartnerOrganizationIds}" multiple size="6">
+                    <option th:each="organization : ${partnerOrganizations}" th:value="${organization.id}"
+                            th:text="${organization.name + ' · ' + organization.type.label}">기업·기관</option>
+                </select>
+                <span class="course-cms-help">Ctrl(Windows) 또는 Command(macOS)를 누른 채 여러 기관을 선택할 수 있습니다.</span>
+            </div>
+            <div class="course-cms-field" th:if="*{projectPartners != null and !#strings.isEmpty(projectPartners)}">
+                <label for="projectPartners">기존 자유입력 값</label>
+                <textarea id="projectPartners" th:field="*{projectPartners}" readonly></textarea>
+                <span class="course-cms-help">위 선택 항목을 저장하면 공개 화면에서는 선택된 기관명이 우선 표시됩니다.</span>
+            </div>
+            <input th:unless="*{projectPartners != null and !#strings.isEmpty(projectPartners)}" type="hidden" th:field="*{projectPartners}">
+            <div class="course-cms-field"><label for="demoUrl">결과물·데모 링크</label><input id="demoUrl" type="url" th:field="*{demoUrl}" placeholder="https://..."></div>
+        </div>
+    </section>
+
+    <section class="course-cms-section">
+        <h3>8. 홈페이지 노출</h3>
+        <p>모집중이면서 홈페이지 노출이 켜진 과정만 공개 목록에 나타납니다.</p>
+        <div class="course-cms-grid">
+            <div class="course-cms-field"><label for="publicationSite">노출 사이트</label><select id="publicationSite" th:field="*{publicationSite}"><option value="">선택하세요</option><option th:each="site : ${publicationSites}" th:value="${site}" th:text="${site.label}">사이트</option></select></div>
+            <div class="course-cms-field"><label for="displayOrder">정렬 순서</label><input id="displayOrder" type="number" min="0" th:field="*{displayOrder}"></div>
+            <label class="course-cms-check"><input type="checkbox" th:field="*{publicVisible}"> 홈페이지 노출</label>
+            <label class="course-cms-check"><input type="checkbox" th:field="*{featured}"> 대표 과정</label>
+        </div>
+    </section>
+
+    <section class="course-cms-section">
+        <h3>9. 과정 상태</h3>
+        <p>교육 운영 상태는 기존 LMS 기능에 사용됩니다. 홈페이지 모집 상태는 상세 화면의 순차 전환 버튼으로만 변경합니다.</p>
+        <div class="course-cms-grid">
+            <div class="course-cms-field"><label class="required" for="status">교육 운영 상태</label><select id="status" th:field="*{status}"><option th:each="item : ${statuses}" th:value="${item}" th:text="${item.label}">상태</option></select></div>
+            <div class="course-cms-field"><label>홈페이지 모집 상태</label><input type="text" th:value="${publicationStatus.label}" disabled></div>
+        </div>
+    </section>
+</th:block>
+</body>
+</html>

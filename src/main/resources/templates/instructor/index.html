@@ -37,6 +37,10 @@
     <title>Samsung Academy LXP - 강사</title>
     <style>
         /* 추가적인 페이지별 스타일은 여기에 작성 */
+        .dashboard-report-bar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:0 0 16px; padding:12px 14px; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:10px; }
+        .dashboard-report-bar strong { margin-right:auto; }
+        .dashboard-report-bar select { min-width:240px; padding:9px 10px; border:1px solid var(--gray-300); border-radius:8px; background:#fff; }
+        @media (max-width:720px) { .dashboard-report-bar select { width:100%; min-width:0; } }
     </style>
 </head>
 <body>
@@ -57,6 +61,17 @@
           </div>
           <div class="dash-date" id="todayText">오늘: -</div>
         </div>
+
+        <form class="dashboard-report-bar" method="get"
+              th:action="@{/instructor/dashboard/learning-report.xlsx}">
+          <strong>담당 분반 학습 현황 보고서</strong>
+          <select name="courseId" aria-label="보고서 분반 선택">
+            <option value="">전체 담당 분반 비교</option>
+            <option th:each="course : ${dashboardReportCourses}"
+                    th:value="${course.id}" th:text="${course.label}">과정 · 기수</option>
+          </select>
+          <button class="btn btn-secondary btn-sm" type="submit">엑셀 다운로드</button>
+        </form>
 
         <!-- KPI -->
         <div class="kpi-grid">

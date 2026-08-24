@@ -2,17 +2,23 @@ package com.ssa.lms.course.web;
 
 import com.ssa.lms.course.entity.Course;
 import com.ssa.lms.course.entity.CourseStatus;
+import com.ssa.lms.course.entity.PublicCourseCategory;
+import com.ssa.lms.course.entity.PublicationSite;
+import com.ssa.lms.course.entity.RecruitmentStatus;
 import com.ssa.lms.course.service.CourseInstructorService;
 import com.ssa.lms.course.service.CourseService;
 import com.ssa.lms.course.service.CurriculumService;
 import com.ssa.lms.course.service.DuplicateCourseCodeException;
 import com.ssa.lms.course.service.EnrollmentService;
+import com.ssa.lms.course.service.RecruitmentReadinessException;
+import com.ssa.lms.organization.service.OrganizationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -31,6 +37,7 @@ public class CourseAdminController {
     private final CurriculumService curriculumService;
     private final CourseInstructorService courseInstructorService;
     private final EnrollmentService enrollmentService;
+    private final OrganizationService organizationService;
 
     /** 과정 목록 + 상단 통계. */
     @GetMapping
@@ -50,8 +57,7 @@ public class CourseAdminController {
     @GetMapping("/new")
     public String createForm(Model model) {
         model.addAttribute("courseForm", new CourseForm());
-        model.addAttribute("statuses", CourseStatus.values());
-        model.addAttribute("mode", "create");
+        prepareFormModel(model, "create", null);
         return VIEW_DIR + "admin-courses-edu-add";
     }
 
@@ -59,8 +65,7 @@ public class CourseAdminController {
     public String create(@Valid @ModelAttribute CourseForm courseForm,
                          BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("statuses", CourseStatus.values());
-            model.addAttribute("mode", "create");
+            prepareFormModel(model, "create", null);
             return VIEW_DIR + "admin-courses-edu-add";
         }
         try {
@@ -68,8 +73,7 @@ public class CourseAdminController {
             return "redirect:/admin/courses/" + id;
         } catch (DuplicateCourseCodeException e) {
             bindingResult.rejectValue("courseCode", "duplicate", e.getMessage());
-            model.addAttribute("statuses", CourseStatus.values());
-            model.addAttribute("mode", "create");
+            prepareFormModel(model, "create", null);
             return VIEW_DIR + "admin-courses-edu-add";
         }
     }
@@ -85,17 +89,21 @@ public class CourseAdminController {
         model.addAttribute("statuses", CourseStatus.values());
         model.addAttribute("subjectForm", new SubjectForm());
         model.addAttribute("sessionForm", new SessionForm());
+        var publication = courseService.publicationOf(id).orElse(null);
+        model.addAttribute("publication", publication);
+        model.addAttribute("publicationStatus", publication == null
+                ? RecruitmentStatus.PRE_CONSULTATION : publication.getRecruitmentStatus());
+        model.addAttribute("readinessMissing", courseService.recruitmentReadiness(id));
+        model.addAttribute("nextRecruitmentStatus", courseService.nextRecruitmentStatus(id));
         return VIEW_DIR + "courses-detail";
     }
 
     /** 과정 수정 폼. */
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
-        Course course = courseService.get(id);
-        model.addAttribute("courseForm", CourseForm.from(course));
+        model.addAttribute("courseForm", courseService.formForEdit(id));
         model.addAttribute("courseId", id);
-        model.addAttribute("statuses", CourseStatus.values());
-        model.addAttribute("mode", "edit");
+        prepareFormModel(model, "edit", id);
         return VIEW_DIR + "admin-courses-edu-update";
     }
 
@@ -105,8 +113,7 @@ public class CourseAdminController {
                          BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("courseId", id);
-            model.addAttribute("statuses", CourseStatus.values());
-            model.addAttribute("mode", "edit");
+            prepareFormModel(model, "edit", id);
             return VIEW_DIR + "admin-courses-edu-update";
         }
         courseService.update(id, courseForm);
@@ -120,9 +127,42 @@ public class CourseAdminController {
         return "redirect:/admin/courses/" + id;
     }
 
+    /** 홈페이지 모집 상태는 임의 변경하지 않고 정해진 다음 단계로만 이동한다. */
+    @PostMapping("/{id}/publication/status")
+    public String changeRecruitmentStatus(@PathVariable Long id,
+                                          @RequestParam RecruitmentStatus status,
+                                          RedirectAttributes redirectAttributes) {
+        try {
+            courseService.changeRecruitmentStatus(id, status);
+            redirectAttributes.addFlashAttribute("publicationMessage",
+                    status.getLabel() + " 상태로 변경했습니다.");
+        } catch (RecruitmentReadinessException e) {
+            redirectAttributes.addFlashAttribute("publicationError",
+                    "모집중으로 전환하려면 누락된 정보를 먼저 입력해 주세요.");
+            redirectAttributes.addFlashAttribute("publicationMissing", e.getMissingItems());
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("publicationError", e.getMessage());
+        }
+        return "redirect:/admin/courses/" + id;
+    }
+
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id) {
         courseService.delete(id);
         return "redirect:/admin/courses";
+    }
+
+    private void prepareFormModel(Model model, String mode, Long courseId) {
+        model.addAttribute("statuses", CourseStatus.values());
+        model.addAttribute("publicationSites", PublicationSite.values());
+        model.addAttribute("publicCategories", PublicCourseCategory.values());
+        model.addAttribute("partnerOrganizations", organizationService.selectableOrganizations());
+        model.addAttribute("mode", mode);
+        var publication = courseId == null ? null : courseService.publicationOf(courseId).orElse(null);
+        model.addAttribute("publicationStatus", publication == null
+                ? RecruitmentStatus.PRE_CONSULTATION : publication.getRecruitmentStatus());
+        model.addAttribute("readinessMissing", courseId == null
+                ? List.of("과정을 저장한 뒤 담당 교사를 배정하세요.")
+                : courseService.recruitmentReadiness(courseId));
     }
 }

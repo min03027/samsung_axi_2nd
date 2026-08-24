@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${editing ? '기업·기관 수정' : '기업·기관 등록'}">기업·기관 등록</title>
+    <link rel="stylesheet" href="/static/css/common-style.css"><link rel="stylesheet" href="/static/css/sidebar-style.css"><link rel="stylesheet" href="/static/css/organization-cms.css">
+    <script src="/static/js/sidebar-function.js" defer></script>
+</head>
+<body>
+<header th:replace="~{fragments/management :: header(${editing ? '기업·기관 수정' : '기업·기관 등록'})}"></header>
+<th:block th:replace="~{fragments/management :: sidebar('organizations')}"></th:block>
+<main class="main-content organization-main"><div class="organization-shell">
+    <div class="organization-head"><div><h1 th:text="${editing ? '기업·기관 수정' : '기업·기관 등록'}">기업·기관 등록</h1><p>내부 메모는 공개되지 않으며, 홈페이지 노출은 사용 상태와 공개 설정을 모두 충족해야 합니다.</p></div><a class="organization-btn" href="/admin/organizations">목록</a></div>
+    <form th:object="${organizationForm}" method="post" th:action="${editing} ? @{/admin/organizations/{id}(id=${organizationId})} : @{/admin/organizations}">
+        <div class="organization-errors" th:if="${#fields.hasAnyErrors()}"><p th:each="error:${#fields.allErrors()}" th:text="${error}">입력 내용을 확인하세요.</p></div>
+        <section class="organization-card organization-section"><h2>기본정보</h2><p>기업과 공공·교육기관을 하나의 마스터에서 구분해 관리합니다.</p><div class="organization-grid">
+            <div class="organization-field"><label for="name">기업·기관명 *</label><input id="name" th:field="*{name}" maxlength="200"></div>
+            <div class="organization-field"><label for="type">유형 *</label><select id="type" th:field="*{type}"><option th:each="item:${types}" th:value="${item}" th:text="${item.label}">유형</option></select></div>
+            <div class="organization-field full"><label for="oneLineDescription">한줄 설명</label><input id="oneLineDescription" th:field="*{oneLineDescription}" maxlength="500"></div>
+            <div class="organization-field full"><label for="detailedDescription">상세 설명</label><textarea id="detailedDescription" th:field="*{detailedDescription}"></textarea></div>
+            <div class="organization-field"><label for="logoUrl">로고 이미지 URL</label><input id="logoUrl" type="url" th:field="*{logoUrl}" placeholder="https://..."><span class="organization-help">운영 스토리지 확정 전까지 URL 방식으로 관리합니다. 비어 있으면 기관명이 표시됩니다.</span></div>
+            <div class="organization-field"><label for="websiteUrl">홈페이지 URL</label><input id="websiteUrl" type="url" th:field="*{websiteUrl}" placeholder="https://..."><span class="organization-help">도메인은 동일 기관 중복 확인에도 사용됩니다.</span></div>
+        </div></section>
+        <section class="organization-card organization-section"><h2>관계</h2><p>관계 유형은 복수로 선택할 수 있고, 과정별 프로젝트·채용 연결은 서로 구분됩니다.</p>
+            <span class="organization-label">관계 유형</span><div class="organization-check-grid" style="margin:8px 0 20px"><label class="organization-check" th:each="item:${relationships}"><input type="checkbox" th:field="*{relationshipTypes}" th:value="${item}"><span th:text="${item.label}">관계</span></label></div>
+            <div class="organization-grid"><div class="organization-field"><label for="projectCourseIds">프로젝트 참여 과정</label><select id="projectCourseIds" th:field="*{projectCourseIds}" multiple><option th:each="course:${courses}" th:value="${course.id}" th:text="${course.courseName + ' · ' + (course.cohort ?: '-')}">과정</option></select></div>
+            <div class="organization-field"><label for="recruitmentCourseIds">채용 연계 과정</label><select id="recruitmentCourseIds" th:field="*{recruitmentCourseIds}" multiple><option th:each="course:${courses}" th:value="${course.id}" th:text="${course.courseName + ' · ' + (course.cohort ?: '-')}">과정</option></select></div></div>
+        </section>
+        <section class="organization-card organization-section"><h2>홈페이지</h2><p>공개 설정, 사이트와 위치가 모두 일치할 때만 공개 API에 나타납니다.</p>
+            <label class="organization-check" style="margin-bottom:18px"><input type="checkbox" th:field="*{homepageExposure}"><span>홈페이지에 공개</span></label>
+            <div class="organization-grid"><div><span class="organization-label">노출 사이트</span><div class="organization-check-grid" style="margin-top:8px"><label class="organization-check" th:each="item:${sites}"><input type="checkbox" th:field="*{exposureSites}" th:value="${item}"><span th:text="${item.label}">사이트</span></label></div></div>
+            <div><span class="organization-label">노출 위치</span><div class="organization-check-grid" style="margin-top:8px"><label class="organization-check" th:each="item:${positions}"><input type="checkbox" th:field="*{exposurePositions}" th:value="${item}"><span th:text="${item.label}">위치</span></label></div></div></div>
+            <div class="organization-field" style="max-width:260px;margin-top:18px"><label for="displayOrder">정렬 순서</label><input id="displayOrder" type="number" min="0" th:field="*{displayOrder}"></div>
+        </section>
+        <section class="organization-card organization-section"><h2>내부관리</h2><p>관리자만 볼 수 있으며 공개 DTO에는 포함되지 않습니다.</p><div class="organization-grid"><div class="organization-field full"><label for="internalNote">관리자 메모</label><textarea id="internalNote" th:field="*{internalNote}"></textarea></div><div class="organization-field"><label for="status">상태 *</label><select id="status" th:field="*{status}"><option th:each="item:${statuses}" th:value="${item}" th:text="${item.label}">상태</option></select></div></div></section>
+        <div class="organization-form-actions"><a class="organization-btn" th:href="${editing} ? @{/admin/organizations/{id}(id=${organizationId})} : @{/admin/organizations}">취소</a><button class="organization-btn primary" type="submit" th:text="${editing ? '수정 저장' : '등록'}">등록</button></div>
+    </form>
+</div></main>
+</body></html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>지원자 상세 | Samsung Academy LXP</title>
+    <link rel="stylesheet" href="/static/css/common-style.css"><link rel="stylesheet" href="/static/css/sidebar-style.css"><link rel="stylesheet" href="/static/css/admission-management.css">
+    <script src="/static/js/sidebar-function.js" defer></script>
+</head>
+<body>
+<header th:replace="~{fragments/management :: header('지원자 상세')}"></header>
+<th:block th:replace="~{fragments/management :: sidebar('admissions')}"></th:block>
+<main class="main-content admission-main"><div class="admission-shell">
+    <a class="admission-back" href="/admin/admissions/applications">← 과정 지원 목록</a>
+    <div class="admission-head"><div><h2 th:text="${courseApplication.applicantName + ' 지원서'}">지원서</h2><p th:text="${'접수번호 ' + courseApplication.receiptNumber}">접수번호</p></div></div>
+    <div class="admission-flash ok" th:if="${message}" th:text="${message}"></div><div class="admission-flash error" th:if="${error}" th:text="${error}"></div>
+    <div class="admission-detail-grid">
+        <section class="admission-panel"><h3>접수 정보</h3><dl class="admission-info">
+            <dt>과정</dt><dd th:text="${courseApplication.course.courseName + ' · ' + (courseApplication.course.cohort != null ? courseApplication.course.cohort : '-')}">과정</dd>
+            <dt>접수일</dt><dd th:text="${#temporals.format(courseApplication.submittedAt, 'yyyy-MM-dd HH:mm')}">접수일</dd>
+            <dt>이름</dt><dd th:text="${courseApplication.applicantName}">이름</dd>
+            <dt>생년월일</dt><dd th:text="${courseApplication.birthDate ?: '-'}">생년월일</dd>
+            <dt>연락처</dt><dd th:text="${courseApplication.phone}">연락처</dd>
+            <dt>이메일</dt><dd th:text="${courseApplication.email}">이메일</dd>
+            <dt>현재 상태</dt><dd th:text="${courseApplication.employment}">상태</dd>
+            <dt>희망 직무</dt><dd th:text="${courseApplication.desiredJob}">직무</dd>
+            <dt>지원 동기</dt><dd th:text="${courseApplication.motivation}">지원 동기</dd>
+            <dt>관련 경험</dt><dd th:text="${courseApplication.career ?: '-'}">관련 경험</dd>
+            <dt>보유 기술</dt><dd th:text="${courseApplication.skills ?: '-'}">보유 기술</dd>
+            <dt>내일배움카드</dt><dd th:text="${courseApplication.trainingCard}">카드</dd>
+            <dt>기숙사 상담</dt><dd th:text="${courseApplication.dormitoryNeed}">기숙사</dd>
+            <dt>개인정보 동의</dt><dd th:text="${#temporals.format(courseApplication.privacyConsentAt, 'yyyy-MM-dd HH:mm') + ' · ' + courseApplication.privacyConsentVersion}">동의</dd>
+            <dt>중복 확인</dt><dd th:text="${courseApplication.duplicateCandidate ? '동일 연락처 또는 기존 계정 확인 필요' : '중복 징후 없음'}">중복</dd>
+            <dt>연결 계정</dt><dd th:text="${courseApplication.matchedUser != null ? courseApplication.matchedUser.name + ' (' + courseApplication.matchedUser.loginId + ')' : '자동 연결 없음'}">계정</dd>
+        </dl></section>
+        <section class="admission-panel"><h3>처리 및 후속조치</h3>
+            <form class="admission-form" th:action="@{/admin/admissions/applications/{id}(id=${courseApplication.id})}" method="post">
+                <label>처리 상태<select name="status" required><option th:each="status : ${applicationStatuses}" th:value="${status}" th:text="${status.label}" th:selected="${status == courseApplication.status}"></option></select></label>
+                <label>담당자<select name="assigneeId"><option value="">미배정</option><option th:each="user : ${assignees}" th:value="${user.id}" th:text="${user.name + ' (' + user.loginId + ')'}" th:selected="${courseApplication.assignedTo != null and user.id == courseApplication.assignedTo.id}"></option></select></label>
+                <label>처리 메모<textarea name="processingNote" maxlength="4000" th:text="${courseApplication.processingNote}"></textarea></label>
+                <label>후속조치 예정일<input type="date" name="followUpDate" th:value="${courseApplication.followUpDate}"></label>
+                <label>최종 결과<textarea name="finalResult" maxlength="4000" th:text="${courseApplication.finalResult}"></textarea></label>
+                <button class="admission-submit" type="submit">처리 정보 저장</button>
+            </form>
+            <p class="admission-sub" style="margin-top:14px;line-height:1.6">승인은 지원자 선발 상태만 변경합니다. 학생 계정과 Enrollment는 자동 생성되지 않습니다.</p>
+        </section>
+    </div>
+</div></main>
+</body></html>

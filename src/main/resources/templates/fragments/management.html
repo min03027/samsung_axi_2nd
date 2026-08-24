@@ -75,13 +75,14 @@
                     onclick="handleMenuClick(this, '/admin/courses')">
                     <img src="/static/icons/03-course.svg" alt="" class="management-menu-icon">
                     <span class="menu-text" th:classappend="${active == 'courses' or active == 'schedule'
-                            or active == 'enrollment-approval' or active == 'contents'
+                            or active == 'enrollment-approval' or active == 'admissions' or active == 'contents'
                             or active == 'att-status' or active == 'att-graduate'} ? 'active_menu'">교육 운영</span>
                     <span class="chev" aria-hidden="true">▾</span>
                     <ul>
                         <li class="submenu" th:classappend="${active == 'courses'} ? 'active_menu'"><a href="/admin/courses">과정·커리큘럼</a></li>
                         <li class="submenu" th:classappend="${active == 'schedule'} ? 'active_menu'"><a href="/admin/courses/schedule">일정·시간표</a></li>
                         <li class="submenu" th:classappend="${active == 'enrollment-approval'} ? 'active_menu'"><a href="/admin/enrollments/pending">수강신청 승인</a></li>
+                        <li class="submenu" th:classappend="${active == 'admissions'} ? 'active_menu'"><a href="/admin/admissions/applications">모집·신청 관리</a></li>
                         <li class="submenu" th:classappend="${active == 'contents'} ? 'active_menu'"><a href="/instructor/contents">콘텐츠·라이브러리</a></li>
                         <li class="submenu" th:classappend="${active == 'att-status'} ? 'active_menu'"><a href="/admin/attendance">출결 현황</a></li>
                         <li class="submenu" th:classappend="${active == 'att-graduate'} ? 'active_menu'"><a href="/admin/completion">이수·수료 관리</a></li>
@@ -99,6 +100,18 @@
                         <li class="submenu" th:classappend="${active == 'contents'} ? 'active_menu'"><a href="/instructor/contents">콘텐츠·라이브러리</a></li>
                         <li class="submenu" th:classappend="${active == 'att-status'} ? 'active_menu'"><a href="/instructor/attendance">출결 현황</a></li>
                         <li class="submenu" th:classappend="${active == 'att-graduate'} ? 'active_menu'"><a href="/instructor/graduate">이수 현황</a></li>
+                    </ul>
+                </li>
+
+                <!-- 사이트 운영: 홈페이지 공개 데이터는 ADMIN만 등록·수정·공개한다. -->
+                <li sec:authorize="hasRole('ADMIN')" data-page="/admin/organizations"
+                    onclick="handleMenuClick(this, '/admin/organizations')">
+                    <img src="/static/icons/03-description.svg" alt="" class="management-menu-icon">
+                    <span class="menu-text" th:classappend="${active == 'organizations' or active == 'reviews'} ? 'active_menu'">사이트 운영</span>
+                    <span class="chev" aria-hidden="true">▾</span>
+                    <ul>
+                        <li class="submenu" th:classappend="${active == 'organizations'} ? 'active_menu'"><a href="/admin/organizations">기업·기관 관리</a></li>
+                        <li class="submenu" th:classappend="${active == 'reviews'} ? 'active_menu'"><a href="/admin/reviews">후기 관리</a></li>
                     </ul>
                 </li>
 

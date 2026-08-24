@@ -5,6 +5,7 @@ import com.ssa.lms.assignment.service.SubmissionService;
 import com.ssa.lms.attendance.service.AttendanceService;
 import com.ssa.lms.attendance.web.TraineeAttendanceView;
 import com.ssa.lms.content.service.ProgressQueryService;
+import com.ssa.lms.content.service.ProgressService;
 import com.ssa.lms.course.entity.EnrollmentStatus;
 import com.ssa.lms.course.entity.Session;
 import com.ssa.lms.course.repository.SessionRepository;
@@ -89,6 +90,7 @@ public class TraineeDashboardService {
     private final EnrollmentService enrollmentService;          // A
     private final AttendanceService attendanceService;          // A
     private final ProgressQueryService progressQueryService;    // A
+    private final ProgressService progressService;
     private final SubmissionService submissionService;
     private final ExamAttemptService examAttemptService;
     private final SurveyService surveyService;
@@ -207,7 +209,9 @@ public class TraineeDashboardService {
             case "SURVEY" -> "설문 이어서 작성";
             default -> "오늘 학습 시작";
         };
-        String actionHref = firstTodo == null ? LEARNING_URL : firstTodo.href();
+        String actionHref = firstTodo == null
+                ? continueLearningHref(userId, primary.courseId())
+                : firstTodo.href();
 
         return new TraineeDashboardView.Assurance(
                 tone, headline, detail, primary.courseName(), progress, recommended, attendanceRate,
@@ -442,10 +446,16 @@ public class TraineeDashboardService {
                     DashboardFormat.percent(progressQueryService.completedRatio(userId, e.courseId())),
                     attendanceRate == null ? DashboardFormat.NONE : DashboardFormat.percent(attendanceRate),
                     dday == null ? DashboardFormat.NONE : (dday >= 0 ? "D-" + dday : "종료"),
-                    LEARNING_URL,
+                    continueLearningHref(userId, e.courseId()),
                     NOTICE_URL));
         }
         return cards;
+    }
+
+    private String continueLearningHref(Long userId, Long courseId) {
+        return progressService.nextLearningContent(userId, courseId)
+                .map(content -> "/trainee/contents/" + content.contentId() + "/play")
+                .orElse(LEARNING_URL + "?courseId=" + courseId);
     }
 
     private Integer attendanceRateOf(Long courseId, List<TraineeAttendanceView> attendance) {

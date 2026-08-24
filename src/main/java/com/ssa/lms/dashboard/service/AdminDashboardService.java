@@ -135,7 +135,9 @@ public class AdminDashboardService {
     private AdminDashboardView.Courses courseKpi(List<Course> courses) {
         long inProgress = courses.stream().filter(c -> c.getStatus() == CourseStatus.IN_PROGRESS).count();
         long upcoming = courses.stream()
-                .filter(c -> c.getStatus() == CourseStatus.DRAFT || c.getStatus() == CourseStatus.RECRUITING)
+                .filter(c -> c.getStatus() == CourseStatus.DRAFT
+                        || c.getStatus() == CourseStatus.RECRUITING
+                        || c.getStatus() == CourseStatus.RECRUITMENT_CLOSED)
                 .count();
         long ended = courses.stream()
                 .filter(c -> c.getStatus() == CourseStatus.COMPLETED || c.getStatus() == CourseStatus.CLOSED)

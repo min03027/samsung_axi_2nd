@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/static/css/common-style.css">
     <link rel="stylesheet" href="/static/css/sidebar-style.css">
     <link rel="stylesheet" href="/static/css/btn-style.css">
+    <link rel="stylesheet" href="/static/css/course-cms.css">
     <script src="/static/js/sidebar-function.js" defer></script>
     <script src="/static/js/common-funtion.js" defer></script>
     <title>Samsung Academy LXP - 과정 상세</title>
@@ -49,6 +50,40 @@
     <main class="main-content">
         <div class="form-wrap">
             <div class="section-header"><h2 th:text="${course.courseName}">과정명</h2></div>
+
+            <p th:if="${publicationMessage}" th:text="${publicationMessage}"
+               style="padding:12px 14px;background:var(--color-success-bg);color:var(--color-success);border-radius:8px;"></p>
+            <div th:if="${publicationError}" style="padding:12px 14px;margin-bottom:14px;background:var(--color-danger-bg);color:var(--color-danger);border-radius:8px;">
+                <strong th:text="${publicationError}">모집 상태를 변경할 수 없습니다.</strong>
+                <ul th:if="${publicationMissing}" style="margin:8px 0 0;padding-left:20px;">
+                    <li th:each="item : ${publicationMissing}" th:text="${item}">누락 항목</li>
+                </ul>
+            </div>
+
+            <!-- 홈페이지 공개 상태 / 모집 준비도 -->
+            <section class="course-cms-status">
+                <div>
+                    <small>홈페이지 모집 상태</small>
+                    <strong th:text="${publicationStatus.label}">사전 상담</strong>
+                    <span style="display:block;margin-top:8px;color:#cbd5e1;font-size:12px;"
+                          th:text="${publication != null and publication.publicVisible} ? '홈페이지 노출 ON' : '홈페이지 노출 OFF'">노출 상태</span>
+                </div>
+                <div class="course-cms-readiness">
+                    <p>모집 준비도</p>
+                    <span class="course-cms-ready" th:if="${readinessMissing.isEmpty()}">필수 정보가 모두 준비됐습니다.</span>
+                    <ul th:unless="${readinessMissing.isEmpty()}">
+                        <li th:each="item : ${readinessMissing}" th:text="${item}">누락 항목</li>
+                    </ul>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
+                        <a class="btn btn-gray" th:href="@{/admin/courses/{id}/edit(id=${course.id})}">공개 정보 수정</a>
+                        <form th:if="${nextRecruitmentStatus != null}" th:action="@{/admin/courses/{id}/publication/status(id=${course.id})}" method="post">
+                            <input type="hidden" name="status" th:value="${nextRecruitmentStatus}">
+                            <button type="submit" class="btn btn-primary"
+                                    th:text="|${nextRecruitmentStatus.label}으로 전환|">모집중으로 전환</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
 
             <!-- 기본 정보 -->
             <div class="form-section">

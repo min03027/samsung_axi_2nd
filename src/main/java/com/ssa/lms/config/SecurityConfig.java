@@ -80,7 +80,11 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 // H2 콘솔용 (local 프로필에서만 콘솔이 열림)
-                .csrf(csrf -> csrf.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")))
+                // 공개 신청 API는 인증 쿠키를 사용하지 않는 JSON endpoint이므로 CSRF 대상에서만 제외한다.
+                // 입력 검증과 공개 과정 검증은 PublicAdmissionController/AdmissionService에서 수행한다.
+                .csrf(csrf -> csrf.ignoringRequestMatchers(
+                        AntPathRequestMatcher.antMatcher("/h2-console/**"),
+                        AntPathRequestMatcher.antMatcher("/v2/api/public/**")))
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
 
         return http.build();

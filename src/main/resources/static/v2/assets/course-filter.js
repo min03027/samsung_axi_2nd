@@ -1,7 +1,7 @@
 (() => {
   const buttons = [...document.querySelectorAll('[data-axi-filter]')];
   const cards = [...document.querySelectorAll('[data-axi-category]')];
-  if (!buttons.length || !cards.length) return;
+  if (!buttons.length) return;
   const courseKeys = ['data','factory','aiot','robot','cloud','video','uiux','japan','usa','china','cooking','game','design','mobility','system','adsp','sqld','bigdata-cert','engineer'];
   cards.forEach((card, index) => {
     const key = courseKeys[index];
@@ -18,6 +18,8 @@
   buttons.forEach(button => button.addEventListener('click', () => {
     const category = button.dataset.axiFilter;
     buttons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-    cards.forEach(card => { card.hidden = category !== 'all' && card.dataset.axiCategory !== category; });
+    document.querySelectorAll('[data-axi-category]').forEach(card => {
+      card.hidden = category !== 'all' && card.dataset.axiCategory !== category;
+    });
   }));
 })();

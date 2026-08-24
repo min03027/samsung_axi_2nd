@@ -36,7 +36,6 @@
                 수강 과정의 이수 여부를 확인하고, 이수 확정된 과정은 이수증을 내려받을 수 있어요.
             </p>
 
-            <div th:replace="${sampleData} ? ~{fragments/trainee :: sampleNotice} : ~{}"></div>
 
             <div class="empty-state" th:if="${completions == null or completions.isEmpty()}">
                 <p>표시할 이수 정보가 없어요.</p>

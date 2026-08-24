@@ -74,12 +74,12 @@
     </form>
 
     <div class="row row--between row--wrap" style="margin-bottom:var(--sp-4)">
-      <p class="small muted">조건에 맞는 과정 <b class="strong num">16</b>개</p>
+      <p class="small muted">현재 공개 모집 과정 <b class="strong num" data-public-course-count>0</b>개</p>
       <a class="btn btn--outline btn--sm" href="/v2/site/campus/recommend.html">어떤 과정이 맞는지 모르겠다면 →</a>
     </div>
 
     <!-- 몰입-028 과정 카드 / 몰입-029 상세·신청 -->
-    <div class="grid grid-auto">
+    <div class="grid grid-auto" data-public-course-grid aria-busy="true">
 
       <article class="course-card">
         <div class="course-card__thumb"><span class="badge badge--accent">모집중 · D-05</span></div>
@@ -198,7 +198,7 @@
 </section>
 
 <nav class="axi-categories" id="course-list-all" aria-label="전체 과정 분류"><div class="container"><div class="axi-categories__head"><span>CHOOSE YOUR ROUTE</span><p>배우고 싶은 기술보다<br><b>도달하고 싶은 목표</b>를 먼저 고르세요.</p></div><div class="axi-categories__inner"><button type="button" data-axi-filter="all" aria-pressed="true"><small>ALL · 19</small><strong>전체 과정</strong><span>가능한 선택지 모두 보기</span></button><button type="button" data-axi-filter="kdt" aria-pressed="false"><small>01 · 5 COURSES</small><strong>KDT 신기술</strong><span>산업 프로젝트로 취업 준비</span></button><button type="button" data-axi-filter="creative" aria-pressed="false"><small>02 · 2 COURSES</small><strong>AI·디자인 실무</strong><span>AI로 결과물을 만드는 과정</span></button><button type="button" data-axi-filter="global" aria-pressed="false"><small>03 · 3 COURSES</small><strong>해외취업</strong><span>국가별 직무 역량과 취업 준비</span></button><button type="button" data-axi-filter="highschool" aria-pressed="false"><small>04 · 5 COURSES</small><strong>일반고 위탁</strong><span>진로와 자격을 함께 준비</span></button><button type="button" data-axi-filter="license" aria-pressed="false"><small>05 · 4 COURSES</small><strong>자격증</strong><span>실력을 공식 자격으로 증명</span></button></div></div></nav>
-<section class="axi-course-section"><div class="container"><div class="axi-course-head"><div><span class="eyebrow">ALL COURSES</span><h2>목표에 맞춰<br>과정을 찾아보세요</h2></div><p>Samsung AXI에 공개된 전체 과정을<br>교육 목적에 따라 나누었습니다.</p></div><div class="axi-course-grid">
+<section class="axi-course-section"><div class="container"><div class="axi-course-head"><div><span class="eyebrow">ALL COURSES</span><h2>목표에 맞춰<br>과정을 찾아보세요</h2></div><p>Samsung AXI에 공개된 전체 과정을<br>교육 목적에 따라 나누었습니다.</p></div><div class="axi-course-grid" data-public-course-grid-all aria-busy="true">
 <article class="axi-course-card" data-axi-category="kdt"><div><span class="axi-cat">KDT · DATA AI</span><span class="axi-status">모집중</span></div><h3>심층 데이터 분석을 통한 개인 맞춤형 예측 자동화 서비스 솔루션 개발</h3><p>Hadoop · Tableau · TensorFlow</p><footer><a class="btn btn--outline btn--sm" href="/v2/site/class/course.html">상세보기</a><a class="btn btn--primary btn--sm" href="/v2/site/class/apply.html">신청하기</a></footer></article>
 <article class="axi-course-card" data-axi-category="kdt"><div><span class="axi-cat">KDT · SMART FACTORY</span><span class="axi-status">모집중</span></div><h3>ESG AIoT를 활용한 스마트 환경공정제어 자동화시스템 구축 과정</h3><p>MES · ERP · PLC</p><footer><a class="btn btn--outline btn--sm" href="/v2/site/class/course.html">상세보기</a><a class="btn btn--primary btn--sm" href="/v2/site/class/apply.html">신청하기</a></footer></article>
 <article class="axi-course-card" data-axi-category="kdt"><div><span class="axi-cat">KDT · AIoT</span><span class="axi-status">모집중</span></div><h3>인공지능 AIoT를 이용한 빅데이터 분석 산업솔루션 개발 취업연계 부트캠프</h3><p>AIoT · Big Data · 산업솔루션</p><footer><a class="btn btn--outline btn--sm" href="/v2/site/class/course.html">상세보기</a><a class="btn btn--primary btn--sm" href="/v2/site/class/apply.html">신청하기</a></footer></article>
@@ -232,6 +232,7 @@
 
 <script src="/v2/assets/brand.js"></script>
 <script src="/v2/assets/shell.js"></script>
+<script src="/v2/assets/public-course-cms.js"></script>
 <script src="/v2/assets/course-filter.js"></script>
 <script src="/v2/assets/track-slider.js"></script>
 <script>Shell.site({ service: "class", nav: location.hash === "#course-list-all" ? "detail" : "catalog" });</script>

@@ -31,10 +31,10 @@
      --------------------------------------------------------- */
   var SITE_NAV = {
     campus: [
-      { key: "about",   label: "브랜드 스토리", href: "/v2/site/campus/about.html", todo: true },
-      { key: "outcome", label: "취업 성과",     href: "/v2/site/campus/outcome.html", todo: true },
-      { key: "review",  label: "수료생 후기",   href: "/v2/site/campus/reviews.html", todo: true },
-      { key: "support", label: "취업 지원",     href: "/v2/site/campus/support.html", todo: true },
+      { key: "about",   label: "브랜드 스토리", href: "/v2/site/campus/index.html#heritage" },
+      { key: "outcome", label: "취업 성과",     href: "/v2/site/campus/index.html#outcomes" },
+      { key: "review",  label: "수료생 후기",   href: "/v2/site/campus/index.html#reviews" },
+      { key: "support", label: "취업 지원",     href: "/v2/site/campus/index.html#career-support" },
       { key: "facility",label: "캠퍼스·기숙사", href: "/v2/site/campus/facility.html" }
     ],
     class: [
@@ -43,11 +43,11 @@
       { key: "apply",   label: "수강 신청",   href: "/v2/site/class/apply.html" }
     ],
     biz: [
-      { key: "diagnosis", label: "조직 진단",   href: "/v2/site/biz/diagnosis.html", todo: true },
-      { key: "flow",      label: "AX Flow",     href: "/v2/site/biz/flow.html", todo: true },
-      { key: "programs",  label: "직무별 과정", href: "/v2/site/biz/programs.html", todo: true },
-      { key: "cases",     label: "기업 사례",   href: "/v2/site/biz/cases.html", todo: true },
-      { key: "contact",   label: "도입 문의",   href: "/v2/site/biz/contact.html", todo: true }
+      { key: "diagnosis", label: "조직 진단",   href: "/v2/site/biz/index.html#diagnosis" },
+      { key: "flow",      label: "AX Flow",     href: "/v2/site/biz/index.html#flow" },
+      { key: "programs",  label: "직무별 과정", href: "/v2/site/biz/index.html#programs" },
+      { key: "cases",     label: "기업 사례",   href: "/v2/site/biz/index.html#cases" },
+      { key: "contact",   label: "도입 문의",   href: "/v2/site/biz/index.html#contact" }
     ]
   };
 
@@ -130,8 +130,8 @@
     ]},
     { group: "공개사이트 CMS", items: [
       { key: "cms-courses",  label: "과정 마스터", href: null /* 화면 미구현 */, level: "L2" },
-      { key: "cms-reviews",  label: "후기 관리",   href: null /* 화면 미구현 */, level: "L2" },
-      { key: "cms-partners", label: "기업·기관",   href: null /* 화면 미구현 */, level: "L2" },
+      { key: "cms-reviews",  label: "후기 관리",   href: "/admin/reviews", level: "L2" },
+      { key: "cms-partners", label: "기업·기관",   href: "/admin/organizations", level: "L2" },
       { key: "cms-inquiry",  label: "문의 통합",   href: null /* 화면 미구현 */, level: "L2" },
       { key: "cms-site",     label: "메뉴·배너",   href: null /* 화면 미구현 */, level: "L2" },
       { key: "cms-seo",      label: "검색·SEO",    href: null /* 화면 미구현 */, level: "L1" }
@@ -272,9 +272,7 @@
           '</ul></div>' +
           '<div><h4>지원</h4><ul class="stack-sm">' +
             '<li><a href="/v2/site/campus/counsel.html">상담 신청</a></li>' +
-            '<li><a href="/v2/site/biz/contact.html">기업교육 문의</a></li>' +
-            '<li><a href="/v2/site/faq.html">자주 묻는 질문</a></li>' +
-            '<li><a href="/v2/site/search.html">통합 검색</a></li>' +
+            '<li><a href="/v2/site/biz/index.html#contact">기업교육 문의</a></li>' +
           '</ul></div>' +
           '<div><h4>문의</h4><ul class="stack-sm">' +
             '<li><span data-brand="tel"></span></li>' +
@@ -284,7 +282,7 @@
         '</div>' +
         '<div class="footer__bottom">' +
           '<span>© <span data-brand="legalName"></span></span>' +
-          '<span><a href="/v2/site/terms.html">이용약관</a> · <a href="/v2/site/privacy.html">개인정보처리방침</a></span>' +
+          '<span><a href="/terms">이용약관</a> · <a href="/privacy">개인정보처리방침</a></span>' +
         '</div>' +
       '</div></footer>'
     );
