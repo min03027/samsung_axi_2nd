@@ -6,6 +6,16 @@
       { value:'KDT', label:'K-디지털 트레이닝 훈련기관' },
       { value:'2022 대상', label:'직업능력개발훈련 부문' }
     ],
+    awards: [
+      { year:'1996', label:'성남시 감사패 수령', image:'https://www.samsungaxi.com/images/aw3.png' },
+      { year:'2018', label:'생산성본부 감사패 수령', image:'https://www.samsungaxi.com/images/aw4.png' },
+      { year:'2018', label:'성남시 감사패 수령', image:'https://www.samsungaxi.com/images/aw5.png' },
+      { year:'2019–2021', label:'이수자평가 A등급 획득', image:'https://www.samsungaxi.com/images/aw7.png' },
+      { year:'2022', label:'대한민국 교육대상 수상', image:'https://www.samsungaxi.com/images/aw2.png' },
+      { year:'2022', label:'산업인력공단 감사패 수령', image:'https://www.samsungaxi.com/images/aw6.png' },
+      { year:'2023', label:'K-Digital 훈련기관 선정', image:'https://www.samsungaxi.com/images/aw8.png' },
+      { year:'2025', label:'Samsung SDS Brity AI RPA', image:'https://www.samsungaxi.com/images/aw9.png' }
+    ],
     credentials: [
       {
         meta:'1996 · 2018 / 지자체 감사',
@@ -61,6 +71,27 @@
       label.textContent = item.label;
       stat.append(value, label);
       return stat;
+    }));
+  }
+
+  const awardsRoot = document.querySelector('[data-campus-awards]');
+  if (awardsRoot) {
+    awardsRoot.replaceChildren(...content.awards.map(item => {
+      const figure = document.createElement('figure');
+      const image = document.createElement('img');
+      image.src = item.image;
+      image.alt = `${item.year} ${item.label}`;
+      image.loading = 'lazy';
+      image.decoding = 'async';
+      image.referrerPolicy = 'no-referrer';
+      const caption = document.createElement('figcaption');
+      const year = document.createElement('strong');
+      year.textContent = item.year;
+      const label = document.createElement('span');
+      label.textContent = item.label;
+      caption.append(year, label);
+      figure.append(image, caption);
+      return figure;
     }));
   }
 
