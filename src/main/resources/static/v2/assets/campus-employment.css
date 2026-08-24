@@ -44,6 +44,13 @@
 .employment-partner-wordmark--bright img { filter:brightness(1.35) saturate(.72); }
 .employment-partner-wordmark--government img { max-width:220px;max-height:58px; }
 .employment-partner-wordmark--moe img { max-width:250px;max-height:62px; }
+.employment-partner-wordmark__layered-logo { position:relative;display:block;flex:none;max-width:100%; }
+.employment-partner-wordmark__layered-logo>img { position:absolute;inset:0;width:100%;max-width:none;height:100%;max-height:none;object-fit:contain; }
+.employment-partner-wordmark__layered-logo>img+img { filter:brightness(0) invert(1); }
+.employment-partner-wordmark__layered-logo--moel { width:220px;aspect-ratio:185/55; }
+.employment-partner-wordmark__layered-logo--moel>img+img { clip-path:inset(0 0 0 33.5%); }
+.employment-partner-wordmark__layered-logo--moe { width:250px;aspect-ratio:1000/310; }
+.employment-partner-wordmark__layered-logo--moe>img+img { clip-path:inset(0 0 0 36%); }
 .employment-partner-wordmark--sds img { width:270px;max-width:100%;max-height:58px;filter:brightness(1.25) saturate(.9); }
 .employment-partner-wordmark--woowa img { width:276px;max-width:100%;max-height:72px; }
 .employment-partner-wordmark--gachon { gap:12px; }
