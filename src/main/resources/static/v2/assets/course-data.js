@@ -259,37 +259,57 @@
     totalOutcome.textContent = '배운 기술을 실무 결과물로 완성할 수 있습니다.';
     curriculumTotal.append(totalTime,totalOutcome);
   }
-  const controls = document.createElement('div');
-  controls.className = 'curriculum-controls';
-  controls.innerHTML = '<p><b>단계별 커리큘럼</b><span>주차와 학습 내용, 도구, 산출물을 구분해 확인하세요.</span></p><div><button type="button" data-expand-all>전체 펼치기</button><button type="button" data-collapse-all>전체 접기</button></div>';
+  const selector = document.createElement('div');
+  selector.className = 'curriculum-phase-selector';
+  const tabList = document.createElement('div');
+  tabList.className = 'curriculum-phase-tabs';
+  tabList.setAttribute('role','tablist');
+  tabList.setAttribute('aria-label','커리큘럼 단계 선택');
+  const viewer = document.createElement('div');
+  viewer.className = 'curriculum-phase-view';
   const curriculumRows = curriculumProfile.phases.map((phase,index) => {
     const [type,title,description,learning,phaseTools,output,hours] = phase;
     const phaseNumber = String(index + 1).padStart(2,'0');
+    const tabId = 'curriculum-tab-' + (index + 1);
     const panelId = 'curriculum-panel-' + (index + 1);
-    const row = document.createElement('article');
-    row.className = 'curriculum-phase';
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'curriculum-phase__button';
-    button.setAttribute('aria-expanded',String(index === 0));
+    button.id = tabId;
+    button.className = 'curriculum-phase-tab';
+    button.setAttribute('role','tab');
+    button.setAttribute('aria-selected',String(index === 0));
     button.setAttribute('aria-controls',panelId);
-    button.innerHTML = '<span class="curriculum-phase__number">PHASE ' + phaseNumber + '</span><span class="curriculum-phase__title"><small>' + type + (hours ? ' · ' + hours : '') + '</small><strong></strong></span><span class="curriculum-phase__period">' + (guide[2][index] || '단계별 운영') + '</span><span class="curriculum-phase__toggle" aria-hidden="true">+</span>';
-    button.querySelector('strong').textContent = title;
+    button.tabIndex = index === 0 ? 0 : -1;
+    const tabNumber = document.createElement('span');
+    tabNumber.textContent = 'PHASE ' + phaseNumber;
+    const tabTitle = document.createElement('strong');
+    tabTitle.textContent = title;
+    const tabPeriod = document.createElement('small');
+    tabPeriod.textContent = guide[2][index] || '단계별 운영';
+    button.append(tabNumber,tabTitle,tabPeriod);
 
-    const panel = document.createElement('div');
+    const panel = document.createElement('section');
     panel.id = panelId;
-    panel.className = 'curriculum-phase__panel';
+    panel.className = 'curriculum-phase-panel';
+    panel.setAttribute('role','tabpanel');
+    panel.setAttribute('aria-labelledby',tabId);
+    panel.tabIndex = 0;
     panel.hidden = index !== 0;
+    const panelHead = document.createElement('header');
+    const panelMeta = document.createElement('span');
+    panelMeta.textContent = 'PHASE ' + phaseNumber + ' · ' + (guide[2][index] || '단계별 운영');
+    const panelTitle = document.createElement('h3');
+    panelTitle.textContent = title;
+    const panelType = document.createElement('small');
+    panelType.textContent = type + (hours ? ' · ' + hours : '');
+    panelHead.append(panelMeta,panelTitle,panelType);
+    const panelBody = document.createElement('div');
+    panelBody.className = 'curriculum-phase-panel__body';
     const descriptionNode = document.createElement('p');
-    descriptionNode.className = 'curriculum-phase__lead';
+    descriptionNode.className = 'curriculum-phase-panel__lead';
     descriptionNode.textContent = description;
     const detail = document.createElement('div');
     detail.className = 'curriculum-phase__detail';
-    const weekSection = document.createElement('section');
-    weekSection.className = 'curriculum-phase__week';
-    weekSection.innerHTML = '<h4>학습 주차</h4><strong></strong><small></small>';
-    weekSection.querySelector('strong').textContent = guide[2][index] || '단계별 운영';
-    weekSection.querySelector('small').textContent = type + (hours ? ' · ' + hours : '');
     const learningSection = document.createElement('section');
     learningSection.innerHTML = '<h4>학습 내용</h4><ul></ul>';
     learning.forEach(item => { const li = document.createElement('li'); li.textContent = item; learningSection.querySelector('ul').append(li); });
@@ -297,25 +317,41 @@
     toolsSection.innerHTML = '<h4>사용 도구</h4><div class="curriculum-phase__chips"></div>';
     phaseTools.forEach(item => { const chip = document.createElement('span'); chip.textContent = item; toolsSection.querySelector('div').append(chip); });
     const outputSection = document.createElement('section');
-    outputSection.className = 'curriculum-phase__result';
-    outputSection.innerHTML = '<h4>완성 산출물</h4><p class="curriculum-phase__output"></p>';
+    outputSection.innerHTML = '<h4>단계 산출물</h4><p class="curriculum-phase__output"></p>';
     outputSection.querySelector('p').textContent = output;
-    detail.append(weekSection,learningSection,toolsSection,outputSection);
-    panel.append(descriptionNode,detail);
-    row.append(button,panel);
-    curriculumList.append(row);
+    detail.append(learningSection,toolsSection,outputSection);
+    panelBody.append(descriptionNode,detail);
+    panel.append(panelHead,panelBody);
+    tabList.append(button);
+    viewer.append(panel);
     return {button,panel};
   });
-  const setPhase = (row,expanded) => {
-    row.button.setAttribute('aria-expanded',String(expanded));
-    row.panel.hidden = !expanded;
+  const activatePhase = (index,focus = false) => {
+    curriculumRows.forEach((row,rowIndex) => {
+      const selected = rowIndex === index;
+      row.button.setAttribute('aria-selected',String(selected));
+      row.button.tabIndex = selected ? 0 : -1;
+      row.panel.hidden = !selected;
+    });
+    if (focus) curriculumRows[index].button.focus();
   };
-  curriculumRows.forEach(row => {
-    row.button.addEventListener('click',() => setPhase(row,row.button.getAttribute('aria-expanded') !== 'true'));
+  curriculumRows.forEach((row,index) => {
+    row.button.addEventListener('click',() => activatePhase(index));
+    row.button.addEventListener('keydown',event => {
+      const last = curriculumRows.length - 1;
+      const next = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? (index === last ? 0 : index + 1)
+        : event.key === 'ArrowUp' || event.key === 'ArrowLeft' ? (index === 0 ? last : index - 1)
+        : event.key === 'Home' ? 0
+        : event.key === 'End' ? last
+        : null;
+      if (next === null) return;
+      event.preventDefault();
+      activatePhase(next,true);
+    });
   });
-  controls.querySelector('[data-expand-all]').addEventListener('click',() => curriculumRows.forEach(row => setPhase(row,true)));
-  controls.querySelector('[data-collapse-all]').addEventListener('click',() => curriculumRows.forEach(row => setPhase(row,false)));
-  curriculumList.before(controls);
+  selector.append(tabList,viewer);
+  curriculumList.append(selector);
+  activatePhase(0);
   document.querySelector('.sales-info').insertAdjacentElement('afterend', curriculum);
 
   const teamGrid = document.querySelector('[data-course-team-grid]');

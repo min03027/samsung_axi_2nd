@@ -368,61 +368,6 @@
   background:#fff8f4;
 }
 .sales-course .curriculum-overview article:nth-child(2) strong { font-size:clamp(1.08rem,1.65vw,1.48rem); }
-.sales-course .curriculum-list { border-top:1px solid rgba(255,255,255,.2); }
-.sales-course .curriculum-phase { border-bottom-color:rgba(255,255,255,.2); }
-.sales-course .curriculum-phase__button { color:#fff; }
-.sales-course .curriculum-phase__title small,
-.sales-course .curriculum-phase__period { color:rgba(255,255,255,.56); }
-.sales-course .curriculum-phase__title strong { color:#fff; }
-.sales-course .curriculum-phase__toggle { color:#17110e; background:#fff; }
-.sales-course .curriculum-phase__button[aria-expanded="true"] .curriculum-phase__toggle { color:#fff; background:#ff641f; }
-.sales-course .curriculum-phase__panel { padding-top:0; }
-.curriculum-phase__lead {
-  margin:0 0 14px;
-  padding:22px 24px;
-  color:#403a36;
-  border-radius:14px;
-  background:#fff;
-  font-size:.95rem;
-  line-height:1.7;
-}
-.sales-course .curriculum-phase__detail {
-  grid-template-columns:minmax(150px,.55fr) minmax(0,1.45fr) minmax(190px,.8fr);
-  gap:1px;
-  overflow:hidden;
-  padding:1px;
-  border:0;
-  border-radius:16px;
-  background:#d8d0cb;
-}
-.sales-course .curriculum-phase__detail section {
-  min-height:180px;
-  padding:24px;
-  background:#fff;
-}
-.sales-course .curriculum-phase__detail section:first-child { grid-row:auto; }
-.sales-course .curriculum-phase__detail h4 {
-  color:#df4811;
-  font-size:.68rem;
-  font-weight:900;
-  letter-spacing:.12em;
-}
-.curriculum-phase__week strong,
-.curriculum-phase__week small { display:block; }
-.curriculum-phase__week strong { margin-top:18px; color:#17110e; font-size:1.25rem; line-height:1.35; }
-.curriculum-phase__week small { margin-top:9px; color:#827872; font-size:.75rem; font-weight:700; }
-.sales-course .curriculum-phase__detail .curriculum-phase__result {
-  color:#fff;
-  background:#231d1a;
-}
-.sales-course .curriculum-phase__detail .curriculum-phase__result h4 { color:#ff7a45; }
-.sales-course .curriculum-phase__detail .curriculum-phase__result .curriculum-phase__output {
-  margin-top:20px;
-  color:#fff;
-  font-size:1.18rem;
-  line-height:1.45;
-}
-
 .sales-team,
 .sales-day { padding:clamp(100px,12vw,170px) 0; }
 .sales-team { color:#fff; background:#101010; }
@@ -484,23 +429,31 @@
 .course-day-note { margin-top:22px; color:rgba(255,255,255,.46); font-size:.75rem; line-height:1.7; }
 
 .sales-day { color:#fff; background:#171310; }
-.course-day-flow { position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:clamp(52px,7vw,86px); background:rgba(255,255,255,.16); }
-.course-day-flow li { min-height:270px; display:grid; align-content:space-between; padding:28px; background:#171310; }
+.course-day-promise { max-width:920px; margin-top:clamp(48px,6vw,76px); padding:clamp(28px,4vw,48px); border-left:5px solid #ff641f; background:#fff; }
+.course-day-promise small,.course-day-promise strong { display:block; }
+.course-day-promise small { color:#e84b10; font:900 .72rem var(--font-mono); letter-spacing:.12em; }
+.course-day-promise strong { margin-top:14px; color:#17110e; font-size:clamp(1.5rem,2.6vw,2.45rem); line-height:1.35; letter-spacing:-.04em; }
+.course-day-promise p { margin-top:14px; color:#6d635e; line-height:1.75; }
+.course-day-flow { position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:28px; background:rgba(255,255,255,.16); }
+.course-day-flow li { min-height:330px; display:grid; grid-template-rows:auto 1fr; padding:30px; background:#171310; }
 .course-day-flow time { color:#ff6a2f; font:800 1.45rem var(--font-mono); }
-.course-day-flow small { display:block; color:rgba(255,255,255,.4); font:800 .65rem var(--font-mono); letter-spacing:.13em; }
+.course-day-flow li>div { align-self:end; }
+.course-day-flow small { display:block; color:#ff7a45; font:800 .65rem var(--font-mono); letter-spacing:.13em; }
 .course-day-flow strong { display:block; margin-top:10px; color:#fff; font-size:1.2rem; line-height:1.4; }
 .course-day-flow p { margin-top:13px; color:rgba(255,255,255,.58); font-size:.85rem; line-height:1.7; }
+.course-day-flow b { display:block; margin-top:22px; padding-top:16px; color:#fff; border-top:1px solid rgba(255,255,255,.16); font-size:.76rem; line-height:1.5; }
+.course-day-result { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:12px; margin-top:28px; padding:24px; color:#504640; border-radius:14px; background:#fff; font-size:.84rem; font-weight:800; }
+.course-day-result i { color:#ff641f; font-style:normal; }
+.course-day-result strong { color:#fff; padding:10px 14px; border-radius:8px; background:#17110e; }
 
 @media(max-width:900px){
   .sales-course .curriculum-overview{grid-template-columns:1fr}.sales-course .curriculum-overview article{min-height:170px}
-  .sales-course .curriculum-phase__detail{grid-template-columns:1fr 1fr}.sales-course .curriculum-phase__detail section{min-height:0}
   .sales-team .sales-section-head,.sales-day .sales-section-head{grid-template-columns:1fr}.sales-team .sales-section-head>span,.sales-day .sales-section-head>span{grid-column:auto}
   .course-team-grid{grid-template-columns:1fr}.course-day-flow{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:620px){
-  .sales-course .curriculum-phase__detail{grid-template-columns:1fr}.sales-course .curriculum-phase__detail section{padding:22px}
   .course-team-card{grid-template-columns:1fr;min-height:0}.course-team-card__photo{min-height:300px}.course-team-card>div:last-child{padding:26px}
-  .course-day-flow{grid-template-columns:1fr}.course-day-flow li{min-height:220px}
+  .course-day-flow{grid-template-columns:1fr}.course-day-flow li{min-height:290px}.course-day-result{align-items:stretch;flex-direction:column}.course-day-result i{rotate:90deg;text-align:center}.course-day-result strong{text-align:center}
 }
 .application-draft-bar button:hover,.application-draft-bar button:focus-visible { color:#fff; border-color:#17110e; background:#17110e; }
 .application-file-note { margin-top:9px; color:#887e78; font-size:.76rem; line-height:1.5; }
