@@ -10,6 +10,8 @@
   background:#fff;
 }
 
+.campus-quickbar{position:sticky;top:0;z-index:calc(var(--z-sticky) - 2);overflow-x:auto;background:#0a0a0a;color:#fff;scrollbar-width:none}.campus-quickbar::-webkit-scrollbar{display:none}.campus-quickbar>.container{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:36px}.campus-quickbar strong{flex:none;color:#fff;font-size:14px}.campus-quickbar div div{display:flex;align-items:center;gap:6px}.campus-quickbar a{display:flex;align-items:center;min-height:58px;padding:0 17px;color:rgba(255,255,255,.72);font-size:13px;font-weight:750;white-space:nowrap;text-decoration:none}.campus-quickbar a:hover{color:#fff;background:rgba(255,255,255,.08)}.campus-quickbar .campus-quickbar__cta{min-height:36px;margin-left:8px;padding:0 18px;border-radius:4px;background:#ef4814;color:#fff}.campus-quickbar .campus-quickbar__cta:hover{background:#ff5b1f}@media(max-width:700px){.campus-quickbar>.container{width:max-content;min-width:100%;padding:0 12px}.campus-quickbar strong{display:none}.campus-quickbar div div{gap:0}.campus-quickbar a{padding:0 13px}.campus-quickbar .campus-quickbar__cta{margin-left:4px}}
+
 .employment-campus .hero {
   min-height:0;
   padding-block:clamp(92px,10vw,148px) clamp(76px,8vw,112px);
