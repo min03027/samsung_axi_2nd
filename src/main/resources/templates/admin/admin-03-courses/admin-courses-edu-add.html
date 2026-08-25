@@ -6,112 +6,31 @@
     <link rel="stylesheet" href="/static/css/common-style.css">
     <link rel="stylesheet" href="/static/css/sidebar-style.css">
     <link rel="stylesheet" href="/static/css/btn-style.css">
+    <link rel="stylesheet" href="/static/css/course-cms.css">
     <script src="/static/js/sidebar-function.js" defer></script>
     <script src="/static/js/common-funtion.js" defer></script>
-    <title>Samsung Academy LXP - 과정 추가</title>
-    <style>
-        /* .main-content 가 overflow:hidden 이라 래퍼가 flex:1 + overflow-y:auto 를 가져야 폼이 스크롤된다
-           (없으면 하단 등록 버튼에 도달할 수 없음) */
-        .form-wrap { max-width: 720px; padding: 20px; flex: 1; min-height: 0; overflow-y: auto; }
-        .form-section { background:#fff; margin-bottom:20px; border:1px solid var(--color-line-gray); padding:20px 24px 30px; border-radius:8px; display:flex; flex-direction:column; gap:20px; }
-        .section-title { font-size:18px; font-weight:700; color:var(--gray-800); margin-bottom:4px; }
-        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-        .form-label { display:block; font-size:14px; font-weight:600; color:var(--gray-800); margin-bottom:4px; }
-        .form-label.required::after { content:"*"; color:var(--color-danger); margin-left:4px; }
-        .form-input, .form-select, .form-textarea { width:100%; padding:12px 16px; border:1px solid var(--gray-300); border-radius:8px; font-size:14px; background:#fff; box-sizing:border-box; }
-        .form-textarea { resize:vertical; min-height:100px; }
-        .field-error { color:var(--color-danger); font-size:12px; margin-top:4px; }
-        .button-group { display:flex; justify-content:center; gap:16px; padding-bottom:30px; }
-        @media (max-width:768px){ .form-row{ grid-template-columns:1fr; } }
-    </style>
+    <style>.form-wrap { flex:1; min-height:0; overflow-y:auto; }</style>
+    <title>Samsung Academy LXP - 과정 등록</title>
 </head>
 <body data-user-role="admin">
-    <header th:replace="~{fragments/admin :: header('과정/운영 관리 > 과정 관리 > 과정 추가')}"></header>
-    <th:block th:replace="~{fragments/admin :: sidebar('courses')}"/>
-
-    <main class="main-content">
-        <div class="form-wrap">
-            <div class="section-header"><h2>과정 추가</h2></div>
-
+<header th:replace="~{fragments/admin :: header('과정/운영 관리 > 과정 관리 > 과정 등록')}"></header>
+<th:block th:replace="~{fragments/admin :: sidebar('courses')}"/>
+<main class="main-content">
+    <div class="course-cms-page form-wrap">
+        <div class="course-cms-inner">
+            <div class="course-cms-heading">
+                <div><h2>과정 등록</h2><p>운영 과정과 홈페이지 공개 정보를 한 번에 등록합니다.</p></div>
+                <button type="button" class="btn btn-back" onclick="location.href='/admin/courses'">목록으로</button>
+            </div>
             <form th:action="@{/admin/courses}" th:object="${courseForm}" method="post">
-                <div class="form-section">
-                    <h3 class="section-title">기본 정보</h3>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label required">과정 코드</label>
-                            <input type="text" class="form-input" th:field="*{courseCode}" placeholder="예) COURSE-2026-001">
-                            <div class="field-error" th:if="${#fields.hasErrors('courseCode')}" th:errors="*{courseCode}"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">기수</label>
-                            <input type="text" class="form-input" th:field="*{cohort}" placeholder="예) 1기">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label required">과정명</label>
-                        <input type="text" class="form-input" th:field="*{courseName}" placeholder="예) 클라우드 기반 풀스택 개발자 양성과정">
-                        <div class="field-error" th:if="${#fields.hasErrors('courseName')}" th:errors="*{courseName}"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">카테고리</label>
-                        <input type="text" class="form-input" th:field="*{category}" placeholder="예) 웹개발, AI, 클라우드">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">과정 설명</label>
-                        <textarea class="form-textarea" th:field="*{description}" placeholder="과정 설명을 입력하세요"></textarea>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3 class="section-title">운영 기간 / 정원</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label required">시작일</label>
-                            <input type="date" class="form-input" th:field="*{startDate}">
-                            <div class="field-error" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label required">종료일</label>
-                            <input type="date" class="form-input" th:field="*{endDate}">
-                            <div class="field-error" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></div>
-                        </div>
-                    </div>
-                    <div class="field-error" th:if="${#fields.hasErrors('periodValid')}" th:errors="*{periodValid}"></div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label required">정원 (명)</label>
-                            <input type="number" class="form-input" th:field="*{capacity}" min="1" placeholder="예) 30">
-                            <div class="field-error" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">이수 기준 진도율 (%)</label>
-                            <input type="number" class="form-input" th:field="*{completionProgressRate}" min="0" max="100" placeholder="80">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-section">
-                    <h3 class="section-title">운영 상태</h3>
-                    <div class="form-group">
-                        <label class="form-label required">상태</label>
-                        <select class="form-select" th:field="*{status}">
-                            <option th:each="s : ${statuses}" th:value="${s}" th:text="${s.label}">상태</option>
-                        </select>
-                        <div class="field-error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
-                    </div>
-                </div>
-
-                <div class="button-group">
+                <th:block th:replace="~{admin/admin-03-courses/course-form-fields :: fields(false)}"/>
+                <div class="course-cms-actions">
                     <button type="button" class="btn btn-back" onclick="location.href='/admin/courses'">취소</button>
-                    <button type="submit" class="btn btn-save">과정 등록</button>
+                    <button type="submit" class="btn btn-save">사전 상담 과정으로 저장</button>
                 </div>
             </form>
         </div>
-    </main>
+    </div>
+</main>
 </body>
 </html>

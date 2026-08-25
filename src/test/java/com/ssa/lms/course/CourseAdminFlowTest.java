@@ -11,6 +11,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,7 +34,9 @@ class CourseAdminFlowTest {
     @WithMockUser(roles = "ADMIN")
     void 과정_목록과_등록폼이_렌더링된다() throws Exception {
         mvc.perform(get("/admin/courses")).andExpect(status().isOk())
-                .andExpect(view().name("admin/admin-03-courses/admin-courses-edu"));
+                .andExpect(view().name("admin/admin-03-courses/admin-courses-edu"))
+                .andExpect(content().string(containsString("/static/icons/add.svg")))
+                .andExpect(content().string(not(containsString("/static/icons//add.svg"))));
         mvc.perform(get("/admin/courses/new")).andExpect(status().isOk())
                 .andExpect(view().name("admin/admin-03-courses/admin-courses-edu-add"));
     }

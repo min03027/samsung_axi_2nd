@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가로 오버플로 점검</title>
+<style>
+  body { font: 12px/1.6 ui-monospace, Menlo, monospace; margin: 0; padding: 14px; background: #0b1220; color: #d7deea; }
+  h1 { font-size: 14px; margin: 0 0 12px; color: #fff; }
+  .ok   { color: #4ade80; }
+  .bad  { color: #f87171; }
+  .dim  { color: #64748b; }
+  iframe { position: fixed; left: -9999px; top: 0; border: 0; }
+  pre { white-space: pre-wrap; margin: 0 0 10px; }
+</style>
+</head>
+<body>
+<h1>가로 오버플로 점검 — 뷰포트 <span id="vw">390</span>px</h1>
+<pre id="out">측정 중…</pre>
+<iframe id="f" width="390" height="900"></iframe>
+
+<script>
+/* 각 화면을 390px 폭 iframe 으로 열어 우측으로 삐져나온 요소를 찾는다.
+   .table-wrap 처럼 스크롤 컨테이너에 갇힌 요소는 오탐이라 제외한다.
+   사용법: /v2/_diag.html   (기본 목록)
+           /v2/_diag.html?u=/v2/admin/index.html  (한 개만) */
+
+var PAGES = [
+  "/v2/_index.html",
+  "/v2/site/campus/index.html",
+  "/v2/site/class/index.html",
+  "/v2/site/class/course.html",
+  "/v2/site/biz/index.html",
+  "/v2/lxp/trainee/index.html",
+  "/v2/admin/index.html"
+];
+
+var one = new URLSearchParams(location.search).get("u");
+if (one) PAGES = [one];
+
+var f = document.getElementById("f");
+var out = document.getElementById("out");
+var report = [];
+var i = 0;
+
+function check() {
+  if (i >= PAGES.length) {
+    var bad = report.filter(function (r) { return r.over > 1; }).length;
+    out.innerHTML = report.map(function (r) { return r.html; }).join("\n") +
+      "\n\n" + (bad
+        ? '<span class="bad">■ ' + bad + "개 화면에 가로 오버플로가 남아 있습니다.</span>"
+        : '<span class="ok">■ 전 화면 가로 오버플로 없음.</span>');
+    return;
+  }
+  var url = PAGES[i];
+  f.onload = function () {
+    var d, w;
+    try { d = f.contentDocument; w = f.contentWindow; } catch (e) {}
+    if (!d) { report.push({ over: 0, html: '<span class="dim">' + url + " — 읽기 실패</span>" }); i++; return check(); }
+
+    setTimeout(function () {
+      var vw = d.documentElement.clientWidth;
+      var sw = d.documentElement.scrollWidth;
+      var over = sw - vw;
+      var hits = [];
+
+      d.querySelectorAll("*").forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.width === 0 && r.height === 0) return;
+        if (r.right <= vw + 1) return;
+        var p = el.parentElement, caged = false;
+        while (p && p !== d.body) {
+          var ox = w.getComputedStyle(p).overflowX;
+          if (ox === "auto" || ox === "scroll" || ox === "hidden" || ox === "clip") { caged = true; break; }
+          p = p.parentElement;
+        }
+        if (caged) return;
+        var id = el.tagName.toLowerCase() + (el.id ? "#" + el.id : "") +
+          (el.className && typeof el.className === "string"
+            ? "." + el.className.trim().split(/\s+/).slice(0, 3).join(".") : "");
+        hits.push({ right: Math.round(r.right), w: Math.round(r.width), id: id });
+      });
+      hits.sort(function (a, b) { return b.right - a.right; });
+
+      var head = (over > 1 ? '<span class="bad">✗ ' : '<span class="ok">✓ ') +
+        url + "</span>  scrollWidth=" + sw + " (초과 " + over + "px)";
+      var body = hits.slice(0, 8).map(function (h) {
+        return '   <span class="bad">→' + h.right + "</span> w=" + h.w + "  " + h.id.slice(0, 90);
+      }).join("\n");
+      report.push({ over: over, html: head + (body ? "\n" + body : "") });
+      i++; check();
+    }, 350);
+  };
+  f.src = url;
+}
+check();
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>기업·기관 상세</title><link rel="stylesheet" href="/static/css/common-style.css"><link rel="stylesheet" href="/static/css/sidebar-style.css"><link rel="stylesheet" href="/static/css/organization-cms.css"><script src="/static/js/sidebar-function.js" defer></script></head>
+<body>
+<header th:replace="~{fragments/management :: header('기업·기관 상세')}"></header><th:block th:replace="~{fragments/management :: sidebar('organizations')}"></th:block>
+<main class="main-content organization-main"><div class="organization-shell">
+    <div class="organization-head"><div><h1 th:text="${organization.name}">기관명</h1><p th:text="${organization.oneLineDescription ?: '등록된 한줄 설명이 없습니다.'}">설명</p></div><div class="organization-actions"><a class="organization-btn" href="/admin/organizations">목록</a><a class="organization-btn primary" th:href="@{/admin/organizations/{id}/edit(id=${organization.id})}">수정</a></div></div>
+    <div class="organization-message" th:if="${message}" th:text="${message}">저장됨</div>
+    <section class="organization-card"><dl class="organization-detail-grid">
+        <dt>유형</dt><dd th:text="${organization.type.label}">유형</dd>
+        <dt>상태</dt><dd th:text="${organization.status.label}">상태</dd>
+        <dt>관계 유형</dt><dd><div class="organization-badges"><span class="organization-badge" th:each="item:${organization.relationshipTypes}" th:text="${item.label}">관계</span><span th:if="${organization.relationshipTypes.isEmpty()}">미지정</span></div></dd>
+        <dt>홈페이지</dt><dd><span class="organization-badge" th:classappend="${organization.homepageExposure} ? ' visible' : ' hidden'" th:text="${organization.homepageExposure ? '공개' : '비공개'}">공개</span></dd>
+        <dt>노출 사이트</dt><dd><div class="organization-badges"><span class="organization-badge" th:each="item:${organization.exposureSites}" th:text="${item.label}">사이트</span><span th:if="${organization.exposureSites.isEmpty()}">미지정</span></div></dd>
+        <dt>노출 위치</dt><dd><div class="organization-badges"><span class="organization-badge" th:each="item:${organization.exposurePositions}" th:text="${item.label}">위치</span><span th:if="${organization.exposurePositions.isEmpty()}">미지정</span></div></dd>
+        <dt>홈페이지 URL</dt><dd><a th:if="${organization.websiteUrl != null}" th:href="${organization.websiteUrl}" th:text="${organization.websiteUrl}" target="_blank" rel="noopener">URL</a><span th:unless="${organization.websiteUrl != null}">미등록</span></dd>
+        <dt>상세 설명</dt><dd th:text="${organization.detailedDescription ?: '미등록'}">상세</dd>
+        <dt>정렬 순서</dt><dd th:text="${organization.displayOrder}">0</dd>
+        <dt>관리자 메모</dt><dd th:text="${organization.internalNote ?: '메모 없음'}">메모</dd>
+    </dl></section>
+    <section class="organization-card organization-section"><h2>연계 과정</h2><p>프로젝트 참여와 채용 연계는 실제 취업 결과와 별도로 관리됩니다.</p><div class="organization-table-wrap"><table class="organization-table"><thead><tr><th>과정</th><th>프로젝트 참여</th><th>채용 연계</th><th></th></tr></thead><tbody><tr th:each="link:${courseLinks}"><td><strong th:text="${link.course.courseName}">과정</strong><span class="organization-sub" th:text="${link.course.cohort ?: '-'}">기수</span></td><td th:text="${link.projectParticipant ? '예' : '아니오'}">예</td><td th:text="${link.recruitmentLinked ? '예' : '아니오'}">예</td><td><a th:href="@{/admin/courses/{id}(id=${link.course.id})}">과정 보기 →</a></td></tr><tr th:if="${#lists.isEmpty(courseLinks)}"><td class="organization-empty" colspan="4">연결된 과정이 없습니다.</td></tr></tbody></table></div></section>
+    </div></main>
+</body></html>

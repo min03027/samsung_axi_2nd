@@ -1,0 +1,8 @@
+<!doctype html>
+<!-- v2 정적 배포(Cloudflare)용 로그인 진입점.
+     Spring 앱에서는 AuthController.v2LoginPage() 가 이 경로를 가로채 실제 LXP 로그인
+     템플릿(01-login/login)을 렌더하므로 이 파일은 쓰이지 않는다.
+     서버가 없는 정적 배포에서만 이 파일이 서빙되고, 운영 LXP 로그인으로 보낸다.
+     ※ 지우지 말 것 — 지우면 정적 배포에서 '수강생 로그인'이 404 가 된다. -->
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>수강생 로그인</title><meta name="robots" content="noindex"><link rel="stylesheet" href="/v2/assets/tokens.css"><link rel="stylesheet" href="/v2/assets/base.css"><script src="/v2/assets/brand.js"></script><script>location.replace(window.BRAND.lxpLogin)</script></head>
+<body><main style="min-height:60vh;display:grid;place-items:center;text-align:center;padding:2rem"><p>수강생 로그인 화면으로 이동합니다.<br>자동으로 넘어가지 않으면 <a href="/v2/login" data-brand-href="lxpLogin">여기를 눌러 주세요</a>.</p></main><script>applyBrand()</script></body></html>

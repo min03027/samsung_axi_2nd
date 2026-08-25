@@ -25,7 +25,6 @@
         </section>
         <section class="main-content">
             <section class="main-content-inner main-wrap">
-                <div th:replace="${sampleData} ? ~{fragments/trainee :: sampleNotice} : ~{}"></div>
                 <div class="content-header">
                     <div class="content-breadcrumb">
                         <div class="breadcrumb-item">
@@ -49,8 +48,7 @@
                 <div class="content-container"
                      th:attr="data-content-id=${content.id},
                               data-duration=${content.durationSeconds != null ? content.durationSeconds : 0},
-                              data-resume=${progress.lastPositionSeconds != null ? progress.lastPositionSeconds : 0},
-                              data-sample=${sampleData}">
+                              data-resume=${progress.lastPositionSeconds != null ? progress.lastPositionSeconds : 0}">
                     <div class="video-container">
                         <div class="video-player">
                             <!-- poster 는 예시 콘텐츠에만 붙는다(재생할 파일이 없어 검은 상자로 뜨는 것을 막는다).

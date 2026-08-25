@@ -3,8 +3,12 @@ package com.ssa.lms.dashboard.service;
 import com.ssa.lms.assignment.dto.TraineeAssignmentCard;
 import com.ssa.lms.assignment.service.SubmissionService;
 import com.ssa.lms.attendance.service.AttendanceService;
+import com.ssa.lms.attendance.web.TraineeAttendanceView;
 import com.ssa.lms.content.service.ProgressQueryService;
+import com.ssa.lms.content.service.ProgressService;
 import com.ssa.lms.course.entity.EnrollmentStatus;
+import com.ssa.lms.course.entity.Session;
+import com.ssa.lms.course.repository.SessionRepository;
 import com.ssa.lms.course.service.EnrollmentService;
 import com.ssa.lms.course.web.MyEnrollmentView;
 import com.ssa.lms.dashboard.dto.DashboardFormat;
@@ -21,6 +25,9 @@ import com.ssa.lms.notice.service.NoticeVisibilityService;
 import com.ssa.lms.notice.service.NotificationService;
 import com.ssa.lms.survey.dto.TraineeSurveyRow;
 import com.ssa.lms.survey.service.SurveyService;
+import com.ssa.lms.support.dto.TutoringRoomDetail;
+import com.ssa.lms.support.dto.TutoringRoomListRow;
+import com.ssa.lms.support.service.TutoringService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -29,7 +36,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -81,6 +90,7 @@ public class TraineeDashboardService {
     private final EnrollmentService enrollmentService;          // A
     private final AttendanceService attendanceService;          // A
     private final ProgressQueryService progressQueryService;    // A
+    private final ProgressService progressService;
     private final SubmissionService submissionService;
     private final ExamAttemptService examAttemptService;
     private final SurveyService surveyService;
@@ -88,6 +98,8 @@ public class TraineeDashboardService {
     private final NoticeService noticeService;
     private final NoticeVisibilityService noticeVisibilityService;
     private final NotificationService notificationService;
+    private final SessionRepository sessionRepository;
+    private final TutoringService tutoringService;
 
     public TraineeDashboardView load(Long userId, String userName) {
         LocalDate today = LocalDate.now();
@@ -98,18 +110,139 @@ public class TraineeDashboardService {
                 .toList();
 
         List<TraineeDashboardView.Todo> todos = todos(userId, today);
-        List<TraineeDashboardView.CourseCard> courses = courseCards(userId, enrollments, today);
+        List<TraineeAttendanceView> attendance = attendanceService.traineeAttendance(userId);
+        List<TraineeDashboardView.ScheduleItem> todaySchedule = todaySchedule(enrollments, todos, today);
+        List<TraineeDashboardView.CourseCard> courses = courseCards(userId, enrollments, attendance, today);
         long unreadNotifications = unreadNotificationCount(userId);
         String recentGrade = recentGradeText(userId, enrollments);
+        TraineeDashboardView.Assurance assurance = assurance(
+                userId, userName, enrollments, attendance, todos, todaySchedule, today);
 
         return new TraineeDashboardView(
                 DashboardFormat.nullToDash(userName),
                 DashboardFormat.today(today),
+                assurance,
                 stats(courses.size(), todos.size(), recentGrade, unreadNotifications),
                 todos.stream().limit(TODO_ROWS).toList(),
+                todaySchedule,
                 courses,
+                coachSummary(userId),
                 notices(userId),
                 NOTICE_URL);
+    }
+
+    /* ===================== 안심 상태 ===================== */
+
+    private TraineeDashboardView.Assurance assurance(
+            Long userId,
+            String userName,
+            List<MyEnrollmentView> enrollments,
+            List<TraineeAttendanceView> attendance,
+            List<TraineeDashboardView.Todo> todos,
+            List<TraineeDashboardView.ScheduleItem> todaySchedule,
+            LocalDate today) {
+
+        MyEnrollmentView primary = primaryEnrollment(enrollments);
+        if (primary == null) {
+            return new TraineeDashboardView.Assurance(
+                    "empty",
+                    DashboardFormat.nullToDash(userName) + "님, 함께 시작할 과정을 준비하고 있어요.",
+                    "과정이 배정되면 오늘 일정과 학습 상태를 이곳에서 차근차근 안내해 드릴게요.",
+                    "배정된 과정 없음", 0, null, null,
+                    0, todos.size(), countType(todos, "TASK"), countType(todos, "EXAM"),
+                    "내 과정 확인하기", "/trainee/my-course",
+                    "과정 배정 후 진도를 확인할 수 있어요.",
+                    "출석 기록이 아직 없어요.");
+        }
+
+        int progress = progressQueryService.completedRatio(userId, primary.courseId());
+        Integer recommended = recommendedProgress(primary.startDate(), primary.endDate(), today);
+        Integer attendanceRate = attendanceRateOf(primary.courseId(), attendance);
+        int progressGap = recommended == null ? 0 : progress - recommended;
+
+        String tone;
+        if ((attendanceRate != null && attendanceRate < 80) || progressGap <= -15) {
+            tone = "support";
+        } else if ((attendanceRate != null && attendanceRate < 90) || progressGap < -5) {
+            tone = "care";
+        } else {
+            tone = "steady";
+        }
+
+        String headline = switch (tone) {
+            case "support" -> DashboardFormat.nullToDash(userName)
+                    + "님, 선생님과 함께 학습 계획을 확인해 보세요.";
+            case "care" -> DashboardFormat.nullToDash(userName)
+                    + "님, 조금만 보완하면 다시 계획에 맞출 수 있어요.";
+            default -> DashboardFormat.nullToDash(userName)
+                    + "님, 이번 주도 계획대로 잘 진행하고 있어요.";
+        };
+
+        int todayCount = todaySchedule.size();
+        String detail = todayCount > 0
+                ? "오늘 확인할 일정 " + todayCount + "개를 차례로 마치면 충분해요. 서두르지 않아도 괜찮아요."
+                : "오늘 등록된 마감 일정은 없어요. 지금 페이스로 학습을 이어가면 충분해요.";
+
+        String progressMessage;
+        if (recommended == null) {
+            progressMessage = "권장 진도를 계산할 과정 일정이 아직 등록되지 않았어요.";
+        } else if (progressGap >= 0) {
+            progressMessage = "현재 권장 진도보다 " + progressGap + "% 앞서 있어요.";
+        } else {
+            progressMessage = "권장 진도까지 " + Math.abs(progressGap)
+                    + "% 남았어요. 오늘 한 걸음씩 따라가면 돼요.";
+        }
+
+        String attendanceMessage;
+        if (attendanceRate == null) {
+            attendanceMessage = "출석 기록이 쌓이면 수료 기준 충족 상태를 안내해 드려요.";
+        } else if (attendanceRate >= 80) {
+            attendanceMessage = "현재 출석은 수료 기준을 안정적으로 충족하고 있어요.";
+        } else {
+            attendanceMessage = "출석 기록을 선생님과 함께 확인해 보는 것이 좋아요.";
+        }
+
+        TraineeDashboardView.Todo firstTodo = todos.isEmpty() ? null : todos.get(0);
+        String actionLabel = firstTodo == null ? "학습 이어하기" : switch (firstTodo.type()) {
+            case "TASK" -> "가장 가까운 과제 확인";
+            case "EXAM" -> "가장 가까운 시험 확인";
+            case "SURVEY" -> "설문 이어서 작성";
+            default -> "오늘 학습 시작";
+        };
+        String actionHref = firstTodo == null
+                ? continueLearningHref(userId, primary.courseId())
+                : firstTodo.href();
+
+        return new TraineeDashboardView.Assurance(
+                tone, headline, detail, primary.courseName(), progress, recommended, attendanceRate,
+                todayCount, todos.size(), countType(todos, "TASK"), countType(todos, "EXAM"),
+                actionLabel, actionHref, progressMessage, attendanceMessage);
+    }
+
+    private MyEnrollmentView primaryEnrollment(List<MyEnrollmentView> enrollments) {
+        return enrollments.stream()
+                .filter(e -> e.status() == EnrollmentStatus.APPROVED)
+                .min(Comparator.comparingDouble(MyEnrollmentView::progressRate))
+                .orElseGet(() -> enrollments.stream().findFirst().orElse(null));
+    }
+
+    private Integer recommendedProgress(LocalDate start, LocalDate end, LocalDate today) {
+        if (start == null || end == null || !end.isAfter(start)) {
+            return null;
+        }
+        if (!today.isAfter(start)) {
+            return 0;
+        }
+        if (!today.isBefore(end)) {
+            return 100;
+        }
+        long total = ChronoUnit.DAYS.between(start, end);
+        long passed = ChronoUnit.DAYS.between(start, today);
+        return (int) Math.round(passed * 100.0 / total);
+    }
+
+    private int countType(List<TraineeDashboardView.Todo> todos, String type) {
+        return (int) todos.stream().filter(t -> type.equals(t.type())).count();
     }
 
     /* ===================== 요약 타일 ===================== */
@@ -209,14 +342,101 @@ public class TraineeDashboardService {
         return todos;
     }
 
+    /* ===================== 오늘 일정 ===================== */
+
+    /**
+     * 실제 차시 날짜와 오늘 마감 항목만 사용한다. Session 에 시작 시각 컬럼이 없으므로
+     * "09:00 수업" 같은 가짜 생활 시간표를 만들지 않고 "시간 미정"으로 명확히 표시한다.
+     */
+    private List<TraineeDashboardView.ScheduleItem> todaySchedule(
+            List<MyEnrollmentView> enrollments,
+            List<TraineeDashboardView.Todo> todos,
+            LocalDate today) {
+
+        List<ScheduleCandidate> candidates = new ArrayList<>();
+
+        for (MyEnrollmentView enrollment : enrollments) {
+            for (Session session : sessionRepository
+                    .findBySubjectCourseIdOrderBySubjectOrderNoAscSeqAsc(enrollment.courseId())) {
+                if (!today.equals(session.getLessonDate())) {
+                    continue;
+                }
+                String minutes = session.getLearningMinutes() == null
+                        ? "수업 일정"
+                        : "인정 학습시간 " + session.getLearningMinutes() + "분";
+                candidates.add(new ScheduleCandidate(
+                        "시간 미정", "LESSON", "수업", session.getName(),
+                        enrollment.courseName() + " · " + minutes,
+                        LEARNING_URL, LocalTime.NOON, false));
+            }
+        }
+
+        for (TraineeDashboardView.Todo todo : todos) {
+            if (todo.dday() == null || todo.dday() != 0) {
+                continue;
+            }
+            LocalDateTime due = parse(todo.due());
+            boolean exactTime = due != null;
+            LocalTime sortTime = exactTime ? due.toLocalTime() : LocalTime.MAX;
+            String timeLabel = exactTime ? due.format(DateTimeFormatter.ofPattern("HH:mm")) : "오늘까지";
+            candidates.add(new ScheduleCandidate(
+                    timeLabel, todo.type(), todoTypeLabel(todo.type()), todo.title(),
+                    todo.meta() + " · 마감", todo.href(), sortTime, exactTime));
+        }
+
+        candidates.sort(Comparator.comparing(ScheduleCandidate::sortTime));
+        if (candidates.isEmpty()) {
+            return List.of();
+        }
+
+        int currentIndex = nearestScheduleIndex(candidates, LocalTime.now());
+        List<TraineeDashboardView.ScheduleItem> result = new ArrayList<>();
+        for (int i = 0; i < candidates.size(); i++) {
+            ScheduleCandidate c = candidates.get(i);
+            result.add(new TraineeDashboardView.ScheduleItem(
+                    c.timeLabel(), c.type(), c.typeLabel(), c.title(), c.meta(), c.href(), i == currentIndex));
+        }
+        return result;
+    }
+
+    private int nearestScheduleIndex(List<ScheduleCandidate> candidates, LocalTime now) {
+        int nearest = 0;
+        long nearestMinutes = Long.MAX_VALUE;
+        boolean foundExact = false;
+        for (int i = 0; i < candidates.size(); i++) {
+            ScheduleCandidate candidate = candidates.get(i);
+            if (!candidate.exactTime()) {
+                continue;
+            }
+            long distance = Math.abs(ChronoUnit.MINUTES.between(now, candidate.sortTime()));
+            if (distance < nearestMinutes) {
+                nearest = i;
+                nearestMinutes = distance;
+                foundExact = true;
+            }
+        }
+        return foundExact ? nearest : 0;
+    }
+
+    private String todoTypeLabel(String type) {
+        return switch (type) {
+            case "TASK" -> "과제";
+            case "EXAM" -> "시험";
+            case "SURVEY" -> "설문";
+            default -> "일정";
+        };
+    }
+
     /* ===================== 수강 과정 ===================== */
 
     private List<TraineeDashboardView.CourseCard> courseCards(Long userId,
                                                               List<MyEnrollmentView> enrollments,
+                                                              List<TraineeAttendanceView> attendance,
                                                               LocalDate today) {
         List<TraineeDashboardView.CourseCard> cards = new ArrayList<>();
         for (MyEnrollmentView e : enrollments) {
             Integer dday = DashboardFormat.daysUntil(today, e.endDate());
+            Integer attendanceRate = attendanceRateOf(e.courseId(), attendance);
             cards.add(new TraineeDashboardView.CourseCard(
                     String.valueOf(e.courseId()),
                     e.courseName(),
@@ -224,12 +444,87 @@ public class TraineeDashboardService {
                     DashboardFormat.date(e.startDate()),
                     DashboardFormat.date(e.endDate()),
                     DashboardFormat.percent(progressQueryService.completedRatio(userId, e.courseId())),
-                    DashboardFormat.percent(attendanceService.attendanceRate(userId, e.courseId())),
+                    attendanceRate == null ? DashboardFormat.NONE : DashboardFormat.percent(attendanceRate),
                     dday == null ? DashboardFormat.NONE : (dday >= 0 ? "D-" + dday : "종료"),
-                    LEARNING_URL,
+                    continueLearningHref(userId, e.courseId()),
                     NOTICE_URL));
         }
         return cards;
+    }
+
+    private String continueLearningHref(Long userId, Long courseId) {
+        return progressService.nextLearningContent(userId, courseId)
+                .map(content -> "/trainee/contents/" + content.contentId() + "/play")
+                .orElse(LEARNING_URL + "?courseId=" + courseId);
+    }
+
+    private Integer attendanceRateOf(Long courseId, List<TraineeAttendanceView> attendance) {
+        return attendance.stream()
+                .filter(row -> row.courseId().equals(courseId))
+                .map(TraineeAttendanceView::attendanceRate)
+                .findFirst()
+                .orElse(null);
+    }
+
+    /* ===================== 코치 피드백 ===================== */
+
+    /**
+     * 홈에는 실제 1:1 튜터링의 최근 강사 답변만 노출한다. 답변이 없으면 가짜 코멘트를 만들지 않고
+     * 현재 대화 상태와 도움 요청 버튼만 보여준다.
+     */
+    private TraineeDashboardView.CoachSummary coachSummary(Long userId) {
+        List<TutoringRoomListRow> rooms = tutoringService.findByTrainee(userId);
+        long unread = rooms.stream().mapToLong(room -> tutoringService.countUnread(room.id(), userId)).sum();
+
+        for (TutoringRoomListRow room : rooms) {
+            TutoringRoomDetail detail = tutoringService.getDetail(room.id(), userId);
+            List<TutoringRoomDetail.MessageRow> messages = detail.messages();
+            for (int i = messages.size() - 1; i >= 0; i--) {
+                TutoringRoomDetail.MessageRow message = messages.get(i);
+                if (message.mine()) {
+                    continue;
+                }
+                return new TraineeDashboardView.CoachSummary(
+                        true,
+                        excerpt(message.content(), 170),
+                        message.senderName(),
+                        room.title() + " · " + room.courseName(),
+                        message.sentAt(),
+                        unread,
+                        "/trainee/qna/tutoring/" + room.id());
+            }
+        }
+
+        if (!rooms.isEmpty()) {
+            TutoringRoomListRow room = rooms.get(0);
+            return new TraineeDashboardView.CoachSummary(
+                    false,
+                    "보낸 질문을 코치가 확인하고 있어요. 답변이 도착하면 이곳에서 바로 알려드릴게요.",
+                    room.instructorName(),
+                    room.title() + " · " + room.statusLabel(),
+                    room.lastMessageAt(),
+                    unread,
+                    "/trainee/qna/tutoring/" + room.id());
+        }
+
+        return new TraineeDashboardView.CoachSummary(
+                false,
+                "혼자 고민하지 않아도 괜찮아요. 막힌 부분을 보내면 담당 코치가 함께 확인해 드려요.",
+                "학습 코치",
+                "아직 요청한 튜터링이 없어요.",
+                "-",
+                0,
+                "/trainee/qna/tutoring");
+    }
+
+    private String excerpt(String text, int maxLength) {
+        if (text == null || text.isBlank()) {
+            return "답변 내용이 없습니다.";
+        }
+        String normalized = text.replaceAll("\\s+", " ").trim();
+        return normalized.length() <= maxLength
+                ? normalized
+                : normalized.substring(0, maxLength).trim() + "…";
     }
 
     /* ===================== 공지 (양식3: 훈련생 유의사항 등재) ===================== */
@@ -303,5 +598,17 @@ public class TraineeDashboardService {
         } catch (RuntimeException e) {
             return null;
         }
+    }
+
+    private record ScheduleCandidate(
+            String timeLabel,
+            String type,
+            String typeLabel,
+            String title,
+            String meta,
+            String href,
+            LocalTime sortTime,
+            boolean exactTime
+    ) {
     }
 }

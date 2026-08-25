@@ -3,6 +3,7 @@ package com.ssa.lms.web;
 import com.ssa.lms.auth.LoginUser;
 import com.ssa.lms.dashboard.service.AdminDashboardService;
 import com.ssa.lms.dashboard.service.DashboardMetricsService;
+import com.ssa.lms.dashboard.service.DashboardLearningReportService;
 import com.ssa.lms.ai.service.AiStatusService;
 import com.ssa.lms.ai.service.AiUsageStatsService;
 import com.ssa.lms.job.service.RoadmapService;
@@ -31,6 +32,7 @@ public class ModuleHomeController {
     private final InstructorDashboardService instructorDashboardService;
     private final TraineeDashboardService traineeDashboardService;
     private final DashboardMetricsService dashboardMetricsService;
+    private final DashboardLearningReportService dashboardLearningReportService;
     private final RoadmapService roadmapService;
     private final AiUsageStatsService aiUsageStatsService;
     private final AiStatusService aiStatusService;
@@ -40,6 +42,7 @@ public class ModuleHomeController {
         model.addAttribute("dashboard", adminDashboardService.load(loginUser.getId()));
         // 차트용 지표 — 관리자는 전체 과정 범위
         model.addAttribute("metrics", dashboardMetricsService.forAdmin());
+        model.addAttribute("dashboardReportCourses", dashboardLearningReportService.adminCourseOptions());
         // [기능 1-관리자] 채용공고 수집 현황 — 언제 수집됐고 무엇이 요구되는지.
         // 수집이 멈춘 것을 아무도 모르면 훈련생이 몇 주째 지난 시장을 보게 된다.
         model.addAttribute("jobSummary", roadmapService.collectionSummary());
@@ -57,6 +60,8 @@ public class ModuleHomeController {
                 instructorDashboardService.load(loginUser.getId(), loginUser.getName()));
         // 같은 계산을 담당 과정 범위로만 — 관리자와 숫자가 갈리면 안 된다
         model.addAttribute("metrics", dashboardMetricsService.forInstructor(loginUser.getId()));
+        model.addAttribute("dashboardReportCourses",
+                dashboardLearningReportService.instructorCourseOptions(loginUser.getId()));
         return "instructor/index";
     }
 

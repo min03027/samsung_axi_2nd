@@ -64,17 +64,24 @@ public class TraineeExamController {
     public String start(@PathVariable Long examId,
                         @RequestParam(value = "verifyMethod", required = false) String verifyMethod,
                         @RequestParam(value = "credential", required = false) String credential,
+                        @RequestParam(value = "precheckSessionId", required = false) Long precheckSessionId,
                         @AuthenticationPrincipal LoginUser loginUser,
                         HttpServletRequest request,
                         RedirectAttributes redirectAttributes) {
         try {
             Long attemptId = examAttemptService.start(
                     examId, loginUser.getId(), verifyMethod, credential,
-                    clientIp(request), request.getHeader("User-Agent"));
+                    clientIp(request), request.getHeader("User-Agent"), precheckSessionId);
             return "redirect:/trainee/exam/attempt/" + attemptId;
         } catch (ExamTakeException e) {
             redirectAttributes.addFlashAttribute("errorCode", e.getCode());
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            /* IDENTITY_REQUIRED 를 전부 사전점검으로 보내면, 비밀번호 인증만 필요한 시험의
+               비밀번호 오류까지 엉뚱한 QR 화면으로 간다. 사전점검 대상 시험만 보낸다.
+               판정은 서비스의 동일 정책(PrecheckPolicy)을 쓴다 — 여기서 다시 하드코딩하지 않는다. */
+            if ("IDENTITY_REQUIRED".equals(e.getCode()) && examAttemptService.requiresPrecheck(examId)) {
+                return "redirect:/trainee/exam/precheck/" + examId;
+            }
             return "redirect:/trainee/exam";
         }
     }

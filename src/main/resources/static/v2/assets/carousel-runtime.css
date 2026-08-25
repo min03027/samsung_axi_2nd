@@ -1,0 +1,7 @@
+/* 캐러셀의 물리적인 스크롤 끝은 숨기고 버튼·휠·자동 재생으로만 순환한다. */
+.track-deck {
+  overflow-x: hidden !important;
+  scrollbar-width: none;
+  overscroll-behavior-inline: contain;
+}
+.track-deck::-webkit-scrollbar { display: none; }

@@ -250,8 +250,10 @@
   window._serverExamRows = /*[[${rows}]]*/ null;
   window._examUrls = {
     // {id} 자리표시자는 online-test.js 가 치환한다 (@{} 로는 표현할 수 없어 리터럴로 둔다)
-    start:   '/trainee/exam/{id}/start',
-    attempt: '/trainee/exam/attempt/{id}'
+    start:    '/trainee/exam/{id}/start',
+    attempt:  '/trainee/exam/attempt/{id}',
+    // LXP-015 — 감독+본인확인 시험은 POST start 대신 사전점검 화면으로 보낸다
+    precheck: '/trainee/exam/precheck/{id}'
   };
   /*]]>*/
 </script>

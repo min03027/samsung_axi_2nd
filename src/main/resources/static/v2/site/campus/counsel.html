@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>교육 상담 신청 — {brand}</title>
+  <link rel="stylesheet" href="/v2/assets/tokens.css">
+  <link rel="stylesheet" href="/v2/assets/base.css">
+  <link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64">
+  <link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64">
+</head>
+<body class="class-site application-page counsel-page">
+<main>
+  <div class="application-layout" data-form-shell>
+    <aside class="application-aside">
+      <a href="/v2/site/class/index.html" class="application-back">← 전체 과정</a>
+      <span>1:1 EDUCATION COUNSEL</span>
+      <h1>결정하기 전에<br>먼저 물어보세요.</h1>
+      <p>과정 선택부터 국비지원, 기숙사까지<br>궁금한 내용을 담당자가 안내합니다.</p>
+      <div class="application-course"><small>관심 과정</small><b data-course-title>아직 선택하지 않았어요</b></div>
+      <div class="counsel-recommendation" data-recommendation-summary hidden>
+        <small>추천 진단에서 이어진 상담</small>
+        <p data-recommendation-copy></p>
+        <ul data-recommendation-tags></ul>
+      </div>
+      <ul class="counsel-points"><li>과정 적합도 확인</li><li>국민내일배움카드 안내</li><li>교육 일정·기숙사 상담</li></ul>
+    </aside>
+    <section class="application-panel">
+      <form data-counsel-form>
+        <input type="hidden" name="course" data-course-value>
+        <input type="hidden" name="courseId" data-course-id>
+        <input type="hidden" name="courseKey" data-course-key-value>
+        <input type="hidden" name="recommendationProfile" data-recommendation-value>
+        <input type="hidden" name="desiredCareer" data-recommendation-field="career">
+        <input type="hidden" name="experience" data-recommendation-field="experience">
+        <input type="hidden" name="education" data-recommendation-field="education">
+        <input type="hidden" name="desiredRegion" data-recommendation-field="region">
+        <input type="hidden" name="lodgingPreference" data-recommendation-field="lodging">
+        <input type="hidden" name="fundingPreference" data-recommendation-field="funding">
+        <input type="hidden" name="desiredSchedule" data-recommendation-field="schedule">
+        <input type="hidden" name="interestField" data-recommendation-field="field">
+        <fieldset>
+          <span class="form-kicker">COUNSEL REQUEST</span>
+          <legend>상담 신청</legend>
+          <div class="form-grid">
+            <label class="form-course-lock">문의 과정<span>과정 상세에서 선택한 과정이 자동으로 입력되었습니다.</span><input class="input" data-course-display readonly aria-readonly="true"></label>
+            <label>이름<input class="input" name="name" required></label>
+            <label>휴대전화<input class="input" name="phone" type="tel" required placeholder="010-0000-0000"></label>
+            <label>이메일<input class="input" name="email" type="email" required></label>
+            <label>상담 유형<select class="select" name="type" required><option value="">선택하세요</option><option>과정 선택</option><option>취업 지원</option><option>국비지원·내일배움카드</option><option>교육 일정</option><option>기숙사·시설</option><option>기타</option></select></label>
+            <label>희망 날짜<input class="input" name="date" type="date" required></label>
+            <label>희망 시간<select class="select" name="time" required><option value="">선택하세요</option><option>09:00–11:00</option><option>11:00–13:00</option><option>14:00–16:00</option><option>16:00–18:00</option></select></label>
+          </div>
+          <div class="form-choice"><p>연락 방법</p><label><input type="radio" name="contact" value="전화" required> 전화</label><label><input type="radio" name="contact" value="문자"> 문자</label><label><input type="radio" name="contact" value="이메일"> 이메일</label></div>
+          <div class="form-choice"><p>기숙사 상담</p><label><input type="radio" name="dorm" value="필요" required> 필요</label><label><input type="radio" name="dorm" value="불필요"> 불필요</label><label><input type="radio" name="dorm" value="미정"> 미정</label></div>
+          <label>문의 내용<textarea class="textarea" name="message" rows="5" placeholder="궁금한 내용을 자유롭게 작성해 주세요."></textarea></label>
+          <label class="consent"><input type="checkbox" name="privacy" required> 상담 접수를 위한 개인정보 수집·이용에 동의합니다.</label>
+          <p class="hint" data-save-message role="status">제출된 상담 신청은 담당자가 확인한 뒤 요청하신 방법으로 안내합니다.</p>
+          <div class="form-actions"><span></span><button class="btn btn--primary btn--lg" type="submit">상담 신청하기</button></div>
+        </fieldset>
+      </form>
+    </section>
+  </div>
+  <section class="application-complete" data-form-complete hidden>
+    <span>COUNSEL REQUESTED</span>
+    <h1>상담 신청이<br>접수되었습니다.</h1>
+    <p>추천 조건과 희망하신 연락 방법을 함께 확인해 담당자가 순서대로 연락드리겠습니다.</p>
+    <div><small>접수번호</small><strong data-receipt></strong></div>
+    <a class="btn btn--primary btn--lg" href="/v2/site/class/index.html">전체 과정으로 돌아가기</a>
+  </section>
+</main>
+<script src="/v2/assets/brand.js"></script>
+<script src="/v2/assets/course-data.js?v=20260823-60"></script>
+<script src="/v2/assets/counsel-flow.js?v=20260824-02"></script>
+<script src="/v2/assets/page-section-navigation.js"></script>
+<script>Shell.site({service:'class',hideNavigator:true})</script>
+</body>
+</html>

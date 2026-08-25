@@ -40,10 +40,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // 정적 리소스, 로그인/가입, H2 콘솔(local)
                         .requestMatchers("/static/**", "/css/**", "/js/**", "/img/**",
-                                "/icons/**", "/font/**", "/favicon.ico").permitAll()
+                                "/icons/**", "/font/**", "/favicon.ico", "/v2/**").permitAll()
                         .requestMatchers("/", "/login", "/signup/**", "/error").permitAll()
                         // 약관·방침 — 가입 동의 대상 문서라 로그인 전에도 열려야 한다
                         .requestMatchers("/terms", "/privacy").permitAll()
+                        /* QR 로 열리는 모바일 신분증 제출 (LXP-015).
+                           훈련생 휴대폰은 LXP 에 로그인돼 있지 않으므로 로그인 세션으로 인가할 수 없다.
+                           대신 URL 안의 일회용 토큰이 신원을 보장한다 — MobileIdentityController 가
+                           매 요청 ExamIdentityService.lookup() 으로 해시 대조·만료·폐기·사용횟수·
+                           세션 상태를 검증한다. permitAll 이지만 토큰이 없으면 아무것도 열리지 않는다.
+                           토큰 TTL 10분, 새 QR 발급 시 이전 토큰 즉시 폐기. */
+                        .requestMatchers("/m/id/**").permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
                         // 역할별 URL 경계 — 구체 경로가 먼저 와야 한다 (권한정의서 기준, a-requests.md P1-6)
                         // B 도메인: 관리자 모듈 중 강사도 접근 가능한 영역
@@ -76,11 +83,15 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/v2/index.html")   // 로그아웃하면 통합 홈으로
                         .permitAll()
                 )
                 // H2 콘솔용 (local 프로필에서만 콘솔이 열림)
-                .csrf(csrf -> csrf.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")))
+                // 공개 신청 API는 인증 쿠키를 사용하지 않는 JSON endpoint이므로 CSRF 대상에서만 제외한다.
+                // 입력 검증과 공개 과정 검증은 PublicAdmissionController/AdmissionService에서 수행한다.
+                .csrf(csrf -> csrf.ignoringRequestMatchers(
+                        AntPathRequestMatcher.antMatcher("/h2-console/**"),
+                        AntPathRequestMatcher.antMatcher("/v2/api/public/**")))
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
 
         return http.build();

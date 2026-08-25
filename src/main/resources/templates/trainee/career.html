@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/basic-form-trainee.css">
+    <link rel="stylesheet" href="/static/css/trainee/platform-hubs.css">
+    <title>Samsung Academy LXP - 취업·포트폴리오</title>
+</head>
+<body class="platform-hub-body">
+<header th:replace="~{fragments/trainee :: header('career')}"></header>
+
+<main class="platform-hub-main">
+    <div class="platform-hub">
+        <section class="hub-hero">
+            <div>
+                <span class="hub-eyebrow">CAREER JOURNEY</span>
+                <h1>수료가 끝이 되지 않도록,<br>다음 준비까지 이어가요.</h1>
+                <p>학습 결과물과 희망 직무, 상담과 지원 과정을 하나의 취업 여정으로 정리하는 공간이에요.</p>
+            </div>
+            <div class="hub-hero-guide">
+                <strong>직무 방향부터 시작해 보세요</strong>
+                <span>현재 채용 공고를 바탕으로 제공되는 직무 로드맵에서 필요한 역량을 먼저 확인할 수 있어요.</span>
+            </div>
+        </section>
+
+        <section class="hub-section" aria-labelledby="career-start-title">
+            <div class="hub-section-heading">
+                <div>
+                    <span class="hub-section-eyebrow">CAREER START</span>
+                    <h2 id="career-start-title">취업 준비 시작하기</h2>
+                </div>
+                <p>이미 연결된 직무 로드맵과 상담 기능을 중심으로 다음 행동을 찾을 수 있어요.</p>
+            </div>
+            <div class="hub-grid">
+                <article class="hub-card is-primary">
+                    <span class="hub-card-label">직무 탐색</span>
+                    <h3>직무 로드맵</h3>
+                    <p>수집된 채용 공고의 요구 역량과 나의 학습 내용을 비교해요.</p>
+                    <a class="hub-card-action is-accent" href="/trainee/ai/roadmap">로드맵 확인하기</a>
+                </article>
+                <article class="hub-card">
+                    <span class="hub-card-label">결과물</span>
+                    <h3>포트폴리오</h3>
+                    <p>완료한 과제와 프로젝트 결과물을 직무별로 정리하는 자리입니다.</p>
+                    <a class="hub-card-action" href="/trainee/assignment">과제 결과물 보기</a>
+                </article>
+                <article class="hub-card">
+                    <span class="hub-card-label">상담</span>
+                    <h3>진로 상담</h3>
+                    <p>준비 과정에서 점검이 필요한 내용을 코치와 함께 확인해요.</p>
+                    <a class="hub-card-action" href="/trainee/qna/tutoring">상담 요청하기</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="hub-section" aria-labelledby="career-journey-title">
+            <div class="hub-section-heading">
+                <div>
+                    <span class="hub-section-eyebrow">MY CAREER JOURNEY</span>
+                    <h2 id="career-journey-title">나의 취업 여정</h2>
+                </div>
+                <p>지원부터 면접, 취업 이후 사후관리까지 같은 흐름에서 확인할 수 있도록 구성했습니다.</p>
+            </div>
+            <div class="hub-grid">
+                <article class="hub-card">
+                    <span class="hub-card-label">STEP 1</span>
+                    <h3>취업 준비 현황</h3>
+                    <p>희망 직무와 준비 항목을 기준으로 현재 상태를 정리하는 영역입니다.</p>
+                </article>
+                <article class="hub-card">
+                    <span class="hub-card-label">STEP 2</span>
+                    <h3>지원 기업·면접</h3>
+                    <p>기업 지원과 면접 일정을 놓치지 않도록 기록하는 영역입니다.</p>
+                </article>
+                <article class="hub-card">
+                    <span class="hub-card-label">STEP 3</span>
+                    <h3>취업·사후관리</h3>
+                    <p>취업 상태와 수료 후 상담, 후속 학습을 이어서 관리하는 영역입니다.</p>
+                </article>
+            </div>
+            <p class="hub-note">등록된 취업 활동이 없을 때는 임의의 수치를 보여주지 않습니다. 실제 기록이 연결되면 이 여정에 표시됩니다.</p>
+        </section>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/trainee :: footer}"></footer>
+</body>
+</html>

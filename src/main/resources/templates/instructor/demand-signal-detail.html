@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>과정 업데이트 추천</title>
+    <link rel="stylesheet" href="/static/css/admin.css"><link rel="stylesheet" href="/static/css/content-operations.css?v=20260825-2">
+</head>
+<body>
+<th:block th:replace="~{fragments/management :: sidebar('demand-signals')}"></th:block>
+<main class="content ops-shell">
+    <div class="ops-head"><div><span class="ops-kicker">RECOMMENDATION REVIEW</span><h1 th:text="${row.title}"></h1><p th:text="${row.industry + ' · ' + row.jobRole + ' · ' + row.skills}"></p></div><a class="ops-btn" href="/instructor/demand-signals">목록</a></div>
+    <div class="ops-message" th:if="${message}" th:text="${message}"></div>
+    <section class="ops-card"><h2>과정 최신화 추천</h2><div class="ops-table-wrap"><table class="ops-table">
+        <thead><tr><th>과정</th><th>일치 키워드</th><th>추천 콘텐츠</th><th>점수·상태</th><th>검토</th></tr></thead>
+        <tbody>
+        <tr th:each="recommendation : ${recommendations}">
+            <td th:text="${recommendation.courseName}"></td><td th:text="${recommendation.matchedKeywords}"></td><td th:text="${recommendation.suggestedContent != null ? recommendation.suggestedContent : '신규 콘텐츠 검토'}"></td>
+            <td><strong th:text="${recommendation.matchScore + '점'}"></strong><small th:text="${recommendation.statusLabel}"></small></td>
+            <td><form class="ops-form ops-review-form" th:action="@{/instructor/demand-signals/{signalId}/recommendations/{id}(signalId=${row.id},id=${recommendation.id})}" method="post">
+                <select class="ops-select" name="status"><option value="APPLIED">과정 반영 결정</option><option value="DISMISSED">보류</option></select>
+                <input class="ops-input" name="note" placeholder="반영할 주차·콘텐츠 메모"><button class="ops-btn primary" type="submit">결정 저장</button>
+            </form></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(recommendations)}"><td colspan="5" class="ops-empty">일치하는 과정이 없습니다. 과정 분류·설명 또는 콘텐츠 태그를 보완하세요.</td></tr>
+        </tbody>
+    </table></div></section>
+</main>
+</body>
+</html>

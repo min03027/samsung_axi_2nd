@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>나에게 맞는 과정 찾기 — {brand}</title>
+  <link rel="stylesheet" href="/v2/assets/tokens.css">
+  <link rel="stylesheet" href="/v2/assets/base.css">
+  <link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64">
+  <link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64">
+</head>
+<body class="class-site recommend-page">
+<main>
+  <section class="recommend-shell">
+    <div class="container">
+      <span>COURSE MATCH</span>
+      <h1>지금 상황에 맞는<br><em>과정부터 좁혀보세요.</em></h1>
+      <p class="recommend-lead">희망직무·경력·학력·지역·숙식·국비·희망일정·관심분야를 비교합니다.<br>결과를 확인한 뒤 여덟 가지 조건 그대로 상담을 이어갈 수 있습니다.</p>
+
+      <form id="course-recommender">
+        <div class="recommend-questions">
+          <fieldset>
+            <legend><small>01</small> 희망 직무</legend>
+            <label><input type="radio" name="career" value="data-ai" required><span>데이터·AI</span></label>
+            <label><input type="radio" name="career" value="smart-factory"><span>스마트팩토리·AIoT</span></label>
+            <label><input type="radio" name="career" value="robot"><span>로봇·자율주행</span></label>
+            <label><input type="radio" name="career" value="developer"><span>웹·클라우드 개발</span></label>
+            <label><input type="radio" name="career" value="content"><span>디자인·콘텐츠</span></label>
+            <label><input type="radio" name="career" value="global"><span>글로벌 취업·기획</span></label>
+          </fieldset>
+          <fieldset>
+            <legend><small>02</small> 경력</legend>
+            <label><input type="radio" name="experience" value="none" required><span>관련 경험 없음</span></label>
+            <label><input type="radio" name="experience" value="learning"><span>학습·자격 준비 경험</span></label>
+            <label><input type="radio" name="experience" value="project"><span>프로젝트 경험</span></label>
+            <label><input type="radio" name="experience" value="work"><span>관련 실무 경험</span></label>
+          </fieldset>
+          <fieldset>
+            <legend><small>03</small> 학력</legend>
+            <label><input type="radio" name="education" value="highschool-current" required><span>일반고 재학 중</span></label>
+            <label><input type="radio" name="education" value="highschool-graduate"><span>고교 졸업·검정고시</span></label>
+            <label><input type="radio" name="education" value="college"><span>대학 재학·졸업</span></label>
+            <label><input type="radio" name="education" value="graduate"><span>대학원·기타</span></label>
+          </fieldset>
+          <fieldset>
+            <legend><small>04</small> 희망 지역</legend>
+            <label><input type="radio" name="region" value="seongnam" required><span>경기 성남</span></label>
+            <label><input type="radio" name="region" value="capital"><span>서울·경기 수도권</span></label>
+            <label><input type="radio" name="region" value="any"><span>지역 무관</span></label>
+            <label><input type="radio" name="region" value="consult"><span>지역 상담 필요</span></label>
+          </fieldset>
+          <fieldset>
+            <legend><small>05</small> 숙식</legend>
+            <label><input type="radio" name="lodging" value="needed" required><span>필요해요</span></label>
+            <label><input type="radio" name="lodging" value="not-needed"><span>필요 없어요</span></label>
+            <label><input type="radio" name="lodging" value="undecided"><span>아직 모르겠어요</span></label>
+          </fieldset>
+          <fieldset>
+            <legend><small>06</small> 국비지원</legend>
+            <label><input type="radio" name="funding" value="required" required><span>국비지원 필수</span></label>
+            <label><input type="radio" name="funding" value="preferred"><span>가능하면 희망</span></label>
+            <label><input type="radio" name="funding" value="not-needed"><span>국비 무관</span></label>
+            <label><input type="radio" name="funding" value="undecided"><span>상담 후 결정</span></label>
+          </fieldset>
+          <fieldset>
+            <legend><small>07</small> 희망 일정</legend>
+            <label><input type="radio" name="schedule" value="immediate" required><span>가능한 빨리</span></label>
+            <label><input type="radio" name="schedule" value="within3"><span>3개월 이내</span></label>
+            <label><input type="radio" name="schedule" value="later"><span>3개월 이후</span></label>
+            <label><input type="radio" name="schedule" value="flexible"><span>일정 상담</span></label>
+          </fieldset>
+          <fieldset>
+            <legend><small>08</small> 관심 분야</legend>
+            <label><input type="radio" name="field" value="ai" required><span>생성형AI·산업AI</span></label>
+            <label><input type="radio" name="field" value="data"><span>데이터 분석</span></label>
+            <label><input type="radio" name="field" value="automation"><span>자동화·제조</span></label>
+            <label><input type="radio" name="field" value="software"><span>SW·클라우드</span></label>
+            <label><input type="radio" name="field" value="creative"><span>디자인·영상</span></label>
+            <label><input type="radio" name="field" value="global"><span>해외취업</span></label>
+            <label><input type="radio" name="field" value="certificate"><span>자격증</span></label>
+          </fieldset>
+        </div>
+        <div class="recommend-submit">
+          <p>입력한 조건은 추천과 상담 연결에만 사용됩니다.</p>
+          <button class="btn btn--primary btn--lg" type="submit">나에게 맞는 과정 보기</button>
+        </div>
+      </form>
+
+      <section class="recommend-result" id="recommend-result" hidden aria-live="polite">
+        <header class="recommend-result__head">
+          <div><span>MATCHED COURSES</span><h2>이 조건이라면<br><em>이 과정부터 확인해 보세요.</em></h2></div>
+          <dl id="recommend-profile"></dl>
+        </header>
+        <div class="recommend-result__grid" id="recommend-list"></div>
+        <div class="recommend-result__footer">
+          <p><strong>결정하기 어렵다면?</strong><br>추천 조건과 결과를 담당자가 그대로 확인하고 차이를 설명해 드립니다.</p>
+          <a class="btn btn--primary btn--lg" id="recommend-general-counsel" href="/v2/site/campus/counsel.html?from=recommend">추천 결과로 상담받기</a>
+        </div>
+      </section>
+
+    </div>
+  </section>
+</main>
+<script src="/v2/assets/brand.js"></script>
+<script src="/v2/assets/course-data.js"></script>
+<script src="/v2/assets/course-recommend.js?v=20260824-02"></script>
+<script src="/v2/assets/page-section-navigation.js"></script>
+<script>Shell.site({service:'class',hideNavigator:true})</script>
+</body>
+</html>

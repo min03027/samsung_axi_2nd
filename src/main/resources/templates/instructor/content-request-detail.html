@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>콘텐츠 요청 처리</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <link rel="stylesheet" href="/static/css/content-operations.css?v=20260825-2">
+</head>
+<body>
+<th:block th:replace="~{fragments/management :: sidebar('content-requests')}"></th:block>
+<main class="content ops-shell">
+    <div class="ops-head">
+        <div><span class="ops-kicker">REQUEST DETAIL</span><h1 th:text="${row.title}"></h1><p th:text="${row.courseName + ' · ' + row.traineeName}"></p></div>
+        <a class="ops-btn" href="/instructor/content-requests">목록</a>
+    </div>
+    <div class="ops-message" th:if="${message}" th:text="${message}"></div>
+    <div class="ops-grid">
+        <section class="ops-card">
+            <h2>요청 내용</h2>
+            <div class="ops-detail">
+                <div><span>상태</span><strong th:text="${row.statusLabel}"></strong></div>
+                <div><span>희망 유형</span><strong th:text="${row.preferredType}"></strong></div>
+                <div class="ops-wide"><span>요청 사유</span><p th:text="${row.reason}"></p></div>
+                <div class="ops-wide" th:if="${row.decisionNote != null}"><span>처리 메모</span><p th:text="${row.decisionNote}"></p></div>
+            </div>
+            <form th:if="${row.status.name() == 'RECEIVED'}" th:action="@{/instructor/content-requests/{id}/review(id=${row.id})}" method="post">
+                <button class="ops-btn" type="submit">검토 시작</button>
+            </form>
+        </section>
+        <aside class="ops-stack">
+            <form class="ops-card ops-form" th:if="${row.status.name() != 'FULFILLED' and row.status.name() != 'REJECTED'}" th:action="@{/instructor/content-requests/{id}/fulfill(id=${row.id})}" method="post" th:object="${form}">
+                <h2>라이브러리에서 제공</h2>
+                <label>공용 원본
+                    <select class="ops-select" th:field="*{libraryItemId}"><option value="">선택</option><option th:each="i : ${libraryItems}" th:value="${i.id}" th:text="${i.title + ' · v' + i.currentVersion}"></option></select>
+                    <small th:errors="*{libraryItemId}"></small>
+                </label>
+                <label>배치 차시<select class="ops-select" th:field="*{sessionId}"><option value="">과정 공용</option><option th:each="s : ${sessions}" th:value="${s.id}" th:text="${s.label}"></option></select></label>
+                <label>처리 메모<textarea class="ops-textarea" th:field="*{note}"></textarea></label>
+                <label class="ops-check"><input type="checkbox" th:field="*{autoSync}"> 새 버전 자동 반영</label>
+                <button class="ops-btn primary" type="submit">과정에 배치하고 완료</button>
+            </form>
+            <form class="ops-card ops-form" th:if="${row.status.name() != 'FULFILLED' and row.status.name() != 'REJECTED'}" th:action="@{/instructor/content-requests/{id}/reject(id=${row.id})}" method="post">
+                <h2>반려</h2><label>사유<textarea class="ops-textarea" name="note" required></textarea></label>
+                <button class="ops-btn danger" type="submit">반려 처리</button>
+            </form>
+        </aside>
+    </div>
+</main>
+</body>
+</html>

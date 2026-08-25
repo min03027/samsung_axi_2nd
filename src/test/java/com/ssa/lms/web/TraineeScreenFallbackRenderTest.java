@@ -23,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * <ol>
  *   <li><b>Whitelabel Error Page</b> — 예전 정적 화면 경로({@code /templates/...})가 링크에
  *       남아 있어 누르면 404 가 났고, {@code /error} 매핑이 없어 흰 화면이 떴다.</li>
- *   <li><b>전부 비어 있는 화면</b> — 배정된 항목이 없으면 과제/시험/출결/이수/설문이
- *       모두 "없습니다" 만 나와 화면정의서 캡처에 쓸 수 없었다.</li>
+ *   <li><b>가짜 데이터 노출</b> — 배정된 항목이 없을 때 실제 기록처럼 보이는 샘플이
+ *       핵심 학습·출결·이수 화면에 노출되면 안 된다.</li>
  * </ol>
  */
 @SpringBootTest
@@ -57,13 +57,19 @@ class TraineeScreenFallbackRenderTest {
     }
 
     @Test
-    @DisplayName("배정된 항목이 없는 계정은 예시 데이터와 안내 배너를 본다")
+    @DisplayName("배정된 항목이 없는 계정의 핵심 화면은 샘플 대신 실제 빈 상태를 본다")
     @WithUserDetails("admin")   // 시드 관리자에게는 수강/출결/이수 데이터가 없다
     void emptyAccountSeesSampleData() throws Exception {
-        for (String page : TRAINEE_PAGES) {
+        for (String page : new String[]{"/trainee/attendance", "/trainee/completion-management",
+                "/trainee/contents", "/trainee/learning"}) {
             mvc.perform(get(page)).andExpect(status().isOk())
-                    .andExpect(content().string(containsString("화면 예시용 샘플 데이터")))
+                    .andExpect(content().string(not(containsString("화면 예시용 샘플 데이터"))))
                     .andExpect(content().string(containsString("</html>")));
+        }
+        // 과제·시험·설문 샘플은 이번 핵심 LXP 감사 범위 밖의 기존 동작이다.
+        for (String page : new String[]{"/trainee/assignment", "/trainee/exam", "/trainee/survey"}) {
+            mvc.perform(get(page)).andExpect(status().isOk())
+                    .andExpect(content().string(containsString("화면 예시용 샘플 데이터")));
         }
         // 과제/시험/설문은 인라인 JS(JSON)로 내려간다 — Thymeleaf 가 한글을 \\uXXXX 로 이스케이프하므로
         // 한글로 단언하면 항상 실패한다. 이스케이프되지 않는 id 로 확인한다.
@@ -73,11 +79,11 @@ class TraineeScreenFallbackRenderTest {
                 .andExpect(content().string(containsString("\"id\":\"900101\"")));
         mvc.perform(get("/trainee/survey"))
                 .andExpect(content().string(containsString("\"id\":\"900301\"")));
-        // 출결/이수는 서버 렌더 테이블이라 한글 그대로 나온다.
+        // 핵심 화면은 실제 데이터가 없으므로 샘플 행·발급 버튼이 없어야 한다.
         mvc.perform(get("/trainee/attendance"))
-                .andExpect(content().string(containsString("오리엔테이션 및 개발환경 구축")));
+                .andExpect(content().string(not(containsString("오리엔테이션 및 개발환경 구축"))));
         mvc.perform(get("/trainee/completion-management"))
-                .andExpect(content().string(containsString("이수증 다운로드")));
+                .andExpect(content().string(not(containsString("이수증 다운로드"))));
     }
 
     @Test
@@ -98,35 +104,24 @@ class TraineeScreenFallbackRenderTest {
      * 오류 화면으로 떨어졌다.
      */
     @Test
-    @DisplayName("예시 학습 콘텐츠는 목록·차시별·재생 화면이 모두 열린다")
+    @DisplayName("학습 콘텐츠가 없으면 빈 상태이며 존재하지 않는 샘플 id는 열리지 않는다")
     @WithUserDetails("admin")   // 시드 관리자에게는 수강 과정이 없다
     void sampleContentPlaysRender() throws Exception {
         mvc.perform(get("/trainee/contents")).andExpect(status().isOk())
-                .andExpect(content().string(containsString("Spring Boot 프로젝트 구조와 자동설정")))
-                .andExpect(content().string(containsString("/trainee/contents/900703/play")))
+                .andExpect(content().string(not(containsString("/trainee/contents/900703/play"))))
                 .andExpect(content().string(containsString("</html>")));
 
         mvc.perform(get("/trainee/learning")).andExpect(status().isOk())
-                .andExpect(content().string(containsString("8차시 · Spring Data JPA")))
+                .andExpect(content().string(containsString("학습 중인(승인된) 과정이 없습니다.")))
                 .andExpect(content().string(containsString("</html>")));
 
-        // VOD — 재생할 파일 대신 poster 를 깐다(없는 파일을 받으러 가지 않는다)
-        mvc.perform(get("/trainee/contents/900703/play")).andExpect(status().isOk())
-                .andExpect(content().string(containsString("화면 예시용 샘플 데이터")))
-                .andExpect(content().string(containsString("poster=\"/static/img/sample-video-poster.svg\"")))
-                .andExpect(content().string(not(containsString("<source"))))
-                .andExpect(content().string(containsString("</html>")));
-
-        // 문서 — SVG 지면을 뷰어가 이미지로 렌더한다
-        mvc.perform(get("/trainee/contents/900704/play")).andExpect(status().isOk())
-                .andExpect(content().string(containsString("화면 예시용 샘플 데이터")))
-                .andExpect(content().string(containsString("/static/img/sample-doc-page.svg")))
-                .andExpect(content().string(containsString("</html>")));
+        mvc.perform(get("/trainee/contents/900703/play")).andExpect(status().isNotFound());
+        mvc.perform(get("/trainee/contents/900704/play")).andExpect(status().isNotFound());
     }
 
-    /** 예시 콘텐츠의 진도 저장은 DB 를 건드리지 않고 고정 값을 돌려준다(500 이 아니라). */
+    /** 존재하지 않는 콘텐츠 id로 고정 진도를 만들어 주지 않는다. */
     @Test
-    @DisplayName("예시 콘텐츠의 진도 저장 API 는 500 이 아니라 고정 진도를 돌려준다")
+    @DisplayName("존재하지 않는 콘텐츠의 진도 저장 API는 404를 돌려준다")
     @WithUserDetails("trainee1")
     void sampleProgressApiIsGuarded() throws Exception {
         mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -135,8 +130,7 @@ class TraineeScreenFallbackRenderTest {
                         .content("{\"positionSeconds\":10,\"durationSeconds\":1440}")
                         .with(org.springframework.security.test.web.servlet.request
                                 .SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("\"progressRate\":62")));
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -153,12 +147,11 @@ class TraineeScreenFallbackRenderTest {
     }
 
     @Test
-    @DisplayName("예시 항목은 제출·열람을 시도해도 500 이 아니라 안내로 되돌아온다")
+    @DisplayName("존재하지 않는 이수 항목은 실제 항목처럼 안내하지 않고 404를 돌려준다")
     @WithUserDetails("trainee1")
     void sampleRowsAreGuarded() throws Exception {
         mvc.perform(get("/trainee/completion-management/900201/certificate"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("화면 예시용 데이터입니다")));
+                .andExpect(status().isNotFound());
     }
 
     /**

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:with="isAdmin=${#authorization.expression('hasRole(''ADMIN'')')}">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/i-common-style.css" th:href="${isAdmin} ? '/static/css/common-style.css' : '/static/css/i-common-style.css'">
+    <link rel="stylesheet" href="/static/css/i-sidebar-style.css" th:href="${isAdmin} ? '/static/css/sidebar-style.css' : '/static/css/i-sidebar-style.css'">
+    <link rel="stylesheet" href="/static/css/content-library.css?v=20260825-1">
+    <script src="/static/js/sidebar-function.js" defer></script><script src="/static/js/common-funtion.js" defer></script>
+    <title>Samsung Academy LXP - 공용 콘텐츠 상세</title>
+</head>
+<body data-user-role="instructor" th:attr="data-user-role=${isAdmin} ? 'admin' : 'instructor'">
+<header th:replace="${isAdmin} ? ~{fragments/admin :: header('콘텐츠 관리 > 공용 원본 상세')} : ~{fragments/instructor :: header('콘텐츠 관리 > 공용 원본 상세')}"></header>
+<th:block th:replace="${isAdmin} ? ~{fragments/admin :: sidebar('content-library')} : ~{fragments/instructor :: sidebar('content-library')}"/>
+<main class="main-content"><div class="library-shell">
+    <nav class="library-tabs" aria-label="콘텐츠 관리 메뉴"><a href="/instructor/contents">과정 콘텐츠</a><a class="active" href="/instructor/content-library">공용 라이브러리</a><a href="/instructor/content-library/versions">버전 이력</a></nav>
+    <div class="library-flash" th:if="${message}" th:text="${message}">완료 메시지</div>
+    <section class="library-detail-head">
+        <div>
+            <span class="library-eyebrow" th:text="${item.typeLabel} + ' · VERSION ' + ${item.currentVersion}">TYPE · VERSION</span>
+            <h1 th:text="${item.title}">공용 원본 제목</h1>
+            <p th:text="${item.description != null ? item.description : '등록된 설명이 없습니다.'}">설명</p>
+            <div class="library-meta">
+                <div><span>현재 버전</span><strong th:text="'v' + ${item.currentVersion}">v1</strong></div>
+                <div><span>연결 콘텐츠</span><strong th:text="${item.linkedContentCount} + '건'">0건</strong></div>
+                <div><span>자동 반영</span><strong th:text="${item.autoSyncCount} + '건'">0건</strong></div>
+                <div><span>산업·직무 태그</span><strong th:text="${item.industryTags != null ? item.industryTags : '-'}">-</strong></div>
+            </div>
+        </div>
+        <div class="library-actions">
+            <a class="library-btn" th:href="@{/instructor/content-library/{id}/edit(id=${item.id})}">새 버전 발행</a>
+            <a class="library-btn primary" th:href="@{/instructor/content-library/{id}/deploy(id=${item.id})}">과정에 배치</a>
+        </div>
+    </section>
+
+    <div class="library-grid">
+        <section class="library-panel library-table-wrap">
+            <div class="library-panel-head"><h2>연결된 과정 콘텐츠</h2><span class="library-badge" th:text="${#lists.size(links)} + '건'">0건</span></div>
+            <table class="library-table"><thead><tr><th>과정</th><th>차시</th><th>반영 버전</th><th>동기화</th><th>최근 반영</th><th>관리</th></tr></thead><tbody>
+            <tr th:if="${#lists.isEmpty(links)}"><td class="library-empty" colspan="6">아직 연결된 과정이 없습니다. ‘과정에 배치’를 눌러 연결하세요.</td></tr>
+            <tr th:each="link : ${links}">
+                <td><strong th:text="${link.courseName}">과정</strong></td><td th:text="${link.sessionName}">차시</td>
+                <td><span th:text="'v' + ${link.appliedVersion}">v1</span> <span class="library-badge warning" th:if="${link.updateAvailable}">업데이트 필요</span></td>
+                <td><span class="library-badge" th:classappend="${!link.autoSync} ? ' muted'" th:text="${link.autoSync ? '자동 반영' : '수동 반영'}">자동</span></td>
+                <td th:text="${link.lastSyncedAt != null ? #temporals.format(link.lastSyncedAt, 'yyyy-MM-dd HH:mm') : '-'}">-</td>
+                <td><div class="library-actions">
+                    <form th:if="${link.updateAvailable}" th:action="@{/instructor/content-library/{id}/links/{linkId}/sync(id=${item.id},linkId=${link.id})}" method="post"><button class="library-btn small primary" type="submit">지금 반영</button></form>
+                    <form th:action="@{/instructor/content-library/{id}/links/{linkId}/auto-sync(id=${item.id},linkId=${link.id})}" method="post"><input type="hidden" name="enabled" th:value="${!link.autoSync}"><button class="library-btn small" type="submit" th:text="${link.autoSync ? '자동 끄기' : '자동 켜기'}">설정</button></form>
+                </div></td>
+            </tr></tbody></table>
+        </section>
+
+        <section class="library-panel">
+            <div class="library-panel-head"><h2>버전 히스토리</h2><a th:href="@{/instructor/content-library/versions}">전체 보기</a></div>
+            <div class="library-panel-body"><ol class="version-list">
+                <li th:each="version : ${versions}">
+                    <strong th:text="'v' + ${version.versionNo} + ' · ' + ${version.title}">v1</strong>
+                    <p th:text="${version.changeSummary}">변경 내용</p>
+                    <small><span th:text="${version.changedAt != null ? #temporals.format(version.changedAt, 'yyyy-MM-dd HH:mm') : '-'}">-</span> · <span th:text="${version.syncedContentCount} + '건 반영'">0건 반영</span></small>
+                </li>
+            </ol></div>
+        </section>
+    </div>
+    <form th:if="${item.status != 'ARCHIVED'}" th:action="@{/instructor/content-library/{id}/archive(id=${item.id})}" method="post" style="margin-top:22px;text-align:right" onsubmit="return confirm('이 원본을 보관 상태로 변경할까요? 기존 과정 콘텐츠는 유지됩니다.');"><button class="library-btn danger" type="submit">원본 보관 처리</button></form>
+</div></main>
+</body></html>

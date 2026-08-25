@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>과정 템플릿 등록</title>
+    <link rel="stylesheet" href="/static/css/admin.css"><link rel="stylesheet" href="/static/css/content-operations.css?v=20260825-2">
+</head>
+<body>
+<th:block th:replace="~{fragments/management :: sidebar('course-templates')}"></th:block>
+<main class="content ops-shell">
+    <div class="ops-head"><div><span class="ops-kicker">NEW BLUEPRINT</span><h1>현재 과정을 재사용 가능한 원본으로</h1><p>과목·차시·콘텐츠 파일 참조를 하나의 버전 스냅샷으로 저장합니다.</p></div></div>
+    <form class="ops-card ops-form ops-form-narrow" th:action="@{/instructor/course-templates}" method="post" th:object="${form}">
+        <label>원본 과정
+            <select class="ops-select" th:field="*{sourceCourseId}"><option value="">선택</option><option th:each="c : ${courses}" th:value="${c.id}" th:text="${c.courseName + ' · ' + c.status.label}"></option></select>
+            <small th:errors="*{sourceCourseId}"></small>
+        </label>
+        <label>템플릿명<input class="ops-input" th:field="*{name}" placeholder="예: 데이터 분석 6개월 표준 과정"><small th:errors="*{name}"></small></label>
+        <label>설명<textarea class="ops-textarea" th:field="*{description}"></textarea></label>
+        <label>최초 버전 메모<input class="ops-input" th:field="*{changeSummary}" placeholder="과목 5개·차시 24개 기준"></label>
+        <div class="ops-actions"><a class="ops-btn" href="/instructor/course-templates">취소</a><button class="ops-btn primary" type="submit">템플릿 등록</button></div>
+    </form>
+</main>
+</body>
+</html>

@@ -7,348 +7,436 @@
     <link rel="stylesheet" href="/static/css/btn-style.css">
     <link rel="stylesheet" href="/static/css/trainee/index.css">
     <link rel="stylesheet" href="/static/css/chatbot.css">
-    <link rel="stylesheet" href="/static/css/ai-common.css">
-    <link rel="stylesheet" href="/static/css/ai-roadmap-map.css">
-    <link rel="stylesheet" href="/static/css/dashboard-visual.css">
     <script src="/static/js/chatbot.js" defer></script>
     <script src="/static/js/trainee/index.js" defer></script>
-    <script src="/static/js/ai-widget.js" defer></script>
-    <!-- 오늘의 여정(가로 지도). 렌더러가 먼저 로드돼야 한다 -->
-    <script src="/static/js/trainee/ai-roadmap-map.js" defer></script>
-    <script src="/static/js/trainee/today-journey.js" defer></script>
-
-    <!-- ===== 서버 데이터 주입 =====
-         TraineeDashboardView(com.ssa.lms.dashboard.dto)를 그대로 내려받는다.
-         trainee/index.js 는 defer 라 문서 파싱 후 실행되므로 이 값이 먼저 채워진다. -->
-    <script th:inline="javascript">
-        window._serverTraineeDashboard = /*[[${dashboard}]]*/ null;
-    </script>
-
-    <style>
-        /* 공지 미리보기 — 기존 .notice-mini-* 스타일(트레이니 index.css)에 링크/범위 배지만 얹는다 */
-        .notice-mini-link {
-            display: flex; align-items: center; gap: 8px;
-            min-width: 0; flex: 1; text-decoration: none; color: inherit;
-        }
-        .notice-mini-scope {
-            font-size: 12px; color: #638ECB; white-space: nowrap;
-            border: 1px solid #b1cfef; border-radius: 999px; padding: 2px 8px;
-        }
-    </style>
-    <title>Samsung Academy LXP</title>
+    <title>Samsung Academy LXP - 나의 홈</title>
 </head>
-<!-- ********************************************************************************************************* -->
-<body>
-    <header th:replace="~{fragments/trainee :: header('my-course')}"></header>
-    <!-- 메인 컨텐츠 ********************************************************************************************************* -->
-    <main>
+<body class="trainee-home-body">
+<header th:replace="~{fragments/trainee :: header('home')}"></header>
 
-        <section class="main-container">
-            <div class="main-content main-wrap">
-                <!-- 학생 메인(홈) 페이지 -->
-                <div class="home-page">
-
-                <!-- 상단 요약 -->
-                <div class="hero">
-                    <div class="hero-left">
-                    <h2 class="hero-title">안녕하세요, <span id="hpUserName">훈련생</span>님</h2>
-                    <p class="hero-sub" id="hpTodayText">오늘: -</p>
-
-                    <div class="hero-stats" id="hpStats">
-                        <!-- JS render -->
-                    </div>
-                    </div>
-
-                    <div class="hero-right">
-                    <div class="quick-actions">
-                        <button type="button" class="btn btn-gray" data-go="learning">내 학습</button>
-                        <button type="button" class="btn btn-gray" data-go="attendance">출결/이수관리</button>
-                        <button type="button" class="btn btn-gray" data-go="examTask">시험/과제</button>
-                        <button type="button" class="btn btn-gray" data-go="survey">설문조사</button>
-                    </div>
-                    <p class="qa-hint">자주 가는 메뉴를 바로 열 수 있어요.</p>
-                    </div>
+<main class="care-home-main">
+    <div class="care-home">
+        <!-- 1. 나의 현재 상태: 실제 과정 기간·진도·출석·할 일을 서버에서 해석한 결과 -->
+        <section class="care-hero" th:classappend="${'tone-' + dashboard.assurance.tone}">
+            <div class="care-hero-copy">
+                <span class="care-eyebrow">MY LEARNING CARE</span>
+                <p class="care-date" th:text="${dashboard.today}">2026.08.21 (금)</p>
+                <h1 th:text="${dashboard.assurance.headline}">이번 주도 계획대로 잘 진행하고 있어요.</h1>
+                <p class="care-hero-detail" th:text="${dashboard.assurance.detail}">
+                    오늘 확인할 일정을 차례로 마치면 충분해요.
+                </p>
+                <div class="care-course-chip">
+                    <span>현재 과정</span>
+                    <strong th:text="${dashboard.assurance.courseName}">과정명</strong>
                 </div>
+            </div>
 
-                <!-- 오늘 할 일 -->
-                <div class="section-double">
-                  <div class="card section" style="flex:1.3;">
-                      <div class="section-head">
-                      <div>
-                          <h3 class="section-title">오늘 할 일</h3>
-                          <p class="section-desc">마감/진행 중인 항목을 우선으로 보여줘요.</p>
-                      </div>
-                      <button type="button" class="btn btn-gray" id="hpRefresh">새로고침</button>
-                      </div>
-  
-                      <!--
-                        오늘의 여정 — 할 일을 마감 순서대로 길 위에 늘어놓는다.
-                        목록은 "무엇이 있는지"는 보여주지만 "지금 어디쯤인지"가 안 보인다.
-                        아래 목록과 같은 데이터를 쓰므로 둘이 어긋날 일은 없다.
-                      -->
-                      <div class="map-wrap horizontal" id="todayJourney" style="display:none;">
-                          <div class="map-canvas" id="todayMapCanvas"></div>
-                          <div class="map-legend">
-                              <span><i class="done"></i> 마감 지남</span>
-                              <span><i class="current"></i> 가장 급함</span>
-                              <span><i class="locked"></i> 여유 있음</span>
-                          </div>
-                      </div>
-
-                      <div class="todo-list" id="hpTodoList"></div>
-                      <div class="empty-state" id="hpTodoEmpty" style="display:none;">
-                      <p class="empty-title">오늘 할 일이 없어요.</p>
-                      <p class="empty-desc">좋아요! 여유롭게 학습을 이어가세요.</p>
-                      </div>
-                  </div>
-
-                  <!--
-                    ══════════════════════════════════════════════════════
-                     [기능 5] 우리 반에서 내 위치 — 세로 레인 트랙   ★ 실데이터 ★
-                    ══════════════════════════════════════════════════════
-
-                    ■ 데이터 출처
-                      DashboardMetricsService.paceOf(traineeId) → CoursePaceView.
-                      진도율(Enrollment.progressRate)로 실제 순위를 매긴 값이다.
-                      수강 중인 과정 중 **진도가 가장 많이 남은 과정** 하나만 보여준다 —
-                      여러 개를 늘어놓으면 "그래서 뭘 해야 하나"가 흐려진다.
-                      혼자 듣는 과정이면 순위가 성립하지 않아 이 카드를 아예 안 그린다.
-
-                    ■ 왜 성적이 아니라 진도인가
-                      성적으로 줄 세우면 위화감이 생기고, 확정 전 값이 섞일 수 있다.
-                      진도는 본인 노력으로 오늘 바로 바꿀 수 있는 값이다.
-
-                    ■ 왜 세로인가
-                      결승선이 위에 있고 각자 자기 레인에서 위로 달린다. 주자의 높이가
-                      곧 진도율이라 선두는 위, 뒤처진 사람은 아래에 있다.
-                      (가로로 눕혔을 때는 주자들이 한 선에 겹쳐 누가 누군지 알 수 없었다)
-
-                    ■ 개인정보
-                      다른 훈련생의 **이름을 쓰지 않는다.** 등수와 진도만 익명으로
-                      보여준다 — 이름이 붙으면 개인정보이고 불필요한 비교를 만든다.
-                  -->
-                  <div class="card section race-card" style="flex:1;" id="heart-area"
-                       th:if="${pace != null}">
-                    <div class="section-head">
-                      <div>
-                        <h3 class="section-title">우리 반에서 내 위치</h3>
-                        <p class="section-desc" th:text="${pace.courseName}">과정명</p>
-                      </div>
-                      <div class="race-rank">
-                        <span class="race-rank-num" th:text="${pace.myRank}">3</span>
-                        <span class="race-rank-unit">위</span>
-                        <span class="race-rank-total" th:text="'/ ' + ${pace.total}">/ 6</span>
-                      </div>
-                    </div>
-
-                    <div class="race-field">
-                      <!-- 결승선 — 트랙 맨 위 -->
-                      <div class="race-goal"><span>🏁 완주 100%</span></div>
-
-                      <!-- 반 평균 — 내가 평균보다 위인지 아래인지 한눈에 -->
-                      <div class="race-avg" th:style="'bottom: calc(6% + 74% * ' + ${pace.classAverage} + ' / 100)'">
-                        <span th:text="'평균 ' + ${pace.classAverage} + '%'">평균</span>
-                      </div>
-
-                      <!-- 레인: 한 칸이 한 명. 주자의 높이가 진도율 -->
-                      <div class="race-lanes">
-                        <div class="race-col" th:each="r : ${pace.runners}"
-                             th:classappend="${r.me()} ? 'me' : ''">
-                          <!--
-                            bottom 이 진도율. 위로 갈수록 멀리(=많이) 달린 것이라
-                            원근감을 주려고 위쪽 주자를 조금 작게 그린다.
-                          -->
-                          <span class="race-runner"
-                                th:style="'bottom: calc(6% + 74% * ' + ${r.progress()} + ' / 100);'
-                                          + ' --depth: ' + ${r.progress()}"
-                                th:title="${r.rank()} + '위 · ' + ${r.progress()} + '%'">
-                            <b class="race-pct" th:text="${r.progress()} + '%'">52%</b>
-                            <i class="race-icon">🏃</i>
-                            <b class="race-dust"></b>
-                          </span>
-                          <span class="race-no">
-                            <span th:if="${r.rank() == 1}">🥇</span>
-                            <span th:if="${r.rank() == 2}">🥈</span>
-                            <span th:if="${r.rank() == 3}">🥉</span>
-                            <span th:text="${r.me()} ? '나' : ${r.rank()}">1</span>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <p class="race-msg" th:if="${pace.myRank == 1}">
-                      <b>선두예요!</b> 지금 페이스를 유지해 보세요.
-                    </p>
-                    <p class="race-msg" th:if="${pace.myRank > 1 and pace.gapToAhead() != null}"
-                       th:text="'앞사람과 ' + ${pace.gapToAhead()} + '%p 차이예요. 조금만 더 하면 따라잡을 수 있어요.'">
-                      앞사람과 2%p 차이예요.
-                    </p>
-
-                    <div class="race-stats">
-                      <div class="race-stat">
-                        <span class="k">내 진도</span>
-                        <span class="v" th:text="${pace.myProgress} + '%'">52%</span>
-                      </div>
-                      <div class="race-stat">
-                        <span class="k">반 평균</span>
-                        <span class="v" th:text="${pace.classAverage} + '%'">50%</span>
-                      </div>
-                      <div class="race-stat">
-                        <span class="k">선두</span>
-                        <span class="v" th:text="${pace.topProgress} + '%'">56%</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- 혼자 듣는 과정이면 순위가 성립하지 않는다 — 응원 이미지를 그대로 둔다 -->
-                  <div class="card section" style="flex:1;" th:if="${pace == null}">
-                    <img src="/static/img/trainee.png" alt="cheerup">
-                  </div>
-                </div>
-
-                <!-- AI 학습지원 요약 — 상세는 AI 학습지원 메뉴에서 -->
-                <div class="card section ai-widget">
-                    <div class="section-head">
-                    <div>
-                        <h3 class="section-title">AI 학습지원 <span class="ai-badge">AI</span></h3>
-                        <p class="section-desc">내 학습 데이터를 분석한 결과예요.</p>
-                    </div>
-                    </div>
-                    <div class="ai-grid ai-grid-3" id="hpAiCards"></div>
-                </div>
-
-                <!-- 진행중 과정 -->
-                <div class="card section">
-                    <div class="section-head">
-                    <div>
-                        <h3 class="section-title">진행중 과정</h3>
-                        <p class="section-desc">현재 학습 중인 과정을 한눈에 확인해요.</p>
-                    </div>
-                    </div>
-
-                    <div class="course-grid" id="hpCourseGrid"></div>
-                    <div class="empty-state" id="hpCourseEmpty" style="display:none;">
-                    <p class="empty-title">진행중인 과정이 없어요.</p>
-                    <p class="empty-desc">과정이 배정되면 여기에 표시돼요.</p>
-                    </div>
-                </div>
-
-                <!-- ===== 공지사항 / 훈련생 유의사항 =====
-                     정부 제출 문서(양식3) "훈련생 유의사항 등재(정보제공)" 요건.
-                     원래는 /static/img/01~05.png 하드코딩 이미지 5장이라 실제 정보 제공이 아니었다.
-
-                     노출 범위는 훈련생 공지 목록 화면과 같은 규칙이다 —
-                     게시된 공지 중 "전체 공지 + 본인이 수강 중인 과정의 공지"만.
-                     (TraineeDashboardService.notices() → NoticeService.searchPublished
-                      + NoticeVisibilityService.traineeCourseIds)
-                     JS 로 그리지 않고 서버에서 직접 렌더한다 — 정보제공 요건이라
-                     스크립트가 죽어도 본문에 남아 있어야 한다. -->
-                <div class="card section">
-                    <div class="section-head">
-                    <div>
-                        <h3 class="section-title">공지사항 · 훈련생 유의사항</h3>
-                        <p class="section-desc">전체 공지와 내가 수강 중인 과정의 공지를 보여줘요.</p>
-                    </div>
-                    <a class="btn btn-gray" th:href="${dashboard.noticeMoreHref}" href="/trainee/notice">전체보기</a>
-                    </div>
-
-                    <ul class="notice-mini-list" id="hpNoticeList" th:if="${not #lists.isEmpty(dashboard.notices)}">
-                    <li class="notice-mini-item" th:each="n : ${dashboard.notices}">
-                        <a class="notice-mini-link" th:href="${n.href}" href="/trainee/notice">
-                        <span class="pill dday" th:if="${n.pinned}">고정</span>
-                        <span class="notice-mini-scope" th:text="${n.scope}">전체</span>
-                        <span class="notice-mini-title" th:text="${n.title}" th:title="${n.title}">공지 제목</span>
-                        </a>
-                        <span class="notice-mini-date" th:text="${n.date}">2026-07-28</span>
-                    </li>
-                    </ul>
-
-                    <div class="empty-state" th:if="${#lists.isEmpty(dashboard.notices)}">
-                    <p class="empty-title">등록된 공지가 없어요.</p>
-                    <p class="empty-desc">새 공지가 등록되면 여기에 표시돼요.</p>
-                    </div>
-                </div>
-
-
-                </div>
-
-
+            <div class="care-hero-metrics" aria-label="현재 학습 상태 요약">
+                <article>
+                    <span>현재 진도</span>
+                    <strong th:text="${dashboard.assurance.progressRate} + '%'">67%</strong>
+                    <small>내 학습 기록</small>
+                </article>
+                <article>
+                    <span>권장 진도</span>
+                    <strong th:text="${dashboard.assurance.recommendedProgress == null ? '안내 전' : dashboard.assurance.recommendedProgress + '%'}">64%</strong>
+                    <small>과정 일정 기준</small>
+                </article>
+                <article>
+                    <span>오늘 일정</span>
+                    <strong th:text="${dashboard.assurance.todayActionCount} + '개'">2개</strong>
+                    <small>오늘 확인할 항목</small>
+                </article>
+                <article>
+                    <span>현재 출석</span>
+                    <strong th:text="${dashboard.assurance.attendanceRate == null ? '기록 전' : dashboard.assurance.attendanceRate + '%'}">95%</strong>
+                    <small>과정 누적 기준</small>
+                </article>
             </div>
         </section>
-        <!-- 플로팅 메뉴 (AI 챗봇) -->
-        <div class="floating-chatbot-btn" id="floatingChatbotBtn">
-            <img src="/static/img/chatbot.png" alt="AI 헬피 챗봇">
-            <span class="chatbot-hint">AI 헬피 챗봇</span>
+
+        <!-- 2. 오늘의 핵심 행동: 중복 메뉴를 제거하고 최대 세 가지로 제한 -->
+        <nav class="core-actions" aria-label="오늘의 핵심 행동">
+            <a class="core-action primary" th:href="${dashboard.assurance.primaryActionHref}" href="/trainee/learning">
+                <span class="core-action-icon" aria-hidden="true">▶</span>
+                <span>
+                    <small>지금 가장 먼저</small>
+                    <strong th:text="${dashboard.assurance.primaryActionLabel}">학습 이어하기</strong>
+                    <em>가장 가까운 학습 일정부터 확인해요</em>
+                </span>
+                <i aria-hidden="true">→</i>
+            </a>
+            <a class="core-action" href="#today-schedule">
+                <span class="core-action-icon calendar" aria-hidden="true">▦</span>
+                <span>
+                    <small>하루를 차분하게</small>
+                    <strong>오늘 일정 보기</strong>
+                    <em th:text="${dashboard.assurance.todayActionCount > 0 ? '등록된 일정 ' + dashboard.assurance.todayActionCount + '개' : '등록된 일정이 없어요'}">일정 확인</em>
+                </span>
+                <i aria-hidden="true">↓</i>
+            </a>
+            <a class="core-action" href="/trainee/qna/tutoring">
+                <span class="core-action-icon help" aria-hidden="true">?</span>
+                <span>
+                    <small>혼자 고민하지 않도록</small>
+                    <strong>도움 요청하기</strong>
+                    <em th:text="${dashboard.coach.unreadCount > 0 ? '읽지 않은 답변 ' + dashboard.coach.unreadCount + '개' : 'AI와 코치가 함께 도와드려요'}">AI와 코치가 도와드려요</em>
+                </span>
+                <i aria-hidden="true">→</i>
+            </a>
+        </nav>
+
+        <div class="care-dashboard-grid">
+            <!-- 3. 오늘 일정: 실제 오늘 차시 + 오늘 마감 과제/시험/설문 -->
+            <section class="home-card schedule-card" id="today-schedule">
+                <div class="home-card-head">
+                    <div>
+                        <span class="section-kicker">TODAY FLOW</span>
+                        <h2>오늘 일정</h2>
+                        <p>등록된 수업과 마감 일정을 가까운 순서로 보여드려요.</p>
+                    </div>
+                    <a href="/trainee/learning" class="text-link">전체 학습 보기</a>
+                </div>
+
+                <ol class="today-timeline" th:if="${not #lists.isEmpty(dashboard.todaySchedule)}">
+                    <li th:each="item : ${dashboard.todaySchedule}"
+                        th:classappend="${(item.current ? 'current ' : '') + 'type-' + #strings.toLowerCase(item.type)}">
+                        <time th:text="${item.type == 'LESSON' ? '오늘' : item.timeLabel}">09:00</time>
+                        <span class="timeline-dot" aria-hidden="true"></span>
+                        <div class="timeline-content">
+                            <span class="timeline-type" th:text="${item.typeLabel}">수업</span>
+                            <strong th:text="${item.title}">학습 일정</strong>
+                            <small th:text="${item.meta}">과정 정보</small>
+                        </div>
+                        <a th:href="${item.href}" href="/trainee/learning"
+                           th:text="${item.current ? '확인하기' : '열기'}">열기</a>
+                    </li>
+                </ol>
+
+                <div class="soft-empty" th:if="${#lists.isEmpty(dashboard.todaySchedule)}">
+                    <span aria-hidden="true">✓</span>
+                    <div>
+                        <strong>오늘 등록된 일정은 모두 확인했어요.</strong>
+                        <p>여유가 있을 때 진행 중인 학습을 이어가 보세요.</p>
+                    </div>
+                    <a href="/trainee/learning">학습 이어하기</a>
+                </div>
+
+            </section>
+
+            <!-- 5. 실제 튜터링 대화 기반 코치 피드백 -->
+            <aside class="home-card coach-card">
+                <div class="coach-card-head">
+                    <div>
+                        <span class="section-kicker">CARE MESSAGE</span>
+                        <h2>선생님·코치 피드백</h2>
+                    </div>
+                    <span class="unread-badge" th:if="${dashboard.coach.unreadCount > 0}"
+                          th:text="${dashboard.coach.unreadCount} + ' NEW'">1 NEW</span>
+                </div>
+                <div class="coach-avatar" aria-hidden="true">
+                    <span th:text="${#strings.substring(dashboard.coach.coachName, 0, 1)}">코</span>
+                </div>
+                <blockquote th:text="${dashboard.coach.message}">
+                    최근 코치 피드백이 이곳에 표시됩니다.
+                </blockquote>
+                <div class="coach-meta">
+                    <strong th:text="${dashboard.coach.coachName}">학습 코치</strong>
+                    <span th:text="${dashboard.coach.context}">최근 튜터링</span>
+                    <small th:if="${dashboard.coach.time != '-'}" th:text="${dashboard.coach.time}">최근 답변 시각</small>
+                </div>
+                <a class="coach-action" th:href="${dashboard.coach.href}" href="/trainee/qna/tutoring"
+                   th:text="${dashboard.coach.hasFeedback ? '답변 확인하기' : '튜터링 요청하기'}">답변 확인하기</a>
+                <a class="coach-ai-link" href="/trainee/ai/qna">먼저 AI 학습 도우미에게 물어보기 →</a>
+            </aside>
         </div>
 
-        <!-- Floating Chatbot Window -->
-        <div class="floating-chatbot-window" id="floatingChatbotWindow" style="display:none;">
-            <div class="chatbot-header">
-                <span>AI 헬피 챗봇</span>
-                <button class="chatbot-close-btn" id="chatbotCloseBtn" title="닫기">×</button>
+        <!-- 4. 학습 상태 + 출석: 숫자보다 해석을 함께 제공 -->
+        <section class="home-card learning-health-card">
+            <div class="home-card-head">
+                <div>
+                    <span class="section-kicker">LEARNING HEALTH</span>
+                    <h2>학습 상태와 출석</h2>
+                    <p>수료까지 안정적으로 따라가고 있는지 함께 확인해요.</p>
+                </div>
+                <a href="/trainee/attendance" class="text-link">출결 상세보기</a>
             </div>
-            <div class="chatbot-messages" id="chatbotMessages">
-                <div class="chatbot-msg chatbot-msg-bot">안녕하세요! 무엇을 도와드릴까요?</div>
+
+            <div class="health-grid">
+                <article class="health-progress">
+                    <div class="health-label-row">
+                        <span>현재 진도</span>
+                        <strong th:text="${dashboard.assurance.progressRate} + '%'">67%</strong>
+                    </div>
+                    <div class="progress-track" role="progressbar" aria-label="현재 진도"
+                         aria-valuemin="0" aria-valuemax="100"
+                         th:attr="aria-valuenow=${dashboard.assurance.progressRate}">
+                        <i th:style="${'width:' + dashboard.assurance.progressRate + '%'}" style="width:67%"></i>
+                        <b th:if="${dashboard.assurance.recommendedProgress != null}"
+                           th:style="${'left:' + dashboard.assurance.recommendedProgress + '%'}"
+                           th:title="${'권장 진도 ' + dashboard.assurance.recommendedProgress + '%'}">
+                        </b>
+                    </div>
+                    <div class="progress-legend">
+                        <span><i></i>내 진도</span>
+                        <span th:if="${dashboard.assurance.recommendedProgress != null}"><i></i>권장 진도</span>
+                    </div>
+                    <p th:text="${dashboard.assurance.progressMessage}">권장 진도보다 앞서 있어요.</p>
+                </article>
+
+                <article class="attendance-summary" th:classappend="${dashboard.assurance.attendanceRate != null and dashboard.assurance.attendanceRate < 80} ? ' needs-care' : ''">
+                    <span class="health-icon" aria-hidden="true">✓</span>
+                    <div>
+                        <span>현재 출석률</span>
+                        <strong th:text="${dashboard.assurance.attendanceRate == null ? '기록 전' : dashboard.assurance.attendanceRate + '%'}">95%</strong>
+                        <p th:text="${dashboard.assurance.attendanceMessage}">수료 기준을 안정적으로 충족하고 있어요.</p>
+                    </div>
+                </article>
+
+                <div class="health-small-stats">
+                    <article>
+                        <span>미제출 과제</span>
+                        <strong th:text="${dashboard.assurance.remainingAssignments} + '건'">1건</strong>
+                        <a href="/trainee/assignment">과제 확인</a>
+                    </article>
+                    <article>
+                        <span>남은 시험</span>
+                        <strong th:text="${dashboard.assurance.remainingExams} + '건'">1건</strong>
+                        <a href="/trainee/exam">시험 확인</a>
+                    </article>
+                </div>
             </div>
-            <div class="chatbot-badge-row" style="padding-left: 15px; display:flex; gap:7px; flex-wrap:wrap;background-color: #f7faff;">
-                <span class="chatbot-badge" style="display:inline-block; color:#638ECB; border:1.2px solid #b1cfef; border-radius:12px; font-size:13px; padding:4px 6px; cursor:pointer; box-shadow:0 1.5px 6px rgba(30,40,60,0.07);">출결 확인</span>
-                <span class="chatbot-badge" style="display:inline-block; color:#638ECB; border:1.2px solid #b1cfef; border-radius:12px; font-size:13px; padding:4px 6px; cursor:pointer; box-shadow:0 1.5px 6px rgba(30,40,60,0.07);">과제 마감</span>
-                <span class="chatbot-badge" style="display:inline-block; color:#638ECB; border:1.2px solid #b1cfef; border-radius:12px; font-size:13px; padding:4px 6px; cursor:pointer; box-shadow:0 1.5px 6px rgba(30,40,60,0.07);">시험 일정</span>
-                <span class="chatbot-badge" style="display:inline-block; color:#638ECB; border:1.2px solid #b1cfef; border-radius:12px; font-size:13px; padding:4px 6px; cursor:pointer; box-shadow:0 1.5px 6px rgba(30,40,60,0.07);">Q&A 문의</span>
+        </section>
+
+        <!-- 6. 익명 실제 진도 데이터 기반의 부드러운 미니 레이스 -->
+        <section class="home-card comfort-race-card" th:if="${pace != null}">
+            <div class="home-card-head">
+                <div>
+                    <span class="section-kicker">TOGETHER PACE</span>
+                    <h2>우리 반과 함께 가는 속도</h2>
+                    <p th:text="${pace.courseName}">과정명</p>
+                </div>
+                <span class="privacy-chip">이름 없이 진도만 비교해요</span>
             </div>
-            <div class="chatbot-input-area">
-                <input type="text" id="chatbotInput" class="chatbot-input" placeholder="메시지를 입력하세요..." autocomplete="off">
-                <button id="chatbotSendBtn" class="chatbot-send-btn">전송</button>
+
+            <div class="comfort-race-message">
+                <span aria-hidden="true">●</span>
+                <strong th:text="${pace.reassuranceMessage()}">반 평균보다 앞서 있어요. 지금 속도면 충분해요.</strong>
             </div>
-        </div>
-      </main>
-      <!-- ********************************************************************************************************* -->
-        <footer th:replace="~{fragments/trainee :: footer}"></footer>
 
-<style>
-    /* ===== simple footer ===== */
-.simple-footer{
+            <div class="comfort-race-field" th:style="${'--runner-count:' + pace.total}">
+                <div class="race-start-sign"><span>START</span></div>
+                <div class="race-finish-sign"><span>100%</span><b aria-hidden="true">⚑</b></div>
+                <div class="comfort-lanes"
+                     th:style="${'grid-template-rows:repeat(' + pace.total + ',minmax(24px,1fr))'}">
+                    <div class="class-average-line" th:style="${'left:' + pace.classAverage + '%'}">
+                        <span th:text="'반 평균 ' + ${pace.classAverage} + '%'">반 평균 64%</span>
+                    </div>
+                    <div class="comfort-lane" th:each="runner : ${pace.runners}"
+                         th:classappend="${runner.me()} ? ' me' : ''">
+                        <div class="runner-marker"
+                             th:style="${'left:clamp(24px,' + runner.progress() + '%,calc(100% - 24px)); --runner:' + runner.rank()}"
+                             th:title="${runner.me() ? '나의 진도 ' + runner.progress() + '%' : '함께 학습 중인 동료 ' + runner.progress() + '%'}">
+                            <b class="runner-progress" th:text="${runner.progress()} + '%'">67%</b>
+                            <span class="runner-crown" th:if="${runner.rank() == 1}" aria-label="선두">♛</span>
+                            <span class="runner-avatar" aria-hidden="true">
+                                <i class="avatar-head"></i>
+                                <i class="avatar-body"></i>
+                            </span>
+                            <em th:if="${runner.me()}">나</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-  padding:14px 18px;
-  border-top:1px solid var(--gray-200);
-  background:#fff;
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  box-sizing: border-box;
-}
+            <div class="race-summary">
+                <article><span>내 진도</span><strong th:text="${pace.myProgress} + '%'">67%</strong></article>
+                <article><span>반 평균</span><strong th:text="${pace.classAverage} + '%'">64%</strong></article>
+                <article><span>가장 앞선 진도</span><strong th:text="${pace.topProgress} + '%'">95%</strong></article>
+            </div>
+        </section>
 
-.footer-inner{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  font-size:12px;
-  color:var(--gray-500);
-  font-weight:700;
-}
+        <section class="home-card no-race-card" th:if="${pace == null}">
+            <span aria-hidden="true">◎</span>
+            <div>
+                <h2>나만의 속도로 차근차근 시작해요.</h2>
+                <p>함께 학습하는 동료의 진도 데이터가 쌓이면 반 평균과 내 위치를 안내해 드릴게요.</p>
+            </div>
+        </section>
 
-.footer-link{
-  color:var(--gray-500);
-  text-decoration:none;
-}
-.footer-link:hover{
-  text-decoration:underline;
-}
+        <!-- 7. 성장 요약: 현재 연결된 실제 학습 기록만 간결하게 노출 -->
+        <section class="home-card growth-summary-card">
+            <div class="home-card-head">
+                <div>
+                    <span class="section-kicker">LEARNING SUMMARY</span>
+                    <h2>성장 요약</h2>
+                    <p>지금까지 쌓인 학습 기록에서 중요한 흐름만 모았어요.</p>
+                </div>
+                <a href="/trainee/ai/roadmap" class="text-link">직무 로드맵 보기</a>
+            </div>
 
-.footer-dot{
-  margin:0 6px;
-  color:var(--gray-300);
-}
+            <div class="growth-summary-grid">
+                <article>
+                    <span class="growth-icon blue" aria-hidden="true">↗</span>
+                    <small>현재 학습 진도</small>
+                    <strong th:text="${dashboard.assurance.progressRate} + '%'">67%</strong>
+                    <p th:text="${dashboard.assurance.progressMessage}">안정적으로 진행 중이에요.</p>
+                </article>
+                <article>
+                    <span class="growth-icon green" aria-hidden="true">✓</span>
+                    <small>현재 출석</small>
+                    <strong th:text="${dashboard.assurance.attendanceRate == null ? '기록 전' : dashboard.assurance.attendanceRate + '%'}">95%</strong>
+                    <p th:text="${dashboard.assurance.attendanceMessage}">수료 기준을 충족하고 있어요.</p>
+                </article>
+                <article>
+                    <span class="growth-icon orange" aria-hidden="true">□</span>
+                    <small>확인할 학습 일정</small>
+                    <strong th:text="${dashboard.assurance.totalTodoCount} + '건'">2건</strong>
+                    <p>마감이 가까운 순서대로 안내하고 있어요.</p>
+                </article>
+            </div>
+        </section>
 
-@media (max-width:640px){
-  .footer-inner{
-    flex-direction:column;
-    gap:6px;
-  }
-}
+        <!-- 기존 과정 기능은 삭제하지 않고 홈 하단의 차분한 상세 영역으로 유지 -->
+        <section class="home-card course-overview-card">
+            <div class="home-card-head">
+                <div>
+                    <span class="section-kicker">MY COURSE</span>
+                    <h2>진행 중인 과정</h2>
+                    <p>과정별 학습과 출결을 더 자세히 확인할 수 있어요.</p>
+                </div>
+                <a href="/trainee/my-course" class="text-link">수강 내역 보기</a>
+            </div>
 
-</style>
+            <div class="course-overview-list" th:if="${not #lists.isEmpty(dashboard.courses)}">
+                <article th:each="course : ${dashboard.courses}">
+                    <div class="course-overview-title">
+                        <span>진행 과정</span>
+                        <h3 th:text="${course.name}">과정명</h3>
+                        <p th:text="${course.cohort + ' · ' + course.startAt + ' ~ ' + course.endAt}">기수와 기간</p>
+                    </div>
+                    <div class="course-overview-numbers">
+                        <span>학습 진도 <b th:text="${course.progressRate}">67%</b></span>
+                        <span>출석 <b th:text="${course.attendanceRate == '-' ? '기록 전' : course.attendanceRate}">95%</b></span>
+                        <span>종료까지 <b th:text="${course.dday == '-' ? '일정 확인' : course.dday}">D-20</b></span>
+                    </div>
+                    <div class="course-overview-actions">
+                        <a th:href="${course.continueHref}">학습 이어하기</a>
+                        <a href="/trainee/attendance">출결 확인</a>
+                    </div>
+                </article>
+            </div>
+            <div class="soft-empty compact" th:if="${#lists.isEmpty(dashboard.courses)}">
+                <span aria-hidden="true">○</span>
+                <div><strong>진행 중인 과정이 없어요.</strong><p>과정이 배정되면 이곳에서 안내해 드릴게요.</p></div>
+            </div>
+        </section>
 
+        <!-- 기존 실제 공지 노출 규칙 유지: 전체 공지 + 본인 수강 과정 공지 -->
+        <section class="home-card notice-home-card">
+            <div class="home-card-head">
+                <div>
+                    <span class="section-kicker">NOTICE</span>
+                    <h2>꼭 확인할 안내</h2>
+                    <p>전체 공지와 내가 수강 중인 과정의 공지만 보여드려요.</p>
+                </div>
+                <a class="text-link" th:href="${dashboard.noticeMoreHref}" href="/trainee/notice">전체보기</a>
+            </div>
+            <ul class="notice-home-list" th:if="${not #lists.isEmpty(dashboard.notices)}">
+                <li th:each="notice : ${dashboard.notices}">
+                    <a th:href="${notice.href}" href="/trainee/notice">
+                        <span class="notice-important" th:if="${notice.pinned}">중요</span>
+                        <span class="notice-scope" th:text="${notice.scope}">전체</span>
+                        <strong th:text="${notice.title}">공지 제목</strong>
+                        <time th:text="${notice.date}">2026.08.21</time>
+                    </a>
+                </li>
+            </ul>
+            <div class="soft-empty compact" th:if="${#lists.isEmpty(dashboard.notices)}">
+                <span aria-hidden="true">✓</span>
+                <div><strong>새로 확인할 공지가 없어요.</strong><p>중요한 안내가 등록되면 이곳에서 알려드릴게요.</p></div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- 중요 공지 팝업: 기존 기능 유지 -->
+<th:block th:with="popupNotices=${dashboard.notices.?[pinned]}">
+    <div class="notice-popup-backdrop" id="importantNoticePopup"
+         th:if="${not #lists.isEmpty(popupNotices)}"
+         th:attr="data-notice-id=${popupNotices[0].id}">
+        <section class="notice-popup" role="dialog" aria-modal="true" aria-labelledby="importantNoticeTitle">
+            <div class="notice-popup-head">
+                <span class="notice-popup-label">IMPORTANT NOTICE</span>
+                <h2 id="importantNoticeTitle" th:text="${popupNotices[0].title}">중요 공지</h2>
+            </div>
+            <div class="notice-popup-body">
+                <p class="notice-popup-meta">
+                    <span th:text="${popupNotices[0].scope}">전체</span>
+                    · <span th:text="${popupNotices[0].date}">2026.08.21</span>
+                </p>
+                <p class="notice-popup-preview">반드시 확인해야 하는 중요 공지입니다. 상세 내용을 확인해 주세요.</p>
+            </div>
+            <div class="notice-popup-actions">
+                <label><input type="checkbox" id="hideNoticeToday"> 오늘 하루 보지 않기</label>
+                <button type="button" class="btn btn-gray" id="closeImportantNotice">닫기</button>
+                <a class="btn btn-primary" th:href="${popupNotices[0].href}">상세보기</a>
+            </div>
+        </section>
+    </div>
+</th:block>
+
+<!-- 기존 AI 챗봇 기능 유지 -->
+<div class="floating-chatbot-btn" id="floatingChatbotBtn">
+    <img src="/static/img/chatbot.png" alt="AI 학습 챗봇">
+    <span class="chatbot-hint">AI 학습 챗봇</span>
+</div>
+<div class="floating-chatbot-window" id="floatingChatbotWindow" style="display:none;">
+    <div class="chatbot-header">
+        <span>AI 학습 챗봇</span>
+        <button class="chatbot-close-btn" id="chatbotCloseBtn" title="닫기">×</button>
+    </div>
+    <div class="chatbot-messages" id="chatbotMessages">
+        <div class="chatbot-msg chatbot-msg-bot">안녕하세요. 무엇을 도와드릴까요?</div>
+    </div>
+    <div class="chatbot-badge-row">
+        <span class="chatbot-badge">출석 확인</span>
+        <span class="chatbot-badge">과제 마감</span>
+        <span class="chatbot-badge">시험 일정</span>
+        <span class="chatbot-badge">Q&amp;A 문의</span>
+    </div>
+    <div class="chatbot-input-area">
+        <input type="text" id="chatbotInput" class="chatbot-input" placeholder="메시지를 입력하세요" autocomplete="off">
+        <button id="chatbotSendBtn" class="chatbot-send-btn">전송</button>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/trainee :: footer}"></footer>
+
+<script>
+    (function () {
+        var popup = document.getElementById('importantNoticePopup');
+        if (!popup) return;
+        var key = 'trainee-important-notice-' + popup.dataset.noticeId;
+        var hiddenUntil = Number(localStorage.getItem(key) || 0);
+        if (hiddenUntil > Date.now()) {
+            popup.remove();
+            return;
+        }
+        document.body.style.overflow = 'hidden';
+        document.getElementById('closeImportantNotice').addEventListener('click', function () {
+            if (document.getElementById('hideNoticeToday').checked) {
+                var tomorrow = new Date();
+                tomorrow.setHours(24, 0, 0, 0);
+                localStorage.setItem(key, String(tomorrow.getTime()));
+            }
+            popup.remove();
+            document.body.style.overflow = '';
+        });
+        popup.addEventListener('click', function (event) {
+            if (event.target === popup) document.getElementById('closeImportantNotice').click();
+        });
+    }());
+</script>
 </body>
 </html>

@@ -8,71 +8,35 @@
     <footer th:replace="~{fragments/trainee :: footer}"></footer>
 
   header() 의 active 키 (상단 GNB 대분류):
-    my-course | contents | test | support | ai | notices | attendance
+    home | learning | assessment | completion | ai | growth | career | notice | my
 
-  구현된 슬라이스는 컨트롤러 URL 연결 완료(2026-07-28). 아직 컨트롤러가 없는 화면
-  (출결현황/이수관리/알림/내 정보)은 "준비 중" alert 처리 — 구현 시 이 파일만 수정.
+  기존 템플릿의 active 키도 하위 호환한다:
+    my-course/contents | test | support | notices | attendance | my-info
 -->
 <body>
 
 <!-- ===== 상단 GNB 헤더 ===== -->
-<header th:fragment="header(active)">
-    <div class="header-logo">
-        <a href="/trainee"><img src="/static/img/logo-white.png" alt="logo" style="width: 130px; cursor: pointer;"></a>
-    </div>
-    <nav class="gnb">
-        <ul>
-            <li th:classappend="${active == 'my-course'} ? 'active_menu'">
-                <span><a href="/trainee/my-course">나의 과정</a></span>
-                <ul>
-                    <li><a href="/trainee/my-course">수강 과정 목록</a></li>
-                    <li><a href="/trainee/learning">이어서 학습</a></li>
-                </ul>
-            </li>
-            <li th:classappend="${active == 'contents'} ? 'active_menu'">
-                <span><a href="/trainee/contents">학습콘텐츠</a></span>
-            </li>
-            <li th:classappend="${active == 'test'} ? 'active_menu'">
-                <span><a href="/trainee/exam">시험/과제</a></span>
-                <ul>
-                    <li><a href="/trainee/exam">온라인 시험</a></li>
-                    <li><a href="/trainee/assignment">과제</a></li>
-                </ul>
-            </li>
-            <!--
-              학습지원 대분류는 없앴다. AI 학습 도우미가 기존 Q&A(글등록형)를 대체하고,
-              튜터링은 이 아래로 옮겼다 — 훈련생 입장에서 "물어보는 곳"이 한 군데여야 한다.
-              (기존 /trainee/qna 는 컨트롤러가 남아 있으나 메뉴에서는 뺐다)
-            -->
-            <li th:classappend="${active == 'ai' or active == 'support'} ? 'active_menu'">
-                <span><a href="/trainee/ai/qna">AI 학습지원</a></span>
-                <ul>
-                    <li><a href="/trainee/ai/qna">AI 학습 도우미</a></li>
-                    <li><a href="/trainee/qna/tutoring">튜터링</a></li>
-                    <li><a href="/trainee/ai/curriculum">맞춤 커리큘럼 추천</a></li>
-                    <li><a href="/trainee/ai/roadmap">직무 로드맵</a></li>
-                </ul>
-            </li>
-            <li th:classappend="${active == 'notices'} ? 'active_menu'">
-                <span><a href="/trainee/notice">공지사항</a></span>
-            </li>
-            <li th:classappend="${active == 'attendance'} ? 'active_menu'">
-                <span><a href="/trainee/survey">출결/이수관리</a></span>
-                <ul>
-                    <li><a href="/trainee/attendance">출결현황</a></li>
-                    <li><a href="/trainee/completion-management">이수관리</a></li>
-                    <li><a href="/trainee/survey">설문조사</a></li>
-                </ul>
-            </li>
-        </ul>
+<header th:fragment="header(active)" class="trainee-site-header" data-trainee-header>
+    <div class="trainee-header-top">
+        <div class="header-logo">
+            <a href="/trainee" aria-label="Samsung Academy LXP 홈">
+                <img src="/static/img/logo-white.png" alt="Samsung Academy LXP">
+            </a>
+        </div>
+
+        <button class="trainee-nav-toggle" type="button" aria-controls="trainee-global-nav"
+                aria-expanded="false" aria-label="전체 메뉴 열기">
+            <span></span><span></span><span></span>
+        </button>
+
         <div class="icon-container">
-            <div class="icon-box">
-                <a href="#" onclick="alert('준비 중인 기능입니다.');return false;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="icon-box" th:classappend="${active == 'notice' or active == 'notices'} ? 'is-active'">
+                <a href="/trainee/alarm" title="알림함" aria-label="알림함"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M18.9342 14.98C18.6358 14.5033 18.4775 13.9524 18.4772 13.39V9.22602C18.4772 7.50822 17.7948 5.86077 16.5801 4.64609C15.3654 3.43142 13.718 2.74902 12.0002 2.74902C10.2824 2.74902 8.63492 3.43142 7.42024 4.64609C6.20557 5.86077 5.52317 7.50822 5.52317 9.22602V13.388C5.52325 13.9511 5.36488 14.5028 5.06617 14.98L3.97817 16.72C3.88357 16.8714 3.8312 17.0453 3.82652 17.2238C3.82183 17.4022 3.865 17.5787 3.95153 17.7348C4.03806 17.8909 4.16481 18.021 4.31861 18.1116C4.47242 18.2022 4.64767 18.25 4.82617 18.25H19.1742C19.3527 18.25 19.5279 18.2022 19.6817 18.1116C19.8355 18.021 19.9623 17.8909 20.0488 17.7348C20.1354 17.5787 20.1785 17.4022 20.1738 17.2238C20.1691 17.0453 20.1168 16.8714 20.0222 16.72L18.9342 14.98Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M10 21.25H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                 </svg></a>
             </div>
-            <div class="icon-box">
+            <div class="icon-box" th:classappend="${active == 'my' or active == 'my-info'} ? 'is-active'">
                 <a href="/trainee/my-info" title="내 정보">
                     <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19.6524 19.405C20.2044 19.29 20.5344 18.712 20.2594 18.218C19.6534 17.131 18.6994 16.175 17.4794 15.447C15.9074 14.509 13.9804 14 12.0004 14C10.0204 14 8.09339 14.508 6.52139 15.447C5.30139 16.175 4.34739 17.131 3.74139 18.218C3.46639 18.712 3.79639 19.29 4.34839 19.405C9.39517 20.4569 14.6046 20.4569 19.6514 19.405" fill="currentColor"/>
@@ -91,7 +55,74 @@
                 </form>
             </div>
         </div>
+    </div>
+
+    <nav class="gnb" id="trainee-global-nav" aria-label="수강생 주요 메뉴">
+        <ul class="gnb-list">
+            <li class="gnb-item" th:classappend="${active == 'home'} ? 'active_menu'">
+                <a class="gnb-link" href="/trainee">홈</a>
+            </li>
+            <li class="gnb-item has-submenu"
+                th:classappend="${active == 'learning' or active == 'my-course' or active == 'contents'} ? 'active_menu'">
+                <a class="gnb-link" href="/trainee/my-course">내 학습</a>
+                <ul class="gnb-submenu">
+                    <li><a href="/trainee/my-course">나의 과정</a></li>
+                    <li><a href="/trainee/learning">이어서 학습</a></li>
+                    <li><a href="/trainee/contents">학습 콘텐츠</a></li>
+                    <li><a href="/trainee/content-requests">추가 콘텐츠 요청</a></li>
+                </ul>
+            </li>
+            <li class="gnb-item has-submenu"
+                th:classappend="${active == 'assessment' or active == 'test'} ? 'active_menu'">
+                <a class="gnb-link" href="/trainee/evaluations">과제·평가</a>
+                <ul class="gnb-submenu">
+                    <li><a href="/trainee/assignment">과제</a></li>
+                    <li><a href="/trainee/exam">시험</a></li>
+                    <li><a href="/trainee/survey">설문·평가</a></li>
+                    <li><a href="/trainee/evaluations">평가 안내</a></li>
+                </ul>
+            </li>
+            <li class="gnb-item has-submenu"
+                th:classappend="${active == 'completion' or active == 'attendance'} ? 'active_menu'">
+                <a class="gnb-link" href="/trainee/attendance">출결·이수</a>
+                <ul class="gnb-submenu">
+                    <li><a href="/trainee/attendance">나의 출결</a></li>
+                    <li><a href="/trainee/completion-management">수료 진행 상태</a></li>
+                </ul>
+            </li>
+            <li class="gnb-item has-submenu"
+                th:classappend="${active == 'ai' or active == 'support'} ? 'active_menu'">
+                <a class="gnb-link" href="/trainee/ai/qna">AI 학습지원</a>
+                <ul class="gnb-submenu">
+                    <li><a href="/trainee/ai/qna">AI 튜터</a></li>
+                    <li><a href="/trainee/qna">강사에게 질문</a></li>
+                    <li><a href="/trainee/qna/tutoring">튜터링</a></li>
+                    <li><a href="/trainee/ai/curriculum">맞춤 학습 추천</a></li>
+                </ul>
+            </li>
+            <li class="gnb-item"
+                th:classappend="${active == 'growth'} ? 'active_menu'">
+                <a class="gnb-link" href="/trainee/growth">성장·피드백</a>
+            </li>
+            <li class="gnb-item has-submenu"
+                th:classappend="${active == 'career'} ? 'active_menu'">
+                <a class="gnb-link" href="/trainee/career">취업·포트폴리오</a>
+                <ul class="gnb-submenu">
+                    <li><a href="/trainee/career">취업 준비 홈</a></li>
+                    <li><a href="/trainee/ai/roadmap">직무 로드맵</a></li>
+                </ul>
+            </li>
+            <li class="gnb-item has-submenu"
+                th:classappend="${active == 'notice' or active == 'notices'} ? 'active_menu'">
+                <a class="gnb-link" href="/trainee/notice">공지·알림</a>
+                <ul class="gnb-submenu">
+                    <li><a href="/trainee/notice">공지사항</a></li>
+                    <li><a href="/trainee/alarm">알림함</a></li>
+                </ul>
+            </li>
+        </ul>
     </nav>
+    <script src="/static/js/trainee/navigation.js" defer></script>
 </header>
 
 <!--

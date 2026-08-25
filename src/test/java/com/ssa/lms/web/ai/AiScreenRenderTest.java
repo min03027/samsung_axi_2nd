@@ -68,7 +68,9 @@ class AiScreenRenderTest {
     @WithUserDetails("trainee1")
     @DisplayName("훈련생 대시보드에 AI 위젯 자리가 있다")
     void 훈련생_대시보드_위젯() throws Exception {
-        assertFullyRendered("/trainee", "hpAiCards");
+        // 수강생 홈 1차 UX 개편에서 예전 hpAiCards 묶음은 제거됐고,
+        // 공통 플로팅 AI 학습 챗봇이 같은 진입 역할을 맡는다.
+        assertFullyRendered("/trainee", "floatingChatbotWindow");
     }
 
     @Test

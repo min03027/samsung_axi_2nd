@@ -1,0 +1,2083 @@
+/* 제작자 시점의 안내 문구를 걷어낸 뒤 남은 실제 콘텐츠 정렬 */
+.axi-categories > .container {
+  display: block;
+}
+
+.class-catalog .axi-categories {
+  padding: clamp(28px, 3.5vw, 46px) 0 24px;
+}
+
+.axi-categories .axi-categories__inner {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.class-catalog .axi-categories .axi-categories__inner button {
+  min-height: 84px;
+  padding: 12px 14px;
+  border-radius: 14px;
+}
+
+.class-catalog .axi-categories .axi-categories__inner button::after {
+  top: 12px;
+  right: 14px;
+  font-size: 1rem;
+}
+
+.class-catalog .axi-categories .axi-categories__inner button strong {
+  font-size: clamp(1rem, 1.25vw, 1.2rem);
+}
+
+.class-catalog .axi-categories .axi-categories__inner button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.class-catalog .axi-categories .axi-course-head {
+  margin: 24px 0 0;
+}
+
+.class-catalog .axi-categories .axi-course-head .eyebrow {
+  color: #ff7d45;
+}
+
+.class-catalog .axi-categories .axi-course-head h2 {
+  margin-top: 8px;
+  color: #fff;
+  font-size: clamp(1.65rem, 2.3vw, 2.45rem);
+  line-height: 1.12;
+}
+
+.class-catalog .axi-course-section {
+  padding: 28px 0 clamp(64px, 7vw, 96px);
+}
+
+.axi-course-head,
+.story-roadmap .story-title-row {
+  display: block;
+}
+
+.story-roadmap .story-title-row h2 {
+  max-width: 980px;
+}
+
+/* 과정 카드의 모집 유형을 색상으로 빠르게 구분 */
+.class-catalog .axi-course-card .axi-status[data-axi-status="rolling"] {
+  color: #1d4ed8;
+  background: #dbeafe;
+  box-shadow: inset 0 0 0 1px #bfdbfe;
+}
+
+.class-catalog .axi-course-card .axi-status[data-axi-status="pre-recruiting"] {
+  color: #6d28d9;
+  background: #ede9fe;
+  box-shadow: inset 0 0 0 1px #ddd6fe;
+}
+
+/* 몰입클라쓰 목록의 전체 스케일을 한 단계 낮춰 정보 밀도를 높인다. */
+.class-catalog .catalog-hero > .container {
+  min-height: clamp(590px, 70vh, 730px);
+  gap: clamp(24px, 4vw, 48px);
+}
+
+.class-catalog .catalog-hero h1 {
+  margin-top: 20px;
+  font-size: clamp(2.9rem, 4.5vw, 5rem);
+}
+
+.class-catalog .catalog-hero__copy > p {
+  margin-top: 20px;
+  font-size: clamp(.95rem, 1.25vw, 1.12rem);
+}
+
+.class-catalog .catalog-hero__cta {
+  gap: 16px;
+  margin-top: 24px;
+  padding: 13px 19px;
+  font-size: .92rem;
+}
+
+.class-catalog .catalog-hero__visual {
+  min-height: 480px;
+}
+
+.class-catalog .hero-radar {
+  width: 350px;
+  height: 350px;
+}
+
+.class-catalog .hero-radar > .hero-generated {
+  width: 170px;
+}
+
+.class-catalog .hero-signal {
+  min-width: 118px;
+  padding: 12px 15px;
+}
+
+.class-catalog .catalog-marquee > div {
+  padding: 11px 0;
+}
+
+.class-catalog .track-showcase {
+  padding: clamp(72px, 7.5vw, 108px) 0;
+}
+
+.class-catalog .track-showcase__head h2 {
+  font-size: clamp(2.3rem, 3.7vw, 3.7rem);
+}
+
+.class-catalog .track-deck {
+  gap: 22px;
+  margin-top: 24px;
+  padding: 32px max(4vw, calc((100vw - 1480px) / 2));
+}
+
+.class-catalog .track-card {
+  width: clamp(400px, 31vw, 490px);
+  border-radius: 30px;
+}
+
+.class-catalog .track-card__visual {
+  height: 260px;
+}
+
+.class-catalog .track-card__visual > .track-generated {
+  width: 195px;
+}
+
+.class-catalog .track-card__body {
+  min-height: 350px;
+  padding: 28px;
+}
+
+.class-catalog .track-card__body h3 {
+  font-size: clamp(1.9rem, 2.6vw, 2.45rem);
+}
+
+.class-catalog .track-card__body > p {
+  font-size: .95rem;
+}
+
+.class-catalog .track-deck__nav button {
+  width: 40px;
+  height: 40px;
+}
+
+.class-catalog .axi-course-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.class-catalog .axi-course-card {
+  position: relative;
+  min-height: 224px;
+  padding: 22px 24px 20px;
+  overflow: hidden;
+  border-color: #d9dee8;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff 0%, #fff 72%, #fff8f4 100%);
+  box-shadow: 0 8px 24px rgba(13, 20, 36, .055);
+}
+
+.class-catalog .axi-course-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  width: 52px;
+  height: 3px;
+  border-radius: 0 0 4px 4px;
+  background: var(--brand-600);
+}
+
+.class-catalog .axi-course-card::after {
+  content: "";
+  position: absolute;
+  right: -58px;
+  bottom: -86px;
+  width: 160px;
+  height: 160px;
+  border: 1px solid rgba(255, 91, 31, .12);
+  border-radius: 50%;
+}
+
+.class-catalog .axi-course-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.class-catalog .axi-course-card:hover {
+  border-color: rgba(255, 91, 31, .42);
+  box-shadow: 0 14px 32px rgba(45, 25, 17, .1);
+  transform: translateY(-3px);
+}
+
+.class-catalog .axi-course-card h3 {
+  max-width: 92%;
+  margin-top: 18px;
+  font-size: clamp(1.12rem, 1.4vw, 1.35rem);
+  line-height: 1.32;
+}
+
+.class-catalog .axi-course-card p {
+  margin-top: 10px;
+  color: #60708f;
+  font-size: .84rem;
+}
+
+.class-catalog .axi-course-card footer {
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #edf0f5;
+}
+
+.class-catalog .axi-course-card footer .btn {
+  min-width: 88px;
+  padding: 8px 13px;
+}
+
+@media (min-width: 1200px) {
+  body.class-catalog.has-public-journey .axi-course-section > .container {
+    width: min(calc(100% - 260px), 1120px);
+    margin-right: 0;
+    margin-left: max(24px, calc((100vw - 1280px) / 2));
+    padding-inline: 0;
+  }
+}
+
+.class-catalog #class-counsel {
+  padding-block: 48px;
+}
+
+.class-catalog #class-counsel .cta-band {
+  padding: 48px 24px;
+}
+
+@media (min-width: 1200px) {
+  body.class-catalog.has-public-journey .public-journey {
+    right: 22px;
+    width: 196px;
+    padding: 12px 10px;
+    border-radius: 20px;
+  }
+
+  body.class-catalog.has-public-journey .public-journey a {
+    min-height: 44px;
+    gap: 12px;
+    padding-inline: 12px;
+    font-size: .875rem;
+  }
+}
+
+@media (max-width: 1280px) {
+  .axi-categories .axi-categories__inner {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .axi-categories .axi-categories__inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .class-catalog .axi-categories {
+    padding: 28px 0 24px;
+  }
+
+  .axi-categories .axi-categories__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .class-catalog .axi-categories .axi-course-head {
+    margin-top: 24px;
+  }
+
+  .class-catalog .catalog-hero > .container {
+    min-height: 0;
+    padding-top: 72px;
+    padding-bottom: 84px;
+  }
+
+  .class-catalog .catalog-hero h1 {
+    font-size: clamp(2.4rem, 10vw, 3.1rem);
+  }
+
+  .class-catalog .catalog-hero__visual {
+    min-height: 340px;
+  }
+
+  .class-catalog .hero-radar {
+    width: 275px;
+    height: 275px;
+  }
+
+  .class-catalog .track-showcase {
+    padding: 64px 0;
+  }
+
+  .class-catalog .track-card {
+    width: min(82vw, 440px);
+  }
+
+  .class-catalog .track-card__visual {
+    height: 225px;
+  }
+
+  .class-catalog .track-card__body {
+    min-height: 320px;
+    padding: 24px;
+  }
+
+  .class-catalog .axi-course-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .class-catalog .axi-course-card {
+    min-height: 216px;
+    padding-inline: 20px;
+  }
+}
+
+/* 통합 홈도 동일한 밀도로: 구성은 유지하고 전체 스케일만 약 10% 낮춘다. */
+.story-page .home-categorybar__inner {
+  min-height: 65px;
+  gap: clamp(25px, 4.5vw, 65px);
+  padding-right: 216px;
+}
+
+.story-page .story-hero {
+  min-height: calc(90vh - 65px);
+}
+
+.story-page .story-hero::before {
+  width: 50vw;
+  height: 50vw;
+}
+
+.story-page .story-hero::after {
+  font-size: 35vw;
+}
+
+.story-page .story-hero__inner {
+  padding-block: clamp(72px, 9vw, 132px);
+}
+
+.story-page .story-hero h1 {
+  max-width: 1000px;
+  margin-top: 28px;
+  font-size: clamp(3.15rem, 6.55vw, 6.3rem);
+}
+
+.story-page .story-hero__copy {
+  max-width: 585px;
+  margin-top: 28px;
+  font-size: clamp(.95rem, 1.35vw, 1.08rem);
+}
+
+.story-page .story-hero__actions {
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.story-page .story-hero__actions .btn {
+  padding: 13px 20px;
+}
+
+.story-page .story-hero__facts {
+  margin-top: 40px;
+  font-size: .92rem;
+}
+
+.story-page .story-ticker {
+  padding-block: 11px;
+}
+
+.story-page .story-ticker div {
+  font-size: 1rem;
+}
+
+.story-page .story-hero__inner::before {
+  width: 198px;
+  padding: 16px 18px;
+  font-size: 12px;
+}
+
+.story-page .story-hero__inner::after,
+.story-page .story-hero h1::after {
+  padding: 14px 18px;
+  font-size: 13px;
+}
+
+.story-page .story-index {
+  margin-bottom: 36px;
+}
+
+.story-page .story-question {
+  padding: clamp(99px, 13.5vw, 198px) 0;
+}
+
+.story-page .story-question h2 {
+  font-size: clamp(2.25rem, 4.95vw, 4.7rem);
+}
+
+.story-page .story-question p {
+  margin-top: 36px;
+  font-size: 1rem;
+}
+
+.story-page .story-shift {
+  padding: clamp(90px, 11.7vw, 171px) 0;
+}
+
+.story-page .story-shift__headline > h2:first-of-type,
+.story-page .story-shift__headline h2.is-accent {
+  font-size: clamp(2rem, 4.5vw, 4.3rem);
+}
+
+.story-page .story-core-grid {
+  max-width: 972px;
+  margin-top: 84px;
+}
+
+.story-page .story-core-grid article,
+.story-page .story-core-grid article:nth-child(2) {
+  grid-template-columns: 82px 1.05fr 1fr;
+  gap: 0 28px;
+  padding: 28px 0;
+}
+
+.story-page .story-core-grid article::before {
+  width: 52px;
+  height: 52px;
+}
+
+.story-page .story-core-grid article > b,
+.story-page .story-core-grid article:nth-child(2) > b {
+  font-size: clamp(1.55rem, 2.7vw, 2.35rem);
+}
+
+.story-page .story-output,
+.story-page .story-proof,
+.story-page .story-support,
+.story-page .story-courses {
+  padding: clamp(90px, 11.7vw, 162px) 0;
+}
+
+.story-page .story-title-row h2,
+.story-page .story-support h2,
+.story-page .story-courses h2,
+.story-page .story-support__head h2 {
+  font-size: clamp(2.25rem, 4.5vw, 4.3rem);
+}
+
+.story-page .story-output__stage {
+  gap: 28px;
+  margin-top: 56px;
+}
+
+.story-page .story-project-card {
+  padding: 36px;
+}
+
+.story-page .story-project-card__label {
+  margin-top: 36px;
+}
+
+.story-page .story-deliverables > div {
+  padding: 22px;
+}
+
+.story-page .story-deliverables h4 {
+  font-size: 1.15rem;
+}
+
+.story-page .story-roadmap {
+  padding: clamp(90px, 11.7vw, 162px) 0;
+}
+
+.story-page .story-track-list {
+  margin-top: 56px;
+}
+
+.story-page .story-track-list article {
+  grid-template-columns: 62px 1.05fr 1fr 1fr;
+  gap: 22px;
+  min-height: 162px;
+  padding-block: 22px;
+}
+
+.story-page .story-track-list h3 {
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+}
+
+.story-page .story-track-list li {
+  padding: 6px 10px;
+}
+
+.story-page .story-proof blockquote {
+  font-size: clamp(1.8rem, 4.05vw, 3.6rem);
+}
+
+.story-page .story-proof__quote > span {
+  font-size: 7.2rem;
+}
+
+.story-page .story-proof__numbers {
+  margin-top: 56px;
+}
+
+.story-page .story-proof__numbers div {
+  padding: 36px;
+}
+
+.story-page .story-proof__numbers b {
+  font-size: clamp(2.25rem, 4.5vw, 4.05rem);
+}
+
+.story-page .story-mini-reviews article {
+  padding: 28px;
+}
+
+.story-page .story-support__head {
+  gap: 40px;
+}
+
+.story-page .main-lxp-stage {
+  gap: clamp(32px, 6.3vw, 86px);
+  margin-top: 40px;
+}
+
+.story-page .main-lxp-copy article {
+  grid-template-columns: 48px 1fr;
+  padding-block: 20px;
+}
+
+.story-page .main-lxp-stage .lxp-preview {
+  max-width: 684px;
+  padding: 18px;
+}
+
+.story-page .story-final {
+  padding: clamp(99px, 13.5vw, 198px) 0;
+}
+
+.story-page .story-final h2 {
+  margin: 28px 0 36px;
+  font-size: clamp(2.9rem, 6.3vw, 5.85rem);
+}
+
+.story-page .story-sticky {
+  width: min(612px, calc(100% - 32px));
+  bottom: 14px;
+  padding: 9px 9px 9px 18px;
+}
+
+.story-page .story-sticky .btn {
+  padding: 10px 16px;
+}
+
+.story-page .home-journey {
+  right: 22px;
+  width: 193px;
+  padding: 14px 12px;
+  border-radius: 21px;
+}
+
+.story-page .home-journey a {
+  gap: 12px;
+  min-height: 43px;
+  padding-inline: 12px;
+  font-size: .875rem;
+}
+
+@media (max-width: 900px) {
+  .story-page .home-categorybar__inner {
+    min-height: 60px;
+    padding-right: 74px;
+  }
+
+  .story-page .story-hero {
+    min-height: auto;
+  }
+
+  .story-page .story-core-grid article,
+  .story-page .story-core-grid article:nth-child(2) {
+    grid-template-columns: 65px 1fr;
+    gap: 16px;
+  }
+
+  .story-page .story-track-list article {
+    grid-template-columns: 42px 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .story-page .story-hero__inner {
+    padding-block: 64px 76px;
+  }
+
+  .story-page .story-hero h1 {
+    font-size: clamp(2.65rem, 11vw, 3.05rem);
+  }
+
+  .story-page .story-question,
+  .story-page .story-shift,
+  .story-page .story-output,
+  .story-page .story-roadmap,
+  .story-page .story-proof,
+  .story-page .story-support,
+  .story-page .story-final {
+    padding-block: 72px;
+  }
+
+  .story-page .story-core-grid article,
+  .story-page .story-core-grid article:nth-child(2) {
+    padding-block: 22px;
+  }
+
+  .story-page .story-project-card {
+    padding: 24px;
+  }
+}
+
+/* 모집 과정 재정리: 짙은 인트로 + 컴팩트 탭 + 비교하기 쉬운 3열 카드 */
+.class-catalog .axi-categories {
+  padding: 42px 0 38px;
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  background:
+    radial-gradient(circle at 10% 0, rgba(255, 91, 31, .11), transparent 28%),
+    #0b0a09;
+}
+
+.class-catalog .axi-categories > .container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 26px;
+}
+
+.class-catalog .axi-categories .axi-course-head {
+  order: -1;
+  margin: 0;
+}
+
+.class-catalog .axi-categories .axi-course-head .eyebrow {
+  color: #ff6a2a;
+  font-size: 10px;
+  letter-spacing: .18em;
+}
+
+.class-catalog .axi-categories .axi-course-head h2 {
+  max-width: none;
+  margin-top: 7px;
+  font-size: clamp(1.65rem, 2.15vw, 2.25rem);
+  font-weight: 680;
+  letter-spacing: -.04em;
+}
+
+.class-catalog .axi-categories .axi-categories__inner {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0;
+}
+
+.class-catalog .axi-categories .axi-categories__inner button {
+  min-height: 72px;
+  padding: 13px 15px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .035);
+  box-shadow: none;
+  backdrop-filter: none;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+
+.class-catalog .axi-categories .axi-categories__inner button::after {
+  content: none;
+}
+
+.class-catalog .axi-categories .axi-categories__inner button small {
+  color: #a59d98;
+  font-size: 8px;
+  letter-spacing: .12em;
+}
+
+.class-catalog .axi-categories .axi-categories__inner button strong {
+  margin-top: auto;
+  color: #f5f2f0;
+  font-size: clamp(.95rem, 1.05vw, 1.08rem);
+  font-weight: 650;
+  line-height: 1.15;
+}
+
+.class-catalog .axi-categories .axi-categories__inner button span {
+  display: none;
+}
+
+.class-catalog .axi-categories .axi-categories__inner button:hover {
+  border-color: rgba(255, 106, 42, .62);
+  background: rgba(255, 106, 42, .07);
+  transform: translateY(-2px);
+}
+
+.class-catalog .axi-categories .axi-categories__inner button[aria-pressed="true"] {
+  color: #120b08;
+  border-color: #ff6426;
+  background: #ff6426;
+  box-shadow: 0 10px 26px rgba(255, 91, 31, .14);
+}
+
+.class-catalog .axi-categories .axi-categories__inner button[aria-pressed="true"] small,
+.class-catalog .axi-categories .axi-categories__inner button[aria-pressed="true"] strong {
+  color: #160b07;
+}
+
+.class-catalog .axi-course-section {
+  padding: 34px 0 clamp(68px, 7vw, 96px);
+  background: #f4f5f6;
+}
+
+.class-catalog .axi-course-grid {
+  counter-reset: catalog-course;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.class-catalog .axi-course-card {
+  counter-increment: catalog-course;
+  min-height: 230px;
+  padding: 20px 20px 18px;
+  border: 1px solid #dde1e7;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.class-catalog .axi-course-card::before {
+  content: counter(catalog-course, decimal-leading-zero);
+  top: auto;
+  right: 20px;
+  bottom: 20px;
+  left: auto;
+  width: auto;
+  height: auto;
+  color: #d9dde3;
+  background: none;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .1em;
+}
+
+.class-catalog .axi-course-card::after {
+  content: none;
+}
+
+.class-catalog .axi-course-card:hover {
+  border-color: rgba(255, 100, 38, .62);
+  box-shadow: 0 12px 30px rgba(22, 15, 11, .07);
+  transform: translateY(-2px);
+}
+
+.class-catalog .axi-course-card > div:first-child {
+  min-height: 26px;
+}
+
+.class-catalog .axi-course-card .axi-cat {
+  color: #e84e12;
+  font-size: 9px;
+  letter-spacing: .12em;
+}
+
+.class-catalog .axi-course-card .axi-status {
+  padding: 5px 9px;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.class-catalog .axi-course-card h3 {
+  display: -webkit-box;
+  max-width: 100%;
+  min-height: 52px;
+  margin-top: 16px;
+  overflow: hidden;
+  font-size: clamp(1.08rem, 1.22vw, 1.26rem);
+  line-height: 1.34;
+  letter-spacing: -.035em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.class-catalog .axi-course-card p {
+  margin-top: 8px;
+  color: #71809a;
+  font-size: .78rem;
+}
+
+.class-catalog .axi-course-card footer {
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid #edf0f3;
+}
+
+.class-catalog .axi-course-card footer .btn {
+  min-width: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: .78rem;
+}
+
+.class-catalog .axi-course-card footer .btn--outline {
+  color: #24201e;
+  border-color: #cfd5df;
+  background: #fff;
+}
+
+.class-catalog .axi-course-card footer .btn--primary {
+  color: #fff;
+  border-color: #171311;
+  background: #171311;
+}
+
+.class-catalog .axi-course-card footer .btn--primary:hover {
+  border-color: #ff5b1f;
+  background: #ff5b1f;
+}
+
+@media (min-width: 1200px) {
+  body.class-catalog.has-public-journey .axi-categories > .container,
+  body.class-catalog.has-public-journey .axi-course-section > .container {
+    width: min(calc(100% - 238px), 1660px);
+    max-width: none;
+    margin-right: auto;
+    margin-left: max(24px, calc((100vw - 1900px) / 2));
+    padding-inline: 0;
+  }
+
+  body.class-catalog.has-public-journey .public-journey {
+    right: max(20px, calc((100vw - 1900px) / 2));
+    width: 174px;
+    padding: 10px 8px;
+    border-color: rgba(255, 100, 31, .28);
+    border-radius: 18px;
+    background: rgba(18, 17, 16, .94);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, .2);
+  }
+
+  body.class-catalog.has-public-journey .public-journey a {
+    min-height: 40px;
+    gap: 10px;
+    padding-inline: 10px;
+    border-radius: 8px;
+    font-size: .76rem;
+  }
+
+  body.class-catalog.has-public-journey .public-journey a[aria-current="step"] {
+    background: rgba(255, 255, 255, .055);
+  }
+}
+
+@media (min-width: 1600px) {
+  .class-catalog .axi-course-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1199px) {
+  .class-catalog .axi-course-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+  .class-catalog .axi-categories {
+    padding: 34px 0 30px;
+  }
+
+  .class-catalog .axi-categories .axi-categories__inner {
+    display: flex;
+    gap: 8px;
+    margin-inline: -16px;
+    padding-inline: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+  }
+
+  .class-catalog .axi-categories .axi-categories__inner button {
+    min-width: 132px;
+    min-height: 66px;
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 650px) {
+  .class-catalog .axi-course-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .class-catalog .axi-course-card {
+    min-height: 220px;
+  }
+}
+
+/* 과정군을 하나의 연결된 트랙으로 소개한다. */
+.class-catalog .axi-categories {
+  padding-bottom: 30px;
+  border-bottom: 0;
+}
+
+.class-catalog .axi-categories .axi-course-head p {
+  margin-top: 10px;
+  color: #938c88;
+  font-size: .88rem;
+}
+
+.class-catalog .axi-course-section {
+  position: relative;
+  padding: 0 0 clamp(76px, 8vw, 112px);
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(circle at 24% 34%, rgba(255, 91, 31, .09), transparent 30%),
+    linear-gradient(180deg, #0b0a09 0%, #0e0c0b 100%);
+}
+
+.class-catalog .axi-course-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 100, 38, .38), transparent);
+}
+
+.class-catalog .axi-course-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 32px) / 3);
+  grid-template-columns: none;
+  gap: 16px;
+  padding: 30px 0 18px;
+  overflow-x: auto;
+  overflow-y: visible;
+  overscroll-behavior-inline: contain;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.class-catalog .axi-course-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.class-catalog .axi-course-card {
+  min-height: 455px;
+  padding: 24px 24px 22px;
+  overflow: visible;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 50% 76%, rgba(255, 91, 31, .13), transparent 36%),
+    #171615;
+  box-shadow: none;
+  scroll-snap-align: start;
+}
+
+.class-catalog .axi-course-card::before {
+  right: 24px;
+  bottom: 22px;
+  color: #5f5955;
+}
+
+.class-catalog .axi-course-card::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 42px;
+  right: -17px;
+  bottom: auto;
+  width: 17px;
+  height: 1px;
+  border: 0;
+  border-radius: 0;
+  background: rgba(255, 100, 38, .34);
+}
+
+.class-catalog .axi-course-card:hover {
+  border-color: rgba(255, 100, 38, .46);
+  background:
+    radial-gradient(circle at 50% 76%, rgba(255, 91, 31, .2), transparent 38%),
+    #1a1817;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, .2);
+}
+
+.class-catalog .axi-course-card .axi-cat {
+  color: #ff7a43;
+}
+
+.class-catalog .axi-course-card .axi-status {
+  color: #8de0ba;
+  background: rgba(38, 151, 104, .14);
+  box-shadow: inset 0 0 0 1px rgba(103, 218, 165, .18);
+}
+
+.class-catalog .axi-course-card .axi-status[data-axi-status="rolling"] {
+  color: #87b8ff;
+  background: rgba(45, 112, 219, .15);
+  box-shadow: inset 0 0 0 1px rgba(105, 160, 247, .2);
+}
+
+.class-catalog .axi-course-card .axi-status[data-axi-status="pre-recruiting"] {
+  color: #c6a4ff;
+  background: rgba(118, 73, 205, .16);
+  box-shadow: inset 0 0 0 1px rgba(161, 123, 235, .2);
+}
+
+.class-catalog .axi-course-card .axi-status[data-axi-status="closing"] {
+  color: #ff9a70;
+  background: rgba(255, 100, 38, .14);
+  box-shadow: inset 0 0 0 1px rgba(255, 122, 67, .28);
+}
+
+.class-catalog .axi-course-card h3 {
+  min-height: 64px;
+  margin-top: 18px;
+  color: #f8f6f4;
+  font-size: clamp(1.2rem, 1.4vw, 1.52rem);
+  -webkit-line-clamp: 3;
+}
+
+.class-catalog .axi-course-card p {
+  margin-top: 10px;
+  color: #9c9691;
+  font-size: .82rem;
+}
+
+.class-catalog .axi-course-visual {
+  position: relative;
+  min-height: 190px;
+  display: grid;
+  flex: 1;
+  place-items: center;
+  margin: 8px -10px 0;
+  overflow: hidden;
+}
+
+.class-catalog .axi-course-visual::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  width: 62%;
+  height: 38%;
+  border-radius: 50%;
+  background: rgba(255, 91, 31, .17);
+  filter: blur(28px);
+  transform: translateX(-50%);
+}
+
+.class-catalog .axi-course-visual img {
+  position: relative;
+  z-index: 1;
+  width: min(92%, 360px);
+  max-height: 180px;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 24px rgba(0, 0, 0, .34));
+  transition: transform .3s ease;
+}
+
+.class-catalog .axi-course-card:hover .axi-course-visual img {
+  transform: translateY(-5px) scale(1.02);
+}
+
+.class-catalog .axi-course-card footer {
+  position: relative;
+  z-index: 2;
+  margin-top: 4px;
+  border-color: rgba(255, 255, 255, .09);
+}
+
+.class-catalog .axi-course-card footer .btn--outline {
+  color: #f2eeeb;
+  border-color: rgba(255, 255, 255, .28);
+  background: transparent;
+}
+
+.class-catalog .axi-course-card footer .btn--outline:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, .06);
+}
+
+.class-catalog .axi-course-card footer .btn--primary,
+.class-catalog .axi-course-card footer .btn--primary:hover {
+  color: #160b07;
+  border-color: #ff6426;
+  background: #ff6426;
+}
+
+.class-catalog .axi-course-deck-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.class-catalog .axi-course-deck-nav span {
+  min-width: 66px;
+  margin-right: 6px;
+  color: #817b77;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.class-catalog .axi-course-deck-nav button {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 50%;
+  background: #171615;
+  cursor: pointer;
+  transition: border-color .2s ease, background .2s ease;
+}
+
+.class-catalog .axi-course-deck-nav button:hover {
+  border-color: #ff6426;
+  background: #ff6426;
+}
+
+@media (max-width: 1199px) {
+  .class-catalog .axi-course-grid {
+    grid-auto-columns: calc((100% - 16px) / 2);
+    grid-template-columns: none;
+  }
+}
+
+@media (max-width: 650px) {
+  .class-catalog .axi-course-section {
+    padding-bottom: 72px;
+  }
+
+  .class-catalog .axi-course-grid {
+    grid-auto-columns: 88%;
+    grid-template-columns: none;
+    padding-top: 22px;
+  }
+
+  .class-catalog .axi-course-card {
+    min-height: 430px;
+    padding: 22px 20px 20px;
+  }
+
+  .class-catalog .axi-course-visual {
+    min-height: 170px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .class-catalog .axi-course-grid {
+    scroll-behavior: auto;
+  }
+
+  .class-catalog .axi-course-visual img {
+    transition: none;
+  }
+}
+
+/* 과정군 다음 단계: 모집 상태와 실제 본인부담금으로 결과를 좁힌다. */
+.class-catalog .axi-course-refine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  padding: 22px 0 2px;
+  border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+.class-catalog .axi-refine-group,
+.class-catalog .axi-fee-filter {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.class-catalog .axi-refine-group > span,
+.class-catalog .axi-fee-filter > span {
+  margin-right: 5px;
+  color: #8e8884;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  white-space: nowrap;
+}
+
+.class-catalog .axi-refine-group button {
+  min-height: 32px;
+  padding: 0 12px;
+  color: #aaa39f;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 999px;
+  background: transparent;
+  font-size: .75rem;
+  cursor: pointer;
+}
+
+.class-catalog .axi-refine-group button:hover {
+  color: #fff;
+  border-color: rgba(255, 100, 38, .62);
+}
+
+.class-catalog .axi-refine-group button[aria-pressed="true"] {
+  color: #160b07;
+  border-color: #ff6426;
+  background: #ff6426;
+  font-weight: 700;
+}
+
+.class-catalog .axi-fee-filter select {
+  min-width: 138px;
+  height: 34px;
+  padding: 0 34px 0 12px;
+  color: #f4f1ee;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 8px;
+  background-color: #171615;
+  font-size: .75rem;
+  cursor: pointer;
+}
+
+.class-catalog .axi-course-refine output {
+  margin-left: auto;
+  color: #ff7a43;
+  font-size: .78rem;
+  font-weight: 700;
+}
+
+.class-catalog .axi-course-fee {
+  align-self: flex-start;
+  margin-top: 10px;
+  padding: 5px 8px;
+  color: #d5cfcb;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, .045);
+  font-size: 9px;
+  font-weight: 650;
+}
+
+.class-catalog .axi-course-visual {
+  min-height: 170px;
+}
+
+.class-catalog .axi-course-empty {
+  min-height: 250px;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  margin-top: 30px;
+  color: #f4f1ee;
+  border: 1px dashed rgba(255, 255, 255, .16);
+  border-radius: 18px;
+  text-align: center;
+}
+
+.class-catalog .axi-course-empty:not([hidden]) {
+  display: grid;
+}
+
+.class-catalog .axi-course-empty span {
+  color: #8e8884;
+  font-size: .82rem;
+}
+
+.class-catalog .axi-course-deck-nav button:disabled {
+  opacity: .3;
+  cursor: default;
+}
+
+/* 모집 과정 검색: 10개 조건을 두 줄 안에서 조합하는 압축형 패널 */
+.class-catalog .axi-course-search {
+  position: relative;
+  z-index: 2;
+  padding: 22px 0 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, .09);
+}
+
+.class-catalog .axi-search-primary,
+.class-catalog .axi-search-secondary {
+  display: grid;
+  gap: 10px;
+}
+
+.class-catalog .axi-search-primary {
+  grid-template-columns: minmax(250px, 1.75fr) repeat(4, minmax(132px, 1fr));
+}
+
+.class-catalog .axi-search-secondary {
+  grid-template-columns: repeat(6, minmax(126px, 1fr)) auto;
+  margin-top: 10px;
+}
+
+.class-catalog .axi-filter-field,
+.class-catalog .axi-search-keyword {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.class-catalog .axi-filter-field > span,
+.class-catalog .axi-search-keyword > span {
+  padding-left: 2px;
+  color: #8f8985;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: .07em;
+}
+
+.class-catalog .axi-filter-field select,
+.class-catalog .axi-search-keyword input {
+  width: 100%;
+  height: 42px;
+  min-width: 0;
+  padding: 0 34px 0 12px;
+  color: #f6f3f0;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 10px;
+  outline: none;
+  background-color: #171514;
+  font: inherit;
+  font-size: .75rem;
+  transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
+}
+
+.class-catalog .axi-search-keyword input {
+  padding-right: 42px;
+  background: #f5f2ef;
+  color: #161311;
+  font-weight: 650;
+}
+
+.class-catalog .axi-search-keyword input::placeholder {
+  color: #837d78;
+  font-weight: 500;
+}
+
+.class-catalog .axi-search-keyword i {
+  position: absolute;
+  right: 14px;
+  bottom: 8px;
+  color: #ff6426;
+  font-size: 23px;
+  font-style: normal;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.class-catalog .axi-filter-field select:hover,
+.class-catalog .axi-filter-field select:focus,
+.class-catalog .axi-search-keyword input:focus {
+  border-color: rgba(255, 100, 38, .75);
+  box-shadow: 0 0 0 3px rgba(255, 100, 38, .1);
+}
+
+.class-catalog .axi-filter-reset {
+  align-self: end;
+  height: 42px;
+  padding: 0 16px;
+  color: #b9b2ad;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 10px;
+  background: transparent;
+  font-size: .72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.class-catalog .axi-filter-reset:hover {
+  color: #fff;
+  border-color: rgba(255, 100, 38, .62);
+}
+
+.class-catalog .axi-search-summary {
+  min-height: 23px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  color: #7f7874;
+  font-size: .69rem;
+}
+
+.class-catalog .axi-search-summary output {
+  color: #ff7a43;
+  font-size: .78rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.class-catalog .axi-search-summary > span {
+  min-width: 0;
+  overflow: hidden;
+  color: #bbb4af;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.class-catalog .axi-search-summary small {
+  margin-left: auto;
+  color: #706a66;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.class-catalog .axi-course-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 8px;
+  color: #837d79;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.class-catalog .axi-course-facts span {
+  position: relative;
+}
+
+.class-catalog .axi-course-facts span + span::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -6px;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #ff6426;
+}
+
+@media (max-width: 1180px) {
+  .class-catalog .axi-search-primary {
+    grid-template-columns: 2fr repeat(2, 1fr);
+  }
+
+  .class-catalog .axi-search-primary .axi-filter-field:last-child {
+    grid-column: auto;
+  }
+
+  .class-catalog .axi-search-secondary {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .class-catalog .axi-course-search {
+    padding-top: 18px;
+  }
+
+  .class-catalog .axi-search-primary,
+  .class-catalog .axi-search-secondary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .class-catalog .axi-search-keyword {
+    grid-column: 1 / -1;
+  }
+
+  .class-catalog .axi-filter-field select,
+  .class-catalog .axi-search-keyword input,
+  .class-catalog .axi-filter-reset {
+    height: 40px;
+  }
+
+  .class-catalog .axi-search-summary {
+    flex-wrap: wrap;
+  }
+
+  .class-catalog .axi-search-summary > span {
+    max-width: calc(100% - 80px);
+  }
+
+  .class-catalog .axi-search-summary small {
+    width: 100%;
+    margin-left: 0;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 430px) {
+  .class-catalog .axi-search-primary,
+  .class-catalog .axi-search-secondary {
+    grid-template-columns: 1fr;
+  }
+
+  .class-catalog .axi-search-keyword {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .class-catalog .axi-course-refine {
+    align-items: flex-start;
+    gap: 13px;
+    padding-top: 18px;
+  }
+
+  .class-catalog .axi-refine-group {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .class-catalog .axi-fee-filter {
+    flex: 1;
+  }
+
+  .class-catalog .axi-fee-filter select {
+    width: 100%;
+  }
+
+  .class-catalog .axi-course-refine output {
+    align-self: center;
+  }
+}
+
+/* 통합 홈 2차 밀도 조정: 큰 문장과 과도한 세로 여백을 확실히 낮춘다. */
+.story-page .home-categorybar__inner {
+  min-height: 60px;
+  gap: clamp(22px, 3.8vw, 54px);
+  padding-right: 202px;
+}
+
+.story-page .story-hero {
+  min-height: calc(80vh - 60px);
+}
+
+.story-page .story-hero::before {
+  width: 44vw;
+  height: 44vw;
+}
+
+.story-page .story-hero__inner {
+  padding-block: clamp(58px, 7vw, 100px);
+}
+
+.story-page .story-hero h1 {
+  max-width: 830px;
+  margin-top: 22px;
+  font-size: clamp(2.8rem, 5.1vw, 4.9rem);
+  line-height: .98;
+}
+
+.story-page .story-hero__copy {
+  max-width: 540px;
+  margin-top: 22px;
+  font-size: clamp(.9rem, 1.05vw, 1rem);
+  line-height: 1.65;
+}
+
+.story-page .story-hero__actions {
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.story-page .story-hero__actions .btn {
+  padding: 11px 17px;
+  font-size: .88rem;
+}
+
+.story-page .story-hero__facts {
+  margin-top: 30px;
+  font-size: .84rem;
+}
+
+.story-page .story-hero__inner::before {
+  width: 178px;
+  padding: 13px 15px;
+  font-size: 10px;
+}
+
+.story-page .story-hero__inner::after,
+.story-page .story-hero h1::after {
+  padding: 11px 15px;
+  font-size: 11px;
+}
+
+.story-page .story-index {
+  margin-bottom: 27px;
+  font-size: .68rem;
+}
+
+.story-page .story-question {
+  padding: clamp(72px, 9vw, 126px) 0;
+}
+
+.story-page .story-question h2 {
+  font-size: clamp(2rem, 3.8vw, 3.65rem);
+}
+
+.story-page .story-question p {
+  margin-top: 26px;
+  font-size: .92rem;
+}
+
+.story-page .story-shift {
+  padding: clamp(72px, 8.5vw, 118px) 0;
+}
+
+.story-page .story-shift__headline > h2:first-of-type,
+.story-page .story-shift__headline h2.is-accent {
+  font-size: clamp(1.85rem, 3.55vw, 3.4rem);
+}
+
+.story-page .story-core-grid {
+  max-width: 900px;
+  margin-top: 58px;
+}
+
+.story-page .story-core-grid article,
+.story-page .story-core-grid article:nth-child(2) {
+  grid-template-columns: 70px 1.05fr 1fr;
+  gap: 0 22px;
+  padding: 21px 0;
+}
+
+.story-page .story-core-grid article::before {
+  width: 44px;
+  height: 44px;
+}
+
+.story-page .story-core-grid article > b,
+.story-page .story-core-grid article:nth-child(2) > b {
+  font-size: clamp(1.35rem, 2.1vw, 1.95rem);
+}
+
+.story-page .story-output,
+.story-page .story-proof,
+.story-page .story-support,
+.story-page .story-courses,
+.story-page .story-roadmap {
+  padding: clamp(72px, 8.5vw, 118px) 0;
+}
+
+.story-page .story-title-row h2,
+.story-page .story-support h2,
+.story-page .story-courses h2,
+.story-page .story-support__head h2 {
+  font-size: clamp(2rem, 3.55vw, 3.4rem);
+}
+
+.story-page .story-output__stage {
+  gap: 22px;
+  margin-top: 40px;
+}
+
+.story-page .story-project-card {
+  padding: 28px;
+}
+
+.story-page .story-project-card__label {
+  margin-top: 26px;
+}
+
+.story-page .story-deliverables > div {
+  padding: 17px;
+}
+
+.story-page .story-deliverables h4 {
+  font-size: 1.02rem;
+}
+
+.story-page .story-track-list {
+  margin-top: 40px;
+}
+
+.story-page .story-track-list article {
+  grid-template-columns: 52px 1.05fr 1fr 1fr;
+  gap: 18px;
+  min-height: 132px;
+  padding-block: 17px;
+}
+
+.story-page .story-track-list h3 {
+  font-size: clamp(1.08rem, 1.65vw, 1.52rem);
+}
+
+.story-page .story-track-list p,
+.story-page .story-track-list li {
+  font-size: .78rem;
+}
+
+.story-page .story-track-list li {
+  padding: 5px 8px;
+}
+
+.story-page .story-proof blockquote {
+  font-size: clamp(1.6rem, 3.2vw, 2.9rem);
+}
+
+.story-page .story-proof__quote > span {
+  font-size: 5.8rem;
+}
+
+.story-page .story-proof__numbers {
+  margin-top: 40px;
+}
+
+.story-page .story-proof__numbers div {
+  padding: 28px;
+}
+
+.story-page .story-proof__numbers b {
+  font-size: clamp(2rem, 3.5vw, 3.2rem);
+}
+
+.story-page .story-mini-reviews article {
+  padding: 22px;
+}
+
+.story-page .story-support__head {
+  gap: 30px;
+}
+
+.story-page .main-lxp-stage {
+  gap: clamp(26px, 5vw, 64px);
+  margin-top: 30px;
+}
+
+.story-page .main-lxp-copy article {
+  grid-template-columns: 42px 1fr;
+  padding-block: 16px;
+}
+
+.story-page .main-lxp-stage .lxp-preview {
+  max-width: 610px;
+  padding: 15px;
+}
+
+.story-page .story-final {
+  padding: clamp(76px, 9vw, 132px) 0;
+}
+
+.story-page .story-final h2 {
+  margin: 22px 0 28px;
+  font-size: clamp(2.5rem, 4.9vw, 4.55rem);
+}
+
+.story-page .story-sticky {
+  width: min(560px, calc(100% - 32px));
+  padding: 8px 8px 8px 16px;
+}
+
+.story-page .home-journey {
+  width: 180px;
+  padding: 12px 10px;
+}
+
+.story-page .home-journey a {
+  min-height: 39px;
+  font-size: .8rem;
+}
+
+@media (max-width: 900px) {
+  .story-page .home-categorybar__inner {
+    min-height: 56px;
+    padding-right: 68px;
+  }
+
+  .story-page .story-core-grid article,
+  .story-page .story-core-grid article:nth-child(2) {
+    grid-template-columns: 58px 1fr;
+  }
+
+  .story-page .story-track-list article {
+    grid-template-columns: 38px 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .story-page .story-hero__inner {
+    padding-block: 52px 62px;
+  }
+
+  .story-page .story-hero h1 {
+    font-size: clamp(2.25rem, 9.6vw, 2.7rem);
+  }
+
+  .story-page .story-question,
+  .story-page .story-shift,
+  .story-page .story-output,
+  .story-page .story-roadmap,
+  .story-page .story-proof,
+  .story-page .story-support,
+  .story-page .story-final {
+    padding-block: 58px;
+  }
+}
+
+/* 모집 결과는 넘기는 캐러셀이 아니라 전체 비교가 가능한 카드 그리드로 표시한다. */
+.class-catalog .axi-course-grid {
+  grid-auto-flow: row;
+  grid-auto-columns: initial;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 14px;
+  padding: 26px 0 10px;
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+.class-catalog .axi-course-card {
+  min-width: 0;
+  min-height: 380px;
+  padding: 20px 19px 18px;
+  scroll-snap-align: none;
+}
+
+.class-catalog .axi-course-card::after {
+  display: none;
+}
+
+.class-catalog .axi-course-card h3 {
+  min-height: 58px;
+  margin-top: 15px;
+  font-size: clamp(1rem, 1.15vw, 1.2rem);
+  line-height: 1.4;
+}
+
+.class-catalog .axi-course-card p {
+  margin-top: 8px;
+  font-size: .74rem;
+}
+
+.class-catalog .axi-course-card .axi-status {
+  padding: 5px 8px;
+  font-size: 9px;
+}
+
+.class-catalog .axi-course-visual {
+  min-height: 128px;
+  margin-top: 3px;
+}
+
+.class-catalog .axi-course-visual img {
+  width: min(90%, 240px);
+  max-height: 125px;
+}
+
+.class-catalog .axi-course-card:hover .axi-course-visual img {
+  transform: translateY(-3px) scale(1.02);
+}
+
+.class-catalog .axi-course-card footer {
+  gap: 7px;
+  padding-top: 13px;
+}
+
+.class-catalog .axi-course-card footer .btn {
+  min-height: 38px;
+  padding-inline: 13px;
+  font-size: .72rem;
+}
+
+.class-catalog .axi-course-deck-nav {
+  display: none;
+}
+
+@media (max-width: 1180px) {
+  .class-catalog .axi-course-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 820px) {
+  .class-catalog .axi-course-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 540px) {
+  .class-catalog .axi-course-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .class-catalog .axi-course-card {
+    min-height: 370px;
+  }
+}
+
+/* 과정 목록 네비게이터가 필터와 마지막 카드 열을 덮지 않도록 전용 공간을 고정한다. */
+body.class-catalog {
+  overflow-x: hidden;
+}
+
+@media (min-width: 900px) and (max-width: 1199px) {
+  body.class-catalog.has-public-journey .axi-categories > .container,
+  body.class-catalog.has-public-journey .axi-course-section > .container {
+    width: calc(100% - 188px);
+    max-width: none;
+    margin-right: auto;
+    margin-left: 16px;
+    padding-inline: 0;
+  }
+
+  body.class-catalog.has-public-journey .public-journey {
+    display: grid !important;
+    right: 12px;
+    width: 148px;
+    padding: 9px 7px;
+    border-radius: 16px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(24px);
+    transition: opacity .28s ease, transform .34s ease, visibility .28s ease;
+  }
+
+  body.class-catalog.has-public-journey .public-journey a {
+    grid-template-columns: 8px minmax(0, 1fr);
+    gap: 8px;
+    min-height: 38px;
+    padding-inline: 8px;
+    border-radius: 8px;
+    font-size: .67rem;
+  }
+
+  body.class-catalog.has-public-journey[data-public-nav-phase="content"] .home-categorybar {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-100%);
+  }
+
+  body.class-catalog.has-public-journey[data-public-nav-phase="content"] .public-journey {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  body.class-catalog.has-public-journey .axi-categories > .container,
+  body.class-catalog.has-public-journey .axi-course-section > .container {
+    width: min(calc(100% - 310px), 1560px);
+    max-width: none;
+    margin-right: auto;
+    margin-left: max(24px, calc((100vw - 1900px) / 2));
+    padding-inline: 0;
+  }
+
+  body.class-catalog.has-public-journey .public-journey {
+    right: max(24px, calc((100vw - 1900px) / 2));
+    width: 190px;
+  }
+}
+
+@media (min-width: 821px) and (max-width: 1499px) {
+  .class-catalog .axi-course-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* 오른쪽 네비게이터 공통 축소: 본문과 카드 영역을 덜 가리도록 폭과 여백을 통일한다. */
+@media (min-width: 900px) and (max-width: 1199px) {
+  body.class-catalog.has-public-journey .axi-categories > .container,
+  body.class-catalog.has-public-journey .axi-course-section > .container {
+    width: calc(100% - 144px);
+  }
+
+  body.class-catalog.has-public-journey .public-journey {
+    width: 108px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .story-page .home-journey,
+  body.class-catalog.has-public-journey .public-journey {
+    right: max(12px, calc((100vw - 1900px) / 2));
+    width: 112px;
+    padding: 8px 6px;
+    border-radius: 14px;
+  }
+
+  .story-page .home-journey a,
+  body.class-catalog.has-public-journey .public-journey a {
+    gap: 6px;
+    min-height: 36px;
+    padding-inline: 8px;
+    border-radius: 7px;
+    font-size: .65rem;
+  }
+
+  body.class-catalog.has-public-journey .axi-categories > .container,
+  body.class-catalog.has-public-journey .axi-course-section > .container {
+    width: min(calc(100% - 184px), 1560px);
+  }
+}
+
+/* 최종 우선순위: 1199px 이하에서도 과정 목록 네비게이터를 숨기지 않는다. */
+@media (max-width: 1199px) {
+  body.class-catalog.has-public-journey .public-journey {
+    display: grid !important;
+    right: 6px;
+    width: 96px;
+    max-height: calc(100vh - 16px);
+    padding: 7px 5px;
+    overflow-y: auto;
+    border-radius: 14px;
+  }
+
+  body.class-catalog.has-public-journey .public-journey a {
+    grid-template-columns: 6px minmax(0, 1fr);
+    gap: 5px;
+    min-height: 34px;
+    padding: 0 6px;
+    font-size: .59rem;
+  }
+
+  body.class-catalog.has-public-journey[data-public-nav-phase="content"] .axi-categories > .container,
+  body.class-catalog.has-public-journey[data-public-nav-phase="content"] .axi-course-section > .container,
+  body.class-catalog.has-public-journey[data-public-nav-phase="content"] .recommend-inline > .container {
+    width: calc(100% - 116px);
+    max-width: none;
+    margin-right: auto;
+    margin-left: 10px;
+    padding-inline: 0;
+  }
+}
+
+@media (max-width: 699px) {
+  body.class-catalog.has-public-journey .public-journey {
+    right: 4px;
+    width: 84px;
+    padding: 6px 4px;
+    border-radius: 13px;
+  }
+
+  body.class-catalog.has-public-journey .public-journey a {
+    gap: 4px;
+    min-height: 31px;
+    padding: 0 5px;
+    font-size: .54rem;
+  }
+
+  body.class-catalog.has-public-journey[data-public-nav-phase="content"] .axi-categories > .container,
+  body.class-catalog.has-public-journey[data-public-nav-phase="content"] .axi-course-section > .container,
+  body.class-catalog.has-public-journey[data-public-nav-phase="content"] .recommend-inline > .container {
+    width: calc(100% - 96px);
+    margin-left: 6px;
+  }
+}

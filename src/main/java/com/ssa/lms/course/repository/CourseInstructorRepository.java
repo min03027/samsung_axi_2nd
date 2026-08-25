@@ -15,6 +15,8 @@ public interface CourseInstructorRepository extends JpaRepository<CourseInstruct
 
     boolean existsByCourseIdAndInstructorId(Long courseId, Long instructorId);
 
+    boolean existsByCourseId(Long courseId);
+
     /** 강사 담당 과정 id 목록 — CourseQueryService 전용 (soft delete 된 과정은 @SQLRestriction 으로 제외) */
     @Query("select ci.course.id from CourseInstructor ci where ci.instructor.id = :instructorId")
     List<Long> findCourseIdsByInstructorId(@Param("instructorId") Long instructorId);

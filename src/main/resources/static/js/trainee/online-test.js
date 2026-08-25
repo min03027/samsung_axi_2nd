@@ -462,6 +462,13 @@
           alert(ex.blockReason || '지금은 응시할 수 없습니다.');
           return;
         }
+        /* LXP-015 — 사전점검 대상 시험은 POST start 도, 비밀번호 모달도 열지 않는다.
+           QR 신분확인·웹캠 확인을 마쳐야 서버가 입장을 허용하므로 사전점검 화면으로 보낸다.
+           이어하기(resume)도 서버가 게이트를 다시 검사하므로 같은 경로로 보낸다. */
+        if (ex.precheckRequired && examUrls.precheck) {
+          location.href = examUrls.precheck.replace('{id}', ex.id);
+          return;
+        }
         if (ex.requireIdentityVerification) {
           openIdentity(ex);
         } else {

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>취업캠퍼스 — {brand}</title>
+<meta name="description" content="공부하는 오늘이 취업하는 내일이 되도록. 공개 과정, 취업지원 흐름, 교육 시설과 상담을 한곳에서 확인하세요.">
+<link rel="stylesheet" href="/v2/assets/tokens.css">
+<link rel="stylesheet" href="/v2/assets/base.css">
+<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64">
+<link rel="stylesheet" href="/v2/assets/campus-employment.css?v=20260824-22">
+<link rel="stylesheet" href="/v2/assets/campus-career-preview.css?v=20260824-02">
+<link rel="stylesheet" href="/v2/assets/campus-career-carousel.css?v=20260824-01">
+<style>.career-carousel{width:min(100%,1180px);margin:clamp(42px,6vw,70px) auto 0}.career-feature{height:460px;min-height:0;grid-template-columns:.92fr 1.08fr}.career-feature>img{height:460px}.career-feature>div{padding:40px 46px}.career-feature small{font-size:10px}.career-feature h3{margin-top:22px;font-size:clamp(34px,3.2vw,48px);line-height:1.08}.career-feature p{margin-top:20px;font-size:15px;line-height:1.65}.career-feature dl{margin:24px 0}.career-feature dl div{padding:15px 0}.career-feature dt{font-size:11px}.career-feature dd{margin-top:6px;font-size:14px}.career-feature dd a{display:inline-block;margin-top:6px;color:#e7440d!important;font-size:11px;font-weight:800;text-decoration:none!important}.career-feature dd a+a{margin-left:8px}.career-feature>div>a{padding:13px 18px;font-size:14px}@media(max-width:850px){.career-carousel{width:100%}.career-feature{height:auto;grid-template-columns:1fr}.career-feature>img{height:min(58vw,360px)}.career-feature>div{min-height:400px;padding:34px}.career-feature h3{font-size:clamp(32px,7vw,44px)}}@media(max-width:520px){.career-feature>div{min-height:390px;padding:28px 20px}.career-feature h3{margin-top:18px;font-size:31px}.career-feature p{font-size:14px}.career-feature dl{margin:22px 0}}</style>
+<style>.career-feature{overflow:hidden}.career-feature>div{position:relative;z-index:1;background:#fff}</style>
+</head>
+<body class="employment-campus">
+
+<nav class="campus-quickbar" aria-label="취업캠퍼스 주요 메뉴">
+  <div class="container">
+    <strong>취업캠퍼스</strong>
+    <div>
+      <a href="#campus-courses">모집 과정</a>
+      <a href="#career-support">취업 지원</a>
+      <a href="#graduate-reviews">취업 후기</a>
+      <a href="#campus-facilities">시설 소개</a>
+      <a class="campus-quickbar__cta" href="/v2/site/campus/counsel.html">1:1 상담</a>
+    </div>
+  </div>
+</nav>
+
+<!-- 취업캠퍼스 페이지 인트로 -->
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow" style="color:var(--brand-500)">EMPLOYMENT CAMPUS</span>
+    <h1>배운 기술이<br>실제 일이 되는 곳</h1>
+    <p class="hero__sub">
+      과정 선택부터 프로젝트, 취업 준비와 수료생의 현재 직무까지.<br>
+      교육이 일로 이어지는 근거와 과정을 한 페이지에서 확인하세요.
+    </p>
+    <div class="hero__cta">
+      <a class="btn btn--lg btn--inverse" href="#campus-history">취업캠퍼스 살펴보기 ↓</a>
+      <a class="btn btn--lg btn--outline" style="color:var(--white);border-color:rgba(255,255,255,.3)" href="#campus-courses">모집 과정 보기</a>
+      <a class="btn btn--lg btn--outline" style="color:var(--white);border-color:rgba(255,255,255,.3)" href="/v2/site/campus/counsel.html">1:1 상담</a>
+    </div>
+    <div class="hero__stats" data-campus-stats></div>
+  </div>
+</section>
+
+<!-- 취업-013 기관 연혁 -->
+<section class="employment-history" id="campus-history">
+  <div class="container employment-history__intro">
+    <span>OUR HISTORY · <b data-brand="heritage">1982 세종교육</b> → 2026 <b data-brand="name">내일의AI</b></span>
+    <h2>AI가 일상이 되기 전부터<br>기술로 일하는 사람을 준비했습니다.</h2>
+    <p>한 번의 유행이 아니라, 직업교육의 변화에 맞춰 과정과 실습 환경을 계속 확장해 온 기록입니다.</p>
+  </div>
+  <div class="container employment-history__timeline" data-campus-history>
+    <div class="employment-history__line" aria-hidden="true"></div>
+  </div>
+  <div class="container employment-history__closing">
+    <p>기술은 바뀌어도, 배운 것을 일로 연결하는 교육은 계속됩니다.</p>
+  </div>
+</section>
+
+<!-- 문제 인식 -->
+<section class="section section--tint" id="why-campus">
+  <div class="container">
+    <div class="section-head" style="max-width:var(--w-narrow)">
+      <span class="eyebrow">WHY</span>
+      <h2>국비교육은 많은데, 고르기는 왜 이렇게 어려울까요</h2>
+      <p class="lead">
+        커리큘럼은 비슷해 보이고, 후기는 광고 같고, 끝나고 뭐가 남는지는 아무도 말해주지 않습니다.
+        저희는 그 세 가지를 먼저 공개합니다.
+      </p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card card--pad stack">
+        <span class="badge badge--brand">결과물</span>
+        <h4>수료 시 손에 남는 것</h4>
+        <p class="muted small">과정 상세에서 단계별 산출물과 사용 기술을 먼저 확인하고, 무엇을 만들게 되는지 비교할 수 있습니다.</p>
+      </div>
+      <div class="card card--pad stack">
+        <span class="badge badge--brand">근거</span>
+        <h4>후기는 확인 가능한 근거와 함께</h4>
+        <p class="muted small">수료 연도·수강 과정·취업 직무를 확인할 수 있는 인터뷰 자료만 선별해 공개합니다.</p>
+      </div>
+      <div class="card card--pad stack">
+        <span class="badge badge--brand">연결</span>
+        <h4>배움과 취업 사이를 잇는 절차</h4>
+        <p class="muted small">진단 → 포트폴리오 → 이력서 → 면접 → 기업 매칭까지 준비 순서를 확인하고 상담으로 이어갑니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 취업-014 수상·평가·라이선스 관계 -->
+<section class="employment-credentials" id="campus-credentials">
+  <div class="container">
+    <header class="employment-credentials__head">
+      <div>
+        <span>EDUCATION RECORDS</span>
+        <h2>교육의 시간과 결과를<br>기록으로 보여드립니다.</h2>
+      </div>
+      <p>지역사회 감사패부터 훈련 품질 평가, 교육대상, K-Digital 선정까지. 교육의 시간과 결과를 확인할 수 있는 기록만 모았습니다.</p>
+    </header>
+    <div class="employment-awards" data-campus-awards aria-label="연도별 수상 및 훈련기관 선정 기록"></div>
+    <div class="employment-credentials__grid" data-campus-credentials></div>
+  </div>
+</section>
+
+<!-- 취업-015 기관·기업 롤링 -->
+<section class="employment-partners" id="campus-partners">
+  <div class="container">
+    <div class="employment-partners__panel">
+      <header class="employment-partners__head">
+        <h2>함께하는 기관과 기업</h2>
+      </header>
+      <div class="employment-partners__viewport" data-employment-marquee aria-label="함께하는 기관과 기업 목록">
+        <div class="employment-partners__track">
+          <ul class="employment-partners__group" data-employment-marquee-group>
+            <li class="employment-partner-wordmark employment-partner-wordmark--government"><span class="employment-partner-wordmark__layered-logo employment-partner-wordmark__layered-logo--moel"><img src="/v2/assets/partners/moel.png" alt="고용노동부"><img src="/v2/assets/partners/moel.png" alt="" aria-hidden="true"></span></li>
+            <li class="employment-partner-wordmark employment-partner-wordmark--wide employment-partner-wordmark--moe"><span class="employment-partner-wordmark__layered-logo employment-partner-wordmark__layered-logo--moe"><img src="/v2/assets/partners/moe.png" alt="교육부 Ministry of Education"><img src="/v2/assets/partners/moe.png" alt="" aria-hidden="true"></span></li>
+            <li class="employment-partner-wordmark"><img src="https://www.ksqa.or.kr/_res/H/images/logo_w.png" alt="직업능력심사평가원" referrerpolicy="no-referrer"></li>
+            <li class="employment-partner-wordmark employment-partner-wordmark--wide employment-partner-wordmark--sds"><img src="/v2/assets/partners/samsung-sds.svg" alt="Samsung SDS 삼성SDS"></li>
+            <li class="employment-partner-wordmark employment-partner-wordmark--invert employment-partner-wordmark--wide"><img src="https://brityautomation.ai/images/common/logo-headermenu.svg" alt="Brity Automation.ai" referrerpolicy="no-referrer"></li>
+            <li class="employment-partner-wordmark employment-partner-wordmark--wide employment-partner-wordmark--woowa"><img src="/v2/assets/partners/woowahan-brothers.svg" alt="우아한형제들"></li>
+            <li class="employment-partner-wordmark employment-partner-wordmark--invert employment-partner-wordmark--wide"><img src="https://ccei.creativekorea.or.kr/gyeonggi/resources/images/common/logo_gyeonggi.png" alt="경기창조경제혁신센터" referrerpolicy="no-referrer"></li>
+            <li class="employment-partner-wordmark employment-partner-wordmark--wide employment-partner-wordmark--gachon"><img src="/v2/assets/partners/gachon-slogan.svg" alt="아름다운 인재의 샘 가천대학교"></li>
+            <li class="employment-partner-wordmark employment-partner-wordmark--bright employment-partner-wordmark--wide"><img src="https://www.gilhospital.com/html-repositories/pc/img/main/logo.png" alt="가천대 길병원" referrerpolicy="no-referrer"></li>
+            <li class="employment-partner-wordmark employment-partner-wordmark--bright"><img src="https://www.kaist.ac.kr/site/kr/img/layout/logo.svg" alt="KAIST" referrerpolicy="no-referrer"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 취업-023 브랜드 네트워크 -->
+<section class="employment-network" id="campus-network">
+  <div class="container">
+    <header class="employment-network__head">
+      <span>ONE NETWORK, SIX ROLES</span>
+      <h2>필요한 다음 단계로<br>바로 이동하세요.</h2>
+    </header>
+    <div class="employment-network__grid" data-campus-network></div>
+  </div>
+</section>
+
+<!-- 취업-019 대표 과정 안내 -->
+<section class="section" id="campus-courses">
+  <div class="container">
+    <div class="row row--between section-head">
+      <div>
+        <span class="eyebrow">COURSES</span>
+        <h2>지금 모집 중인 과정</h2>
+      </div>
+      <a class="btn btn--outline" href="/v2/site/class/index.html">전체 과정 보기</a>
+    </div>
+
+    <div class="employment-course-grid" data-employment-courses aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- 취업-022 취업지원 프로세스 -->
+<section class="section section--tint" id="career-support">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">CAREER SUPPORT</span>
+      <h2>수료가 끝이 아니라 시작이 되도록</h2>
+    </div>
+    <div class="employment-support-preview">
+      <ol class="employment-support-preview__rail">
+        <li><b>역량 진단</b><span>목표 직무와 현재 수준을 확인합니다.</span></li>
+        <li><b>포트폴리오</b><span>프로젝트를 채용 담당자가 읽을 결과물로 정리합니다.</span></li>
+        <li><b>이력서·자소서</b><span>지원 직무에 맞게 경험과 강점을 다시 씁니다.</span></li>
+        <li><b>면접 준비</b><span>예상 질문과 프로젝트 설명을 점검합니다.</span></li>
+        <li><b>기업 매칭</b><span>채용 정보와 준비된 직무를 연결합니다.</span></li>
+        <li><b>취업 후 관리</b><span>입사 이후의 적응과 다음 성장을 확인합니다.</span></li>
+      </ol>
+      <div class="employment-support-preview__result">
+        <span>지원 과정에서 남는 기록</span>
+        <strong>진단표 · 포트폴리오 · 지원서 · 면접 피드백</strong>
+        <p>각 단계에서 무엇을 준비하고 어떤 기록이 남는지 취업지원 상세 화면에서 확인할 수 있습니다.</p>
+      </div>
+    </div>
+    <div class="row" style="margin-top:var(--sp-8)">
+      <a class="btn btn--outline" href="/v2/site/campus/support.html">취업지원 자세히 보기</a>
+      <a class="btn btn--outline" href="/v2/site/campus/support.html#support-cases">수료생 사례 바로 보기</a>
+      <a class="btn btn--primary" href="/v2/site/campus/counsel.html?type=취업%20지원">취업지원 상담</a>
+    </div>
+  </div>
+</section>
+
+<!-- 취업-017 수료생 후기 -->
+<section class="career-preview" id="graduate-reviews">
+  <div class="container">
+    <header class="career-preview__head">
+      <div><span>취업클라쓰 · CAREER TRANSITION</span><h2>배운 과정이<br>어떻게 일이 되었는지</h2></div>
+      <div><p>수강 전의 고민, 과정에서 만든 프로젝트, 취업 준비와 현재 직무까지 수료생이 직접 들려주는 전환 기록입니다.</p><a class="career-preview__cta" href="/v2/site/class/reviews.html">27명 인터뷰 전체 보기 <b>→</b></a></div>
+    </header>
+    <div class="career-carousel" data-career-carousel>
+      <div class="career-carousel__viewport"><div class="career-carousel__track" data-career-track>
+        <article class="career-feature"><img src="/v2/assets/reviews/20126.png" alt="김O신 수료생 인터뷰"><div><small>FEATURED · DATA × ROBOT AI</small><h3>무역회사 대신 선택한<br>IT, 데이터와 로봇</h3><p>데이터 처리 감각을 로봇·영상 AI로 연결해 현재 브레인크루에서 AI·AIgent 개발자로 일합니다.</p><dl><div><dt>연계 과정</dt><dd>데이터 분석 · 로봇 AI<br><a href="/v2/site/class/course.html?course=data">데이터 분석 바로가기 →</a><a href="/v2/site/class/course.html?course=robot">로봇 AI 바로가기 →</a></dd></div><div><dt>현재</dt><dd>브레인크루 · AI·AIgent 개발</dd></div></dl><a href="/v2/site/class/review.html?id=20126">인터뷰 상세 보기 →</a></div></article>
+        <article class="career-feature"><img src="/v2/assets/reviews/20039.png" alt="김O은 수료생 인터뷰"><div><small>CAREER START · APP DEVELOPMENT</small><h3>내가 쓰던 앱을,<br>이제 직접 만듭니다</h3><p>앱 개발 기초부터 심화까지 1년간 배우고 팀 프로젝트를 경험한 뒤, 현재 한화생명에서 애플리케이션 업무를 담당하고 있습니다.</p><dl><div><dt>교육 경험</dt><dd>1년간 앱 개발<br><a href="/v2/site/class/course.html?course=cloud">비슷한 과정 바로가기 →</a></dd></div><div><dt>현재</dt><dd>한화생명 · 애플리케이션 업무</dd></div></dl><a href="/v2/site/class/review.html?id=20039">인터뷰 상세 보기 →</a></div></article>
+        <article class="career-feature"><img src="/v2/assets/reviews/20136.png" alt="임O은 수료생 인터뷰"><div><small>PROJECT · DATA</small><h3>불안함을 없애는<br>데이터 커리큘럼</h3><p>통계 전공 지식을 실제 데이터 프로젝트로 연결하고, 하나의 결과물을 끝까지 완성한 기록입니다.</p><dl><div><dt>과정</dt><dd>데이터 분석<br><a href="/v2/site/class/course.html?course=data">비슷한 과정 바로가기 →</a></dd></div><div><dt>핵심 경험</dt><dd>프로젝트 완성</dd></div></dl><a href="/v2/site/class/review.html?id=20136">인터뷰 상세 보기 →</a></div></article>
+        <article class="career-feature"><img src="/v2/assets/reviews/20011.png" alt="양O민 수료생 인터뷰"><div><small>CAREER START · AIoT</small><h3>하고 싶은 게 없던 제가,<br>가고 싶은 곳을 찾기까지</h3><p>기업 솔루션 실무와 IoT 과정에서 진로를 발견하고 현재 야놀자에서 일하고 있습니다.</p><dl><div><dt>수료 과정</dt><dd>IoT · 기업 솔루션<br><a href="/v2/site/class/course.html?course=aiot">비슷한 과정 바로가기 →</a></dd></div><div><dt>현재</dt><dd>야놀자</dd></div></dl><a href="/v2/site/class/review.html?id=20011">인터뷰 상세 보기 →</a></div></article>
+        <article class="career-feature"><img src="/v2/assets/reviews/20034.png" alt="박O슬 수료생 인터뷰"><div><small>EMPLOYMENT · CAREER</small><h3>꿈꾸던 대기업,<br>현실이 되기까지</h3><p>막연한 목표를 과정 경험과 취업 준비 기록으로 바꿔 원하는 커리어에 도달한 이야기입니다.</p><dl><div><dt>교육 경험</dt><dd>IT·웹 개발<br><a href="/v2/site/class/course.html?course=cloud">비슷한 과정 바로가기 →</a></dd></div><div><dt>현재</dt><dd>LG디스플레이</dd></div></dl><a href="/v2/site/class/review.html?id=20034">인터뷰 상세 보기 →</a></div></article>
+      </div></div>
+      <div class="career-carousel__controls"><button type="button" data-career-prev aria-label="이전 인터뷰">←</button><div data-career-dots aria-label="인터뷰 위치"></div><span><b data-career-current>01</b> / 05</span><button type="button" data-career-next aria-label="다음 인터뷰">→</button></div>
+    </div>
+    <div class="public-review-grid" aria-busy="true" data-public-review-grid
+         data-review-site="CAMPUS" data-review-position="CAMPUS_REVIEWS" data-review-limit="3"></div>
+  </div>
+</section>
+
+<!-- 취업-020/021 시설 -->
+<section class="campus-facility-teaser" id="campus-facilities">
+  <div class="container campus-facility-teaser__layout">
+    <div class="campus-facility-teaser__copy">
+      <span>CAMPUS FACILITIES</span>
+      <h2>지원할 과정의 공간까지<br>확인하고 결정하세요.</h2>
+      <p>실제 교육장과 공용 휴게공간, 기숙사 사진을 공개합니다. 과정마다 사용하는 실습 환경과 기숙사 가능 여부도 함께 확인할 수 있습니다.</p>
+      <ul>
+        <li><b>교육장</b><small>과정별 전산·장비 실습 환경</small></li>
+        <li><b>공용공간</b><small>층별 로비와 휴게공간</small></li>
+        <li><b>기숙사</b><small>과정 신청 후 입실 가능 여부 확인</small></li>
+      </ul>
+      <a class="btn btn--primary btn--lg" href="/v2/site/campus/facility.html">실제 시설 둘러보기</a>
+    </div>
+    <div class="campus-facility-teaser__gallery" aria-label="실제 시설 사진">
+      <figure class="campus-facility-teaser__main"><img src="https://samsungaxi.com/data/facility/fac_x_1776317699.jpg" alt="교육장 실제 모습" loading="lazy"><figcaption>EDUCATION</figcaption></figure>
+      <figure><img src="https://samsungaxi.com/data/facility/fac_x_1776317715.jpg" alt="휴게공간 실제 모습" loading="lazy"><figcaption>COMMON SPACE</figcaption></figure>
+      <figure><img src="https://samsungaxi.com/data/facility/fac_1_1700740164.jpg" alt="기숙사 실제 모습" loading="lazy"><figcaption>DORMITORY</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 취업-024 과정 추천 진단 + 취업-025 상담 -->
+<section class="section">
+  <div class="container">
+    <div class="cta-band">
+      <span class="eyebrow" style="color:var(--brand-500)">1분이면 됩니다</span>
+      <h2>내 조건으로 전체 과정을 좁혀보세요</h2>
+      <p>희망직무·경력·학력·지역·숙식·국비·희망일정·관심분야를 함께 비교합니다.</p>
+      <div class="btn-group">
+        <a class="btn btn--lg btn--inverse" href="/v2/site/campus/recommend.html">과정 추천 시작하기</a>
+        <a class="btn btn--lg btn--outline" style="color:var(--white);border-color:rgba(255,255,255,.35)" href="/v2/site/campus/counsel.html">상담 신청</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="/v2/assets/brand.js"></script>
+<script src="/v2/assets/campus-content.js?v=20260824-06"></script>
+<script src="/v2/assets/recruitment-status.js?v=20260824-01"></script>
+<script src="/v2/assets/course-data.js?v=20260824-01"></script>
+<script src="/v2/assets/campus-employment.js?v=20260824-03"></script>
+<script src="/v2/assets/campus-career-carousel.js?v=20260824-01"></script>
+<script src="/v2/assets/page-section-navigation.js"></script>
+<script>Shell.site({service:"campus",sections:[{href:"#campus-history",label:"연혁"},{href:"#why-campus",label:"선택 기준"},{href:"#campus-credentials",label:"성과 기록"},{href:"#campus-network",label:"브랜드 역할"},{href:"#campus-courses",label:"모집 과정"},{href:"#career-support",label:"취업 지원"},{href:"#graduate-reviews",label:"취업 후기"},{href:"#campus-facilities",label:"시설 소개"}]});</script>
+</body>
+</html>

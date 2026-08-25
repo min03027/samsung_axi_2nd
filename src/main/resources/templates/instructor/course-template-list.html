@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>과정 템플릿</title>
+    <link rel="stylesheet" href="/static/css/admin.css"><link rel="stylesheet" href="/static/css/content-operations.css?v=20260825-2">
+</head>
+<body>
+<th:block th:replace="~{fragments/management :: sidebar('course-templates')}"></th:block>
+<main class="content ops-shell">
+    <div class="ops-head">
+        <div><span class="ops-kicker">COURSE BLUEPRINT</span><h1>과정 템플릿</h1><p>과목·차시·수업자료를 원본으로 묶어 재사용하고, 작성중 과정에는 추가·수정만 안전하게 반영합니다.</p></div>
+        <a class="ops-btn primary" href="/instructor/course-templates/new">템플릿 만들기</a>
+    </div>
+    <section class="ops-card"><div class="ops-table-wrap"><table class="ops-table">
+        <thead><tr><th>템플릿</th><th>원본 과정</th><th>버전</th><th>연결 과정</th><th></th></tr></thead>
+        <tbody>
+        <tr th:each="row : ${rows}">
+            <td><strong th:text="${row.name}"></strong><small th:text="${row.description}"></small></td>
+            <td th:text="${row.sourceCourseName}"></td><td th:text="${'v' + row.currentVersion}"></td><td th:text="${row.linkedCourses + '개'}"></td>
+            <td><a class="ops-btn" th:href="@{/instructor/course-templates/{id}(id=${row.id})}">관리</a></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(rows)}"><td colspan="5" class="ops-empty">등록된 과정 템플릿이 없습니다.</td></tr>
+        </tbody>
+    </table></div></section>
+</main>
+</body>
+</html>

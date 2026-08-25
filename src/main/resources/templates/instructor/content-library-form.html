@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:with="isAdmin=${#authorization.expression('hasRole(''ADMIN'')')}">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/i-common-style.css" th:href="${isAdmin} ? '/static/css/common-style.css' : '/static/css/i-common-style.css'">
+    <link rel="stylesheet" href="/static/css/i-sidebar-style.css" th:href="${isAdmin} ? '/static/css/sidebar-style.css' : '/static/css/i-sidebar-style.css'">
+    <link rel="stylesheet" href="/static/css/content-library.css?v=20260825-1">
+    <script src="/static/js/sidebar-function.js" defer></script><script src="/static/js/common-funtion.js" defer></script>
+    <title>Samsung Academy LXP - 공용 콘텐츠 원본</title>
+</head>
+<body data-user-role="instructor" th:attr="data-user-role=${isAdmin} ? 'admin' : 'instructor'">
+<header th:replace="${isAdmin} ? ~{fragments/admin :: header(${mode == 'edit'} ? '콘텐츠 관리 > 새 버전 발행' : '콘텐츠 관리 > 공용 원본 등록')} : ~{fragments/instructor :: header(${mode == 'edit'} ? '콘텐츠 관리 > 새 버전 발행' : '콘텐츠 관리 > 공용 원본 등록')}"></header>
+<th:block th:replace="${isAdmin} ? ~{fragments/admin :: sidebar('content-library')} : ~{fragments/instructor :: sidebar('content-library')}"/>
+<main class="main-content"><div class="library-shell">
+    <nav class="library-tabs" aria-label="콘텐츠 관리 메뉴"><a href="/instructor/contents">과정 콘텐츠</a><a class="active" href="/instructor/content-library">공용 라이브러리</a><a href="/instructor/content-library/versions">버전 이력</a></nav>
+    <div class="library-hero"><div><span class="library-eyebrow" th:text="${mode == 'edit'} ? 'PUBLISH NEW VERSION' : 'NEW LIBRARY SOURCE'">CONTENT</span><h1 th:text="${mode == 'edit'} ? '원본을 수정하고 새 버전을 발행합니다' : '재사용할 공용 원본을 등록합니다'">원본 등록</h1><p th:text="${mode == 'edit'} ? '발행 즉시 자동 반영이 켜진 과정 콘텐츠가 같은 내용으로 업데이트됩니다.' : '과정에 직접 묶지 않고 원본을 먼저 등록한 뒤 필요한 과정과 차시에 배치할 수 있습니다.'">안내</p></div></div>
+    <form class="library-form-card" th:action="${mode == 'edit'} ? @{/instructor/content-library/{id}(id=${libraryItemId})} : @{/instructor/content-library}" method="post" enctype="multipart/form-data" th:object="${libraryForm}">
+        <div class="library-error" th:if="${#fields.hasErrors('*')}"><p th:each="err : ${#fields.errors('*')}" th:text="${err}">오류</p></div>
+        <div class="library-form-grid">
+            <div class="library-field"><label for="type">콘텐츠 유형</label><select class="library-select" id="type" th:field="*{type}"><option th:each="option : ${contentTypes}" th:value="${option}" th:text="${option.label}">유형</option></select></div>
+            <div class="library-field"><label for="status">운영 상태</label><select class="library-select" id="status" th:field="*{status}"><option th:each="option : ${libraryStatuses}" th:value="${option}" th:text="${option.label}">상태</option></select></div>
+            <div class="library-field full"><label for="title">원본 제목</label><input class="library-input" id="title" th:field="*{title}" required maxlength="200"></div>
+            <div class="library-field full"><label for="description">설명</label><textarea class="library-textarea" id="description" th:field="*{description}" placeholder="학습 목표, 활용 범위, 권장 대상 등을 적어주세요."></textarea></div>
+            <div class="library-field full"><label for="industryTags">산업·직무 태그</label><input class="library-input" id="industryTags" th:field="*{industryTags}" placeholder="예: 생성형 AI, 제조, 데이터 분석"><p class="library-help">쉼표로 구분해 두면 산업 수요에 따른 원본 업데이트 흐름을 검색할 수 있습니다.</p></div>
+            <div class="library-field"><label for="durationSeconds">영상 길이(초)</label><input class="library-input" type="number" min="0" id="durationSeconds" th:field="*{durationSeconds}"></div>
+            <div class="library-field"><label for="pageCount">문서 페이지 수</label><input class="library-input" type="number" min="1" id="pageCount" th:field="*{pageCount}"></div>
+            <div class="library-field full"><label for="file" th:text="${mode == 'edit'} ? '교체 파일(선택)' : '원본 파일'">원본 파일</label><input class="library-input" type="file" id="file" name="file" accept="video/*,.pdf,image/*" th:required="${mode != 'edit'}"><p class="library-help" th:text="${mode == 'edit'} ? '비워두면 현재 파일을 유지합니다. 이전 파일은 버전 이력의 스냅샷을 위해 삭제하지 않습니다.' : '영상, PDF 또는 이미지 원본을 등록할 수 있습니다.'">파일 안내</p></div>
+            <div class="library-field full" th:if="${mode == 'edit'}"><label for="changeSummary">이번 버전의 변경 내용</label><textarea class="library-textarea" id="changeSummary" th:field="*{changeSummary}" required maxlength="1000" placeholder="예: 2026년 현업 수요를 반영해 RAG 실습과 평가 자료를 개편"></textarea><p class="library-help">수정 일시·작업자·자동 반영 건수와 함께 버전 히스토리에 기록됩니다.</p></div>
+        </div>
+        <div class="library-form-actions"><a class="library-btn" th:href="${mode == 'edit'} ? @{/instructor/content-library/{id}(id=${libraryItemId})} : @{/instructor/content-library}">취소</a><button class="library-btn primary" type="submit" th:text="${mode == 'edit'} ? '새 버전 발행' : '공용 원본 등록'">저장</button></div>
+    </form>
+</div></main>
+</body></html>

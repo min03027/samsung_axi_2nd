@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기업·기관 관리</title>
+    <link rel="stylesheet" href="/static/css/common-style.css">
+    <link rel="stylesheet" href="/static/css/sidebar-style.css">
+    <link rel="stylesheet" href="/static/css/organization-cms.css">
+    <script src="/static/js/sidebar-function.js" defer></script>
+</head>
+<body>
+<header th:replace="~{fragments/management :: header('기업·기관 관리')}"></header>
+<th:block th:replace="~{fragments/management :: sidebar('organizations')}"></th:block>
+<main class="main-content organization-main">
+    <div class="organization-shell">
+        <div class="organization-head">
+            <div><h1>기업·기관 관리</h1><p>한 번 등록한 기관을 홈페이지, 과정 프로젝트와 채용 연계에서 재사용합니다.</p></div>
+            <a class="organization-btn primary" href="/admin/organizations/new">기업·기관 등록</a>
+        </div>
+        <section class="organization-card">
+            <form class="organization-filter" method="get" action="/admin/organizations">
+                <div class="organization-field"><label for="query">검색</label><input id="query" name="query" th:value="${query}" placeholder="기관명·설명·도메인"></div>
+                <div class="organization-field"><label for="type">유형</label><select id="type" name="type"><option value="">전체</option><option th:each="item:${types}" th:value="${item}" th:text="${item.label}" th:selected="${selectedType == item}">유형</option></select></div>
+                <div class="organization-field"><label for="relationship">관계</label><select id="relationship" name="relationship"><option value="">전체</option><option th:each="item:${relationships}" th:value="${item}" th:text="${item.label}" th:selected="${selectedRelationship == item}">관계</option></select></div>
+                <div class="organization-field"><label for="status">상태</label><select id="status" name="status"><option value="">전체</option><option th:each="item:${statuses}" th:value="${item}" th:text="${item.label}" th:selected="${selectedStatus == item}">상태</option></select></div>
+                <div class="organization-field"><label for="homepageExposure">홈페이지</label><select id="homepageExposure" name="homepageExposure"><option value="">전체</option><option value="true" th:selected="${selectedExposure == true}">공개</option><option value="false" th:selected="${selectedExposure == false}">비공개</option></select></div>
+                <button class="organization-btn" type="submit">조회</button>
+            </form>
+        </section>
+        <section class="organization-card organization-table-wrap">
+            <table class="organization-table">
+                <thead><tr><th>기업·기관</th><th>유형</th><th>관계 유형</th><th>홈페이지</th><th>정렬</th><th>상태</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="item:${organizations}">
+                    <td><div class="organization-name"><span class="organization-logo"><img th:if="${item.logoUrl != null}" th:src="${item.logoUrl}" th:alt="${item.name + ' 로고'}"><span th:unless="${item.logoUrl != null}" th:text="${#strings.substring(item.name,0,1)}">기</span></span><div><strong th:text="${item.name}">기관명</strong><span class="organization-sub" th:text="${item.oneLineDescription ?: '설명 없음'}">설명</span></div></div></td>
+                    <td th:text="${item.type.label}">유형</td>
+                    <td><div class="organization-badges"><span class="organization-badge" th:each="relation:${item.relationshipTypes}" th:text="${relation.label}">관계</span><span class="organization-sub" th:if="${item.relationshipTypes.isEmpty()}">미지정</span></div></td>
+                    <td><span class="organization-badge" th:classappend="${item.homepageExposure} ? ' visible' : ' hidden'" th:text="${item.homepageExposure ? '공개' : '비공개'}">공개</span></td>
+                    <td th:text="${item.displayOrder}">0</td><td th:text="${item.status.label}">상태</td>
+                    <td><a th:href="@{/admin/organizations/{id}(id=${item.id})}">상세 보기 →</a></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(organizations)}"><td class="organization-empty" colspan="7">조건에 맞는 기업·기관이 없습니다.</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</main>
+</body></html>

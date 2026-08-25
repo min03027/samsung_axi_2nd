@@ -34,7 +34,6 @@
         </section>
         <section class="main-content">
             <section class="main-content-inner main-wrap">
-                <div th:replace="${sampleData} ? ~{fragments/trainee :: sampleNotice} : ~{}"></div>
                 <p th:if="${#lists.isEmpty(contents)}" style="color:var(--gray-500);">학습 가능한 콘텐츠가 없습니다.</p>
                 <ul style="list-style:none; padding:0; margin:0;">
                     <li class="content-li" th:each="c : ${contents}">

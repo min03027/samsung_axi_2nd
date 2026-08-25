@@ -1,0 +1,164 @@
+<!doctype html>
+<!-- 응시환경 사전점검 — LXP-018(미공유 시 입장 차단), LXP-019(다중 모니터 통제),
+     LXP-015(신분 확인 진입). 운영 훈련생 UI(GNB + main-wrap + 카드/배지/버튼)를 그대로 쓴다.
+     카메라·화면공유·전체화면·다중모니터는 실제 브라우저 API 를 호출한다.
+     신분증 심사와 감독 서버 연결은 시뮬레이션이다.
+
+     페이지 루트 클래스 .exam-precheck-page 는 <body> 에 붙는다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/css/basic-form-trainee.css">
+<link rel="stylesheet" href="/static/css/btn-style.css">
+<link rel="stylesheet" href="/v2/assets/exam.css">
+<title>Samsung Academy LXP</title>
+</head>
+<body class="exam-precheck-page">
+
+<main>
+  <section class="main-content main-wrap">
+
+    <div class="page-header">
+      <p class="page-desc">아래 다섯 항목을 모두 통과해야 시험장에 입장할 수 있습니다.</p>
+      <div class="demo-warn">
+        <strong>카메라와 화면 공유는 브라우저 권한을 실제로 요청합니다.</strong>
+        미리보기는 이 브라우저 안에서만 재생되며 녹화·저장·서버 전송을 하지 않습니다.
+        감독 서버 연결과 신분증 심사는 시뮬레이션입니다.
+      </div>
+    </div>
+
+    <p class="hint-text mb-12" id="progressLine" aria-live="polite"></p>
+
+    <div class="check-grid">
+
+      <article class="check-card" data-check="camera" data-state="idle">
+        <div class="check-top">
+          <div>
+            <p class="check-title">카메라</p>
+            <p class="check-desc">얼굴이 보이는 웹캠이 필요합니다.</p>
+          </div>
+          <span class="state-badge" data-role="badge">미확인</span>
+        </div>
+        <div class="media-tile">
+          <video data-role="preview" playsinline muted hidden></video>
+          <p class="tile-empty" data-role="placeholder">카메라를 켜면 미리보기가 표시됩니다</p>
+          <span class="tile-label">내 카메라</span>
+        </div>
+        <p class="check-msg" data-role="msg" aria-live="polite"></p>
+        <div class="check-actions">
+          <button type="button" class="btn btn-primary" data-action="camera-start">카메라 켜기</button>
+          <button type="button" class="btn btn-gray" data-action="camera-stop" disabled>끄기</button>
+        </div>
+      </article>
+
+      <article class="check-card" data-check="display" data-state="idle">
+        <div class="check-top">
+          <div>
+            <p class="check-title">화면 공유</p>
+            <p class="check-desc">전체 화면을 공유해야 합니다. 창·탭 공유는 인정되지 않습니다.</p>
+          </div>
+          <span class="state-badge" data-role="badge">미확인</span>
+        </div>
+        <div class="media-tile">
+          <video data-role="preview" playsinline muted hidden></video>
+          <p class="tile-empty" data-role="placeholder">화면 공유를 시작하면 미리보기가 표시됩니다</p>
+          <span class="tile-label">내 화면</span>
+        </div>
+        <p class="check-msg" data-role="msg" aria-live="polite"></p>
+        <div class="check-actions">
+          <button type="button" class="btn btn-primary" data-action="display-start">화면 공유 시작</button>
+          <button type="button" class="btn btn-gray" data-action="display-stop" disabled>중지</button>
+        </div>
+      </article>
+
+      <article class="check-card" data-check="fullscreen" data-state="idle">
+        <div class="check-top">
+          <div>
+            <p class="check-title">전체화면</p>
+            <p class="check-desc">시험 중 전체화면을 유지해야 합니다.</p>
+          </div>
+          <span class="state-badge" data-role="badge">미확인</span>
+        </div>
+        <p class="check-msg" data-role="msg" aria-live="polite"></p>
+        <div class="check-actions">
+          <button type="button" class="btn btn-primary" data-action="fullscreen-enter">전체화면 확인</button>
+          <button type="button" class="btn btn-gray" data-action="fullscreen-exit" disabled>해제</button>
+        </div>
+      </article>
+
+      <article class="check-card" data-check="multiMonitor" data-state="idle">
+        <div class="check-top">
+          <div>
+            <p class="check-title">다중 모니터</p>
+            <p class="check-desc">확장 디스플레이가 연결되어 있으면 응시할 수 없습니다.</p>
+          </div>
+          <span class="state-badge" data-role="badge">미확인</span>
+        </div>
+        <p class="check-msg" data-role="msg" aria-live="polite"></p>
+        <div class="check-actions">
+          <button type="button" class="btn btn-primary" data-action="monitor-check">모니터 확인</button>
+        </div>
+        <div hidden data-role="monitor-fallback">
+          <p class="hint-text fallback-hint">이 브라우저는 확장 디스플레이 여부를 알려주지 않습니다. 데모에서는 상황을 직접 고릅니다.</p>
+          <div class="check-actions">
+            <button type="button" class="btn btn-secondary" data-action="monitor-demo" data-value="single">단일 모니터(데모)</button>
+            <button type="button" class="btn btn-secondary" data-action="monitor-demo" data-value="multi">확장 연결됨(데모)</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="check-card" data-check="identity" data-state="idle">
+        <div class="check-top">
+          <div>
+            <p class="check-title">신분 확인</p>
+            <p class="check-desc">휴대폰으로 신분증 앞면을 제출합니다.</p>
+          </div>
+          <span class="state-badge" data-role="badge">미확인</span>
+        </div>
+        <div class="id-row">
+          <div class="qr-demo" role="img" aria-label="데모용 QR 코드 그림입니다. 실제로 스캔되지 않습니다."></div>
+          <div class="stack-8">
+            <p class="hint-text">QR 은 데모용 그림이며 스캔되지 않습니다. 아래 주소를 휴대폰에서 직접 여세요.</p>
+            <p class="mono hint-text id-link">/v2/lxp/trainee/exam-id-upload.html</p>
+            <a class="btn btn-secondary" href="/v2/lxp/trainee/exam-id-upload.html?exam=frontend-2026">이 기기에서 열기</a>
+          </div>
+        </div>
+        <p class="check-msg" data-role="msg" aria-live="polite"></p>
+        <div class="check-actions">
+          <button type="button" class="btn btn-gray" data-action="identity-refresh">제출 상태 새로고침</button>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="gate-box">
+      <div>
+        <p class="gate-title">시험장 입장</p>
+        <p class="gate-msg" id="gateMsg" aria-live="polite">다섯 항목을 모두 통과하면 입장할 수 있습니다.</p>
+      </div>
+      <div class="gate-actions">
+        <button type="button" class="btn btn-gray" id="simulateAll">전체 조건 시뮬레이션(데모)</button>
+        <a class="btn btn-secondary" id="enterBtn" href="/v2/lxp/trainee/exam-workspace.html?exam=frontend-2026"
+           aria-disabled="true" tabindex="-1">시험장 입장</a>
+      </div>
+    </div>
+
+    <p class="hint-text mt-12">
+      <b>전체 조건 시뮬레이션</b>은 카메라·화면 공유가 없는 개발 환경에서 다음 화면을 확인하기 위한 데모 전용 버튼입니다. 실제 응시에서는 제공되지 않습니다.
+    </p>
+
+    <p class="mt-12">
+      <a class="btn btn-gray" href="/v2/lxp/trainee/exams.html">시험 목록으로</a>
+    </p>
+
+  </section>
+</main>
+
+<script src="/v2/assets/exam-legacy-shell.js"></script>
+<script src="/v2/assets/exam-demo-data.js"></script>
+<script src="/v2/assets/exam-common.js"></script>
+<script src="/v2/assets/exam-precheck.js"></script>
+<script>ExamShell.trainee({ active: "test", title: "시험/과제 > 응시환경 사전점검" });</script>
+</body>
+</html>

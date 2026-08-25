@@ -1,118 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <!--
-  강사 공통 레이아웃 fragment (공동 소유 — 수정 전 상대 개발자와 공유, CLAUDE.md 참고)
-
-  사용법:
-    <header th:replace="~{fragments/instructor :: header('대시보드')}"></header>
-    <th:block th:replace="~{fragments/instructor :: sidebar('dashboard')}"/>
-
-  sidebar() 의 active 키:
-    dashboard | trainees | contents | courses | scheduler
-    | eval-assignment | eval-exam | eval-monitoring
-    | att-status | att-graduate | notices | tutoring | ai-diagnosis
-
-  구현된 슬라이스는 컨트롤러 URL 연결 완료(2026-07-28).
-  튜터링/Q&A 는 관리자·강사 공용 화면(/admin/support/tutoring)으로 연결됨(2026-08-04).
-  아직 컨트롤러가 없는 화면(알림함)은 "준비 중" alert 처리 — 구현 시 이 파일만 수정.
+  기존 강사 템플릿 호환 래퍼.
+  실제 header/sidebar IA는 fragments/management.html 한 곳에서 관리한다.
 -->
 <body>
+<header th:fragment="header(title)"
+        th:replace="~{fragments/management :: header(${title})}"></header>
 
-<!-- ===== 상단 헤더 ===== -->
-<header class="header" th:fragment="header(title)">
-    <h1 th:text="${title}">페이지 제목</h1>
-    <div class="icon-container">
-        <div class="icon-box"><a href="#" onclick="alert('준비 중인 기능입니다.');return false;"><img src="/static/icons/bell.svg" alt="alert icon" style="width: 28px;"></a></div>
-        <div class="icon-box" onclick="location.href='/instructor/my-info'" title="내 정보"><img src="/static/icons/user.svg" alt="user icon" style="width: 30px;"></div>
-        <div class="icon-box"><img src="/static/icons/setting.svg" alt="setting icon" style="width: 25px;"></div>
-    </div>
-</header>
-
-<!-- ===== 왼쪽 사이드바 (+ 토글 버튼) ===== -->
 <th:block th:fragment="sidebar(active)">
-<aside class="sidebar">
-    <div class="logo-box">
-        <img id="sidebarLogo" src="/static/img/logo-white.png" alt="logo" style="width: 130px;">
-    </div>
-
-    <nav class="menu">
-        <ul>
-            <li onclick="handleMenuClick(this, '/instructor')">
-                <img src="/static/icons/01-dashboard.svg" alt="dashboard icon" style="width: 26px; margin-right: 8px; vertical-align: middle; padding-bottom: 4px;">
-                <span class="menu-text" th:classappend="${active == 'dashboard'} ? 'active_menu'">대시보드</span>
-            </li>
-            <li onclick="handleMenuClick(this, '/instructor/trainees')">
-                <img src="/static/icons/02-user.svg" alt="trainee icon" style="width: 28px; margin-right: 8px; vertical-align: middle; padding-bottom: 4px;">
-                <span class="menu-text" th:classappend="${active == 'trainees'} ? 'active_menu'">훈련생</span>
-            </li>
-            <li onclick="handleMenuClick(this, '/instructor/contents')">
-                <img src="/static/icons/03-description.svg" alt="contents icon" style="width: 26px; margin-right: 8px; vertical-align: middle; padding-bottom: 4px;">
-                <span class="menu-text" th:classappend="${active == 'contents'} ? 'active_menu'">콘텐츠</span>
-            </li>
-            <li data-page="/instructor/courses" onclick="handleMenuClick(this, '/instructor/courses')">
-                <img src="/static/icons/03-course.svg" alt="course icon" style="width: 25px; margin-right: 8px; vertical-align: middle; padding-bottom: 4px;">
-                <span class="menu-text" th:classappend="${active == 'courses' or active == 'scheduler'} ? 'active_menu'">담당 과정</span>
-                <span class="chev" aria-hidden="true">▾</span>
-                <ul>
-                    <li class="submenu" th:classappend="${active == 'courses'} ? 'active_menu'"><a href="/instructor/courses">과정 관리</a></li>
-                    <li class="submenu" th:classappend="${active == 'scheduler'} ? 'active_menu'"><a href="/instructor/scheduler">일정 관리</a></li>
-                </ul>
-            </li>
-            <li data-page="/instructor/assignments" onclick="handleMenuClick(this, '/instructor/assignments')">
-                <img src="/static/icons/04-evaluation.svg" alt="evaluation icon" style="width: 28px; margin-right: 8px; vertical-align: middle; padding-bottom: 4px;">
-                <span class="menu-text" th:classappend="${#strings.startsWith(active, 'eval-')} ? 'active_menu'">평가</span>
-                <span class="chev" aria-hidden="true">▾</span>
-                <ul>
-                    <li class="submenu" th:classappend="${active == 'eval-assignment'} ? 'active_menu'"><a href="/instructor/assignments">과제 채점</a></li>
-                    <li class="submenu" th:classappend="${active == 'eval-exam'} ? 'active_menu'"><a href="/instructor/grading">시험 채점</a></li>
-                    <li class="submenu" th:classappend="${active == 'eval-monitoring'} ? 'active_menu'"><a href="/instructor/proctor/exams">평가 모니터링</a></li>
-                </ul>
-            </li>
-            <li data-page="/instructor/attendance" onclick="handleMenuClick(this, '/instructor/attendance')">
-                <img src="/static/icons/05-attendance.svg" alt="attendance icon" style="width: 28px; margin-right: 8px; vertical-align: middle; padding-bottom: 4px;">
-                <span class="menu-text" th:classappend="${#strings.startsWith(active, 'att-')} ? 'active_menu'">출결/이수 관리</span>
-                <span class="chev" aria-hidden="true">▾</span>
-                <ul>
-                    <li class="submenu" th:classappend="${active == 'att-status'} ? 'active_menu'"><a href="/instructor/attendance">출결현황</a></li>
-                    <li class="submenu" th:classappend="${active == 'att-graduate'} ? 'active_menu'"><a href="/instructor/graduate">이수 관리</a></li>
-                </ul>
-            </li>
-            <li data-page="/instructor/notice" onclick="handleMenuClick(this, '/instructor/notice')">
-                <img src="/static/icons/06-support.svg" alt="communication icon" style="width: 28px; margin-right: 8px; vertical-align: middle; padding-bottom: 4px;">
-                <span class="menu-text" th:classappend="${active == 'notices' or active == 'tutoring'} ? 'active_menu'">소통</span>
-                <span class="chev" aria-hidden="true">▾</span>
-                <ul>
-                    <li class="submenu" th:classappend="${active == 'notices'} ? 'active_menu'"><a href="/instructor/notice">공지사항</a></li>
-                    <!-- 관리자·강사 공용 화면(AdminSupportController). 강사가 열면 본인 배정 건만 보이고
-                         이 강사 레이아웃으로 렌더된다 — 새 URL 네임스페이스를 만들지 않는다. -->
-                    <li class="submenu" th:classappend="${active == 'tutoring'} ? 'active_menu'"><a th:href="@{/admin/support/tutoring}" href="/admin/support/tutoring">튜터링/Q&amp;A</a></li>
-                </ul>
-            </li>
-            <!-- AI 학습진단 — 훈련생의 AI 질문·평가 결과로 취약 영역을 진단하고 과제를 추천한다 -->
-            <li onclick="handleMenuClick(this, '/instructor/ai/diagnosis')">
-                <img src="/static/icons/01-dashboard.svg" alt="ai icon" style="width: 26px; margin-right: 8px; vertical-align: middle; padding-bottom: 4px;">
-                <span class="menu-text" th:classappend="${active == 'ai-diagnosis'} ? 'active_menu'">AI 학습진단</span>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- 로그아웃: Spring Security 는 POST /logout -->
-    <form th:action="@{/logout}" method="post" style="display: contents;">
-        <button type="submit" class="logout" style="background: none; border: none; cursor: pointer;">로그아웃
-            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="CurrentColor">
-                <path d="M186.67-120q-27 0-46.84-19.83Q120-159.67 120-186.67v-586.66q0-27 19.83-46.84Q159.67-840 186.67-840h292.66v66.67H186.67v586.66h292.66V-120H186.67Zm470.66-176.67-47-48 102-102H360v-66.66h351l-102-102 47-48 184 184-182.67 182.66Z"/>
-            </svg>
-        </button>
-    </form>
-</aside>
-
-<!-- 토글 버튼 (사이드바와 한 세트) -->
-<div class="toggle-btn" onclick="toggleSidebar()">◀</div>
+    <th:block th:replace="~{fragments/management :: sidebar(${active})}"></th:block>
 </th:block>
 
-<!-- ===== 예시(샘플) 데이터 배지 =====
-     사용법: <div th:replace="${sampleData} ? ~{fragments/instructor :: sampleNotice} : ~{}"></div>
-     같은 태그에 th:if 를 달면 th:replace 가 먼저 실행돼 조건이 무시된다 — 반드시 삼항식으로. -->
+<!-- 기존 강사 예시 데이터 배너 계약 유지 -->
 <div th:fragment="sampleNotice" class="sample-notice"
      style="display:flex;align-items:center;gap:10px;margin-bottom:18px;padding:12px 16px;
             border:1px solid #cdd9ee;background:#eef3fb;border-radius:10px;
@@ -121,6 +21,5 @@
     <span>담당 과정에 아직 배정된 항목이 없어 <strong>화면 예시용 샘플 데이터</strong>를 보여주고 있어요.
         실제 데이터가 등록되면 자동으로 바뀝니다.</span>
 </div>
-
 </body>
 </html>
