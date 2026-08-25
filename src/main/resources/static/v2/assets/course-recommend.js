@@ -51,7 +51,7 @@
 
     if (item.careers.includes(answers.career)) {
       score += item.careers[0] === answers.career ? 38 : 30;
-      reasons.push(`${labels.career[answers.career]} 희망 직무와 연결`);
+      reasons.push(`${labels.career[answers.career]} 희망 과정과 연결`);
     }
     if (item.fields.includes(answers.field)) {
       score += 28;
@@ -168,7 +168,7 @@
     const matches = Object.keys(profiles).map(key => scoreCourse(key, answers)).filter(Boolean).sort((a, b) => b.score - a.score).slice(0, 3);
 
     profile.replaceChildren();
-    const headings = { career:'희망 직무', experience:'경력', education:'학력', region:'희망 지역', lodging:'숙식', funding:'국비지원', schedule:'희망 일정', field:'관심 분야' };
+    const headings = { career:'희망 과정', experience:'경험', education:'학력', region:'희망 지역', lodging:'숙식', funding:'국비지원', schedule:'희망 일정', field:'관심 분야' };
     Object.keys(headings).forEach(name => {
       const div = document.createElement('div');
       div.innerHTML = `<dt>${headings[name]}</dt><dd></dd>`;

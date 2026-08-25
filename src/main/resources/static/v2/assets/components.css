@@ -1198,7 +1198,7 @@ body[data-viewer="L3"] [data-level="L2"] { display: none; }
 .recommend-page .recommend-questions fieldset { min-height:176px; padding:26px; border-color:#343434; border-radius:18px; background:#151515; }
 .recommend-page .recommend-questions fieldset:hover { border-color:#555; }
 .recommend-page .recommend-questions .recommend-question--wide { grid-column:1/-1; min-height:auto; }
-.recommend-page .recommend-questions legend { display:flex; gap:11px; align-items:center; color:var(--white); font-size:1.12rem; }
+.recommend-page .recommend-questions legend { float:left; width:100%; display:flex; gap:11px; align-items:center; margin:0 0 var(--sp-5); padding:0; color:var(--white); font-size:1.12rem; }
 .recommend-page .recommend-questions legend small { display:grid; width:30px; height:30px; place-items:center; color:var(--brand-500); border:1px solid #4b2a1f; border-radius:50%; font:var(--fw-bold) 10px var(--font-mono); }
 .recommend-page .recommend-questions label span { color:#c5c5c5; border-color:#3b3b3b; background:#101010; transition:.18s ease; }
 .recommend-page .recommend-questions label:hover span { color:var(--white); border-color:#777; }

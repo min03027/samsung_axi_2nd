@@ -78,8 +78,12 @@ class HomeControllerIntegrationTest {
     @DisplayName("공개 랜딩은 통합된 팀 페이지와 실제 섹션을 연결한다")
     void publicLandingLinksIntegratedTeamPagesAndSections() throws IOException {
         String campus = resourceText("static/v2/site/campus/index.html");
+        String campusRecommend = resourceText("static/v2/site/campus/recommend.html");
+        String classCatalog = resourceText("static/v2/site/class/index.html");
         String biz = resourceText("static/v2/site/biz/index.html");
         String bizEducationTypes = resourceText("static/v2/assets/biz-education-types.js");
+        String components = resourceText("static/v2/assets/components.css");
+        String courseRecommend = resourceText("static/v2/assets/course-recommend.js");
         String navigation = resourceText("static/v2/assets/page-section-navigation.js");
 
         assertFalse(campus.contains("/v2/assets/shell.js"));
@@ -99,6 +103,12 @@ class HomeControllerIntegrationTest {
         assertTrue(biz.contains("id=\"biz-diagnosis-result\""), "AX 간편 진단 결과 영역 누락");
         assertTrue(bizEducationTypes.contains("getElementById(\"biz-diagnosis-form\")"), "AX 간편 진단 동작 누락");
         assertTrue(bizEducationTypes.contains("href=\\\"#biz-contact\\\""), "진단 결과의 도입 문의 연결 누락");
+        assertTrue(classCatalog.contains("<legend><small>01</small> 희망 과정</legend>"));
+        assertTrue(classCatalog.contains("<legend><small>02</small> 경험</legend>"));
+        assertTrue(campusRecommend.contains("<legend><small>01</small> 희망 과정</legend>"));
+        assertTrue(campusRecommend.contains("<legend><small>02</small> 경험</legend>"));
+        assertTrue(components.contains(".recommend-page .recommend-questions legend { float:left; width:100%;"));
+        assertTrue(courseRecommend.contains("career:'희망 과정', experience:'경험'"));
     }
 
     private String resourceText(String path) throws IOException {
