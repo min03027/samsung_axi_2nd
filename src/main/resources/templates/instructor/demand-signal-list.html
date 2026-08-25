@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:with="isAdmin=${#authorization.expression('hasRole(''ADMIN'')')}">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <title>산업수요 신호</title>
-    <link rel="stylesheet" href="/static/css/admin.css"><link rel="stylesheet" href="/static/css/content-operations.css?v=20260825-2">
+    <link rel="stylesheet" href="/static/css/i-common-style.css" th:href="${isAdmin} ? '/static/css/common-style.css' : '/static/css/i-common-style.css'">
+    <link rel="stylesheet" href="/static/css/i-sidebar-style.css" th:href="${isAdmin} ? '/static/css/sidebar-style.css' : '/static/css/i-sidebar-style.css'">
+    <link rel="stylesheet" href="/static/css/content-operations.css?v=20260825-2">
 </head>
 <body>
+<header th:replace="~{fragments/management :: header('교육 운영 > 산업수요 추천')}"></header>
 <th:block th:replace="~{fragments/management :: sidebar('demand-signals')}"></th:block>
 <main class="content ops-shell">
     <div class="ops-head"><div><span class="ops-kicker">DEMAND SIGNALS</span><h1>산업수요와 과정 최신화를 연결하세요</h1><p>채용·기업 요청·NCS 조사 결과를 기록하면 기술 키워드를 기준으로 검토할 과정을 제안합니다.</p></div></div>

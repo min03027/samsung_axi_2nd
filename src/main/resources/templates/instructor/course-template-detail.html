@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:with="isAdmin=${#authorization.expression('hasRole(''ADMIN'')')}">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <title>과정 템플릿 관리</title>
-    <link rel="stylesheet" href="/static/css/admin.css"><link rel="stylesheet" href="/static/css/content-operations.css?v=20260825-2">
+    <link rel="stylesheet" href="/static/css/i-common-style.css" th:href="${isAdmin} ? '/static/css/common-style.css' : '/static/css/i-common-style.css'">
+    <link rel="stylesheet" href="/static/css/i-sidebar-style.css" th:href="${isAdmin} ? '/static/css/sidebar-style.css' : '/static/css/i-sidebar-style.css'">
+    <link rel="stylesheet" href="/static/css/content-operations.css?v=20260825-2">
 </head>
 <body>
+<header th:replace="~{fragments/management :: header('교육 운영 > 과정 템플릿')}"></header>
 <th:block th:replace="~{fragments/management :: sidebar('course-templates')}"></th:block>
 <main class="content ops-shell">
     <div class="ops-head"><div><span class="ops-kicker">BLUEPRINT DETAIL</span><h1 th:text="${row.name}"></h1><p th:text="${'원본 · ' + row.sourceCourseName}"></p></div><a class="ops-btn" href="/instructor/course-templates">목록</a></div>
