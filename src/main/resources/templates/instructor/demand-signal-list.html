@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>산업수요 신호</title>
+    <link rel="stylesheet" href="/static/css/admin.css"><link rel="stylesheet" href="/static/css/content-operations.css?v=20260825-2">
+</head>
+<body>
+<th:block th:replace="~{fragments/management :: sidebar('demand-signals')}"></th:block>
+<main class="content ops-shell">
+    <div class="ops-head"><div><span class="ops-kicker">DEMAND SIGNALS</span><h1>산업수요와 과정 최신화를 연결하세요</h1><p>채용·기업 요청·NCS 조사 결과를 기록하면 기술 키워드를 기준으로 검토할 과정을 제안합니다.</p></div></div>
+    <div class="ops-message" th:if="${message}" th:text="${message}"></div>
+    <div class="ops-stats"><div class="ops-stat"><span>등록 신호</span><strong th:text="${#lists.size(rows)}"></strong></div><div class="ops-stat"><span>검토 대기 추천</span><strong th:text="${pendingCount}"></strong></div></div>
+    <div class="ops-grid">
+        <section class="ops-card"><h2>수요 신호</h2><div class="ops-table-wrap"><table class="ops-table">
+            <thead><tr><th>관찰 내용</th><th>직무</th><th>수요 점수</th><th>과정 추천</th><th></th></tr></thead>
+            <tbody>
+            <tr th:each="row : ${rows}">
+                <td><strong th:text="${row.title}"></strong><small th:text="${row.industry + ' · ' + row.observedOn + ' · ' + row.sourceLabel}"></small></td>
+                <td><span th:text="${row.jobRole}"></span><small th:text="${row.skills}"></small></td><td th:text="${row.demandScore + '/100'}"></td><td th:text="${row.recommendationCount + '개'}"></td>
+                <td><a class="ops-btn" th:href="@{/instructor/demand-signals/{id}(id=${row.id})}">추천 검토</a></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(rows)}"><td colspan="5" class="ops-empty">등록된 수요 데이터가 없습니다.</td></tr>
+            </tbody>
+        </table></div></section>
+        <aside class="ops-stack">
+            <form class="ops-card ops-form" th:action="@{/instructor/demand-signals}" method="post" th:object="${form}">
+                <h2>수요 신호 등록</h2>
+                <label>제목<input class="ops-input" th:field="*{title}" placeholder="예: 제조업 생성형 AI 채용 증가"><small th:errors="*{title}"></small></label>
+                <label>산업<input class="ops-input" th:field="*{industry}" placeholder="제조"><small th:errors="*{industry}"></small></label>
+                <label>직무<input class="ops-input" th:field="*{jobRole}" placeholder="AI 서비스 개발"><small th:errors="*{jobRole}"></small></label>
+                <label>기술 키워드<input class="ops-input" th:field="*{skills}" placeholder="RAG, LLM, Python"><small th:errors="*{skills}"></small></label>
+                <label>수요 점수<input class="ops-input" type="number" min="0" max="100" th:field="*{demandScore}"></label>
+                <label>관찰일<input class="ops-input" type="date" th:field="*{observedOn}"></label>
+                <label>출처<input class="ops-input" th:field="*{sourceName}" placeholder="기업 인터뷰·채용공고 조사"></label>
+                <button class="ops-btn primary" type="submit">등록하고 추천 생성</button>
+            </form>
+            <form class="ops-card ops-form" th:action="@{/instructor/demand-signals/import}" method="post" enctype="multipart/form-data">
+                <h2>CSV 일괄 등록</h2><p>열 순서: observedOn, industry, jobRole, skills, demandScore, title, sourceName, sourceUrl</p>
+                <input class="ops-input" type="file" name="file" accept=".csv,text/csv" required><button class="ops-btn" type="submit">CSV 가져오기</button>
+            </form>
+        </aside>
+    </div>
+</main>
+</body>
+</html>

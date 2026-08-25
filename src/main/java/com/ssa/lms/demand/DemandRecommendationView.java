@@ -1,0 +1,2 @@
+package com.ssa.lms.demand;
+public record DemandRecommendationView(Long id,String courseName,int matchScore,String matchedKeywords,String suggestedContent,DemandRecommendationStatus status,String statusLabel,String reviewNote){public static DemandRecommendationView of(DemandRecommendation r){return new DemandRecommendationView(r.getId(),r.getCourse().getCourseName(),r.getMatchScore(),r.getMatchedKeywords(),r.getSuggestedLibraryItem()==null?null:r.getSuggestedLibraryItem().getTitle(),r.getStatus(),r.getStatus().getLabel(),r.getReviewNote());}}

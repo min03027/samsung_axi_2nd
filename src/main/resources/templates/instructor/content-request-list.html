@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>콘텐츠 요청 관리</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <link rel="stylesheet" href="/static/css/content-operations.css?v=20260825-2">
+</head>
+<body>
+<th:block th:replace="~{fragments/management :: sidebar('content-requests')}"></th:block>
+<main class="content ops-shell">
+    <div class="ops-head">
+        <div><span class="ops-kicker">LEARNER DEMAND</span><h1>추가 콘텐츠 요청</h1><p>훈련생 요청을 검토하고 공용 원본을 해당 과정·차시에 제공합니다.</p></div>
+        <a class="ops-btn" href="/instructor/content-library">공용 라이브러리</a>
+    </div>
+    <section class="ops-card">
+        <div class="ops-table-wrap"><table class="ops-table">
+            <thead><tr><th>요청</th><th>훈련생</th><th>과정</th><th>상태</th><th></th></tr></thead>
+            <tbody>
+            <tr th:each="row : ${rows}">
+                <td><strong th:text="${row.title}"></strong><small th:text="${#temporals.format(row.createdAt, 'yyyy-MM-dd HH:mm')}"></small></td>
+                <td th:text="${row.traineeName}"></td><td th:text="${row.courseName}"></td>
+                <td><span class="ops-badge" th:classappend="${row.status}" th:text="${row.statusLabel}"></span></td>
+                <td><a class="ops-btn" th:href="@{/instructor/content-requests/{id}(id=${row.id})}">처리</a></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(rows)}"><td colspan="5" class="ops-empty">접수된 요청이 없습니다.</td></tr>
+            </tbody>
+        </table></div>
+    </section>
+</main>
+</body>
+</html>

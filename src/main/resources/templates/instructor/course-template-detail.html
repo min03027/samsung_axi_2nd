@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>과정 템플릿 관리</title>
+    <link rel="stylesheet" href="/static/css/admin.css"><link rel="stylesheet" href="/static/css/content-operations.css?v=20260825-2">
+</head>
+<body>
+<th:block th:replace="~{fragments/management :: sidebar('course-templates')}"></th:block>
+<main class="content ops-shell">
+    <div class="ops-head"><div><span class="ops-kicker">BLUEPRINT DETAIL</span><h1 th:text="${row.name}"></h1><p th:text="${'원본 · ' + row.sourceCourseName}"></p></div><a class="ops-btn" href="/instructor/course-templates">목록</a></div>
+    <div class="ops-message" th:if="${message}" th:text="${message}"></div>
+    <div class="ops-grid">
+        <section class="ops-stack">
+            <div class="ops-card"><h2>연결 과정</h2><div class="ops-table-wrap"><table class="ops-table">
+                <thead><tr><th>대상 과정</th><th>적용 버전</th><th>자동 안전 반영</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="link : ${links}"><td th:text="${link.courseName}"></td><td th:text="${'v' + link.appliedVersion}"></td><td th:text="${link.autoSyncSafe ? '사용' : '수동'}"></td><td><form th:if="${link.updateAvailable}" th:action="@{/instructor/course-templates/{id}/links/{linkId}/sync(id=${row.id},linkId=${link.id})}" method="post"><button class="ops-btn primary" type="submit">안전 변경 반영</button></form></td></tr>
+                <tr th:if="${#lists.isEmpty(links)}"><td colspan="4" class="ops-empty">연결된 과정이 없습니다.</td></tr>
+                </tbody>
+            </table></div></div>
+            <div class="ops-card"><h2>버전 이력</h2><div class="ops-table-wrap"><table class="ops-table">
+                <thead><tr><th>버전</th><th>변경 내용</th><th>자동 반영</th><th>발행일</th></tr></thead>
+                <tbody><tr th:each="version : ${versions}"><td th:text="${'v' + version.versionNo}"></td><td th:text="${version.changeSummary}"></td><td th:text="${version.syncedCourseCount + '개 과정'}"></td><td th:text="${#temporals.format(version.createdAt, 'yyyy-MM-dd HH:mm')}"></td></tr></tbody>
+            </table></div></div>
+        </section>
+        <aside class="ops-stack">
+            <form class="ops-card ops-form" th:action="@{/instructor/course-templates/{id}/publish(id=${row.id})}" method="post">
+                <h2>원본의 현재 구조로 새 버전 발행</h2><p>삭제는 자동 전파하지 않고, 작성중 과정에 추가·수정만 반영합니다.</p>
+                <label>변경 요약<textarea class="ops-textarea" name="changeSummary"></textarea></label><button class="ops-btn primary" type="submit">새 버전 발행</button>
+            </form>
+            <form class="ops-card ops-form" th:action="@{/instructor/course-templates/{id}/deploy(id=${row.id})}" method="post" th:object="${deployForm}">
+                <h2>작성중 과정에 적용</h2>
+                <label>대상 과정<select class="ops-select" th:field="*{targetCourseId}"><option value="">선택</option><option th:each="c : ${courses}" th:if="${c.status.name() == 'DRAFT' and c.id != row.sourceCourseId}" th:value="${c.id}" th:text="${c.courseName}"></option></select><small th:errors="*{targetCourseId}"></small></label>
+                <label class="ops-check"><input type="checkbox" th:field="*{autoSyncSafe}"> 새 버전의 추가·수정 자동 반영</label>
+                <button class="ops-btn primary" type="submit">템플릿 적용</button>
+            </form>
+        </aside>
+    </div>
+</main>
+</body>
+</html>
