@@ -53,7 +53,8 @@ class LxpContentOperationsRenderTest {
     void traineeRequestPage() throws Exception {
         mvc.perform(get("/trainee/content-requests"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("학습에 필요한 콘텐츠를 요청하세요")));
+                .andExpect(content().string(containsString("학습에 필요한 콘텐츠를 요청하세요")))
+                .andExpect(content().string(containsString("/static/css/basic-form-trainee.css?v=20260825-3")));
     }
 
     @Test
