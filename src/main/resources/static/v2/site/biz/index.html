@@ -7,7 +7,7 @@
 <meta name="description" content="AI를 배우는 조직에서 AI로 일하는 조직으로. 조직 진단부터 정착까지 설계합니다.">
 <link rel="stylesheet" href="/v2/assets/tokens.css">
 <link rel="stylesheet" href="/v2/assets/base.css">
-<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/biz-pages.css?v=20260824-111">
+<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/biz-pages.css?v=20260825-112">
 </head>
 <body>
 
@@ -158,7 +158,7 @@
   <div class="container">
     <div class="row row--between row--wrap section-head">
       <div><span class="eyebrow">PROGRAMS</span><h2>직무에 맞춰 다르게 배웁니다</h2></div>
-      <a class="btn btn--outline" href="#contact">맞춤 과정 문의</a>
+      <a class="btn btn--outline" href="#biz-contact">맞춤 과정 문의</a>
     </div>
 
     <div class="grid grid-3" style="margin-bottom:var(--sp-10)">
@@ -195,20 +195,20 @@
   <div class="container">
     <div class="row row--between row--wrap section-head">
       <div><span class="eyebrow">CASES</span><h2>교육 당일, 직원들은 무엇을 했나</h2></div>
-      <a class="btn btn--outline" href="#cases">대표 사례 보기</a>
+      <a class="btn btn--outline" href="/v2/site/biz/cases.html">대표 사례 보기</a>
     </div>
     <div class="grid grid-3">
-      <a class="card card--pad card--hover stack" href="/v2/site/biz/cases.html?industry=제조" style="color:inherit">
+      <a class="card card--pad card--hover stack" href="/v2/site/biz/cases.html?case=manufacturing#case-detail" style="color:inherit">
         <div class="row row--wrap"><span class="badge">제조</span><span class="badge">교육 수행</span><span class="badge">익명 공개</span></div>
         <h4>품질 검사 기록과 현장 보고서 자동화</h4>
         <p class="small muted">반복 문서를 기준으로 입력 항목과 결과물 형식을 정리하는 직무교육 구성입니다.</p>
       </a>
-      <a class="card card--pad card--hover stack" href="/v2/site/biz/cases.html?industry=커머스" style="color:inherit">
+      <a class="card card--pad card--hover stack" href="/v2/site/biz/cases.html?case=commerce#case-detail" style="color:inherit">
         <div class="row row--wrap"><span class="badge">커머스</span><span class="badge">직무교육</span><span class="badge">익명 공개</span></div>
         <h4>브랜드 기준을 반영한 콘텐츠 제작</h4>
         <p class="small muted">콘텐츠 기획과 카피 변형에 사용할 팀 템플릿을 구성하는 교육입니다.</p>
       </a>
-      <a class="card card--pad card--hover stack" href="/v2/site/biz/cases.html?industry=금융" style="color:inherit">
+      <a class="card card--pad card--hover stack" href="/v2/site/biz/cases.html?case=finance#case-detail" style="color:inherit">
         <div class="row row--wrap"><span class="badge">금융</span><span class="badge">PoC 교육</span><span class="badge">익명 공개</span></div>
         <h4>내부 규정 문서를 근거로 찾는 업무</h4>
         <p class="small muted">보안 기준을 전제로 문서 검색·답변 PoC를 설계하는 프로젝트형 교육입니다.</p>
@@ -246,9 +246,10 @@
       <div class="card card--pad biz-contact-form">
         <span class="biz-contact-form__step">1:1 CONSULTATION</span>
         <h3>도입 문의</h3>
-        <p class="small muted" style="margin-top:var(--sp-2)">필요한 내용만 남겨주세요. 담당자가 1영업일 안에 연락드립니다.</p>
-        <form class="stack" style="margin-top:var(--sp-5)" onsubmit="return false">
-          <p class="hint" role="status">현재 기업교육 문의 입력 화면은 시연용입니다. 입력한 내용은 서버에 저장되거나 실제 접수되지 않습니다.</p>
+        <p class="small muted" style="margin-top:var(--sp-2)">조직 정보를 입력하고 상담용 요약을 먼저 확인하세요.</p>
+        <form class="stack" id="biz-contact-form" style="margin-top:var(--sp-5)">
+          <p class="hint" role="status">작성 내용은 이 브라우저에만 임시 저장됩니다. 아직 서버 접수·담당자 전송 기능은 연결되지 않았습니다.</p>
+          <div class="biz-draft-status" id="biz-draft-status" role="status" hidden><span></span><button type="button" data-clear-draft>임시저장 삭제</button></div>
           <div class="grid grid-2">
             <div class="field"><label class="label" for="co">회사명 <span class="req">*</span></label><input class="input" id="co" required></div>
             <div class="field"><label class="label" for="nm">담당자명 <span class="req">*</span></label><input class="input" id="nm" required></div>
@@ -267,10 +268,23 @@
           <div class="field"><label class="label" for="issue">해결하고 싶은 문제</label>
             <textarea class="textarea" id="issue" placeholder="업무 과제, 사용 중인 도구, 보안 기준과 예산 범위를 알려 주세요."></textarea></div>
           <div class="field"><label class="label" for="attachment">참고 자료</label><input class="input" id="attachment" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip"><p class="xsmall muted" style="margin-top:var(--sp-2)">제안요청서나 기존 교육 자료가 있다면 첨부해 주세요.</p></div>
-          <label class="check"><input type="checkbox" required>
+          <label class="check"><input id="privacy-consent" type="checkbox" required>
             <span>개인정보 수집·이용에 동의합니다. <a href="/privacy" data-lxp>내용 보기</a></span></label>
-          <button class="btn btn--primary btn--block" type="button" disabled aria-disabled="true">온라인 문의 접수 준비 중</button>
+          <div class="biz-contact-actions"><button class="btn btn--outline" type="button" data-save-draft>임시저장</button><button class="btn btn--primary" type="submit">문의 내용 검토하기</button></div>
         </form>
+        <section class="biz-contact-review" id="biz-contact-review" hidden aria-live="polite">
+          <span class="biz-contact-form__step">REVIEW</span><h3>상담 전에 내용을 확인하세요</h3>
+          <p>아래 요약은 이 기기에서만 만들어지며 실제 접수되지 않습니다.</p>
+          <dl id="biz-contact-summary"></dl>
+          <div class="biz-contact-actions"><button class="btn btn--outline" type="button" data-edit-contact>수정하기</button><button class="btn btn--primary" type="button" data-finish-contact>작성 완료</button></div>
+        </section>
+        <section class="biz-contact-complete" id="biz-contact-complete" hidden aria-live="polite">
+          <span class="biz-contact-form__step">READY</span><h3>상담 내용이 준비됐습니다</h3>
+          <p>실제 접수 전까지 작성 내용을 이 브라우저에 보관합니다. 아래 요약을 복사해 담당자에게 전달할 수 있습니다.</p>
+          <strong id="biz-contact-reference"></strong>
+          <div class="biz-contact-actions"><button class="btn btn--outline" type="button" data-copy-contact>요약 복사</button><button class="btn btn--primary" type="button" data-edit-contact>내용 수정</button></div>
+          <p class="biz-copy-status" role="status"></p>
+        </section>
       </div>
     </div>
   </div>
@@ -279,7 +293,7 @@
 <script src="/v2/assets/brand.js"></script>
 <script src="/v2/assets/page-section-navigation.js"></script>
 <script>Shell.site({service:"biz",nav:"home",sections:[{href:"#education-types",label:"교육 유형"},{href:"#ax-execution",label:"AX 실행"},{href:"#job-programs",label:"직무별 과정"},{href:"#company-cases",label:"기업 사례"},{href:"#biz-contact",label:"도입 문의"}]});</script>
-<script src="/v2/assets/biz-education-types.js?v=20260824-102"></script>
-<script>var selectedProgram=new URLSearchParams(location.search).get('program');if(selectedProgram){var issue=document.getElementById('issue');if(issue&&!issue.value){issue.value=selectedProgram+' 직무 과정의 시간·대상·교육 방식을 문의합니다.'}}</script>
+<script src="/v2/assets/biz-education-types.js?v=20260825-112"></script>
+<script>var bizParams=new URLSearchParams(location.search),selectedProgram=bizParams.get('program'),selectedCase=bizParams.get('case'),issue=document.getElementById('issue');if(selectedProgram&&issue&&!issue.value){issue.value=selectedProgram+' 직무 과정의 시간·대상·교육 방식을 문의합니다.'}if(selectedCase&&issue&&!issue.value){var bizCaseLabels={manufacturing:'제조 품질·현장 보고 자동화',logistics:'물류 운영 기록·일일 보고',finance:'금융 규정 문서 RAG PoC',medical:'의료 행정 문서 자동화',commerce:'커머스 콘텐츠 제작',public:'공공 행정 보고서'};issue.value=(bizCaseLabels[selectedCase]||'익명 공개 사례')+'와 비슷한 업무를 상담하고 싶습니다.'}</script>
 </body>
 </html>
