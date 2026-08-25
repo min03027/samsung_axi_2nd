@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:with="isAdmin=${#authorization.expression('hasRole(''ADMIN'')')}">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/i-common-style.css" th:href="${isAdmin} ? '/static/css/common-style.css' : '/static/css/i-common-style.css'">
+    <link rel="stylesheet" href="/static/css/i-sidebar-style.css" th:href="${isAdmin} ? '/static/css/sidebar-style.css' : '/static/css/i-sidebar-style.css'">
+    <link rel="stylesheet" href="/static/css/content-library.css?v=20260825-1">
+    <script src="/static/js/sidebar-function.js" defer></script><script src="/static/js/common-funtion.js" defer></script>
+    <title>Samsung Academy LXP - 과정에 콘텐츠 배치</title>
+</head>
+<body data-user-role="instructor" th:attr="data-user-role=${isAdmin} ? 'admin' : 'instructor'">
+<header th:replace="${isAdmin} ? ~{fragments/admin :: header('콘텐츠 관리 > 과정에 배치')} : ~{fragments/instructor :: header('콘텐츠 관리 > 과정에 배치')}"></header>
+<th:block th:replace="${isAdmin} ? ~{fragments/admin :: sidebar('content-library')} : ~{fragments/instructor :: sidebar('content-library')}"/>
+<main class="main-content"><div class="library-shell">
+    <nav class="library-tabs" aria-label="콘텐츠 관리 메뉴"><a href="/instructor/contents">과정 콘텐츠</a><a class="active" href="/instructor/content-library">공용 라이브러리</a><a href="/instructor/content-library/versions">버전 이력</a></nav>
+    <div class="library-hero"><div><span class="library-eyebrow">DEPLOY CONTENT</span><h1>공용 원본을 과정에 배치합니다</h1><p><strong th:text="${item.title}">원본명</strong> <span th:text="'v' + ${item.currentVersion}">v1</span>을 선택한 과정·차시에 새 학습 콘텐츠로 연결합니다.</p></div></div>
+    <form class="library-form-card" th:action="@{/instructor/content-library/{id}/deploy(id=${libraryItemId})}" method="post" th:object="${deployForm}">
+        <div class="library-error" th:if="${#fields.hasErrors('*')}"><p th:each="err : ${#fields.errors('*')}" th:text="${err}">오류</p></div>
+        <div class="library-form-grid">
+            <div class="library-field"><label for="courseId">과정</label><select class="library-select" id="courseId" th:field="*{courseId}" onchange="filterLibrarySessions()"><option value="">과정 선택</option><option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}">과정</option></select></div>
+            <div class="library-field"><label for="sessionId">차시</label><select class="library-select" id="sessionId" th:field="*{sessionId}"><option value="">과정 공용(차시 미지정)</option><option th:each="sessionOption : ${sessionOptions}" th:value="${sessionOption.id}" th:text="${sessionOption.label}" th:attr="data-course=${sessionOption.courseId}">차시</option></select></div>
+            <div class="library-field"><label for="orderNo">정렬 순서</label><input class="library-input" type="number" min="1" id="orderNo" th:field="*{orderNo}"></div>
+            <div class="library-field"><label>이수 기준</label><label class="library-check"><input type="checkbox" th:field="*{required}"><span><strong>필수 학습 콘텐츠</strong><small>과정 이수 판정에 이 콘텐츠의 완료 여부를 포함합니다.</small></span></label></div>
+            <div class="library-field full"><label>버전 반영 방식</label><label class="library-check"><input type="checkbox" th:field="*{autoSync}"><span><strong>원본의 새 버전을 자동 반영</strong><small>공용 원본이 업데이트되어도 과정 콘텐츠 ID와 기존 진도 기록은 유지되고, 제목·설명·파일·학습 기준만 최신 버전으로 바뀝니다.</small></span></label></div>
+        </div>
+        <div class="library-form-actions"><a class="library-btn" th:href="@{/instructor/content-library/{id}(id=${libraryItemId})}">취소</a><button class="library-btn primary" type="submit">과정에 배치</button></div>
+    </form>
+</div></main>
+<script>
+function filterLibrarySessions(){var course=document.getElementById('courseId').value;var select=document.getElementById('sessionId');Array.prototype.forEach.call(select.options,function(option){if(!option.value)return;var visible=option.getAttribute('data-course')===course;option.hidden=!visible;if(!visible&&option.selected)select.value='';});}
+document.addEventListener('DOMContentLoaded',filterLibrarySessions);
+</script>
+</body></html>

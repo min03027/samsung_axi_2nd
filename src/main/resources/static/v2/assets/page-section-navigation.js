@@ -100,7 +100,7 @@
       { key: "courses",  label: "과정 관리",     href: "/admin/courses", level: "L2" },
       { key: "schedule", label: "차시·일정",     href: "/admin/courses/schedule", level: "L2" },
       { key: "contents", label: "콘텐츠 라이브러리", href: "/instructor/contents" },
-      { key: "versions", label: "콘텐츠 버전",   href: null /* 화면 미구현 */ }
+      { key: "versions", label: "콘텐츠 버전",   href: "/instructor/content-library/versions" }
     ]},
     { group: "사용자", items: [
       { key: "trainees",    label: "훈련생 관리", href: "/admin/users/trainees" },

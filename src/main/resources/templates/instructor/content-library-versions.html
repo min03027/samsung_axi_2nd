@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      th:with="isAdmin=${#authorization.expression('hasRole(''ADMIN'')')}">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/i-common-style.css" th:href="${isAdmin} ? '/static/css/common-style.css' : '/static/css/i-common-style.css'">
+    <link rel="stylesheet" href="/static/css/i-sidebar-style.css" th:href="${isAdmin} ? '/static/css/sidebar-style.css' : '/static/css/i-sidebar-style.css'">
+    <link rel="stylesheet" href="/static/css/content-library.css?v=20260825-1">
+    <script src="/static/js/sidebar-function.js" defer></script><script src="/static/js/common-funtion.js" defer></script>
+    <title>Samsung Academy LXP - 콘텐츠 버전 이력</title>
+</head>
+<body data-user-role="instructor" th:attr="data-user-role=${isAdmin} ? 'admin' : 'instructor'">
+<header th:replace="${isAdmin} ? ~{fragments/admin :: header('콘텐츠 관리 > 버전 이력')} : ~{fragments/instructor :: header('콘텐츠 관리 > 버전 이력')}"></header>
+<th:block th:replace="${isAdmin} ? ~{fragments/admin :: sidebar('content-versions')} : ~{fragments/instructor :: sidebar('content-versions')}"/>
+<main class="main-content"><div class="library-shell">
+    <nav class="library-tabs" aria-label="콘텐츠 관리 메뉴"><a href="/instructor/contents">과정 콘텐츠</a><a href="/instructor/content-library">공용 라이브러리</a><a class="active" href="/instructor/content-library/versions">버전 이력</a></nav>
+    <div class="library-hero"><div><span class="library-eyebrow">VERSION HISTORY</span><h1>언제, 무엇을 바꿨는지<br>업데이트 흐름을 확인하세요</h1><p>원본별 변경 내용과 발행 시각, 작업자, 연결 과정 반영 건수를 한 곳에 기록합니다.</p></div></div>
+    <section class="library-panel library-table-wrap"><table class="library-table"><thead><tr><th>발행 시각</th><th>공용 원본</th><th>버전</th><th>변경 내용</th><th>산업·직무 태그</th><th>자동 반영</th><th>작업자</th></tr></thead><tbody>
+        <tr th:if="${#lists.isEmpty(versions)}"><td class="library-empty" colspan="7">아직 발행된 콘텐츠 버전이 없습니다.</td></tr>
+        <tr th:each="version : ${versions}">
+            <td th:text="${version.changedAt != null ? #temporals.format(version.changedAt, 'yyyy-MM-dd HH:mm') : '-'}">-</td>
+            <td class="title-cell"><strong><a th:href="@{/instructor/content-library/{id}(id=${version.libraryItemId})}" th:text="${version.libraryTitle}">원본</a></strong><small th:text="${version.originalFileName != null ? version.originalFileName : version.title}">파일</small></td>
+            <td><span class="library-badge" th:text="'v' + ${version.versionNo}">v1</span></td>
+            <td th:text="${version.changeSummary}">변경 내용</td>
+            <td th:text="${version.industryTags != null ? version.industryTags : '-'}">-</td>
+            <td th:text="${version.syncedContentCount} + '건'">0건</td>
+            <td th:text="${version.changedBy != null ? '사용자 #' + version.changedBy : '시스템'}">시스템</td>
+        </tr>
+    </tbody></table></section>
+</div></main>
+</body></html>

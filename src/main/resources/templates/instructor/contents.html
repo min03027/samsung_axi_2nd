@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/static/css/i-sidebar-style.css" th:href="${isAdmin} ? '/static/css/sidebar-style.css' : '/static/css/i-sidebar-style.css'">
     <link rel="stylesheet" href="/static/css/btn-style.css">
     <link rel="stylesheet" href="/static/css/contents.css">
+    <link rel="stylesheet" href="/static/css/content-library.css?v=20260825-1">
     <link rel="stylesheet" href="/static/css/pagination.css">
     <script src="/static/js/sidebar-function.js" defer></script>
     <script src="/static/js/common-funtion.js" defer></script>
@@ -20,6 +21,11 @@
 
     <main class="main-content">
         <section class="main-content-inner">
+            <nav class="library-tabs" aria-label="콘텐츠 관리 메뉴">
+                <a class="active" href="/instructor/contents">과정 콘텐츠</a>
+                <a href="/instructor/content-library">공용 라이브러리</a>
+                <a href="/instructor/content-library/versions">버전 이력</a>
+            </nav>
             <div th:replace="${sampleData} ? ~{fragments/instructor :: sampleNotice} : ~{}"></div>
 
             <!-- 과정 필터 + 등록 버튼 -->
@@ -86,6 +92,9 @@
                             <td th:text="${c.createdAt != null ? #temporals.format(c.createdAt, 'yyyy-MM-dd') : '-'}">등록일</td>
                             <td style="white-space:nowrap;">
                                 <a class="btn btn-secondary btn-sm" th:href="@{/instructor/contents/{id}/edit(id=${c.id})}">수정</a>
+                                <form th:action="@{/instructor/content-library/promote/{id}(id=${c.id})}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-secondary btn-sm">공용 원본으로 등록</button>
+                                </form>
                                 <form th:action="@{/instructor/contents/{id}/status(id=${c.id})}" method="post" style="display:inline;">
                                     <input type="hidden" name="courseId" th:value="${selectedCourseId}">
                                     <input type="hidden" name="status" th:value="${c.status.name() == 'ACTIVE'} ? 'ARCHIVED' : 'ACTIVE'">

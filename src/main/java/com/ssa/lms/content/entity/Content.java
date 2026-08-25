@@ -138,6 +138,24 @@ public class Content extends BaseEntity {
         this.mimeType = mimeType;
     }
 
+    /**
+     * 공용 콘텐츠 원본의 새 버전을 이 과정 콘텐츠에 반영한다.
+     * 콘텐츠 id와 과정/차시 연결은 유지하므로 기존 진도와 학습 이력이 끊기지 않는다.
+     */
+    public void syncFromLibrary(ContentType type, String title, String description,
+                                String fileUrl, String originalFileName, Long fileSize, String mimeType,
+                                Integer durationSeconds, Integer pageCount) {
+        this.type = type;
+        this.title = title;
+        this.description = description;
+        this.fileUrl = fileUrl;
+        this.originalFileName = originalFileName;
+        this.fileSize = fileSize;
+        this.mimeType = mimeType;
+        this.durationSeconds = durationSeconds;
+        this.pageCount = pageCount;
+    }
+
     public void changeStatus(ContentStatus status) {
         this.status = status;
     }

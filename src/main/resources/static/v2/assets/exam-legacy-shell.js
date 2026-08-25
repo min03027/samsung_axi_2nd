@@ -162,6 +162,8 @@
     ]},
     { key: "contents", label: "콘텐츠 관리", href: "/instructor/contents", icon: "03-description.svg", w: 26, sub: [
       { key: "contents", label: "학습 콘텐츠(VOD/문서)", href: "/instructor/contents" },
+      { key: "content-library", label: "공용 콘텐츠 라이브러리", href: "/instructor/content-library" },
+      { key: "content-versions", label: "콘텐츠 버전 이력", href: "/instructor/content-library/versions" },
       { key: "contents-qbank", label: "문제은행", href: "/admin/evaluation/questions" }
     ]},
     { key: "courses", label: "과정/운영 관리", href: "/admin/courses", icon: "03-course.svg", w: 25, sub: [

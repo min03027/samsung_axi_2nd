@@ -76,6 +76,7 @@
                     <img src="/static/icons/03-course.svg" alt="" class="management-menu-icon">
                     <span class="menu-text" th:classappend="${active == 'courses' or active == 'schedule'
                             or active == 'enrollment-approval' or active == 'admissions' or active == 'contents'
+                            or active == 'content-library' or active == 'content-versions'
                             or active == 'att-status' or active == 'att-graduate'} ? 'active_menu'">교육 운영</span>
                     <span class="chev" aria-hidden="true">▾</span>
                     <ul>
@@ -83,7 +84,9 @@
                         <li class="submenu" th:classappend="${active == 'schedule'} ? 'active_menu'"><a href="/admin/courses/schedule">일정·시간표</a></li>
                         <li class="submenu" th:classappend="${active == 'enrollment-approval'} ? 'active_menu'"><a href="/admin/enrollments/pending">수강신청 승인</a></li>
                         <li class="submenu" th:classappend="${active == 'admissions'} ? 'active_menu'"><a href="/admin/admissions/applications">모집·신청 관리</a></li>
-                        <li class="submenu" th:classappend="${active == 'contents'} ? 'active_menu'"><a href="/instructor/contents">콘텐츠·라이브러리</a></li>
+                        <li class="submenu" th:classappend="${active == 'contents'} ? 'active_menu'"><a href="/instructor/contents">과정 콘텐츠</a></li>
+                        <li class="submenu" th:classappend="${active == 'content-library'} ? 'active_menu'"><a href="/instructor/content-library">공용 라이브러리</a></li>
+                        <li class="submenu" th:classappend="${active == 'content-versions'} ? 'active_menu'"><a href="/instructor/content-library/versions">콘텐츠 버전 이력</a></li>
                         <li class="submenu" th:classappend="${active == 'att-status'} ? 'active_menu'"><a href="/admin/attendance">출결 현황</a></li>
                         <li class="submenu" th:classappend="${active == 'att-graduate'} ? 'active_menu'"><a href="/admin/completion">이수·수료 관리</a></li>
                     </ul>
@@ -92,12 +95,15 @@
                     onclick="handleMenuClick(this, '/instructor/courses')">
                     <img src="/static/icons/03-course.svg" alt="" class="management-menu-icon">
                     <span class="menu-text" th:classappend="${active == 'courses' or active == 'scheduler'
-                            or active == 'contents' or active == 'att-status' or active == 'att-graduate'} ? 'active_menu'">교육 운영</span>
+                            or active == 'contents' or active == 'content-library' or active == 'content-versions'
+                            or active == 'att-status' or active == 'att-graduate'} ? 'active_menu'">교육 운영</span>
                     <span class="chev" aria-hidden="true">▾</span>
                     <ul>
                         <li class="submenu" th:classappend="${active == 'courses'} ? 'active_menu'"><a href="/instructor/courses">담당 과정</a></li>
                         <li class="submenu" th:classappend="${active == 'scheduler'} ? 'active_menu'"><a href="/instructor/scheduler">일정·시간표</a></li>
-                        <li class="submenu" th:classappend="${active == 'contents'} ? 'active_menu'"><a href="/instructor/contents">콘텐츠·라이브러리</a></li>
+                        <li class="submenu" th:classappend="${active == 'contents'} ? 'active_menu'"><a href="/instructor/contents">과정 콘텐츠</a></li>
+                        <li class="submenu" th:classappend="${active == 'content-library'} ? 'active_menu'"><a href="/instructor/content-library">공용 라이브러리</a></li>
+                        <li class="submenu" th:classappend="${active == 'content-versions'} ? 'active_menu'"><a href="/instructor/content-library/versions">콘텐츠 버전 이력</a></li>
                         <li class="submenu" th:classappend="${active == 'att-status'} ? 'active_menu'"><a href="/instructor/attendance">출결 현황</a></li>
                         <li class="submenu" th:classappend="${active == 'att-graduate'} ? 'active_menu'"><a href="/instructor/graduate">이수 현황</a></li>
                     </ul>
