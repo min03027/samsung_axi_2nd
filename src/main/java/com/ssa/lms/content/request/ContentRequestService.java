@@ -36,10 +36,12 @@ public class ContentRequestService {
         return requestRepository.findByTraineeIdOrderByCreatedAtDesc(traineeId).stream().map(ContentRequestView::of).toList();
     }
 
-    public List<com.ssa.lms.course.entity.Course> myCourses(Long traineeId) {
+    public List<ContentRequestCourseOption> myCourses(Long traineeId) {
         return enrollmentRepository.findByTraineeIdOrderByAppliedAtDesc(traineeId).stream()
                 .filter(e -> e.getStatus() == EnrollmentStatus.APPROVED || e.getStatus() == EnrollmentStatus.COMPLETED)
-                .map(e -> e.getCourse()).toList();
+                .map(e -> ContentRequestCourseOption.of(e.getCourse()))
+                .distinct()
+                .toList();
     }
 
     public List<ContentRequestView> staffRows(LoginUser actor) {

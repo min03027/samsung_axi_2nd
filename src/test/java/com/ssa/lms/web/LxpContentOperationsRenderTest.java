@@ -26,7 +26,10 @@ import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -51,6 +54,28 @@ class LxpContentOperationsRenderTest {
         mvc.perform(get("/trainee/content-requests"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("학습에 필요한 콘텐츠를 요청하세요")));
+    }
+
+    @Test
+    @WithUserDetails("trainee1")
+    @DisplayName("훈련생이 콘텐츠 요청을 접수하고 목록에서 확인한다")
+    void traineeCreatesRequest() throws Exception {
+        var trainee = userRepository.findByLoginId("trainee1").orElseThrow();
+        var enrollment = enrollmentRepository.findByTraineeIdOrderByAppliedAtDesc(trainee.getId()).stream()
+                .filter(row -> row.getStatus() == EnrollmentStatus.APPROVED || row.getStatus() == EnrollmentStatus.COMPLETED)
+                .findFirst().orElseThrow();
+
+        mvc.perform(post("/trainee/content-requests")
+                        .with(csrf())
+                        .param("courseId", enrollment.getCourse().getId().toString())
+                        .param("title", "Tableau 대시보드 실습")
+                        .param("reason", "시각화 실습 자료가 더 필요합니다."))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/trainee/content-requests"));
+
+        mvc.perform(get("/trainee/content-requests"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Tableau 대시보드 실습")));
     }
 
     @Test
