@@ -1,0 +1,124 @@
+<!doctype html>
+<!-- 화상강의 입장 전 장치 점검 — LXP-125/127 프론트엔드 부분 구현.
+     카메라·마이크·화면 공유는 실제 브라우저 API 를 호출해 로컬로만 점검한다.
+     녹화·저장·서버 전송은 하지 않는다. 강의실 데모 입장 이후에도 다자간 실시간
+     송출은 없다 — 이 화면은 어디까지나 "내 장치가 켜지는가"만 확인한다.
+
+     페이지 루트 클래스 .live-precheck-page 는 <body> 에 붙는다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/css/basic-form-trainee.css">
+<link rel="stylesheet" href="/static/css/btn-style.css">
+<link rel="stylesheet" href="/v2/assets/live-class.css">
+<title>Samsung Academy LXP — 화상강의 입장 전 장치 점검</title>
+</head>
+<body class="live-precheck-page">
+
+<main>
+  <section class="main-content main-wrap">
+
+    <div class="page-header">
+      <p class="page-desc">화상 라이브 강의실에 들어가기 전 카메라·마이크·화면 공유를 점검합니다. 세 항목을 모두 통과해야 강의실 데모에 입장할 수 있습니다.</p>
+      <div class="demo-warn">
+        <strong>이 점검은 로컬 장치 확인입니다(데모).</strong>
+        영상·음성은 이 브라우저 안에서만 재생되며 녹화·저장·서버 전송을 하지 않습니다.
+        강의실 데모 입장 이후에도 참가자 간 실시간 송출·녹화는 없습니다 — 실제 화상강의 서버는 아직 연동되지 않았습니다.
+      </div>
+    </div>
+
+    <p class="hint-text mb-12" id="progressLine" aria-live="polite">통과 0 / 3개 항목</p>
+
+    <div class="check-grid">
+
+      <article class="check-card" data-check="camera" data-state="idle">
+        <div class="check-top">
+          <div>
+            <p class="check-title">카메라</p>
+            <p class="check-desc">내 카메라의 로컬 미리보기입니다. 현재 다른 참가자에게 송출되지 않습니다.</p>
+          </div>
+          <span class="state-badge" data-role="badge">미확인</span>
+        </div>
+        <div class="media-tile">
+          <video data-role="preview" playsinline muted hidden></video>
+          <p class="tile-empty" data-role="placeholder">장치 점검을 시작하면 미리보기가 표시됩니다</p>
+          <span class="tile-label">내 카메라</span>
+        </div>
+        <div class="device-row">
+          <label class="sr-only" for="cameraSelect">카메라 선택</label>
+          <select id="cameraSelect" data-role="device-select" disabled></select>
+        </div>
+        <p class="check-msg" data-role="msg" aria-live="polite"></p>
+      </article>
+
+      <article class="check-card" data-check="mic" data-state="idle">
+        <div class="check-top">
+          <div>
+            <p class="check-title">마이크</p>
+            <p class="check-desc">내 마이크의 로컬 입력 레벨입니다. 현재 다른 참가자에게 송출되지 않습니다.</p>
+          </div>
+          <span class="state-badge" data-role="badge">미확인</span>
+        </div>
+        <div class="level-meter" role="img" aria-label="마이크 입력 레벨">
+          <div class="level-fill" data-role="level-fill"></div>
+        </div>
+        <div class="device-row">
+          <label class="sr-only" for="micSelect">마이크 선택</label>
+          <select id="micSelect" data-role="device-select" disabled></select>
+        </div>
+        <p class="check-msg" data-role="msg" aria-live="polite"></p>
+      </article>
+
+      <article class="check-card" data-check="screen" data-state="idle">
+        <div class="check-top">
+          <div>
+            <p class="check-title">화면 공유</p>
+            <p class="check-desc">발표할 화면을 미리 선택해 둡니다.</p>
+          </div>
+          <span class="state-badge" data-role="badge">미확인</span>
+        </div>
+        <div class="media-tile">
+          <video data-role="preview" playsinline muted hidden></video>
+          <p class="tile-empty" data-role="placeholder">화면 공유를 시작하면 미리보기가 표시됩니다</p>
+          <span class="tile-label">내 화면</span>
+        </div>
+        <p class="check-msg" data-role="msg" aria-live="polite"></p>
+        <div class="check-actions">
+          <button type="button" class="btn btn-primary" data-action="screen-start">화면 공유 시작</button>
+          <button type="button" class="btn btn-gray" data-action="screen-stop" disabled>중지</button>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="gate-box">
+      <div>
+        <p class="gate-title">장치 점검 시작</p>
+        <p class="gate-msg" id="gateMsg" aria-live="polite">아래 버튼을 눌러 카메라·마이크 권한을 한 번에 요청합니다.</p>
+      </div>
+      <div class="gate-actions">
+        <button type="button" class="btn btn-primary" data-action="device-start">장치 점검 시작</button>
+        <a class="btn btn-secondary" id="enterBtn" href="/v2/lxp/trainee/live-classroom.html"
+           aria-disabled="true" tabindex="-1">강의실 데모 입장</a>
+      </div>
+    </div>
+
+    <p class="hint-text mt-12" id="permHint">
+      권한을 거부한 뒤 다시 허용하려면 주소창의 권한(자물쇠) 아이콘을 눌러 카메라·마이크를 허용으로 바꾼 다음 <b>장치 점검 시작</b>을 다시 누르세요.
+      화면 공유 선택 창을 취소했다면 <b>화면 공유 시작</b>을 다시 눌러 재시도할 수 있습니다.
+    </p>
+
+    <p class="mt-12">
+      <a class="btn btn-gray" href="/trainee/contents">학습콘텐츠로 돌아가기</a>
+    </p>
+
+  </section>
+</main>
+
+<script src="/v2/assets/exam-legacy-shell.js"></script>
+<script src="/v2/assets/live-class-common.js"></script>
+<script src="/v2/assets/live-class-precheck.js"></script>
+<script>ExamShell.trainee({ active: "contents", title: "학습콘텐츠 > 화상 라이브 강의" });</script>
+</body>
+</html>

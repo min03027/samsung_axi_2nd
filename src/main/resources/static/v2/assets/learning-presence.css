@@ -1,0 +1,342 @@
+/* ============================================================
+   learning-presence.css — 학습 참여 확인 데모 전용 스타일 (LXP-140 / LXP-141 / LXP-142)
+
+   전제: 운영 CSS 를 먼저 로드한다(live-class.css 와 같은 전제).
+     훈련생 화면 : basic-form-trainee.css → btn-style.css → learning-presence.css
+     관리자 화면 : common-style.css → sidebar-style.css → btn-style.css → learning-presence.css
+
+   색·간격은 운영 CSS 의 :root 토큰(--color-primary, --gray-*, --color-line-gray 등)만
+   쓴다. live-class.css 의 점검카드·상태배지·표 문법과 같은 느낌으로 재현했지만
+   live-class.css 파일 자체는 참고만 하고 수정하지 않는다(이번 차수 수정 금지 파일).
+
+   ── 범위 규칙 (반드시 지킬 것) ────────────────────────────────
+   이 파일의 모든 선택자는 아래 2개 "페이지 루트 클래스" 중 하나로 시작한다.
+   루트 클래스는 각 화면의 <body> 에 붙는다 — GNB·사이드바·토스트·다이얼로그가
+   본문 div 바깥에 삽입되기 때문에 body 가 아니면 전부 감쌀 수 없다.
+
+     .learning-presence-page   /v2/lxp/trainee/learning-presence-check.html
+     .presence-monitor-page    /v2/admin/presence-monitor.html
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   0. [hidden] — 2개 루트별로만 선언한다(UA 스타일보다 클래스 규칙이 이겨야 한다)
+   ------------------------------------------------------------ */
+.learning-presence-page [hidden] { display: none !important; }
+.presence-monitor-page [hidden] { display: none !important; }
+
+.presence-monitor-page .main-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+
+/* ------------------------------------------------------------
+   1. 데모 표시 — 두 화면 모두 최상단에 상시 노출한다
+   ------------------------------------------------------------ */
+.learning-presence-page .demo-warn {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #ffe5b8;
+    background: #fff7e8;
+    color: #7a4a00;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.learning-presence-page .demo-warn strong { font-weight: 700; }
+
+.presence-monitor-page .demo-flash {
+    margin: 0 0 12px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: #E8F4FF;
+    color: #0b4a7d;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* ------------------------------------------------------------
+   2. 공통 상태 배지 — 색만으로 구분하지 않도록 항상 라벨 텍스트와 함께 쓴다
+   ------------------------------------------------------------ */
+.learning-presence-page .state-badge,
+.presence-monitor-page .state-badge {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    background: var(--gray-100);
+    color: var(--gray-600);
+    border: 1px solid var(--gray-200);
+}
+.learning-presence-page .state-badge.ok,
+.presence-monitor-page .state-badge.ok { background: var(--color-success-bg); color: var(--color-success); border-color: #cfe7d1; }
+
+.learning-presence-page .state-badge.warn,
+.presence-monitor-page .state-badge.warn { background: var(--color-warning-bg); color: var(--color-warning); border-color: #f4dfc0; }
+
+.learning-presence-page .state-badge.risk,
+.presence-monitor-page .state-badge.risk { background: var(--color-danger-bg); color: var(--color-danger); border-color: #f3cfcb; }
+
+
+/* ------------------------------------------------------------
+   3. 공통 보조 유틸
+   ------------------------------------------------------------ */
+.learning-presence-page .sr-only,
+.presence-monitor-page .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.learning-presence-page .hint-text,
+.presence-monitor-page .hint-text { font-size: 13px; color: var(--gray-500); line-height: 1.6; }
+
+.learning-presence-page .mb-12, .presence-monitor-page .mb-12 { margin-bottom: 12px; }
+.learning-presence-page .mt-12, .presence-monitor-page .mt-12 { margin-top: 12px; }
+
+.learning-presence-page .row-between,
+.presence-monitor-page .row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+.learning-presence-page .mono, .presence-monitor-page .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 토스트 — presence-monitor.js 의 toast() 가 쓴다 ---------- */
+.presence-monitor-page .toast-host {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: min(340px, calc(100vw - 40px));
+}
+.presence-monitor-page .toast {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: var(--color-deep-primary);
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.presence-monitor-page .toast.is-out { opacity: 0; transform: translateY(6px); }
+
+
+/* ------------------------------------------------------------
+   4. 훈련생 학습 참여 확인 화면 (learning-presence-page)
+   ------------------------------------------------------------ */
+.learning-presence-page .page-header { margin-bottom: 14px; }
+.learning-presence-page .page-desc { margin: 6px 0 0 0; font-size: 14px; color: var(--gray-600); line-height: 1.5; }
+
+.learning-presence-page .consent-box,
+.learning-presence-page .camera-card,
+.learning-presence-page .scenario-card,
+.learning-presence-page .presence-card,
+.learning-presence-page .time-card,
+.learning-presence-page .event-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 14px;
+    margin-top: 14px;
+}
+.learning-presence-page .consent-desc { margin: 0 0 10px; font-size: 14px; color: var(--gray-700); line-height: 1.6; }
+.learning-presence-page .consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--gray-900);
+    line-height: 1.5;
+}
+.learning-presence-page .consent-label input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; flex: none; }
+
+.learning-presence-page .check-title { font-size: 15px; font-weight: 600; color: var(--gray-900); margin: 0 0 10px; }
+
+.learning-presence-page .device-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.learning-presence-page .device-row select { height: 40px; min-width: 180px; }
+.learning-presence-page .device-row .btn { height: 40px; }
+
+.learning-presence-page .media-tile {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    max-width: 480px;
+    background: #000;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.learning-presence-page .media-tile video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.learning-presence-page .media-tile .tile-empty { color: var(--gray-400); font-size: 13px; text-align: center; padding: 10px; line-height: 1.5; }
+
+.learning-presence-page .check-msg { font-size: 13px; color: var(--gray-600); line-height: 1.5; min-height: 18px; }
+.learning-presence-page .check-msg[data-tone="warn"] { color: var(--color-warning); }
+.learning-presence-page .check-msg[data-tone="risk"] { color: var(--color-danger); }
+
+.learning-presence-page .scenario-card label { display: block; font-size: 14px; font-weight: 600; color: var(--gray-900); margin-bottom: 8px; }
+.learning-presence-page .scenario-card select { height: 40px; min-width: 220px; margin-bottom: 8px; }
+
+.learning-presence-page .time-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 0;
+}
+.learning-presence-page .time-grid dt { font-size: 13px; color: var(--gray-500); margin-bottom: 4px; }
+.learning-presence-page .time-grid dd {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gray-900);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+.learning-presence-page .event-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; }
+.learning-presence-page .event-list li { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+.learning-presence-page .event-list .mono { color: var(--gray-500); margin-right: 6px; }
+
+
+/* ------------------------------------------------------------
+   5. 관리자 학습 참여 모니터링 화면 (presence-monitor-page)
+   ------------------------------------------------------------ */
+.presence-monitor-page .monitor-summary {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 4px 0 12px;
+    font-size: 14px;
+    color: var(--gray-700);
+}
+
+.presence-monitor-page .search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.presence-monitor-page .search-container input { width: 220px; height: 38px; }
+.presence-monitor-page .search-container select { height: 38px; }
+
+.presence-monitor-page .kpi-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 10px 0;
+    font-size: 14px;
+    color: var(--gray-800);
+}
+.presence-monitor-page .kpi-row strong { font-size: 18px; font-weight: 700; color: var(--gray-900); }
+
+.presence-monitor-page .admin-card {
+    background: #fff;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 8px;
+    padding: 16px;
+}
+.presence-monitor-page .admin-card + .admin-card { margin-top: 14px; }
+.presence-monitor-page .admin-card > h3 { font-size: 15px; font-weight: 600; color: var(--gray-900); margin: 0 0 12px; }
+
+.presence-monitor-page .people-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    background: #fff;
+    font-size: 13px;
+    min-width: 560px;
+}
+.presence-monitor-page .people-table th,
+.presence-monitor-page .people-table td {
+    border-bottom: 1px solid var(--color-line-gray);
+    padding: 8px 10px;
+    text-align: left;
+}
+.presence-monitor-page .people-table th { background: #f5f6f8; font-weight: 600; white-space: nowrap; }
+.presence-monitor-page .people-table td.nowrap { white-space: nowrap; }
+.presence-monitor-page .people-row { cursor: pointer; }
+.presence-monitor-page .people-row:hover td { background: var(--gray-50); }
+.presence-monitor-page .people-table tr.is-selected td { background: var(--color-light-primary); }
+.presence-monitor-page .table-scroll { overflow-x: auto; }
+
+.presence-monitor-page dialog.notice-dialog {
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+.presence-monitor-page dialog.notice-dialog h3 { margin: 0 0 10px; font-size: 16px; font-weight: 700; color: var(--gray-900); }
+.presence-monitor-page dialog.notice-dialog p { margin: 0 0 16px; font-size: 13px; color: var(--gray-700); line-height: 1.6; }
+.presence-monitor-page dialog.notice-dialog .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; }
+.presence-monitor-page dialog.notice-dialog .dialog-actions .btn { min-height: 44px; }
+.presence-monitor-page dialog.notice-dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+
+
+/* ------------------------------------------------------------
+   6. 반응형 — 1440x900 / 1024x768 / 390x844 대응
+      운영 화면과 같은 브레이크포인트(1023/768/480)를 그대로 쓴다.
+      ⚠ 768 은 exam-legacy-shell.js 의 matchMedia("(max-width: 768px)") 와 같아야 한다.
+   ------------------------------------------------------------ */
+@media (max-width: 1023px) {
+    .learning-presence-page .time-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .presence-monitor-page .main-content { padding: 14px; }
+    .presence-monitor-page .header { padding-left: 12px; padding-right: 12px; gap: 8px; }
+    .presence-monitor-page .header h1 {
+        font-size: 14px;
+        min-width: 0;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .presence-monitor-page .header .icon-container { gap: 4px; flex: none; }
+    .presence-monitor-page .header .icon-box { width: 32px; height: 32px; }
+    .presence-monitor-page .header .icon-box img { width: 20px !important; }
+
+    .presence-monitor-page .search-container input { width: 100%; }
+    .presence-monitor-page .kpi-row { gap: 12px; font-size: 13px; }
+    .presence-monitor-page .kpi-row strong { font-size: 16px; }
+}
+
+/* 390px 폭에서도 버튼 높이 44px 이상, 본문 글자 14px 이상을 보장한다.
+   페이지 전체 가로 스크롤은 만들지 않는다 — 표만 .table-scroll 내부에서 넘친다. */
+@media (max-width: 480px) {
+    .learning-presence-page .device-row { flex-direction: column; align-items: stretch; }
+    .learning-presence-page .device-row .btn,
+    .learning-presence-page .device-row select { width: 100%; min-height: 44px; }
+    .learning-presence-page .consent-desc,
+    .learning-presence-page .check-msg,
+    .learning-presence-page .hint-text { font-size: 14px; }
+    .learning-presence-page .media-tile { max-width: 100%; }
+    .learning-presence-page .time-grid { grid-template-columns: 1fr 1fr; }
+
+    .presence-monitor-page .search-container input,
+    .presence-monitor-page .search-container select { width: 100%; min-height: 44px; }
+    .presence-monitor-page .admin-card { padding: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .presence-monitor-page .toast { transition: none; }
+}

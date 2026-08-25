@@ -1,0 +1,98 @@
+<!doctype html>
+<!-- 학습 참여 확인 데모 — LXP-140/141/142 프론트엔드 부분 구현.
+     카메라는 실제 브라우저 API 로 로컬 미리보기까지만 쓴다. 얼굴 검출·동일인 판별·
+     생체정보 저장·서버 전송·실제 출결 반영은 전부 하지 않는다. 화면의 "참여 상태"는
+     아래 데모 시나리오 select 가 정하는 모의 값으로만 계산된다 — 실제 영상을 분석하지
+     않는다.
+
+     페이지 루트 클래스 .learning-presence-page 는 <body> 에 붙는다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/css/basic-form-trainee.css">
+<link rel="stylesheet" href="/static/css/btn-style.css">
+<link rel="stylesheet" href="/v2/assets/learning-presence.css">
+<title>Samsung Academy LXP — 학습 참여 확인</title>
+</head>
+<body class="learning-presence-page">
+
+<main>
+  <section class="main-content main-wrap">
+
+    <div class="page-header">
+      <p class="page-desc">얼굴/재실 확인 기반 학습 참여 상태를 확인합니다. 카메라 로컬 미리보기만 사용하며 실제 얼굴 인식·저장·출결 반영은 하지 않습니다.</p>
+      <div class="demo-warn">
+        <strong>프론트엔드 데모 / 실제 얼굴 인식·저장·출결 반영 없음.</strong>
+        카메라 영상은 이 브라우저 안에서만 재생되며 녹화·저장·서버 전송을 하지 않습니다.
+        아래 "참여 상태"는 실제 영상 분석이 아니라 데모 시나리오 선택값으로만 계산됩니다.
+      </div>
+    </div>
+
+    <div class="consent-box">
+      <p class="consent-desc">카메라를 시작하면 브라우저가 카메라 접근 권한을 요청합니다. 영상은 로컬 미리보기에만 쓰이며 저장·전송되지 않습니다. 계속하려면 아래 동의가 필요합니다.</p>
+      <label class="consent-label">
+        <input type="checkbox" id="consentCheckbox">
+        카메라 사용 및 개인정보 처리(로컬 미리보기 전용, 저장·전송 없음)에 동의합니다.
+      </label>
+    </div>
+
+    <div class="camera-card">
+      <div class="device-row">
+        <label class="sr-only" for="cameraSelect">카메라 선택</label>
+        <select id="cameraSelect" disabled></select>
+        <button type="button" class="btn btn-primary" id="startBtn" disabled>시작</button>
+        <button type="button" class="btn btn-gray" id="stopBtn" disabled>중지</button>
+        <button type="button" class="btn btn-secondary" id="retryBtn" hidden>재시도</button>
+      </div>
+      <div class="media-tile">
+        <video id="selfPreview" playsinline muted hidden></video>
+        <p class="tile-empty" id="selfPlaceholder">카메라를 시작하면 로컬 미리보기가 표시됩니다</p>
+      </div>
+      <p class="check-msg" id="cameraMsg" aria-live="polite"></p>
+    </div>
+
+    <div class="scenario-card">
+      <label for="scenarioSelect">데모 시나리오</label>
+      <select id="scenarioSelect"></select>
+      <p class="hint-text">아래 상태는 실제 얼굴 분석 결과가 아니라 선택한 데모 시나리오값으로 계산됩니다.</p>
+      <p class="hint-text" id="scenarioDesc" aria-live="polite"></p>
+    </div>
+
+    <div class="presence-card">
+      <p class="check-title">현재 참여 상태</p>
+      <p><span class="state-badge" id="stateBadge">미확인</span></p>
+      <p class="check-msg" id="stateMsg" aria-live="polite"></p>
+    </div>
+
+    <div class="time-card">
+      <p class="check-title">학습시간</p>
+      <dl class="time-grid">
+        <div><dt>접속 시간</dt><dd id="connectedTime">00:00:00</dd></div>
+        <div><dt>확인된 학습시간</dt><dd id="verifiedTime">00:00:00</dd></div>
+        <div><dt>누적 자리 이탈</dt><dd id="awayTime">00:00:00</dd></div>
+        <div><dt>인정 예정 시간</dt><dd id="recognizedTime">00:00:00</dd></div>
+      </dl>
+      <p class="hint-text">인정 예정 시간은 얼굴 1명이 확인된 데모 시간이며 실제 출결 정책과 연결되지 않습니다.</p>
+      <p class="hint-text">마지막 확인 <span id="lastCheckedAt">-</span> · 다음 확인 예정 <span id="nextCheckedAt">-</span></p>
+    </div>
+
+    <div class="event-card">
+      <p class="check-title">최근 데모 이벤트</p>
+      <ul id="eventList" class="event-list" aria-live="polite"></ul>
+    </div>
+
+    <p class="mt-12">
+      <a class="btn btn-gray" href="/trainee/contents">학습콘텐츠로 돌아가기</a>
+    </p>
+
+  </section>
+</main>
+
+<script src="/v2/assets/exam-legacy-shell.js"></script>
+<script src="/v2/assets/learning-presence-common.js"></script>
+<script src="/v2/assets/learning-presence-demo-data.js"></script>
+<script src="/v2/assets/learning-presence-check.js"></script>
+<script>ExamShell.trainee({ active: "contents", title: "학습콘텐츠 > 학습 참여 확인" });</script>
+</body>
+</html>

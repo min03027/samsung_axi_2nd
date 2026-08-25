@@ -1,0 +1,119 @@
+<!doctype html>
+<!-- 출결·OTP·모바일 본인인증 데모 — LXP-144/146/147 프론트엔드 부분 구현.
+     실제 OTP 발송·본인인증 API 호출·HRD 전문 송수신은 하지 않는다. 화면에 보이는
+     인증 결과·전송 상태·체류시간은 전부 이 브라우저 메모리 안의 모의 값이다.
+
+     페이지 루트 클래스 .attendance-verification-page 는 <body> 에 붙는다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/css/basic-form-trainee.css">
+<link rel="stylesheet" href="/static/css/btn-style.css">
+<link rel="stylesheet" href="/v2/assets/attendance-verification.css">
+<title>Samsung Academy LXP — 출결 현황·본인인증</title>
+</head>
+<body class="attendance-verification-page">
+
+<main>
+  <section class="main-content main-wrap">
+
+    <div class="page-header">
+      <p class="page-desc">OTP 인증과 모바일 본인인증으로 실제 학습 여부를 확인하고, 인증 결과가 산업인력공단(HRD-Net)으로 전송되는 과정을 확인합니다.</p>
+      <div class="demo-warn">
+        <strong>프론트엔드 데모입니다.</strong>
+        실제 OTP 발송·본인인증·HRD-Net 전송·출결 반영은 수행하지 않습니다. 표시되는 인증·전송 결과와 체류시간은 이 브라우저의 모의 값입니다.
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <p><strong id="courseTitle"></strong></p>
+      <p class="hint-text" id="unitLine"></p>
+      <p class="hint-text" id="scheduleLine"></p>
+    </div>
+
+    <div class="stage-card">
+      <p class="check-title">오늘의 출결 및 인증 진행 단계</p>
+      <p><span class="state-badge" id="overallStageBadge">본인인증 진행 중</span></p>
+      <p class="check-msg" id="overallStageMsg" aria-live="polite"></p>
+    </div>
+
+    <div class="time-card">
+      <p class="check-title">플랫폼 체류시간</p>
+      <dl class="time-grid">
+        <div><dt>접속 시간</dt><dd id="connectedTime">00:00:00</dd></div>
+        <div><dt>확인된 체류시간</dt><dd id="verifiedTime">00:00:00</dd></div>
+        <div><dt>인증 이후 확인시간</dt><dd id="sinceVerifiedTime">00:00:00</dd></div>
+      </dl>
+      <p class="hint-text">마지막 상태 갱신 <span id="lastUpdatedAt">-</span></p>
+      <p class="hint-text">이 시간은 실제 출결 인정시간이 아니라 데모 화면의 체류시간 표시입니다.</p>
+    </div>
+
+    <div class="otp-card">
+      <p class="check-title">OTP 인증</p>
+      <p><span class="state-badge" id="otpStateBadge">미발급</span></p>
+      <p class="check-msg" id="otpMsg" aria-live="polite"></p>
+      <p class="hint-text" id="otpDemoCodeHint" hidden></p>
+
+      <div class="otp-row">
+        <label class="sr-only" for="otpInput">OTP 6자리 입력</label>
+        <input type="text" inputmode="numeric" autocomplete="off" id="otpInput" maxlength="6" placeholder="6자리 숫자" disabled>
+        <button type="button" class="btn btn-primary" id="otpIssueBtn">OTP 발급(데모)</button>
+        <button type="button" class="btn btn-primary" id="otpVerifyBtn" disabled>인증</button>
+        <button type="button" class="btn btn-gray" id="otpReissueBtn" hidden>재발급(데모)</button>
+      </div>
+      <p class="hint-text">남은 유효시간 <span id="otpRemainingTime">-</span> · 남은 시도 횟수 <span id="otpAttemptsLeft">-</span></p>
+      <p>
+        <button type="button" class="btn btn-secondary" id="otpUnreceivedBtn" disabled>OTP 를 받지 못했어요</button>
+      </p>
+    </div>
+
+    <div class="mobile-card" id="mobileCard" hidden>
+      <p class="check-title">모바일 본인인증 대체</p>
+      <p class="hint-text">OTP 를 받지 못한 경우에만 사용할 수 있는 데모 대체 인증입니다. 실제 외부 인증 창은 열리지 않습니다.</p>
+      <p>
+        <button type="button" class="btn btn-primary" id="mobileStartBtn">모바일 본인인증 시작(데모)</button>
+      </p>
+      <p class="check-msg" id="mobileResultMsg" aria-live="polite"></p>
+    </div>
+
+    <div class="event-card">
+      <p class="check-title">처리 이력</p>
+      <ul id="eventList" class="event-list" aria-live="polite"></ul>
+    </div>
+
+    <div class="integration-card" id="integrationNotice">
+      <p class="check-title">실제 연동 시 필요한 항목</p>
+      <ul class="integration-list">
+        <li>외부 OTP 인증사업자 API 필요</li>
+        <li>모바일 본인인증 사업자 API 필요</li>
+        <li>HRD-Net 인증·전문 규격 필요</li>
+        <li>전송 시점·미수신 판정·재시도·감사로그 정책 필요</li>
+        <li>플랫폼 체류시간 산정 규칙과 공단 기준 대조 필요</li>
+      </ul>
+    </div>
+
+    <p class="mt-12">
+      <a class="btn btn-gray" href="/trainee/attendance">출결/이수 관리로 돌아가기</a>
+    </p>
+
+  </section>
+</main>
+
+<dialog class="mobile-auth-dialog" id="mobileDialog" aria-labelledby="mobileDialogTitle">
+  <h3 id="mobileDialogTitle">모바일 본인인증(데모)</h3>
+  <p>실제 외부 본인인증 창을 열지 않습니다. 아래에서 데모 결과를 선택하세요.</p>
+  <div class="dialog-actions">
+    <button type="button" class="btn btn-gray" id="mobileDialogCancelBtn">취소</button>
+    <button type="button" class="btn btn-danger" id="mobileDialogFailBtn">실패(데모)</button>
+    <button type="button" class="btn btn-primary" id="mobileDialogSuccessBtn">성공(데모)</button>
+  </div>
+</dialog>
+
+<script src="/v2/assets/exam-legacy-shell.js"></script>
+<script src="/v2/assets/attendance-verification-common.js"></script>
+<script src="/v2/assets/attendance-verification-demo-data.js"></script>
+<script src="/v2/assets/attendance-trainee.js"></script>
+<script>ExamShell.trainee({ active: "attendance", title: "출결/이수관리 > 출결 현황·본인인증" });</script>
+</body>
+</html>

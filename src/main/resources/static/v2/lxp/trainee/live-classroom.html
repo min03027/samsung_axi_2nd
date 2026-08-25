@@ -1,0 +1,111 @@
+<!doctype html>
+<!-- 화상 라이브 강의실 데모 — LXP-125/127 프론트엔드 부분 구현.
+     강사 영상·참가자 연결·채팅 전송·녹화는 실제 서버 연동이 없는 데모다.
+     본인 카메라·마이크·화면 공유만 로컬 브라우저 MediaStream 으로 실제 확인한다.
+
+     페이지 루트 클래스 .live-classroom-page 는 <body> 에 붙는다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/css/basic-form-trainee.css">
+<link rel="stylesheet" href="/static/css/btn-style.css">
+<link rel="stylesheet" href="/v2/assets/live-class.css">
+<title>Samsung Academy LXP — 화상 라이브 강의실</title>
+</head>
+<body class="live-classroom-page">
+
+<main>
+  <section class="main-content main-wrap">
+
+    <div class="demo-warn">
+      <strong>이 화면은 데모입니다.</strong>
+      강사 영상·참가자 연결·채팅 전송·녹화는 실제 서버 연동이 없습니다.
+      본인 카메라·마이크·화면 공유만 이 브라우저 안에서 로컬로 확인합니다.
+    </div>
+
+    <div class="classroom-top">
+      <div>
+        <h2 class="classroom-title" id="sessionTitle"></h2>
+        <p class="hint-text" id="sessionMeta"></p>
+      </div>
+      <button type="button" class="btn btn-danger" id="leaveBtn">나가기</button>
+    </div>
+
+    <!-- WAI-ARIA APG 탭 패턴: tablist/tab/tabpanel 계약 + 좌우/Home/End 키 이동은 live-classroom.js 가 처리한다.
+         좁은 화면(1023px 이하)에서만 보이며, 넓은 화면에서는 세 패널이 동시에 표시되므로 hidden 이 아니다. -->
+    <nav class="classroom-tabs" id="classroomTabs" hidden aria-label="화면 전환" role="tablist">
+      <button type="button" class="btn btn-secondary is-active" role="tab" id="tabStage"
+              aria-controls="stagePane" aria-selected="true" tabindex="0">강의 화면</button>
+      <button type="button" class="btn btn-gray" role="tab" id="tabPeople"
+              aria-controls="peoplePane" aria-selected="false" tabindex="-1">참가자</button>
+      <button type="button" class="btn btn-gray" role="tab" id="tabChat"
+              aria-controls="chatPane" aria-selected="false" tabindex="-1">채팅</button>
+    </nav>
+
+    <div class="classroom-grid">
+
+      <section class="classroom-pane" id="stagePane" role="tabpanel" aria-labelledby="tabStage">
+        <div class="stage-tile">
+          <p class="stage-empty">강사 영상 미연결 — 데모 화면</p>
+        </div>
+
+        <div class="self-row">
+          <div class="media-tile self-tile">
+            <video data-role="self-preview" playsinline muted hidden></video>
+            <p class="tile-empty" data-role="self-placeholder">카메라가 꺼져 있습니다</p>
+            <span class="tile-label">나</span>
+          </div>
+          <div class="media-tile self-tile">
+            <video data-role="screen-preview" playsinline muted hidden></video>
+            <p class="tile-empty" data-role="screen-placeholder">화면 공유가 꺼져 있습니다</p>
+            <span class="tile-label">내 화면 공유</span>
+          </div>
+        </div>
+
+        <div class="control-bar">
+          <button type="button" class="btn btn-secondary" id="camBtn" data-state="off" aria-pressed="false">카메라 켜기</button>
+          <button type="button" class="btn btn-secondary" id="micBtn" data-state="off" aria-pressed="false">마이크 켜기</button>
+          <button type="button" class="btn btn-secondary" id="screenBtn" data-state="off" aria-pressed="false">화면 공유 시작</button>
+        </div>
+        <p class="check-msg" id="stageMsg" aria-live="polite"></p>
+      </section>
+
+      <section class="classroom-pane" id="peoplePane" role="tabpanel" aria-labelledby="tabPeople">
+        <h3 class="pane-title">참가자 <span id="peopleCount"></span></h3>
+        <ul class="people-list" id="peopleList"></ul>
+        <p class="hint-text">참가자 목록은 데모 데이터입니다. 실제 접속자가 아닙니다.</p>
+      </section>
+
+      <section class="classroom-pane" id="chatPane" role="tabpanel" aria-labelledby="tabChat">
+        <h3 class="pane-title">채팅</h3>
+        <p class="hint-text mb-12">이 메시지는 다른 참가자에게 전송되지 않습니다. 새로고침하면 초기 메시지로 되돌아갑니다.</p>
+        <ul class="chat-list" id="chatList" aria-live="polite"></ul>
+        <form class="chat-form" id="chatForm">
+          <label class="sr-only" for="chatInput">채팅 입력 (최대 300자)</label>
+          <input type="text" id="chatInput" maxlength="300" placeholder="메시지를 입력하세요 (로컬 전용)">
+          <button type="submit" class="btn btn-primary">보내기</button>
+        </form>
+      </section>
+
+    </div>
+
+  </section>
+</main>
+
+<dialog class="leave-dialog" id="leaveDialog" aria-labelledby="leaveTitle">
+  <h3 id="leaveTitle">강의실에서 나가시겠습니까?</h3>
+  <p>카메라·마이크·화면 공유가 모두 종료되고 장치 점검 화면으로 돌아갑니다.</p>
+  <div class="dialog-actions">
+    <button type="button" class="btn btn-gray" id="leaveCancel">취소</button>
+    <button type="button" class="btn btn-danger" id="leaveConfirm">나가기</button>
+  </div>
+</dialog>
+
+<script src="/v2/assets/exam-legacy-shell.js"></script>
+<script src="/v2/assets/live-class-common.js"></script>
+<script src="/v2/assets/live-class-demo-data.js"></script>
+<script src="/v2/assets/live-classroom.js"></script>
+<script>ExamShell.trainee({ active: "contents", title: "학습콘텐츠 > 화상 라이브 강의" });</script>
+</body>
+</html>

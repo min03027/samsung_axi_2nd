@@ -1,0 +1,533 @@
+/* ============================================================
+   live-class.css — 화상강의 데모 전용 스타일 (LXP-125 / LXP-127)
+
+   전제: 운영 CSS 를 먼저 로드한다. 이 파일은 그 위에 얹는다(exam.css 와 같은 전제).
+     훈련생 화면 : basic-form-trainee.css → btn-style.css → live-class.css
+     관리자 화면 : common-style.css → sidebar-style.css → btn-style.css → live-class.css
+
+   색·간격은 운영 CSS 의 :root 토큰(--color-primary, --gray-*, --color-line-gray 등)만
+   쓴다. exam.css 의 점검카드·타일·요약줄·표 문법을 같은 느낌으로 재현했지만,
+   exam.css 파일 자체는 수정하지 않고(이번 차수 수정 금지 파일) 이 파일에 새로 옮겨 썼다.
+
+   ── 범위 규칙 (반드시 지킬 것) ────────────────────────────────
+   이 파일의 모든 선택자는 아래 3개 "페이지 루트 클래스" 중 하나로 시작한다.
+   루트 클래스는 각 화면의 <body> 에 붙는다 — GNB·사이드바·토스트·다이얼로그가
+   본문 div 바깥에 삽입되기 때문에 body 가 아니면 전부 감쌀 수 없다.
+
+     .live-precheck-page    /v2/lxp/trainee/live-class-precheck.html
+     .live-classroom-page   /v2/lxp/trainee/live-classroom.html
+     .live-monitor-page     /v2/admin/live-class-monitor.html
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   0. [hidden] — 3개 루트별로만 선언한다(UA 스타일보다 클래스 규칙이 이겨야 한다)
+   ------------------------------------------------------------ */
+.live-precheck-page [hidden] { display: none !important; }
+.live-classroom-page [hidden] { display: none !important; }
+.live-monitor-page [hidden] { display: none !important; }
+
+/* 관리자 1종 — 운영 .main-content(고정 헤더·사이드바 오프셋)는 그대로 두고 안쪽 여백만 정한다. */
+.live-monitor-page .main-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+
+/* ------------------------------------------------------------
+   1. 데모 표시 — 세 화면 모두 최상단에 상시 노출한다
+   ------------------------------------------------------------ */
+.live-precheck-page .demo-warn,
+.live-classroom-page .demo-warn {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #ffe5b8;
+    background: #fff7e8;
+    color: #7a4a00;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.live-precheck-page .demo-warn strong,
+.live-classroom-page .demo-warn strong { font-weight: 700; }
+
+.live-monitor-page .demo-flash {
+    margin: 0 0 12px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: #E8F4FF;
+    color: #0b4a7d;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* ------------------------------------------------------------
+   2. 공통 상태 배지 — 색만으로 구분하지 않도록 항상 라벨 텍스트와 함께 쓴다
+   ------------------------------------------------------------ */
+.live-precheck-page .state-badge,
+.live-classroom-page .state-badge,
+.live-monitor-page .state-badge {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    background: var(--gray-100);
+    color: var(--gray-600);
+    border: 1px solid var(--gray-200);
+}
+.live-precheck-page .state-badge.ok,
+.live-classroom-page .state-badge.ok,
+.live-monitor-page .state-badge.ok { background: var(--color-success-bg); color: var(--color-success); border-color: #cfe7d1; }
+
+.live-precheck-page .state-badge.warn,
+.live-classroom-page .state-badge.warn,
+.live-monitor-page .state-badge.warn { background: var(--color-warning-bg); color: var(--color-warning); border-color: #f4dfc0; }
+
+.live-precheck-page .state-badge.risk,
+.live-classroom-page .state-badge.risk,
+.live-monitor-page .state-badge.risk { background: var(--color-danger-bg); color: var(--color-danger); border-color: #f3cfcb; }
+
+
+/* ------------------------------------------------------------
+   3. 공통 보조 유틸
+   ------------------------------------------------------------ */
+.live-precheck-page .sr-only,
+.live-classroom-page .sr-only,
+.live-monitor-page .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.live-precheck-page .hint-text,
+.live-classroom-page .hint-text,
+.live-monitor-page .hint-text { font-size: 12px; color: var(--gray-500); line-height: 1.6; }
+
+.live-precheck-page .mb-12, .live-classroom-page .mb-12, .live-monitor-page .mb-12 { margin-bottom: 12px; }
+.live-precheck-page .mt-12, .live-classroom-page .mt-12, .live-monitor-page .mt-12 { margin-top: 12px; }
+
+.live-precheck-page .row-between,
+.live-classroom-page .row-between,
+.live-monitor-page .row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+.live-precheck-page .mono, .live-monitor-page .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; }
+
+/* 미리보기 타일 — 카메라는 cover(빈 공간 없이 채움), 화면 공유는 contain(잘리면 글자가 안 보인다) */
+.live-precheck-page .media-tile,
+.live-classroom-page .media-tile {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.live-precheck-page .media-tile video,
+.live-classroom-page .media-tile video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.live-precheck-page .check-card[data-check="screen"] video,
+.live-classroom-page .self-row .media-tile:last-child video { object-fit: contain; }
+
+.live-precheck-page .media-tile .tile-empty,
+.live-classroom-page .media-tile .tile-empty,
+.live-monitor-page .device-tile .tile-empty {
+    color: var(--gray-400);
+    font-size: 12px;
+    text-align: center;
+    padding: 10px;
+    line-height: 1.5;
+}
+.live-precheck-page .media-tile .tile-label,
+.live-classroom-page .media-tile .tile-label,
+.live-monitor-page .device-tile .tile-label {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+}
+
+/* ---------- 토스트 (live-class-common.js 의 toast() 가 세 화면 어디서나 쓴다) ---------- */
+.live-precheck-page .toast-host,
+.live-classroom-page .toast-host,
+.live-monitor-page .toast-host {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: min(340px, calc(100vw - 40px));
+}
+.live-precheck-page .toast,
+.live-classroom-page .toast,
+.live-monitor-page .toast {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: var(--color-deep-primary);
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.live-precheck-page .toast.ok, .live-classroom-page .toast.ok, .live-monitor-page .toast.ok { background: var(--color-success); }
+.live-precheck-page .toast.warn, .live-classroom-page .toast.warn, .live-monitor-page .toast.warn { background: var(--color-warning); }
+.live-precheck-page .toast.risk, .live-classroom-page .toast.risk, .live-monitor-page .toast.risk { background: var(--color-danger); }
+.live-precheck-page .toast.is-out, .live-classroom-page .toast.is-out, .live-monitor-page .toast.is-out { opacity: 0; transform: translateY(6px); }
+
+
+/* ------------------------------------------------------------
+   4. 장치 점검 화면 (live-precheck-page)
+   ------------------------------------------------------------ */
+.live-precheck-page .page-header { margin-bottom: 14px; }
+.live-precheck-page .page-desc { margin: 6px 0 0 0; font-size: 14px; color: var(--gray-600); line-height: 1.5; }
+
+.live-precheck-page .check-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.live-precheck-page .check-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-left: 4px solid var(--gray-300);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.live-precheck-page .check-card[data-state="pass"] { border-left-color: var(--color-success); }
+.live-precheck-page .check-card[data-state="fail"] { border-left-color: var(--color-danger); }
+.live-precheck-page .check-card[data-state="checking"] { border-left-color: var(--color-warning); }
+.live-precheck-page .check-card[data-state="unsupported"] { border-left-color: var(--gray-400); }
+
+.live-precheck-page .check-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.live-precheck-page .check-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.live-precheck-page .check-desc { font-size: 12px; color: var(--gray-600); line-height: 1.5; margin-top: 4px; }
+.live-precheck-page .check-msg { font-size: 13px; color: var(--gray-800); line-height: 1.5; min-height: 1.4em; }
+.live-precheck-page .check-msg[data-tone="ok"] { color: var(--color-success); }
+.live-precheck-page .check-msg[data-tone="risk"] { color: var(--color-danger); }
+.live-precheck-page .check-msg[data-tone="warn"] { color: var(--color-warning); }
+.live-precheck-page .check-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+
+.live-precheck-page .device-row select { width: 100%; height: 38px; padding: 6px 10px; font-size: 13px; }
+.live-precheck-page .device-row select:disabled { color: var(--gray-400); }
+
+/* 마이크 레벨 미터 — 실제 오디오 파일을 만들지 않고 막대 높이로만 보여준다 */
+.live-precheck-page .level-meter {
+    height: 10px;
+    border-radius: 999px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+}
+.live-precheck-page .level-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--color-success);
+    transition: width 0.08s linear;
+}
+
+.live-precheck-page .gate-box {
+    margin-top: 16px;
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+}
+.live-precheck-page .gate-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+.live-precheck-page .gate-msg { font-size: 13px; color: var(--gray-600); margin-top: 4px; }
+.live-precheck-page .gate-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.live-precheck-page .btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
+
+/* 터치 타깃 44px 확보 — 조건부가 아니라 항상 적용한다 */
+.live-precheck-page .check-actions .btn,
+.live-precheck-page .gate-actions .btn,
+.live-precheck-page #enterBtn { min-height: 44px; }
+
+
+/* ------------------------------------------------------------
+   5. 강의실 데모 (live-classroom-page)
+   ------------------------------------------------------------ */
+.live-classroom-page .classroom-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+}
+.live-classroom-page .classroom-title { margin: 0; font-size: 18px; font-weight: 800; color: var(--gray-900); }
+
+.live-classroom-page .classroom-tabs { display: flex; gap: 8px; margin-bottom: 10px; }
+.live-classroom-page .classroom-tabs button {
+    padding: 8px 14px;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 20px;
+    background: #fff;
+    font-size: 14px;
+    color: var(--gray-800);
+    cursor: pointer;
+    min-height: 44px;
+}
+.live-classroom-page .classroom-tabs button.is-active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+}
+
+.live-classroom-page .classroom-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    grid-template-rows: auto auto;
+    grid-template-areas: "stage people" "stage chat";
+    gap: 14px;
+    align-items: start;
+}
+/* 표시 여부는 네이티브 [hidden] 속성(live-classroom.js 의 syncTabMode)이 정한다 — section 0 의
+   ".live-classroom-page [hidden]{display:none!important}" 가 이를 그대로 받는다. 여기 display 를
+   넣으면 id 선택자 특정성이 [hidden] 규칙을 항상 이겨서 좁은 화면에서 탭을 눌러도 패널이 계속
+   보이는 버그가 생긴다(이전 class 기반 버전에서 실측으로 재현·확인한 문제와 같은 종류라 구조
+   자체를 [hidden] 기반으로 바꿨다). */
+.live-classroom-page .classroom-pane { display: flex; flex-direction: column; gap: 12px; }
+.live-classroom-page #stagePane { grid-area: stage; }
+.live-classroom-page #peoplePane { grid-area: people; }
+.live-classroom-page #chatPane { grid-area: chat; min-height: 0; }
+
+.live-classroom-page .stage-tile {
+    aspect-ratio: 16 / 9;
+    background: repeating-linear-gradient(45deg, var(--gray-900), var(--gray-900) 10px, #1a1a1a 10px, #1a1a1a 20px);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.live-classroom-page .stage-empty { color: #fff; font-size: 14px; text-align: center; padding: 12px; }
+
+.live-classroom-page .self-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.live-classroom-page .self-tile { aspect-ratio: 16 / 10; }
+
+.live-classroom-page .control-bar { display: flex; flex-wrap: wrap; gap: 8px; }
+.live-classroom-page .control-bar .btn { min-height: 44px; }
+.live-classroom-page .control-bar .btn[data-state="on"] { background: var(--color-light-primary); border-color: var(--color-primary); color: var(--color-primary); }
+
+.live-classroom-page .check-msg { font-size: 13px; color: var(--gray-800); min-height: 1.4em; }
+.live-classroom-page .check-msg[data-tone="risk"] { color: var(--color-danger); }
+
+.live-classroom-page .admin-card, /* 참가자·채팅 패널을 카드 톤으로 통일 */
+.live-classroom-page #peoplePane,
+.live-classroom-page #chatPane {
+    background: #fff;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 8px;
+    padding: 14px;
+}
+.live-classroom-page .pane-title { font-size: 14px; font-weight: 700; color: var(--gray-900); margin: 0 0 10px; }
+
+.live-classroom-page .people-list { list-style: none; max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.live-classroom-page .people-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 4px;
+    font-size: 13px;
+    color: var(--gray-800);
+    border-bottom: 1px solid var(--gray-100);
+}
+.live-classroom-page .people-item:last-child { border-bottom: none; }
+
+.live-classroom-page .chat-list {
+    list-style: none;
+    flex: 1;
+    min-height: 160px;
+    max-height: 320px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 4px;
+}
+.live-classroom-page .chat-item { border-bottom: 1px solid var(--gray-100); padding-bottom: 8px; }
+.live-classroom-page .chat-meta { margin: 0 0 2px; font-size: 12px; color: var(--gray-500); }
+.live-classroom-page .chat-text { margin: 0; font-size: 13px; color: var(--gray-800); line-height: 1.5; word-break: break-word; }
+
+.live-classroom-page .chat-form { display: flex; gap: 8px; margin-top: 10px; }
+.live-classroom-page .chat-form input {
+    flex: 1;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 8px;
+    font-size: 14px;
+}
+.live-classroom-page .chat-form .btn { min-height: 44px; }
+
+/* 나가기 확인 — 네이티브 <dialog>. 포커스 트랩·Escape 는 브라우저가 처리하고
+   여기서는 모양만 정한다. ::backdrop 도 이 루트 아래에서만 쓴다. */
+.live-classroom-page dialog.leave-dialog {
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+.live-classroom-page dialog.leave-dialog h3 { margin: 0 0 10px; font-size: 16px; font-weight: 700; color: var(--gray-900); }
+.live-classroom-page dialog.leave-dialog p { margin: 0 0 16px; font-size: 13px; color: var(--gray-700); line-height: 1.6; }
+.live-classroom-page dialog.leave-dialog .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; }
+.live-classroom-page dialog.leave-dialog .dialog-actions .btn { min-height: 44px; }
+.live-classroom-page dialog.leave-dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+
+
+/* ------------------------------------------------------------
+   6. 관리자 모니터링 데모 (live-monitor-page) — monitoring-live 의 검색·요약·표 문법
+   ------------------------------------------------------------ */
+.live-monitor-page .search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.live-monitor-page .search-container input { width: 220px; height: 38px; }
+.live-monitor-page .search-container select { height: 38px; }
+
+.live-monitor-page .monitor-summary {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 14px 0 10px;
+    font-size: 14px;
+    color: var(--gray-800);
+}
+.live-monitor-page .monitor-summary strong { font-size: 18px; font-weight: 700; color: var(--gray-900); }
+.live-monitor-page .monitor-summary .sep { width: 1px; height: 16px; background: var(--gray-300); }
+
+.live-monitor-page .admin-card {
+    background: #fff;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 8px;
+    padding: 16px;
+}
+.live-monitor-page .admin-card + .admin-card { margin-top: 14px; }
+.live-monitor-page .admin-card > h3 { font-size: 15px; font-weight: 600; color: var(--gray-900); margin: 0 0 12px; }
+
+.live-monitor-page .device-tiles {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.live-monitor-page .device-tile {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: repeating-linear-gradient(45deg, var(--gray-900), var(--gray-900) 10px, #1a1a1a 10px, #1a1a1a 20px);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.live-monitor-page .device-tile .state-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+}
+
+.live-monitor-page .people-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    background: #fff;
+    font-size: 13px;
+}
+.live-monitor-page .people-table th,
+.live-monitor-page .people-table td {
+    border-bottom: 1px solid var(--color-line-gray);
+    padding: 8px 10px;
+    text-align: left;
+}
+.live-monitor-page .people-table th { background: #f5f6f8; font-weight: 600; white-space: nowrap; }
+.live-monitor-page .people-table td.nowrap { white-space: nowrap; }
+.live-monitor-page .people-row { cursor: pointer; }
+.live-monitor-page .people-row:hover td { background: var(--gray-50); }
+.live-monitor-page .people-table tr.is-selected td { background: var(--color-light-primary); }
+.live-monitor-page .sev-warn { color: #F9A825; font-weight: 600; }
+.live-monitor-page .sev-risk { color: var(--color-danger); font-weight: 700; }
+.live-monitor-page .table-scroll { overflow-x: auto; }
+.live-monitor-page .people-table { min-width: 480px; }
+
+
+/* ------------------------------------------------------------
+   7. 반응형 — 운영 화면과 같은 브레이크포인트(1023/768/480)
+   ------------------------------------------------------------ */
+
+/* 강의실 3열 → 탭 전환. 패널 표시/숨김 자체는 네이티브 [hidden] 속성(위 section 0)이
+   처리하므로 여기서는 좁은 화면에서 그리드 배치만 1열로 풀어준다.
+   ⚠ 이 경계값은 live-classroom.js 의 matchMedia("(max-width: 1023px)") 와 반드시 같아야 한다. */
+@media (max-width: 1023px) {
+    .live-classroom-page .classroom-grid {
+        display: block;
+    }
+}
+
+/* ⚠ 이 768 은 exam-legacy-shell.js 의 matchMedia("(max-width: 768px)") 와 같아야 한다.
+   그쪽에서 사이드바를 자동으로 접고, 여기서 그 폭에 맞춰 헤더 여백을 줄인다. */
+@media (max-width: 768px) {
+    .live-monitor-page .main-content { padding: 14px; }
+    .live-monitor-page .header { padding-left: 12px; padding-right: 12px; gap: 8px; }
+    .live-monitor-page .header h1 {
+        font-size: 14px;
+        min-width: 0;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .live-monitor-page .header .icon-container { gap: 4px; flex: none; }
+    .live-monitor-page .header .icon-box { width: 32px; height: 32px; }
+    .live-monitor-page .header .icon-box img { width: 20px !important; }
+
+    .live-monitor-page .search-container input { width: 100%; }
+    .live-monitor-page .monitor-summary { gap: 12px; font-size: 13px; }
+    .live-monitor-page .monitor-summary strong { font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+    .live-precheck-page .gate-actions,
+    .live-precheck-page .check-actions { flex-direction: column; align-items: stretch; }
+    .live-precheck-page .gate-actions .btn,
+    .live-precheck-page .check-actions .btn { width: 100%; }
+
+    .live-classroom-page .self-row { grid-template-columns: 1fr; }
+    .live-classroom-page .control-bar { flex-direction: column; align-items: stretch; }
+    .live-classroom-page .control-bar .btn { width: 100%; }
+    .live-classroom-page .chat-form { flex-direction: column; }
+    .live-classroom-page .chat-form .btn { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .live-precheck-page .toast, .live-classroom-page .toast, .live-monitor-page .toast { transition: none; }
+    .live-precheck-page .level-fill { transition: none; }
+}

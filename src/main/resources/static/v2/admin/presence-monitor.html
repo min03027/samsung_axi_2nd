@@ -1,0 +1,103 @@
+<!doctype html>
+<!-- 학습 참여 모니터링 데모 — LXP-140/141/142 프론트엔드 부분 구현.
+     참가자·이탈 이력·이벤트는 전부 모의 데이터다. 실제 얼굴 영상·생체정보는 없고
+     출결에도 반영되지 않는다. 안내 보내기는 이 브라우저의 이벤트 로그에만 남는다.
+
+     페이지 루트 클래스 .presence-monitor-page 는 <body> 에 붙는다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/css/common-style.css">
+<link rel="stylesheet" href="/static/css/sidebar-style.css">
+<link rel="stylesheet" href="/static/css/btn-style.css">
+<link rel="stylesheet" href="/v2/assets/learning-presence.css">
+<title>Samsung Academy LXP - 관리자 — 학습 참여 모니터링</title>
+</head>
+<body class="presence-monitor-page">
+
+<main class="main-content">
+
+  <p class="demo-flash">
+    이 화면의 참가자·이탈 이력·이벤트는 전부 <b>모의 데이터(데모)</b>입니다. 실제 얼굴 인식·얼굴 영상·생체정보는 없으며 저장되지 않고,
+    출결에도 반영되지 않습니다. 안내 보내기도 이 브라우저의 이벤트 로그에만 기록됩니다.
+  </p>
+
+  <div class="monitor-summary">
+    <span>강의: <strong id="courseTitle"></strong></span>
+    <span id="policyLine"></span>
+  </div>
+
+  <div class="search-container">
+    <label class="sr-only" for="peopleSearch">훈련생 검색</label>
+    <input type="search" id="peopleSearch" placeholder="이름 또는 좌석번호 검색">
+
+    <label class="sr-only" for="stateFilter">상태 필터</label>
+    <select id="stateFilter">
+      <option value="all">상태 전체</option>
+      <option value="normal">정상</option>
+      <option value="warning">주의</option>
+      <option value="focus">집중관리</option>
+    </select>
+
+    <label class="sr-only" for="scenarioSelect">상태 시나리오(데모)</label>
+    <select id="scenarioSelect"></select>
+  </div>
+
+  <div class="kpi-row">
+    <span>전체 <strong id="kpiTotal">0</strong></span>
+    <span>정상 <strong id="kpiNormal">0</strong></span>
+    <span>주의 <strong id="kpiWarning">0</strong></span>
+    <span>집중관리 <strong id="kpiFocus">0</strong></span>
+  </div>
+  <p class="hint-text mb-12" id="filterCount" aria-live="polite"></p>
+
+  <div class="admin-card">
+    <div class="row-between mb-12">
+      <div>
+        <h3 id="selName">훈련생을 선택하세요</h3>
+        <p class="hint-text" id="selMeta"></p>
+        <p class="hint-text" id="selReason" aria-live="polite"></p>
+      </div>
+      <button type="button" class="btn btn-secondary" id="noticeBtn" disabled>안내 보내기</button>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h3>훈련생 목록</h3>
+    <div class="table-scroll">
+      <table class="people-table">
+        <thead><tr><th>훈련생</th><th>좌석</th><th>연결시간</th><th>확인시간</th><th>이탈시간</th><th>인정 예정</th><th>상태</th></tr></thead>
+        <tbody id="peopleBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h3>시간순 자리 이탈·안내 이벤트</h3>
+    <div class="table-scroll">
+      <table class="people-table">
+        <thead><tr><th>시각</th><th>훈련생</th><th>이탈시간</th><th>내용</th></tr></thead>
+        <tbody id="timelineBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<dialog class="notice-dialog" id="noticeDialog" aria-labelledby="noticeTitle">
+  <h3 id="noticeTitle">안내를 보내시겠습니까?</h3>
+  <p>실제로 발송되지 않으며 저장·출결 변경도 없습니다. 이 화면의 이벤트 로그에만 기록됩니다.</p>
+  <div class="dialog-actions">
+    <button type="button" class="btn btn-gray" id="noticeCancel">취소</button>
+    <button type="button" class="btn btn-primary" id="noticeConfirm">보내기(데모)</button>
+  </div>
+</dialog>
+
+<script src="/v2/assets/exam-legacy-shell.js"></script>
+<script src="/v2/assets/learning-presence-common.js"></script>
+<script src="/v2/assets/learning-presence-demo-data.js"></script>
+<script src="/v2/assets/presence-monitor.js"></script>
+<script>ExamShell.admin({ active: "att", title: "출결/이수 관리 > 학습 참여 모니터링" });</script>
+</body>
+</html>

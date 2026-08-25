@@ -1,0 +1,341 @@
+/* ============================================================
+   attendance-verification.css — 출결·OTP·본인인증·HRD 전송 데모 전용 스타일
+   (LXP-144 / LXP-146 / LXP-147)
+
+   전제: 운영 CSS 를 먼저 로드한다.
+     훈련생 화면 : basic-form-trainee.css → btn-style.css → attendance-verification.css
+     관리자 화면 : common-style.css → sidebar-style.css → btn-style.css → attendance-verification.css
+
+   색·간격은 운영 CSS 의 :root 토큰(--color-primary, --gray-*, --color-line-gray 등)만
+   쓴다. 기존 learning-presence.css/live-class.css 의 문법(점검카드·상태배지·표)을
+   참고했지만 그 파일들 자체는 수정하지 않는다(이번 차수 수정 금지 파일).
+
+   ── 범위 규칙 (반드시 지킬 것) ────────────────────────────────
+   이 파일의 모든 선택자는 아래 2개 "페이지 루트 클래스" 중 하나로 시작한다.
+
+     .attendance-verification-page   /v2/lxp/trainee/attendance.html
+     .attendance-admin-page          /v2/admin/attendance.html
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   0. [hidden] — 2개 루트별로만 선언한다(UA 스타일보다 클래스 규칙이 이겨야 한다)
+   ------------------------------------------------------------ */
+.attendance-verification-page [hidden] { display: none !important; }
+.attendance-admin-page [hidden] { display: none !important; }
+
+.attendance-admin-page .main-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+
+/* ------------------------------------------------------------
+   1. 데모 표시
+   ------------------------------------------------------------ */
+.attendance-verification-page .demo-warn {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #ffe5b8;
+    background: #fff7e8;
+    color: #7a4a00;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.attendance-verification-page .demo-warn strong { font-weight: 700; }
+
+.attendance-admin-page .demo-flash {
+    margin: 0 0 12px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background: #E8F4FF;
+    color: #0b4a7d;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* ------------------------------------------------------------
+   2. 공통 상태 배지 — 색만으로 구분하지 않도록 항상 라벨 텍스트와 함께 쓴다
+   ------------------------------------------------------------ */
+.attendance-verification-page .state-badge,
+.attendance-admin-page .state-badge {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    background: var(--gray-100);
+    color: var(--gray-600);
+    border: 1px solid var(--gray-200);
+}
+.attendance-verification-page .state-badge.ok,
+.attendance-admin-page .state-badge.ok { background: var(--color-success-bg); color: var(--color-success); border-color: #cfe7d1; }
+
+.attendance-verification-page .state-badge.warn,
+.attendance-admin-page .state-badge.warn { background: var(--color-warning-bg); color: var(--color-warning); border-color: #f4dfc0; }
+
+.attendance-verification-page .state-badge.risk,
+.attendance-admin-page .state-badge.risk { background: var(--color-danger-bg); color: var(--color-danger); border-color: #f3cfcb; }
+
+
+/* ------------------------------------------------------------
+   3. 공통 보조 유틸
+   ------------------------------------------------------------ */
+.attendance-verification-page .sr-only,
+.attendance-admin-page .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.attendance-verification-page .hint-text,
+.attendance-admin-page .hint-text { font-size: 13px; color: var(--gray-500); line-height: 1.6; }
+
+.attendance-verification-page .mb-12, .attendance-admin-page .mb-12 { margin-bottom: 12px; }
+.attendance-verification-page .mt-12, .attendance-admin-page .mt-12 { margin-top: 12px; }
+
+.attendance-verification-page .row-between,
+.attendance-admin-page .row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+.attendance-verification-page .mono, .attendance-admin-page .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 토스트 — attendance-admin.js 의 toast() 가 쓴다 ---------- */
+.attendance-admin-page .toast-host {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: min(340px, calc(100vw - 40px));
+}
+.attendance-admin-page .toast {
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: var(--color-deep-primary);
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.5;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.attendance-admin-page .toast.is-out { opacity: 0; transform: translateY(6px); }
+
+/* ---------- 두 화면이 함께 쓰는 카드/타임라인 문법 ---------- */
+.attendance-verification-page .integration-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 14px;
+    margin-top: 14px;
+}
+.attendance-verification-page .integration-list,
+.attendance-admin-page .integration-list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 13px;
+    color: var(--gray-600);
+    line-height: 1.8;
+}
+
+
+/* ------------------------------------------------------------
+   4. 훈련생 출결·본인인증 화면 (attendance-verification-page)
+   ------------------------------------------------------------ */
+.attendance-verification-page .page-header { margin-bottom: 14px; }
+.attendance-verification-page .page-desc { margin: 6px 0 0 0; font-size: 14px; color: var(--gray-600); line-height: 1.5; }
+
+.attendance-verification-page .summary-card,
+.attendance-verification-page .stage-card,
+.attendance-verification-page .time-card,
+.attendance-verification-page .otp-card,
+.attendance-verification-page .mobile-card,
+.attendance-verification-page .event-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 14px;
+    margin-top: 14px;
+}
+.attendance-verification-page .check-title { font-size: 15px; font-weight: 600; color: var(--gray-900); margin: 0 0 10px; }
+.attendance-verification-page .check-msg { font-size: 13px; color: var(--gray-600); line-height: 1.5; min-height: 18px; }
+
+.attendance-verification-page .time-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 0;
+}
+.attendance-verification-page .time-grid dt { font-size: 13px; color: var(--gray-500); margin-bottom: 4px; }
+.attendance-verification-page .time-grid dd {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gray-900);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+.attendance-verification-page .otp-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.attendance-verification-page .otp-row input {
+    height: 40px;
+    width: 140px;
+    font-size: 16px;
+    letter-spacing: 4px;
+    text-align: center;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.attendance-verification-page .otp-row .btn { height: 40px; }
+
+.attendance-verification-page .event-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; }
+.attendance-verification-page .event-list li { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+.attendance-verification-page .event-list .mono { color: var(--gray-500); margin-right: 6px; }
+
+
+/* ------------------------------------------------------------
+   5. 관리자 출결부·HRD 전송 화면 (attendance-admin-page)
+   ------------------------------------------------------------ */
+.attendance-admin-page .monitor-summary {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 4px 0 12px;
+    font-size: 14px;
+    color: var(--gray-700);
+}
+
+.attendance-admin-page .search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.attendance-admin-page .search-container input { width: 220px; height: 38px; }
+.attendance-admin-page .search-container select { height: 38px; }
+
+.attendance-admin-page .kpi-row {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 10px 0;
+    font-size: 14px;
+    color: var(--gray-800);
+}
+.attendance-admin-page .kpi-row strong { font-size: 18px; font-weight: 700; color: var(--gray-900); }
+
+.attendance-admin-page .admin-card {
+    background: #fff;
+    border: 1px solid var(--color-line-gray);
+    border-radius: 8px;
+    padding: 16px;
+}
+.attendance-admin-page .admin-card + .admin-card { margin-top: 14px; }
+.attendance-admin-page .admin-card > h3 { font-size: 15px; font-weight: 600; color: var(--gray-900); margin: 0 0 12px; }
+
+.attendance-admin-page .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.attendance-admin-page .people-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    background: #fff;
+    font-size: 13px;
+    min-width: 640px;
+}
+.attendance-admin-page .people-table th,
+.attendance-admin-page .people-table td {
+    border-bottom: 1px solid var(--color-line-gray);
+    padding: 8px 10px;
+    text-align: left;
+}
+.attendance-admin-page .people-table th { background: #f5f6f8; font-weight: 600; white-space: nowrap; }
+.attendance-admin-page .people-table td.nowrap { white-space: nowrap; }
+.attendance-admin-page .people-row { cursor: pointer; }
+.attendance-admin-page .people-row:hover td { background: var(--gray-50); }
+.attendance-admin-page .people-table tr.is-selected td { background: var(--color-light-primary); }
+.attendance-admin-page .table-scroll { overflow-x: auto; }
+
+.attendance-admin-page dialog.confirm-dialog,
+.attendance-verification-page dialog.mobile-auth-dialog {
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    border: 1px solid var(--gray-200);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+.attendance-admin-page dialog.confirm-dialog h3,
+.attendance-verification-page dialog.mobile-auth-dialog h3 { margin: 0 0 10px; font-size: 16px; font-weight: 700; color: var(--gray-900); }
+.attendance-admin-page dialog.confirm-dialog p,
+.attendance-verification-page dialog.mobile-auth-dialog p { margin: 0 0 16px; font-size: 13px; color: var(--gray-700); line-height: 1.6; }
+.attendance-admin-page dialog.confirm-dialog .dialog-actions,
+.attendance-verification-page dialog.mobile-auth-dialog .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+.attendance-admin-page dialog.confirm-dialog .dialog-actions .btn,
+.attendance-verification-page dialog.mobile-auth-dialog .dialog-actions .btn { min-height: 44px; }
+.attendance-admin-page dialog.confirm-dialog::backdrop,
+.attendance-verification-page dialog.mobile-auth-dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+
+
+/* ------------------------------------------------------------
+   6. 반응형 — 1440x900 / 1024x768 / 390x844 대응
+      운영 화면과 같은 브레이크포인트(1023/768/480)를 그대로 쓴다.
+      ⚠ 768 은 exam-legacy-shell.js 의 matchMedia("(max-width: 768px)") 와 같아야 한다.
+   ------------------------------------------------------------ */
+@media (max-width: 1023px) {
+    .attendance-verification-page .time-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .attendance-admin-page .main-content { padding: 14px; }
+    .attendance-admin-page .header { padding-left: 12px; padding-right: 12px; gap: 8px; }
+    .attendance-admin-page .header h1 {
+        font-size: 14px;
+        min-width: 0;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .attendance-admin-page .header .icon-container { gap: 4px; flex: none; }
+    .attendance-admin-page .header .icon-box { width: 32px; height: 32px; }
+    .attendance-admin-page .header .icon-box img { width: 20px !important; }
+
+    .attendance-admin-page .search-container input { width: 100%; }
+    .attendance-admin-page .kpi-row { gap: 12px; font-size: 13px; }
+    .attendance-admin-page .kpi-row strong { font-size: 16px; }
+}
+
+/* 390px 폭에서도 버튼 높이 44px 이상, 본문 글자 14px 이상을 보장하고
+   카드·버튼이 한 열로 자연스럽게 배치되게 한다. 페이지 전체 가로 스크롤은
+   만들지 않는다 — 관리자 표만 .table-scroll 내부에서 넘친다. */
+@media (max-width: 480px) {
+    .attendance-verification-page .otp-row { flex-direction: column; align-items: stretch; }
+    .attendance-verification-page .otp-row .btn,
+    .attendance-verification-page .otp-row input { width: 100%; min-height: 44px; }
+    .attendance-verification-page .check-msg,
+    .attendance-verification-page .hint-text { font-size: 14px; }
+    .attendance-verification-page .time-grid { grid-template-columns: 1fr 1fr; }
+
+    .attendance-admin-page .search-container input,
+    .attendance-admin-page .search-container select { width: 100%; min-height: 44px; }
+    .attendance-admin-page .admin-card { padding: 12px; }
+    .attendance-admin-page .action-buttons { flex-direction: column; align-items: stretch; }
+    .attendance-admin-page .action-buttons .btn { width: 100%; min-height: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .attendance-admin-page .toast { transition: none; }
+}

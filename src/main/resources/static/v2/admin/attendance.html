@@ -1,0 +1,139 @@
+<!doctype html>
+<!-- 출결부·HRD 전송 모니터링 데모 — LXP-144/146/147 프론트엔드 부분 구현.
+     참가자·OTP/모바일 인증 상태·전송 이력은 전부 모의 데이터다. 실제 산업인력공단
+     전송·출결 반영·감사로그 저장은 하지 않는다.
+
+     페이지 루트 클래스 .attendance-admin-page 는 <body> 에 붙는다. -->
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/css/common-style.css">
+<link rel="stylesheet" href="/static/css/sidebar-style.css">
+<link rel="stylesheet" href="/static/css/btn-style.css">
+<link rel="stylesheet" href="/v2/assets/attendance-verification.css">
+<title>Samsung Academy LXP - 관리자 — 출결부·HRD 전송</title>
+</head>
+<body class="attendance-admin-page">
+
+<main class="main-content">
+
+  <p class="demo-flash">
+    이 화면의 훈련생·OTP/모바일 인증 상태·전송 이력은 전부 <b>모의 데이터(데모)</b>입니다. 실제 산업인력공단(HRD-Net) 전송,
+    출결 반영, 감사로그 저장은 수행하지 않습니다.
+  </p>
+
+  <div class="monitor-summary">
+    <span>강의: <strong id="courseTitle"></strong></span>
+    <span id="unitLine"></span>
+  </div>
+
+  <div class="search-container">
+    <label class="sr-only" for="peopleSearch">훈련생 검색</label>
+    <input type="search" id="peopleSearch" placeholder="이름 또는 좌석번호 검색">
+
+    <label class="sr-only" for="authFilter">인증상태 필터</label>
+    <select id="authFilter">
+      <option value="all">인증상태 전체</option>
+      <option value="otp">OTP 인증완료</option>
+      <option value="unreceived">OTP 미수신</option>
+      <option value="mobile">모바일 인증완료</option>
+    </select>
+
+    <label class="sr-only" for="transferFilter">전송상태 필터</label>
+    <select id="transferFilter">
+      <option value="all">전송상태 전체</option>
+      <option value="pending">전송대기</option>
+      <option value="success">전송성공</option>
+      <option value="failed">전송실패</option>
+      <option value="fallback_needed">모바일 보완 필요</option>
+    </select>
+
+    <label class="sr-only" for="scenarioSelect">상태 시나리오(데모)</label>
+    <select id="scenarioSelect"></select>
+  </div>
+
+  <div class="kpi-row">
+    <span>전체 <strong id="kpiTotal">0</strong></span>
+    <span>OTP 인증완료 <strong id="kpiOtpVerified">0</strong></span>
+    <span>전송대기 <strong id="kpiPending">0</strong></span>
+    <span>전송성공 <strong id="kpiSuccess">0</strong></span>
+    <span>전송실패 <strong id="kpiFailed">0</strong></span>
+    <span>모바일 보완 필요 <strong id="kpiFallback">0</strong></span>
+  </div>
+  <p class="hint-text mb-12" id="filterCount" aria-live="polite"></p>
+
+  <div class="admin-card">
+    <div class="row-between mb-12">
+      <div>
+        <h3 id="selName">훈련생을 선택하세요</h3>
+        <p class="hint-text" id="selMeta"></p>
+        <p class="hint-text" id="selDetail" aria-live="polite"></p>
+      </div>
+      <div class="action-buttons">
+        <button type="button" class="btn btn-primary" id="sendBtn" disabled>전송 시작(데모)</button>
+        <button type="button" class="btn btn-secondary" id="retryBtn" disabled>재시도(데모)</button>
+        <button type="button" class="btn btn-secondary" id="fallbackBtn" disabled>모바일 보완 전송(데모)</button>
+      </div>
+    </div>
+    <p class="hint-text">실제 공단 전송·출결 반영·감사로그 저장은 이 데모에서 이뤄지지 않습니다.</p>
+  </div>
+
+  <div class="admin-card">
+    <h3>훈련생 출결·전송 현황</h3>
+    <div class="table-scroll">
+      <table class="people-table">
+        <thead><tr><th>훈련생</th><th>좌석</th><th>접속시간</th><th>확인된 체류시간</th><th>인증상태</th><th>전송상태</th><th>재시도</th><th>마지막 처리시각</th></tr></thead>
+        <tbody id="peopleBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h3>전송·재시도·보완 전송 타임라인</h3>
+    <div class="table-scroll">
+      <table class="people-table">
+        <thead><tr><th>시각</th><th>훈련생</th><th>내용</th></tr></thead>
+        <tbody id="timelineBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h3>실제 연동 시 필요한 항목</h3>
+    <ul class="integration-list">
+      <li>외부 OTP 인증사업자 API 필요</li>
+      <li>모바일 본인인증 사업자 API 필요</li>
+      <li>HRD-Net 인증·전문 규격 필요</li>
+      <li>전송 시점·미수신 판정·재시도·감사로그 정책 필요</li>
+      <li>플랫폼 체류시간 산정 규칙과 공단 기준 대조 필요</li>
+    </ul>
+  </div>
+
+</main>
+
+<dialog class="confirm-dialog" id="retryDialog" aria-labelledby="retryDialogTitle">
+  <h3 id="retryDialogTitle">전송을 재시도하시겠습니까?</h3>
+  <p>실제 공단으로 재전송되지 않으며 이 화면의 데모 상태만 바뀝니다.</p>
+  <div class="dialog-actions">
+    <button type="button" class="btn btn-gray" id="retryCancelBtn">취소</button>
+    <button type="button" class="btn btn-primary" id="retryConfirmBtn">재시도(데모)</button>
+  </div>
+</dialog>
+
+<dialog class="confirm-dialog" id="fallbackDialog" aria-labelledby="fallbackDialogTitle">
+  <h3 id="fallbackDialogTitle">모바일 보완 전송을 진행하시겠습니까?</h3>
+  <p id="fallbackDialogBody">모바일 본인인증이 완료된 훈련생의 데이터를 보완 전송하는 데모입니다. 실제 공단 전송은 없습니다.</p>
+  <div class="dialog-actions">
+    <button type="button" class="btn btn-gray" id="fallbackCancelBtn">취소</button>
+    <button type="button" class="btn btn-primary" id="fallbackConfirmBtn">보완 전송(데모)</button>
+  </div>
+</dialog>
+
+<script src="/v2/assets/exam-legacy-shell.js"></script>
+<script src="/v2/assets/attendance-verification-common.js"></script>
+<script src="/v2/assets/attendance-verification-demo-data.js"></script>
+<script src="/v2/assets/attendance-admin.js"></script>
+<script>ExamShell.admin({ active: "att", title: "출결/이수 관리 > 출결부·HRD 전송" });</script>
+</body>
+</html>
