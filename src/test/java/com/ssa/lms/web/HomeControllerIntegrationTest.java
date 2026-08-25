@@ -16,6 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,6 +60,21 @@ class HomeControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("삼성 도메인용 공개 사이트 대표 주소는 각 정적 첫 화면으로 연결된다")
+    void publicDirectoryRoutesForwardToIndexPages() throws Exception {
+        assertForwarded("/v2", "/v2/index.html");
+        assertForwarded("/v2/", "/v2/index.html");
+        assertForwarded("/v2/site/campus", "/v2/site/campus/index.html");
+        assertForwarded("/v2/site/campus/", "/v2/site/campus/index.html");
+        assertForwarded("/v2/site/class", "/v2/site/class/index.html");
+        assertForwarded("/v2/site/class/", "/v2/site/class/index.html");
+        assertForwarded("/v2/site/biz", "/v2/site/biz/index.html");
+        assertForwarded("/v2/site/biz/", "/v2/site/biz/index.html");
+        assertForwarded("/v2/site/lxp", "/v2/site/lxp/index.html");
+        assertForwarded("/v2/site/lxp/", "/v2/site/lxp/index.html");
+    }
+
+    @Test
     @DisplayName("공개 랜딩은 통합된 팀 페이지와 실제 섹션을 연결한다")
     void publicLandingLinksIntegratedTeamPagesAndSections() throws IOException {
         String campus = resourceText("static/v2/site/campus/index.html");
@@ -89,5 +105,11 @@ class HomeControllerIntegrationTest {
         try (var input = new ClassPathResource(path).getInputStream()) {
             return new String(input.readAllBytes(), StandardCharsets.UTF_8);
         }
+    }
+
+    private void assertForwarded(String requestPath, String targetPath) throws Exception {
+        mvc.perform(get(requestPath))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl(targetPath));
     }
 }
