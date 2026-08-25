@@ -404,3 +404,48 @@ body.biz-site.has-public-journey .public-journey a[aria-current="step"] i{backgr
 .biz-ax__cta li{font-size:18px!important}
 .biz-diagnosis{margin-top:0}
 @media(max-width:850px){.biz-ax__cta{grid-template-columns:1fr}.biz-ax__cta .btn{grid-column:1}}
+
+/* Consultation: card UI 대신 읽기 쉬운 기업 상담 문서형 레이아웃 */
+.biz-site #biz-contact{background:#eef3f9}
+.biz-site #biz-contact>.container>.section-head{max-width:880px;margin-bottom:52px}
+.biz-site #biz-contact>.container>.section-head .eyebrow{font-size:13px;letter-spacing:.02em}
+.biz-site #biz-contact>.container>.section-head h2{max-width:760px;font-size:clamp(38px,5vw,66px);line-height:1.08}
+.biz-support-steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-bottom:clamp(76px,9vw,116px);border-top:2px solid var(--biz-ink);border-bottom:1px solid var(--biz-line)}
+.biz-support-steps li{min-height:210px;padding:26px 28px 30px 0;border-right:0;border-bottom:0;background:transparent}
+.biz-support-steps li+li{padding-left:28px;border-left:1px solid var(--biz-line)}
+.biz-support-steps em{font-size:12px;letter-spacing:.08em}
+.biz-support-steps b{display:block;margin-top:34px;font-size:19px;letter-spacing:-.02em}
+.biz-support-steps p{margin-top:13px;font-size:14px;line-height:1.7}
+.biz-contact-layout{grid-template-columns:minmax(290px,.7fr) minmax(0,1.3fr);gap:clamp(54px,7vw,104px);padding-top:clamp(48px,6vw,76px);border-top:1px solid var(--biz-line)}
+.biz-contact-guide{position:static;top:auto}
+.biz-contact-guide>.eyebrow{font-size:13px;letter-spacing:.02em}
+.biz-contact-guide h2{margin-top:14px;font-size:clamp(34px,3.5vw,50px)}
+.biz-contact-guide .deflist{grid-template-columns:108px 1fr;margin-top:30px!important;border-top:2px solid var(--biz-ink)}
+.biz-contact-guide .deflist dt,.biz-contact-guide .deflist dd{padding:17px 0;font-size:14px}
+.biz-contact-guide .notice-box{margin-top:28px!important;padding:18px 0 0 18px;background:transparent;color:#435675}
+.biz-site #biz-contact .biz-contact-form{padding:0 0 0 clamp(36px,5vw,72px);border:0;border-left:1px solid var(--biz-line);border-radius:0;background:transparent;box-shadow:none}
+.biz-contact-form__step{color:var(--biz-accent-dark);font-size:13px;font-weight:850;letter-spacing:.02em}
+.biz-contact-form h3{max-width:690px;margin-top:14px;font-size:clamp(38px,4.4vw,58px);line-height:1.1;letter-spacing:-.055em}
+.biz-contact-form>p{max-width:650px;color:#58677d!important;font-size:16px!important;line-height:1.75}
+.biz-contact-form form{gap:22px!important;margin-top:42px!important;padding-top:32px;border-top:2px solid var(--biz-ink)}
+.biz-contact-form .hint{margin:0;padding:0 0 0 16px;border-left:2px solid var(--biz-accent);background:transparent;color:#52627b;font-size:13px;line-height:1.65}
+.biz-contact-form .label{margin-bottom:9px;color:#263248;font-size:14px}
+.biz-contact-form .input,.biz-contact-form .select,.biz-contact-form .textarea{min-height:58px;border:1px solid #b8c5d8;border-radius:2px;background:#fff;font-size:15px}
+.biz-contact-form .textarea{min-height:150px;padding-top:16px}
+.biz-contact-form .check{padding:18px 0;border-block:1px solid var(--biz-line);border-radius:0;background:transparent}
+.biz-contact-actions{justify-content:flex-end;gap:12px;margin-top:14px}
+.biz-contact-actions .btn{min-width:150px;min-height:56px;flex:0 0 auto;border-radius:2px}
+.biz-draft-status{padding:14px 0;border:0;border-bottom:1px solid var(--biz-line);background:transparent;color:#435675}
+.biz-contact-review,.biz-contact-complete{padding-top:4px}
+.biz-contact-review>p,.biz-contact-complete>p{font-size:15px}
+.biz-contact-review dl{margin-top:34px}
+.biz-contact-complete strong{padding:18px 0;border:0;border-block:1px solid var(--biz-line);background:transparent}
+
+@media(max-width:900px){
+  .biz-support-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.biz-support-steps li:nth-child(3){border-left:0}.biz-support-steps li:nth-child(n+3){border-top:1px solid var(--biz-line)}
+  .biz-contact-layout{grid-template-columns:1fr;gap:56px}.biz-site #biz-contact .biz-contact-form{padding:52px 0 0;border-left:0;border-top:1px solid var(--biz-line)}
+}
+@media(max-width:560px){
+  .biz-site #biz-contact>.container>.section-head{margin-bottom:38px}.biz-support-steps{grid-template-columns:1fr;margin-bottom:70px}.biz-support-steps li,.biz-support-steps li+li{min-height:0;padding:24px 0;border-left:0;border-top:1px solid var(--biz-line)}.biz-support-steps li:first-child{border-top:0}.biz-support-steps b{margin-top:16px}
+  .biz-contact-guide .deflist{grid-template-columns:94px 1fr}.biz-site #biz-contact .biz-contact-form{padding:42px 0 0}.biz-contact-form h3 br{display:none}.biz-contact-form form{margin-top:32px!important}.biz-contact-form .grid-2{grid-template-columns:1fr}.biz-contact-actions{display:grid}.biz-contact-actions .btn{width:100%;min-width:0}
+}

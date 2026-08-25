@@ -7,7 +7,7 @@
 <meta name="description" content="AI를 배우는 조직에서 AI로 일하는 조직으로. 조직 진단부터 정착까지 설계합니다.">
 <link rel="stylesheet" href="/v2/assets/tokens.css">
 <link rel="stylesheet" href="/v2/assets/base.css">
-<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/biz-pages.css?v=20260825-113">
+<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64"><link rel="stylesheet" href="/v2/assets/biz-pages.css?v=20260825-114">
 </head>
 <body>
 
@@ -220,7 +220,7 @@
 <!-- 비즈-055 지원 + 비즈-058 문의 -->
 <section class="section" id="biz-contact">
   <div class="container">
-    <div class="section-head"><span class="eyebrow">ADMIN SUPPORT</span><h2>신청부터 수료까지 필요한 행정을 안내합니다</h2></div>
+    <div class="section-head"><span class="eyebrow">기업교육 운영 안내</span><h2>신청부터 수료까지 필요한 행정을 안내합니다</h2></div>
     <ol class="biz-support-steps">
       <li><em>01</em><b>지원 가능 여부 확인</b><p>사업장·수강자·과정 조건을 확인하고 일반 과정과 지원 과정의 차이를 안내합니다.</p></li>
       <li><em>02</em><b>계약·신청</b><p>견적과 계약 범위, 교육 대상자 명단, 일정 및 필요한 신청 서류를 정리합니다.</p></li>
@@ -229,7 +229,7 @@
     </ol>
     <div class="biz-contact-layout">
       <div class="biz-contact-guide">
-        <span class="eyebrow">SUPPORT</span>
+        <span class="eyebrow">비용·지원 안내</span>
         <h2>비용은 이렇게 나뉩니다</h2>
         <dl class="deflist" style="margin-top:var(--sp-6)">
           <dt>정부 환급</dt><dd>고용보험 환급 과정 운영 (사업장 조건 확인 필요)</dd>
@@ -243,10 +243,10 @@
         </div>
       </div>
 
-      <div class="card card--pad biz-contact-form">
-        <span class="biz-contact-form__step">1:1 CONSULTATION</span>
-        <h3>도입 문의</h3>
-        <p class="small muted" style="margin-top:var(--sp-2)">조직 정보를 입력하고 상담용 요약을 먼저 확인하세요.</p>
+      <div class="biz-contact-form">
+        <span class="biz-contact-form__step">기업교육 도입 상담</span>
+        <h3>우리 조직에 맞는 교육을<br>함께 정리합니다</h3>
+        <p class="small muted" style="margin-top:var(--sp-2)">과정이 정해지지 않았어도 괜찮습니다. 현재 업무와 희망 일정부터 알려주세요.</p>
         <form class="stack" id="biz-contact-form" style="margin-top:var(--sp-5)">
           <p class="hint" role="status">작성 내용은 이 브라우저에만 임시 저장됩니다. 아직 서버 접수·담당자 전송 기능은 연결되지 않았습니다.</p>
           <div class="biz-draft-status" id="biz-draft-status" role="status" hidden><span></span><button type="button" data-clear-draft>임시저장 삭제</button></div>
@@ -273,13 +273,13 @@
           <div class="biz-contact-actions"><button class="btn btn--outline" type="button" data-save-draft>임시저장</button><button class="btn btn--primary" type="submit">문의 내용 검토하기</button></div>
         </form>
         <section class="biz-contact-review" id="biz-contact-review" hidden aria-live="polite">
-          <span class="biz-contact-form__step">REVIEW</span><h3>상담 전에 내용을 확인하세요</h3>
+          <span class="biz-contact-form__step">입력 내용 확인</span><h3>작성 내용을 한 번 확인해주세요</h3>
           <p>아래 요약은 이 기기에서만 만들어지며 실제 접수되지 않습니다.</p>
           <dl id="biz-contact-summary"></dl>
           <div class="biz-contact-actions"><button class="btn btn--outline" type="button" data-edit-contact>수정하기</button><button class="btn btn--primary" type="button" data-finish-contact>작성 완료</button></div>
         </section>
         <section class="biz-contact-complete" id="biz-contact-complete" hidden aria-live="polite">
-          <span class="biz-contact-form__step">READY</span><h3>상담 내용이 준비됐습니다</h3>
+          <span class="biz-contact-form__step">상담 준비 완료</span><h3>상담 내용이 준비됐습니다</h3>
           <p>실제 접수 전까지 작성 내용을 이 브라우저에 보관합니다. 아래 요약을 복사해 담당자에게 전달할 수 있습니다.</p>
           <strong id="biz-contact-reference"></strong>
           <div class="biz-contact-actions"><button class="btn btn--outline" type="button" data-copy-contact>요약 복사</button><button class="btn btn--primary" type="button" data-edit-contact>내용 수정</button></div>
