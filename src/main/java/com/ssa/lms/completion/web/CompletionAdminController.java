@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -48,6 +49,17 @@ public class CompletionAdminController {
             model.addAttribute("completions", completionService.managementViewsByCourse(selected.getId()));
         }
         return VIEW;
+    }
+
+    /** 과정별 이수증 디자인 시연 화면. 1차 단계에서는 DB 저장 없이 브라우저 미리보기만 제공한다. */
+    @GetMapping("/certificate-editor")
+    public String certificateEditor(@RequestParam(required = false) Long courseId, Model model) {
+        List<Course> courses = courseRepository.findAllByOrderByStartDateDesc();
+        Course selected = resolveSelected(courses, courseId);
+        model.addAttribute("courses", courses);
+        model.addAttribute("selectedCourse", selected);
+        model.addAttribute("previewIssueDate", LocalDate.now());
+        return "admin/admin-05-attendance/certificate-editor";
     }
 
     @PostMapping("/criteria")

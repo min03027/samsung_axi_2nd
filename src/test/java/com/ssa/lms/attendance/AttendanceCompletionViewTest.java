@@ -269,6 +269,39 @@ class AttendanceCompletionViewTest {
         assertThat(completionRepository.findByCourseIdAndTraineeId(course.getId(), trainee.getId())).isEmpty();
     }
 
+    @Test
+    @DisplayName("관리자는 과정별 이수증 템플릿 3종과 A4 미리보기 화면을 연다")
+    @WithUserDetails("admin")
+    void adminCertificateEditorRendersForSelectedCourse() throws Exception {
+        Course course = courseRepository.save(Course.builder()
+                .courseCode("COURSE-CERT-EDITOR-A3")
+                .courseName("AI 실무 이수증 시연 과정")
+                .cohort("3기")
+                .category("AI")
+                .startDate(LocalDate.of(2026, 3, 1))
+                .endDate(LocalDate.of(2026, 8, 20))
+                .capacity(20)
+                .status(CourseStatus.IN_PROGRESS)
+                .completionProgressRate(80)
+                .build());
+
+        mvc.perform(get("/admin/completion/certificate-editor")
+                        .param("courseId", course.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("AI 실무 이수증 시연 과정")))
+                .andExpect(content().string(containsString("공식형")))
+                .andExpect(content().string(containsString("테크형")))
+                .andExpect(content().string(containsString("크리에이티브형")))
+                .andExpect(content().string(containsString("A4 미리보기")))
+                .andExpect(content().string(containsString("id=\"certificatePaper\"")))
+                .andExpect(content().string(containsString("실제 발급 PDF와 서버 데이터에는 아직 반영되지 않습니다")));
+
+        mvc.perform(get("/admin/completion").param("courseId", course.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("/admin/completion/certificate-editor?courseId=" + course.getId())))
+                .andExpect(content().string(containsString("이수증 디자인 편집")));
+    }
+
     /* ===== 권한 경계 ===== */
 
     @Test

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/common-style.css">
+    <link rel="stylesheet" href="/static/css/sidebar-style.css">
+    <link rel="stylesheet" href="/static/css/btn-style.css">
+    <link rel="stylesheet" href="/static/css/certificate-editor.css?v=20260826-1">
+    <script src="/static/js/sidebar-function.js" defer></script>
+    <script src="/static/js/common-funtion.js" defer></script>
+    <script src="/static/js/certificate-editor.js?v=20260826-1" defer></script>
+    <title>Samsung Academy LXP - 이수증 디자인 편집</title>
+</head>
+<body class="certificate-editor-page" data-user-role="admin"
+      th:attr="data-course-id=${selectedCourse != null ? selectedCourse.id : ''},
+               data-course-category=${selectedCourse != null ? selectedCourse.category : ''}">
+    <header th:replace="~{fragments/admin :: header('이수증 디자인 편집')}"></header>
+    <th:block th:replace="~{fragments/admin :: sidebar('att-graduate')}"/>
+
+    <main class="main-content">
+        <section class="main-content-inner editor-shell">
+            <header class="editor-header">
+                <div>
+                    <a class="editor-back"
+                       th:href="${selectedCourse != null} ? @{/admin/completion(courseId=${selectedCourse.id})} : @{/admin/completion}">← 이수 관리</a>
+                    <div class="editor-title-line">
+                        <h2>과정별 이수증 디자인</h2>
+                        <span class="demo-badge">화면 시연용</span>
+                    </div>
+                    <p>기본 템플릿을 고르고 문구와 표시 항목을 조정해 실제 발급 형태를 미리 확인하세요.</p>
+                </div>
+                <form class="course-switcher" method="get" th:action="@{/admin/completion/certificate-editor}">
+                    <label for="editorCourseSelect">적용 과정</label>
+                    <select id="editorCourseSelect" name="courseId" onchange="this.form.submit()">
+                        <option th:each="course : ${courses}" th:value="${course.id}"
+                                th:selected="${selectedCourse != null and course.id == selectedCourse.id}"
+                                th:text="|${course.courseName} (${course.courseCode}${course.cohort != null ? ' / ' + course.cohort : ''})|">과정</option>
+                    </select>
+                </form>
+            </header>
+
+            <div class="editor-notice">
+                <strong>1차 시연 범위</strong>
+                <span>선택값은 이 브라우저에만 과정별로 저장됩니다. 실제 발급 PDF와 서버 데이터에는 아직 반영되지 않습니다.</span>
+            </div>
+
+            <div class="editor-empty" th:if="${selectedCourse == null}">
+                등록된 과정이 없어 이수증을 미리 볼 수 없습니다.
+            </div>
+
+            <div class="editor-workspace" th:if="${selectedCourse != null}">
+                <aside class="editor-controls" aria-label="이수증 디자인 설정">
+                    <section class="control-section">
+                        <div class="control-heading">
+                            <span>01</span>
+                            <div><h3>기본 템플릿</h3><p>과정 성격에 가까운 형태를 선택하세요.</p></div>
+                        </div>
+                        <div class="preset-list" role="radiogroup" aria-label="이수증 템플릿">
+                            <button type="button" class="preset-card is-active" data-certificate-preset="formal" aria-pressed="true">
+                                <span class="preset-thumb preset-thumb--formal"></span>
+                                <span><strong>공식형</strong><small>기관·KDT·공공 교육</small></span>
+                            </button>
+                            <button type="button" class="preset-card" data-certificate-preset="tech" aria-pressed="false">
+                                <span class="preset-thumb preset-thumb--tech"></span>
+                                <span><strong>테크형</strong><small>AI·데이터·개발 과정</small></span>
+                            </button>
+                            <button type="button" class="preset-card" data-certificate-preset="creative" aria-pressed="false">
+                                <span class="preset-thumb preset-thumb--creative"></span>
+                                <span><strong>크리에이티브형</strong><small>디자인·콘텐츠 과정</small></span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <section class="control-section">
+                        <div class="control-heading">
+                            <span>02</span>
+                            <div><h3>문구와 색상</h3><p>미리보기에 즉시 반영됩니다.</p></div>
+                        </div>
+                        <label class="control-field">이수증 제목
+                            <input id="certificateTitleInput" type="text" maxlength="24" value="이 수 증">
+                        </label>
+                        <label class="control-field">발급기관
+                            <input id="certificateIssuerInput" type="text" maxlength="40" value="Samsung Academy LXP">
+                        </label>
+                        <label class="control-field">수여 문구
+                            <textarea id="certificateStatementInput" rows="4" maxlength="180">위 사람은 해당 교육과정을 성실히 이수하였기에 이 증서를 수여합니다.</textarea>
+                        </label>
+                        <label class="control-field control-field--color">포인트 색상
+                            <span><input id="certificateAccentInput" type="color" value="#1c3d6e"><output id="certificateAccentOutput">#1C3D6E</output></span>
+                        </label>
+                    </section>
+
+                    <section class="control-section">
+                        <div class="control-heading">
+                            <span>03</span>
+                            <div><h3>표시 정보</h3><p>과정에 필요한 항목만 남기세요.</p></div>
+                        </div>
+                        <div class="toggle-list">
+                            <label><input type="checkbox" data-certificate-toggle="birth" checked><span>생년월일</span></label>
+                            <label><input type="checkbox" data-certificate-toggle="period" checked><span>교육기간</span></label>
+                            <label><input type="checkbox" data-certificate-toggle="metrics" checked><span>진도율·출석률</span></label>
+                            <label><input type="checkbox" data-certificate-toggle="seal" checked><span>기관 직인</span></label>
+                        </div>
+                    </section>
+
+                    <div class="editor-actions">
+                        <button type="button" class="btn btn-gray" id="certificateResetButton">기본값 복원</button>
+                        <button type="button" class="btn btn-secondary" id="certificatePrintButton">인쇄 미리보기</button>
+                        <button type="button" class="btn btn-primary" id="certificateSaveButton">이 과정에 적용</button>
+                    </div>
+                    <p class="editor-save-status" id="certificateSaveStatus" role="status" aria-live="polite"></p>
+                </aside>
+
+                <section class="preview-stage" aria-label="A4 이수증 미리보기">
+                    <div class="preview-toolbar">
+                        <div><strong>A4 미리보기</strong><span>실제 PDF 적용 전 시안입니다.</span></div>
+                        <span class="preview-scale">210 × 297 mm</span>
+                    </div>
+
+                    <article class="certificate-paper preset-formal" id="certificatePaper">
+                        <div class="certificate-decoration" aria-hidden="true"></div>
+                        <header class="certificate-brand">
+                            <span class="certificate-brand-mark">AXI</span>
+                            <strong>SAMSUNG ACADEMY LXP</strong>
+                        </header>
+                        <p class="certificate-number" th:text="|발급번호 PREVIEW-${selectedCourse.courseCode}|">발급번호</p>
+                        <div class="certificate-heading">
+                            <span>Certificate of Completion</span>
+                            <h1 id="certificatePreviewTitle">이 수 증</h1>
+                        </div>
+
+                        <section class="certificate-recipient">
+                            <small>성명</small>
+                            <strong>홍 길 동</strong>
+                        </section>
+
+                        <dl class="certificate-details">
+                            <div data-certificate-field="birth"><dt>생년월일</dt><dd>1999년 1월 1일</dd></div>
+                            <div><dt>과정명</dt><dd th:text="${selectedCourse.courseName}">과정명</dd></div>
+                            <div th:if="${selectedCourse.cohort != null}"><dt>기수</dt><dd th:text="${selectedCourse.cohort}">1기</dd></div>
+                            <div data-certificate-field="period"><dt>교육기간</dt><dd th:text="|${selectedCourse.startDate} ~ ${selectedCourse.endDate}|">기간</dd></div>
+                            <div data-certificate-field="metrics"><dt>이수 결과</dt><dd>진도율 100% · 출석률 96%</dd></div>
+                        </dl>
+
+                        <p class="certificate-statement" id="certificatePreviewStatement">
+                            위 사람은 해당 교육과정을 성실히 이수하였기에 이 증서를 수여합니다.
+                        </p>
+
+                        <footer class="certificate-footer">
+                            <time th:text="${#temporals.format(previewIssueDate, 'yyyy년 M월 d일')}">2026년 8월 26일</time>
+                            <div class="certificate-issuer">
+                                <strong id="certificatePreviewIssuer">Samsung Academy LXP</strong>
+                                <span class="certificate-seal" data-certificate-field="seal">AXI</span>
+                            </div>
+                        </footer>
+                    </article>
+                </section>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
