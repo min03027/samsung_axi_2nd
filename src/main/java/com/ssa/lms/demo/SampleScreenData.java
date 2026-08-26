@@ -69,7 +69,7 @@ public class SampleScreenData {
 
     private final boolean enabled;
 
-    public SampleScreenData(@Value("${lms.demo.sample-data:true}") boolean enabled) {
+    public SampleScreenData(@Value("${lms.demo.sample-data:false}") boolean enabled) {
         this.enabled = enabled;
     }
 

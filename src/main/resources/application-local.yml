@@ -15,3 +15,8 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+# 기존 로컬 화면 캡처/회귀 테스트 동작은 유지한다. 환경변수로 명시적으로 끌 수 있다.
+lms:
+  demo:
+    sample-data: ${LMS_DEMO_SAMPLE_DATA:true}
