@@ -54,4 +54,9 @@ public class NotificationRecipient extends BaseEntity {
             this.readAt = at;
         }
     }
+
+    /** 관리자가 기존 공지를 새 로그인 팝업으로 전환했을 때 다시 확인할 수 있게 한다. */
+    public void resetUnread() {
+        this.readAt = null;
+    }
 }

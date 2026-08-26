@@ -619,10 +619,15 @@
             createdAt: r.date,
             authorRole: '시스템',
             authorName: r.author,
+            actionUrl: r.actionUrl,
             related: [],
             read: r.readStatus === '읽음'
         };
     });
+    window._alarmCsrf = {
+        name: /*[[${_csrf != null ? _csrf.parameterName : ''}]]*/ '',
+        token: /*[[${_csrf != null ? _csrf.token : ''}]]*/ ''
+    };
     /*]]>*/
 </script>
 
@@ -828,7 +833,13 @@
       const chips = document.createElement("div");
       chips.className = "chips";
 
-      if(item.related?.length){
+      if(item.actionUrl && item.actionUrl !== '/trainee/alarm'){
+        const sourceLink = document.createElement("a");
+        sourceLink.className = "chip";
+        sourceLink.href = item.actionUrl;
+        sourceLink.textContent = "관련 화면 열기";
+        chips.appendChild(sourceLink);
+      } else if(item.related?.length){
         for(const r of item.related){
           const chip = document.createElement("div");
           chip.className = "chip";
@@ -862,11 +873,27 @@
       const btnPrimary = document.createElement("button");
       btnPrimary.className = "btn primary";
       btnPrimary.type = "button";
-      btnPrimary.textContent = "확인";
+      btnPrimary.textContent = item.actionUrl && item.actionUrl !== '/trainee/alarm' ? "상세 보기" : "확인";
       btnPrimary.addEventListener("click", () => {
-        item.read = true;
-        updateSummary();
-        renderCards();
+        const form = document.createElement("form");
+        form.method = "post";
+        form.action = "/trainee/alarm/read";
+        const fields = {
+          ids: item.id,
+          returnTo: item.actionUrl || "/trainee/alarm"
+        };
+        if(window._alarmCsrf?.name && window._alarmCsrf?.token){
+          fields[window._alarmCsrf.name] = window._alarmCsrf.token;
+        }
+        Object.entries(fields).forEach(([name, value]) => {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = name;
+          input.value = value;
+          form.appendChild(input);
+        });
+        document.body.appendChild(form);
+        form.submit();
       });
 
       const btnCopy = document.createElement("button");

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
@@ -78,6 +79,18 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
                                  @Param("courseIds") java.util.Collection<Long> courseIds,
                                  @Param("keyword") String keyword,
                                  Pageable pageable);
+
+    /** 배포 전에 팝업으로 지정돼 있던 게시 공지를 알림 수신 행과 동기화할 때 사용한다. */
+    @Query("""
+            select n from Notice n
+            left join fetch n.course
+            join fetch n.author
+            where n.popupOnLogin = true
+              and n.publishedAt is not null
+              and n.publishedAt <= :now
+            order by n.id asc
+            """)
+    List<Notice> findPublishedLoginPopups(@Param("now") LocalDateTime now);
 
     @EntityGraph(attributePaths = {"category", "course", "author", "attachments"})
     Optional<Notice> findWithDetailById(Long id);

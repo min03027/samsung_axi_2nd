@@ -48,7 +48,7 @@ class TraineePlatformIaRenderTest {
         assertThat(evaluations)
                 .contains("과제 확인하기", "시험 확인하기", "참여할 평가 없음", "</html>");
         assertThat(growth)
-                .contains("나의 학습 기록", "도움과 피드백", "주간 성장 흐름", "</html>");
+                .contains("나의 학습 기록", "도움과 피드백", "주간 성장 리포트", "</html>");
         assertThat(career)
                 .contains("직무 로드맵", "포트폴리오", "나의 취업 여정", "진로·취업 상담",
                         "href=\"/trainee/qna?ask=career\"", "</html>")

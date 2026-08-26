@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/basic-form-trainee.css">
-    <link rel="stylesheet" href="/static/css/trainee/platform-hubs.css?v=20260826-1">
+    <link rel="stylesheet" href="/static/css/trainee/platform-hubs.css?v=20260826-2">
     <title>Samsung Academy LXP - 성장·피드백</title>
 </head>
 <body class="platform-hub-body">
@@ -21,6 +21,28 @@
             <div class="hub-hero-guide">
                 <strong>혼자 판단하지 않아도 괜찮아요</strong>
                 <span>궁금한 점은 AI 튜터에게 묻고, 더 필요한 도움은 코치에게 이어서 요청할 수 있어요.</span>
+            </div>
+        </section>
+
+        <section class="hub-section growth-report-section" aria-labelledby="weekly-growth-title">
+            <div class="hub-section-heading">
+                <div>
+                    <span class="hub-section-eyebrow">WEEKLY VIEW</span>
+                    <h2 id="weekly-growth-title">주간 성장 리포트</h2>
+                </div>
+                <p>현재 저장된 진도·출석·과제·시험 기록을 기준으로 바로 확인한 결과입니다.</p>
+            </div>
+            <div class="growth-report" th:classappend="${' tone-' + report.tone}">
+                <div class="growth-report-head">
+                    <div><span>현재 과정</span><strong th:text="${report.courseName}">과정명</strong></div>
+                    <p th:text="${report.summary}">현재 학습 흐름을 안내합니다.</p>
+                </div>
+                <div class="growth-metrics">
+                    <article><span>현재 진도</span><strong th:text="${report.progressRate + '%'}">0%</strong><small th:text="${report.recommendedProgress == null ? '권장 진도 집계 전' : '권장 ' + report.recommendedProgress + '%'}">권장 진도</small></article>
+                    <article><span>출석률</span><strong th:text="${report.attendanceRate == null ? '집계 전' : report.attendanceRate + '%'}">집계 전</strong><small>누적 출석 기준</small></article>
+                    <article><span>남은 항목</span><strong th:text="${report.pendingCount + '건'}">0건</strong><small th:text="${'과제 ' + report.remainingAssignments + ' · 시험 ' + report.remainingExams}">과제·시험</small></article>
+                </div>
+                <a class="growth-report-action" th:href="${report.actionHref}" th:text="${report.actionLabel}">학습 이어하기</a>
             </div>
         </section>
 
@@ -78,26 +100,6 @@
             </div>
         </section>
 
-        <section class="hub-section" aria-labelledby="weekly-growth-title">
-            <div class="hub-section-heading">
-                <div>
-                    <span class="hub-section-eyebrow">WEEKLY VIEW</span>
-                    <h2 id="weekly-growth-title">주간 성장 흐름</h2>
-                </div>
-            </div>
-            <div class="growth-report" th:classappend="${' tone-' + report.tone}">
-                <div class="growth-report-head">
-                    <div><span>현재 과정</span><strong th:text="${report.courseName}">과정명</strong></div>
-                    <p th:text="${report.summary}">현재 학습 흐름을 안내합니다.</p>
-                </div>
-                <div class="growth-metrics">
-                    <article><span>현재 진도</span><strong th:text="${report.progressRate + '%'}">0%</strong><small th:text="${report.recommendedProgress == null ? '권장 진도 집계 전' : '권장 ' + report.recommendedProgress + '%'}">권장 진도</small></article>
-                    <article><span>출석률</span><strong th:text="${report.attendanceRate == null ? '집계 전' : report.attendanceRate + '%'}">집계 전</strong><small>누적 출석 기준</small></article>
-                    <article><span>남은 항목</span><strong th:text="${report.pendingCount + '건'}">0건</strong><small th:text="${'과제 ' + report.remainingAssignments + ' · 시험 ' + report.remainingExams}">과제·시험</small></article>
-                </div>
-                <a class="growth-report-action" th:href="${report.actionHref}" th:text="${report.actionLabel}">학습 이어하기</a>
-            </div>
-        </section>
     </div>
 </main>
 

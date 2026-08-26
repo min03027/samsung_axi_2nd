@@ -29,5 +29,11 @@
         <div class="report-row"><label for="lowProgressGap">부진 판단 기준</label><div>권장 진도보다 <input id="lowProgressGap" type="number" name="lowProgressGap" min="0" max="50" th:value="${setting.lowProgressGap}" required> %p 이상 낮을 때<small>해당 훈련생에게 학습 계획 점검 문구를 제공합니다.</small></div></div>
         <div class="button-group" style="justify-content:flex-end;margin-top:24px"><button type="submit" class="btn btn-primary">설정 저장</button></div>
     </form>
+    <form class="report-setting" method="post" action="/admin/settings/growth-report/send-now" style="margin-top:20px">
+        <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <h2>지금 확인하기</h2>
+        <p>대기하지 않고 현재 학습 기록으로 리포트를 만들어 훈련생 알림함에 바로 보냅니다. 훈련생은 알림의 <strong>상세 보기</strong>를 누르면 성장 리포트 화면으로 이동합니다.</p>
+        <div class="button-group" style="justify-content:flex-end"><button type="submit" class="btn btn-primary">성장 리포트 지금 발송</button></div>
+    </form>
 </div></main>
 </body></html>

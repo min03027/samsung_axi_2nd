@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
+
 @Controller
 @RequestMapping("/admin/settings/growth-report")
 @RequiredArgsConstructor
@@ -32,6 +34,15 @@ public class AdminGrowthReportSettingController {
                 ? "%d일마다 %02d시에 성장 리포트를 발송하도록 저장했습니다."
                     .formatted(setting.getIntervalDays(), setting.getSendHour())
                 : "성장 리포트 자동 발송을 껐습니다.");
+        return "redirect:/admin/settings/growth-report";
+    }
+
+    @PostMapping("/send-now")
+    public String sendNow(RedirectAttributes ra) {
+        int sent = growthReportService.sendNow(LocalDateTime.now());
+        ra.addFlashAttribute("message", sent == 0
+                ? "발송할 수강 과정이 있는 활성 훈련생이 없습니다."
+                : "현재 학습 기록으로 성장 리포트 %d건을 즉시 발송했습니다.".formatted(sent));
         return "redirect:/admin/settings/growth-report";
     }
 }

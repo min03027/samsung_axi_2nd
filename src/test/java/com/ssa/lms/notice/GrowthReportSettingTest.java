@@ -26,4 +26,13 @@ class GrowthReportSettingTest {
         fresh.update(true, 5, 14, 12);
         assertThat(fresh.isDue(LocalDateTime.of(2026, 8, 26, 14, 0))).isTrue();
     }
+
+    @Test
+    void 관리자는_자동발송_시각을_기다리지_않고_현재_리포트를_보낼_수_있다() {
+        growthReportService.saveSetting(false, 7, 23, 10);
+
+        int sent = growthReportService.sendNow(LocalDateTime.of(2026, 8, 26, 9, 0));
+
+        assertThat(sent).isPositive();
+    }
 }

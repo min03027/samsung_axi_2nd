@@ -133,6 +133,27 @@ public class Notification extends BaseEntity {
         this.status = status;
     }
 
+    /** 게시 공지의 수정 내용을 기존 알림에도 동기화한다. */
+    public void syncNotice(String title, String content, Priority priority,
+                           TargetType targetType, Long targetRefId,
+                           LocalDateTime sendAt, String sourceUrl, boolean popupOnLogin) {
+        this.title = title;
+        this.content = content;
+        this.priority = priority;
+        this.targetType = targetType;
+        this.targetRefId = targetRefId;
+        this.sendAt = sendAt;
+        this.sourceUrl = sourceUrl;
+        this.popupOnLogin = popupOnLogin;
+        this.status = NotificationStatus.SENT;
+    }
+
+    /** 게시 취소된 공지는 로그인 팝업과 알림 상세 진입 대상에서 제외한다. */
+    public void withdrawNotice() {
+        this.popupOnLogin = false;
+        this.status = NotificationStatus.CANCELED;
+    }
+
     public enum Priority {
         LOW,
         NORMAL,

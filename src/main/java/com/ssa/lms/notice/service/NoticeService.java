@@ -145,6 +145,8 @@ public class NoticeService {
         assertCanManageCourse(notice.getCourse() == null ? null : notice.getCourse().getId(), actorId, role);
         assertCanManageCourse(form.getCourseId(), actorId, role);
         boolean wasPublished = notice.getPublishedAt() != null;
+        boolean popupWasEnabled = notice.isPopupOnLogin();
+        boolean emailWasEnabled = notice.isEmailNotify();
         notice.update(findCategory(form.getCategoryId()), form.getTitle(), form.getContent(), form.isPinned(),
                 form.isPopupOnLogin(), form.isEmailNotify());
         notice.changeCourse(findCourse(form.getCourseId()));
@@ -153,7 +155,23 @@ public class NoticeService {
         } else {
             notice.unpublish();
         }
-        if (!wasPublished && notice.getPublishedAt() != null) notificationService.dispatchNotice(notice);
+        if (!wasPublished && notice.getPublishedAt() != null) {
+            notificationService.dispatchNotice(notice);
+        } else if (notice.getPublishedAt() != null) {
+            notificationService.synchronizeNotice(notice,
+                    !popupWasEnabled && notice.isPopupOnLogin(),
+                    !emailWasEnabled && notice.isEmailNotify());
+        } else if (wasPublished) {
+            notificationService.withdrawNotice(notice.getId());
+        }
+    }
+
+    /** 서버 재시작 시 기존 게시 공지 중 팝업 지정 건을 수신자 데이터와 한 번 동기화한다. */
+    @Transactional
+    public int synchronizePublishedPopups() {
+        List<Notice> popups = noticeRepository.findPublishedLoginPopups(LocalDateTime.now());
+        popups.forEach(notice -> notificationService.synchronizeNotice(notice, false, false));
+        return popups.size();
     }
 
     /**

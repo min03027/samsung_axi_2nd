@@ -47,9 +47,19 @@ public class GrowthReportService {
 
     @Transactional
     public int sendDue(LocalDateTime now) {
+        return sendReports(now, false);
+    }
+
+    /** 관리자 시연·운영 확인용 즉시 발송. 자동 발송 주기와 무관하게 현재 값을 집계한다. */
+    @Transactional
+    public int sendNow(LocalDateTime now) {
+        return sendReports(now, true);
+    }
+
+    private int sendReports(LocalDateTime now, boolean force) {
         GrowthReportSetting setting = settingRepository.findById(GrowthReportSetting.SINGLETON_ID)
                 .orElseGet(() -> settingRepository.save(GrowthReportSetting.createDefault()));
-        if (!setting.isDue(now)) return 0;
+        if (!force && !setting.isDue(now)) return 0;
 
         int sent = 0;
         for (User user : userRepository.findByRoleAndStatusOrderByNameAsc(Role.TRAINEE, UserStatus.ACTIVE)) {

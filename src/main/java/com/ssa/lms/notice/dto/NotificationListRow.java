@@ -22,6 +22,7 @@ public record NotificationListRow(
         String date,
         String importance,
         String author,
+        String actionUrl,
         long recipientCount,
         long readCount
 ) {
@@ -37,6 +38,8 @@ public record NotificationListRow(
                 n.getSendAt() == null ? "-" : n.getSendAt().format(DateTimeFormatter.ISO_LOCAL_DATE),
                 importanceLabel(n.getPriority()),
                 n.getSender().getName(),
+                n.getSourceUrl() == null || !n.getSourceUrl().startsWith("/trainee/")
+                        ? "/trainee/alarm" : n.getSourceUrl(),
                 recipientCount,
                 readCount
         );

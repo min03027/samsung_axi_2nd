@@ -44,6 +44,10 @@ public class NotificationScheduler {
     @Value("${lms.scheduler.reminder.enabled:true}")
     private boolean reminderEnabled;
 
+    /** 성장 리포트는 과제·시험 리마인더 운영 여부와 독립적으로 켜고 끈다. */
+    @Value("${lms.scheduler.growth-report.enabled:true}")
+    private boolean growthReportEnabled;
+
     @Scheduled(fixedDelayString = "${lms.scheduler.notification.interval-ms:60000}")
     public void dispatchScheduledNotifications() {
         if (!enabled) {
@@ -80,12 +84,23 @@ public class NotificationScheduler {
             for (ReminderLog.ReminderStage stage : ReminderLog.ReminderStage.values()) {
                 total += reminderService.remindDue(now, stage);
             }
-            total += growthReportService.sendDue(now);
             if (total > 0) {
                 log.info("리마인드 알림 {}건 발송", total);
             }
         } catch (RuntimeException e) {
             log.error("리마인드 발송 중 오류", e);
+        }
+    }
+
+    /** 성장 리포트는 리마인더 스위치를 꺼도 설정된 주기·시각에 계속 발송한다. */
+    @Scheduled(fixedDelayString = "${lms.scheduler.growth-report.interval-ms:3600000}")
+    public void sendGrowthReports() {
+        if (!growthReportEnabled) return;
+        try {
+            int sent = growthReportService.sendDue(LocalDateTime.now());
+            if (sent > 0) log.info("성장 리포트 {}건 발송", sent);
+        } catch (RuntimeException e) {
+            log.error("성장 리포트 발송 중 오류", e);
         }
     }
 }

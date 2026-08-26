@@ -167,36 +167,75 @@ public class NotificationService {
         return notification.getId();
     }
 
-    /** 게시 공지를 인앱 알림으로 펼치고, 선택한 경우 같은 대상에게 이메일도 보낸다. */
+    /** 최초 게시 공지를 인앱 알림으로 펼치고, 선택한 경우 같은 대상에게 이메일도 보낸다. */
     @Transactional
     public void dispatchNotice(Notice notice) {
-        if (notice == null || notice.getId() == null || notice.getPublishedAt() == null
-                || notificationRepository.existsByKindAndSourceRefId(
-                        Notification.NotificationKind.NOTICE, notice.getId())) {
-            return;
+        synchronizeNotice(notice, false, notice != null && notice.isEmailNotify());
+    }
+
+    /**
+     * 이미 게시된 공지의 팝업·대상·본문 변경도 기존 알림에 반영한다.
+     *
+     * <p>예전에는 최초 게시 순간에만 알림을 만들었다. 그래서 게시된 공지 수정 화면에서
+     * {@code 로그인 팝업}을 켜도 훈련생 수신 행이 없어 아무것도 뜨지 않았다.</p>
+     */
+    @Transactional
+    public void synchronizeNotice(Notice notice, boolean resetPopupRead, boolean sendEmail) {
+        if (notice == null || notice.getId() == null || notice.getPublishedAt() == null) return;
+
+        Notification.TargetType targetType = notice.getCourse() == null
+                ? Notification.TargetType.ALL : Notification.TargetType.COURSE;
+        Long targetRefId = notice.getCourse() == null ? null : notice.getCourse().getId();
+        String sourceUrl = "/trainee/notice/" + notice.getId();
+
+        Notification notification = notificationRepository.findByKindAndSourceRefId(
+                        Notification.NotificationKind.NOTICE, notice.getId())
+                .orElse(null);
+        boolean targetChanged = false;
+        boolean popupNewlyEnabled = false;
+        if (notification == null) {
+            notification = notificationRepository.save(Notification.builder()
+                    .title("[공지] " + notice.getTitle())
+                    .content(notice.getContent())
+                    .priority(notice.isPinned() ? Notification.Priority.HIGH : Notification.Priority.NORMAL)
+                    .targetType(targetType).targetRefId(targetRefId)
+                    .sendAt(notice.getPublishedAt()).sender(notice.getAuthor())
+                    .status(Notification.NotificationStatus.SENT)
+                    .kind(Notification.NotificationKind.NOTICE).sourceRefId(notice.getId())
+                    .sourceUrl(sourceUrl).popupOnLogin(notice.isPopupOnLogin())
+                    .build());
+        } else {
+            targetChanged = notification.getTargetType() != targetType
+                    || !java.util.Objects.equals(notification.getTargetRefId(), targetRefId);
+            popupNewlyEnabled = notice.isPopupOnLogin() && !notification.isPopupOnLogin();
+            notification.syncNotice("[공지] " + notice.getTitle(), notice.getContent(),
+                    notice.isPinned() ? Notification.Priority.HIGH : Notification.Priority.NORMAL,
+                    targetType, targetRefId, notice.getPublishedAt(), sourceUrl, notice.isPopupOnLogin());
         }
-        Notification notification = notificationRepository.save(Notification.builder()
-                .title("[공지] " + notice.getTitle())
-                .content(notice.getContent())
-                .priority(notice.isPinned() ? Notification.Priority.HIGH : Notification.Priority.NORMAL)
-                .targetType(notice.getCourse() == null
-                        ? Notification.TargetType.ALL : Notification.TargetType.COURSE)
-                .targetRefId(notice.getCourse() == null ? null : notice.getCourse().getId())
-                .sendAt(notice.getPublishedAt())
-                .sender(notice.getAuthor())
-                .status(Notification.NotificationStatus.SENT)
-                .kind(Notification.NotificationKind.NOTICE)
-                .sourceRefId(notice.getId())
-                .sourceUrl("/trainee/notice/" + notice.getId())
-                .popupOnLogin(notice.isPopupOnLogin())
-                .build());
+
+        if (targetChanged) {
+            recipientRepository.deleteByNotificationIdIn(List.of(notification.getId()));
+        }
         fanOut(notification);
-        if (notice.isEmailNotify()) {
+        if (resetPopupRead || popupNewlyEnabled) {
+            recipientRepository.findByNotificationIds(List.of(notification.getId()))
+                    .forEach(NotificationRecipient::resetUnread);
+        }
+        if (sendEmail) {
+            String mailTitle = notification.getTitle();
+            String mailContent = notification.getContent();
             for (Long userId : resolveTargets(notification)) {
                 userRepository.findById(userId)
-                        .ifPresent(user -> mailSender.send(user, notification.getTitle(), notification.getContent()));
+                        .ifPresent(user -> mailSender.send(user, mailTitle, mailContent));
             }
         }
+    }
+
+    @Transactional
+    public void withdrawNotice(Long noticeId) {
+        if (noticeId == null) return;
+        notificationRepository.findByKindAndSourceRefId(Notification.NotificationKind.NOTICE, noticeId)
+                .ifPresent(Notification::withdrawNotice);
     }
 
     /** 성장 리포트처럼 개인에게 자동 생성되는 인앱 알림과 이메일을 함께 보낸다. */
