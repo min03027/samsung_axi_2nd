@@ -50,7 +50,9 @@ class TraineePlatformIaRenderTest {
         assertThat(growth)
                 .contains("나의 학습 기록", "도움과 피드백", "주간 성장 흐름", "</html>");
         assertThat(career)
-                .contains("직무 로드맵", "포트폴리오", "나의 취업 여정", "</html>");
+                .contains("직무 로드맵", "포트폴리오", "나의 취업 여정", "진로·취업 상담",
+                        "href=\"/trainee/qna?ask=career\"", "</html>")
+                .doesNotContain("href=\"/trainee/qna/tutoring\">상담");
 
         assertThat(evaluations + growth + career)
                 .doesNotContain("연결 준비 중", "시간 미정", "mock data", "준비 중입니다");

@@ -24,6 +24,9 @@
 
     const aTitle = $("aTitle");
     const aBody = $("aBody");
+    const aVisibility = $("aVisibility");
+    const aCategory = $("aCategory");
+    const askTitle = $("askTitle");
     const askError = $("askError");
 
     btnOpenAsk?.addEventListener("click", () => {
@@ -33,6 +36,21 @@
       }
       openModal(askModal);
     });
+
+    // 취업 준비 홈의 진로·취업 상담 버튼에서 들어오면 일반 튜터링이 아니라
+    // 담당자 답변이 남는 비공개 Q&A 작성창을 바로 연다.
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("ask") === "career") {
+      if (askTitle) askTitle.textContent = "진로·취업 상담 요청";
+      if (aVisibility) aVisibility.value = "private";
+      if (aCategory) aCategory.value = "ETC";
+      if (aTitle && !aTitle.value.trim()) aTitle.value = "진로·취업 상담 요청";
+      if (aBody) {
+        aBody.placeholder = "희망 직무, 준비 중인 사항, 상담받고 싶은 내용을 적어주세요.";
+      }
+      openModal(askModal);
+      window.setTimeout(() => aBody?.focus(), 0);
+    }
 
     // 모달 바깥 클릭 닫기
     askModal?.addEventListener("click", (e) => {
