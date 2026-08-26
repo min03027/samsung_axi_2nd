@@ -42,6 +42,29 @@ class DropoutPageRenderTest {
         assertThat(html).contains("표본");
         // 위험 학습자 표가 실제로 채워졌는지 (표본 1행)
         assertThat(html).contains("고위험");
+        assertThat(html).contains("/admin/analytics/dropout/trainees/sample01", "개입·피드백 큐");
+    }
+
+    @Test
+    @WithUserDetails("admin")
+    @DisplayName("위험 학습자 상세와 통합 개입 큐가 끝까지 연결된다")
+    void 위험학습자_상세와_개입큐_렌더링() throws Exception {
+        String detail = mvc.perform(get("/admin/analytics/dropout/trainees/sample01"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        String queue = mvc.perform(get("/admin/analytics/interventions"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        assertThat(detail).contains("김민준 학습·개입 상세", "상세 학습 지표", "담당자·개입 등록", "</html>");
+        assertThat(queue).contains("개입·피드백 통합 큐", "처리 대기 목록", "sample01", "</html>");
+    }
+
+    @Test
+    @WithUserDetails("admin")
+    @DisplayName("분반 비교와 훈련생 상세 학습지표 화면이 렌더된다")
+    void 학습성과분석_렌더링() throws Exception {
+        String html = mvc.perform(get("/admin/analytics/learning"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        assertThat(html).contains("분반 비교", "훈련생 상세 학습지표", "문제 풀이", "코드 실행", "</html>");
     }
 
     @Test

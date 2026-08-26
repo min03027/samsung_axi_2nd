@@ -93,6 +93,25 @@ class ManagementPlatformIaRenderTest {
     }
 
     @Test
+    @DisplayName("관리자 취업 현황과 과정 개선 보드가 렌더된다")
+    @WithUserDetails("admin")
+    void careerAndImprovementScreensRender() throws Exception {
+        String career = getHtml("/admin/career");
+        String improvements = getHtml("/admin/quality/improvements");
+
+        assertThat(career).contains("취업 여정 현황", "후속조치 우선 목록", "</html>");
+        assertThat(improvements).contains("개선 과제 등록", "과정 개선 진행판", "개선 전·후 성과 비교", "</html>");
+    }
+
+    @Test
+    @DisplayName("강사도 담당 범위의 과정 개선 보드를 확인한다")
+    @WithUserDetails("instructor1")
+    void instructorImprovementBoardRenders() throws Exception {
+        String html = getHtml("/instructor/quality/improvements");
+        assertThat(html).contains("내 담당 과정·수강생", "과정 개선 진행판", "</html>");
+    }
+
+    @Test
     @DisplayName("수강생은 관리자 케어 허브에 접근할 수 없다")
     @WithUserDetails("trainee1")
     void traineeCannotAccessAdminCareHub() throws Exception {

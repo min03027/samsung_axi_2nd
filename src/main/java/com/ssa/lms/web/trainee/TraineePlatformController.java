@@ -57,4 +57,31 @@ public class TraineePlatformController {
     public String career() {
         return "trainee/career";
     }
+
+    @GetMapping("/career/portfolio")
+    public String careerPortfolio(Model model) {
+        return careerScreen(model, "portfolio", "직무 포트폴리오", "학습 결과물을 직무 역량 기준으로 정리하고 공개 준비 상태를 확인합니다.");
+    }
+
+    @GetMapping("/career/applications")
+    public String careerApplications(Model model) {
+        return careerScreen(model, "applications", "지원·면접 관리", "지원 기업, 전형 단계, 면접 일정과 후속 행동을 한 흐름으로 관리합니다.");
+    }
+
+    @GetMapping("/career/recommendations")
+    public String careerRecommendations(Model model) {
+        return careerScreen(model, "recommendations", "기업·직무 추천", "희망 직무와 보유 역량을 기준으로 확인할 채용 기회를 모아봅니다.");
+    }
+
+    @GetMapping("/career/follow-up")
+    public String careerFollowUp(Model model) {
+        return careerScreen(model, "follow-up", "취업 후 관리", "입사 이후 적응 상태와 추가 학습, 후속 상담 계획을 이어서 확인합니다.");
+    }
+
+    private String careerScreen(Model model, String mode, String title, String description) {
+        model.addAttribute("careerMode", mode);
+        model.addAttribute("careerTitle", title);
+        model.addAttribute("careerDescription", description);
+        return "trainee/career-workspace";
+    }
 }

@@ -82,7 +82,7 @@
         .mini-table { border: 1px solid var(--gray-200); border-radius: 10px; overflow: hidden; }
         .mini-head, .mini-row {
             display: grid; gap: 12px; align-items: center; padding: 12px;
-            grid-template-columns: 1.1fr 1.4fr 1.7fr 0.8fr 2.1fr 0.9fr 0.7fr;
+            grid-template-columns: 1.1fr 1.4fr 1.7fr 0.8fr 2.1fr 0.9fr 0.7fr 0.8fr;
         }
         .mini-head { background: var(--gray-100); font-size: 12px; color: var(--gray-600); }
         .mini-row { border-top: 1px solid var(--gray-200); font-size: 13px; color: var(--gray-800); }
@@ -243,6 +243,7 @@
                     <div style="display:flex; align-items:center; gap:10px;">
                         <span class="muted">위험도 높은 순 · 상위 8명 표시</span>
                         <button class="btn btn-gray btn-sm" type="button" onclick="location.href='/admin/users/trainees'">훈련생 관리로 이동</button>
+                        <button class="btn btn-blue btn-sm" type="button" onclick="location.href='/admin/analytics/interventions'">개입·피드백 큐</button>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -255,6 +256,7 @@
                             <div>주요 요인</div>
                             <div>최근 접속</div>
                             <div>진도율</div>
+                            <div>관리</div>
                         </div>
                         <div class="mini-row" th:each="t : ${prediction.riskTrainees}">
                             <div>
@@ -272,6 +274,7 @@
                             <div class="muted" th:text="${t.mainFactor}">요인</div>
                             <div th:text="${t.lastAccess}">-</div>
                             <div th:text="${t.progressRate} + '%'">0%</div>
+                            <div><a class="btn btn-gray btn-sm" th:href="@{/admin/analytics/dropout/trainees/{id}(id=${t.loginId})}">상세·개입</a></div>
                         </div>
                     </div>
                 </div>

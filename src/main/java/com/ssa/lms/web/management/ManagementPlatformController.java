@@ -89,6 +89,18 @@ public class ManagementPlatformController {
         return "management/quality";
     }
 
+    @GetMapping("/admin/career")
+    public String careerManagement(@AuthenticationPrincipal LoginUser user, Model model) {
+        addScope(user, model);
+        return "management/career";
+    }
+
+    @GetMapping({"/admin/quality/improvements", "/instructor/quality/improvements"})
+    public String qualityImprovements(@AuthenticationPrincipal LoginUser user, Model model) {
+        addScope(user, model);
+        return "management/quality-improvements";
+    }
+
     private void addScope(LoginUser user, Model model) {
         boolean admin = user != null && user.getRole() == Role.ADMIN;
         model.addAttribute("managementScope", admin ? "전체 과정·수강생" : "내 담당 과정·수강생");

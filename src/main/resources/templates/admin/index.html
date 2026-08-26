@@ -341,6 +341,7 @@
                     <option th:each="course : ${dashboardReportCourses}"
                             th:value="${course.id}" th:text="${course.label}">과정 · 기수</option>
                 </select>
+                <a class="btn btn-secondary btn-sm" href="/admin/analytics/learning">화면에서 비교</a>
                 <button class="btn btn-secondary btn-sm" type="submit">엑셀 다운로드</button>
             </form>
 

@@ -26,6 +26,7 @@
         <section class="management-section">
             <div class="management-section-head"><div><h3>현재 연결된 품질 관련 기능</h3><p>실제 설문·평가·공지 화면을 재사용합니다.</p></div></div>
             <div class="management-action-grid">
+                <a class="management-action-card" th:href="${managementBase} + '/quality/improvements'"><span class="card-index">00 · IMPROVE</span><strong>과정 개선 보드</strong><p>평가 의견을 담당자·기한·성과 비교가 있는 개선 과제로 전환합니다.</p></a>
                 <a sec:authorize="hasRole('ADMIN')" class="management-action-card" href="/admin/survey"><span class="card-index">01 · SURVEY</span><strong>설문 관리</strong><p>설문 작성, 응답 현황과 엑셀 결과를 확인합니다.</p></a>
                 <a sec:authorize="hasRole('ADMIN')" class="management-action-card" href="/admin/evaluation/grading"><span class="card-index">02 · RESULT</span><strong>평가 결과</strong><p>시험·과제 결과와 채점 진행 상태를 확인합니다.</p></a>
                 <a sec:authorize="hasRole('INSTRUCTOR')" class="management-action-card" href="/instructor/grading"><span class="card-index">01 · RESULT</span><strong>담당 평가 결과</strong><p>내 담당 범위의 시험 결과와 피드백을 확인합니다.</p></a>

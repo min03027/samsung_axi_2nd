@@ -202,23 +202,26 @@
                     onclick="handleMenuClick(this, '/admin/notice')">
                     <img src="/static/icons/06-support.svg" alt="" class="management-menu-icon">
                     <span class="menu-text" th:classappend="${active == 'notice' or active == 'alarm'
-                            or active == 'reminder' or active == 'att-survey' or active == 'quality'} ? 'active_menu'">소통·교육품질</span>
+                            or active == 'reminder' or active == 'att-survey' or active == 'quality'
+                            or active == 'quality-improvements'} ? 'active_menu'">소통·교육품질</span>
                     <span class="chev" aria-hidden="true">▾</span>
                     <ul>
                         <li class="submenu" th:classappend="${active == 'notice'} ? 'active_menu'"><a href="/admin/notice">공지 관리</a></li>
                         <li class="submenu" th:classappend="${active == 'alarm'} ? 'active_menu'"><a href="/admin/notice/alarms">개인 알림</a></li>
                         <li class="submenu" th:classappend="${active == 'att-survey'} ? 'active_menu'"><a href="/admin/survey">설문 관리</a></li>
                         <li class="submenu" th:classappend="${active == 'quality'} ? 'active_menu'"><a href="/admin/quality">교육품질·강사평가</a></li>
+                        <li class="submenu" th:classappend="${active == 'quality-improvements'} ? 'active_menu'"><a href="/admin/quality/improvements">과정 개선 보드</a></li>
                     </ul>
                 </li>
                 <li sec:authorize="hasRole('INSTRUCTOR')" data-page="/instructor/notice"
                     onclick="handleMenuClick(this, '/instructor/notice')">
                     <img src="/static/icons/06-support.svg" alt="" class="management-menu-icon">
-                    <span class="menu-text" th:classappend="${active == 'notices' or active == 'quality'} ? 'active_menu'">소통·교육품질</span>
+                    <span class="menu-text" th:classappend="${active == 'notices' or active == 'quality' or active == 'quality-improvements'} ? 'active_menu'">소통·교육품질</span>
                     <span class="chev" aria-hidden="true">▾</span>
                     <ul>
                         <li class="submenu" th:classappend="${active == 'notices'} ? 'active_menu'"><a href="/instructor/notice">담당 과정 공지</a></li>
                         <li class="submenu" th:classappend="${active == 'quality'} ? 'active_menu'"><a href="/instructor/quality">내 과정 교육품질</a></li>
+                        <li class="submenu" th:classappend="${active == 'quality-improvements'} ? 'active_menu'"><a href="/instructor/quality/improvements">과정 개선 보드</a></li>
                     </ul>
                 </li>
 
@@ -226,12 +229,14 @@
                 <li sec:authorize="hasRole('ADMIN')" data-page="/admin/analytics/dropout"
                     onclick="handleMenuClick(this, '/admin/analytics/dropout')">
                     <img src="/static/icons/08-analytics.svg" alt="" class="management-menu-icon">
-                    <span class="menu-text" th:classappend="${active == 'analytics-dropout' or active == 'performance'} ? 'active_menu'">성과관리</span>
+                    <span class="menu-text" th:classappend="${active == 'analytics-dropout' or active == 'analytics-learning'
+                            or active == 'analytics-interventions' or active == 'career-management' or active == 'performance'} ? 'active_menu'">성과관리</span>
                     <span class="chev" aria-hidden="true">▾</span>
                     <ul>
                         <li class="submenu" th:classappend="${active == 'analytics-dropout'} ? 'active_menu'"><a href="/admin/analytics/dropout">학습 이탈 예측</a></li>
-                        <li class="submenu future-menu"><span>통계·통합 리포트</span><em>향후</em></li>
-                        <li class="submenu future-menu"><span>취업·사후관리</span><em>향후</em></li>
+                        <li class="submenu" th:classappend="${active == 'analytics-learning'} ? 'active_menu'"><a href="/admin/analytics/learning">학습 성과 분석</a></li>
+                        <li class="submenu" th:classappend="${active == 'analytics-interventions'} ? 'active_menu'"><a href="/admin/analytics/interventions">개입·피드백 큐</a></li>
+                        <li class="submenu" th:classappend="${active == 'career-management'} ? 'active_menu'"><a href="/admin/career">취업·사후관리</a></li>
                     </ul>
                 </li>
 

@@ -58,6 +58,21 @@ class TraineePlatformIaRenderTest {
                 .doesNotContain("연결 준비 중", "시간 미정", "mock data", "준비 중입니다");
     }
 
+    @Test
+    @DisplayName("포트폴리오부터 취업 후 관리까지 네 취업 화면이 서로 연결된다")
+    @WithUserDetails("trainee1")
+    void careerJourneyScreensRender() throws Exception {
+        String portfolio = getHtml("/trainee/career/portfolio");
+        String applications = getHtml("/trainee/career/applications");
+        String recommendations = getHtml("/trainee/career/recommendations");
+        String followUp = getHtml("/trainee/career/follow-up");
+
+        assertThat(portfolio).contains("포트폴리오 공개 준비", "대표 프로젝트로 설정", "</html>");
+        assertThat(applications).contains("지원·면접 파이프라인", "면접 일정", "</html>");
+        assertThat(recommendations).contains("나와 가까운 채용 기회", "직무 로드맵 보기", "</html>");
+        assertThat(followUp).contains("입사 후 성장 체크인", "후속 상담 요청하기", "</html>");
+    }
+
     private String getHtml(String path) throws Exception {
         return mvc.perform(get(path))
                 .andExpect(status().isOk())
