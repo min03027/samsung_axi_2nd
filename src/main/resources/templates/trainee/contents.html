@@ -12,6 +12,9 @@
         .content-course { font-size:13px; color:var(--gray-600); }
         .prog-badge { font-size:14px; color:var(--color-primary); min-width:44px; text-align:right; }
         .content-title { flex:1; min-width:0; }
+        .feature-shortcuts { display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:24px; padding:18px 20px; border:1px solid var(--gray-200); border-radius:12px; background:#f7f9fc; }
+        .feature-shortcuts-copy p { margin:4px 0 0; color:var(--gray-500); font-size:14px; }
+        .feature-shortcuts-actions { display:flex; flex-wrap:wrap; gap:8px; }
 
         /* 차시별 학습(learning.html)과 같은 행 구조라 같은 처리를 한다.
            375px 에서 "학습하기" 버튼이 화면 밖(311~393px)으로 나가 누를 수 없었다. */
@@ -20,6 +23,7 @@
             .content-title { flex: 1 1 calc(100% - 54px); }   /* 아이콘 42 + gap 12 */
             .prog-badge { margin-left: 54px; text-align: left; }
             .content-li .btn { margin-left: auto; }
+            .feature-shortcuts { align-items:flex-start; flex-direction:column; }
         }
     </style>
 </head>
@@ -34,6 +38,16 @@
         </section>
         <section class="main-content">
             <section class="main-content-inner main-wrap">
+                <div class="feature-shortcuts">
+                    <div class="feature-shortcuts-copy">
+                        <strong>실시간 학습 기능 데모</strong>
+                        <p>학습 참여 확인 또는 화상강의 장치 점검 화면으로 바로 이동합니다.</p>
+                    </div>
+                    <div class="feature-shortcuts-actions">
+                        <a class="btn btn-gray" href="/v2/lxp/trainee/learning-presence-check.html">학습 참여 확인</a>
+                        <a class="btn btn-secondary" href="/v2/lxp/trainee/live-class-precheck.html">화상 라이브 강의</a>
+                    </div>
+                </div>
                 <p th:if="${#lists.isEmpty(contents)}" style="color:var(--gray-500);">학습 가능한 콘텐츠가 없습니다.</p>
                 <ul style="list-style:none; padding:0; margin:0;">
                     <li class="content-li" th:each="c : ${contents}">

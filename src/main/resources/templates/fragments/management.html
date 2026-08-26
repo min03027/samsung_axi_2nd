@@ -78,7 +78,8 @@
                             or active == 'enrollment-approval' or active == 'admissions' or active == 'contents'
                             or active == 'content-library' or active == 'content-versions'
                             or active == 'content-requests' or active == 'course-templates' or active == 'demand-signals'
-                            or active == 'att-status' or active == 'att-graduate'} ? 'active_menu'">교육 운영</span>
+                            or active == 'att-status' or active == 'att-graduate' or active == 'att-demo'
+                            or active == 'presence-demo' or active == 'live-class-demo'} ? 'active_menu'">교육 운영</span>
                     <span class="chev" aria-hidden="true">▾</span>
                     <ul>
                         <li class="submenu" th:classappend="${active == 'courses'} ? 'active_menu'"><a href="/admin/courses">과정·커리큘럼</a></li>
@@ -92,6 +93,9 @@
                         <li class="submenu" th:classappend="${active == 'course-templates'} ? 'active_menu'"><a href="/instructor/course-templates">과정 템플릿</a></li>
                         <li class="submenu" th:classappend="${active == 'demand-signals'} ? 'active_menu'"><a href="/instructor/demand-signals">산업수요 추천</a></li>
                         <li class="submenu" th:classappend="${active == 'att-status'} ? 'active_menu'"><a href="/admin/attendance">출결 현황</a></li>
+                        <li class="submenu" th:classappend="${active == 'att-demo'} ? 'active_menu'"><a href="/v2/admin/attendance.html">출결·HRD 전송(데모)</a></li>
+                        <li class="submenu" th:classappend="${active == 'presence-demo'} ? 'active_menu'"><a href="/v2/admin/presence-monitor.html">학습 참여 모니터링(데모)</a></li>
+                        <li class="submenu" th:classappend="${active == 'live-class-demo'} ? 'active_menu'"><a href="/v2/admin/live-class-monitor.html">라이브 강의 모니터링(데모)</a></li>
                         <li class="submenu" th:classappend="${active == 'att-graduate'} ? 'active_menu'"><a href="/admin/completion">이수·수료 관리</a></li>
                     </ul>
                 </li>

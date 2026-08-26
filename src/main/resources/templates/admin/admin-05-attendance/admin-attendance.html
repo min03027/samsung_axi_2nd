@@ -33,6 +33,10 @@
         .override-form button { padding:2px 6px; font-size:11px; }
         details.cell-edit summary { cursor:pointer; list-style:none; }
         details.cell-edit[open] summary { margin-bottom:4px; }
+        .feature-shortcuts { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:22px; padding:18px 20px; border:1px solid var(--gray-200); border-radius:12px; background:var(--gray-50); }
+        .feature-shortcuts p { margin:4px 0 0; color:var(--gray-500); font-size:14px; }
+        .feature-shortcuts-actions { display:flex; flex-wrap:wrap; gap:8px; }
+        @media (max-width:900px) { .feature-shortcuts { align-items:flex-start; flex-direction:column; } }
     </style>
 </head>
 <body data-user-role="admin">
@@ -43,6 +47,18 @@
         <section class="main-content-inner">
             <div class="section-header">
                 <h2>출결현황</h2>
+            </div>
+
+            <div class="feature-shortcuts">
+                <div>
+                    <strong>출결·실시간 학습 운영 데모</strong>
+                    <p>전송 상태, 학습 참여, 라이브 강의를 각 운영 화면에서 확인할 수 있습니다.</p>
+                </div>
+                <div class="feature-shortcuts-actions">
+                    <a class="btn btn-gray" href="/v2/admin/attendance.html">출결·HRD 전송</a>
+                    <a class="btn btn-gray" href="/v2/admin/presence-monitor.html">학습 참여 모니터링</a>
+                    <a class="btn btn-primary" href="/v2/admin/live-class-monitor.html">라이브 강의 모니터링</a>
+                </div>
             </div>
 
             <p class="flash-msg" th:if="${message}" th:text="${message}"></p>

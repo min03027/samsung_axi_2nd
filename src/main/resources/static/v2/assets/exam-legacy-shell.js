@@ -43,7 +43,11 @@
       { label: "수강 과정 목록", href: "/trainee/my-course" },
       { label: "이어서 학습", href: "/trainee/learning" }
     ]},
-    { key: "contents", label: "학습콘텐츠", href: "/trainee/contents" },
+    { key: "contents", label: "학습콘텐츠", href: "/trainee/contents", sub: [
+      { label: "학습 콘텐츠 목록", href: "/trainee/contents" },
+      { label: "학습 참여 확인(데모)", href: "/v2/lxp/trainee/learning-presence-check.html" },
+      { label: "화상 라이브 강의(데모)", href: "/v2/lxp/trainee/live-class-precheck.html" }
+    ]},
     { key: "test", label: "시험/과제", href: "/trainee/exam", sub: [
       { label: "온라인 시험", href: "/trainee/exam" },
       { label: "응시 데모(사전점검)", href: "/v2/lxp/trainee/exams.html" },
@@ -58,6 +62,7 @@
     { key: "notices", label: "공지사항", href: "/trainee/notice" },
     { key: "attendance", label: "출결/이수관리", href: "/trainee/survey", sub: [
       { label: "출결현황", href: "/trainee/attendance" },
+      { label: "출결·본인인증(데모)", href: "/v2/lxp/trainee/attendance.html" },
       { label: "이수관리", href: "/trainee/completion-management" },
       { label: "설문조사", href: "/trainee/survey" }
     ]}
@@ -169,7 +174,8 @@
     { key: "courses", label: "과정/운영 관리", href: "/admin/courses", icon: "03-course.svg", w: 25, sub: [
       { key: "courses", label: "과정 관리", href: "/admin/courses" },
       { key: "enrollment-approval", label: "수강신청 승인", href: "/admin/enrollments/pending" },
-      { key: "schedule", label: "일정 관리", href: "/admin/courses/schedule" }
+      { key: "schedule", label: "일정 관리", href: "/admin/courses/schedule" },
+      { key: "live-class-demo", label: "라이브 강의 모니터링(데모)", href: "/v2/admin/live-class-monitor.html" }
     ]},
     { key: "eval", label: "평가 관리", href: "/admin/evaluation/assignments", icon: "04-evaluation.svg", w: 30, sub: [
       { key: "eval-exam", label: "시험 관리", href: "/admin/evaluation/exams" },
@@ -182,6 +188,8 @@
     ]},
     { key: "att", label: "출결/이수 관리", href: "/admin/attendance", icon: "05-attendance.svg", w: 28, sub: [
       { key: "att-status", label: "출결현황", href: "/admin/attendance" },
+      { key: "att-demo", label: "출결·HRD 전송(데모)", href: "/v2/admin/attendance.html" },
+      { key: "presence-demo", label: "학습 참여 모니터링(데모)", href: "/v2/admin/presence-monitor.html" },
       { key: "att-graduate", label: "이수 관리", href: "/admin/completion" },
       { key: "att-survey", label: "설문조사 관리", href: "/admin/survey" }
     ]},

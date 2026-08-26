@@ -20,6 +20,9 @@
         .att-ABSENT  { background:var(--color-danger-bg); color:var(--color-danger); }
         .att-EXCUSED { background:#e2e3ff; color:#3730a3; }
         .empty-state { color:var(--gray-500); font-size:15px; padding:40px 0; text-align:center; }
+        .feature-shortcuts { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:24px; padding:18px 20px; border:1px solid var(--gray-200); border-radius:12px; background:#f7f9fc; }
+        .feature-shortcuts p { margin:4px 0 0; color:var(--gray-500); font-size:14px; }
+        @media (max-width:768px) { .feature-shortcuts { align-items:flex-start; flex-direction:column; } }
     </style>
 </head>
 <body>
@@ -36,6 +39,14 @@
             <p class="page-desc" style="color:var(--gray-500); margin-bottom:20px;">
                 온라인 학습 접속 기준으로 산정된 나의 차시별 출결 상태입니다.
             </p>
+
+            <div class="feature-shortcuts">
+                <div>
+                    <strong>출석 인증 흐름을 먼저 확인해보세요</strong>
+                    <p>OTP 발급부터 모바일 본인인증, 출결 전송 상태까지 화면으로 체험할 수 있습니다.</p>
+                </div>
+                <a class="btn btn-secondary" href="/v2/lxp/trainee/attendance.html">출결·본인인증 데모</a>
+            </div>
 
 
             <div class="empty-state" th:if="${courses == null or courses.isEmpty()}">
