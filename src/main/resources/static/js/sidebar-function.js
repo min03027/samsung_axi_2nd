@@ -36,10 +36,11 @@ function toggleSidebar() {
 function handleMenuClick(element, page) {
     const body = document.body;
     const submenu = element.querySelector('ul');    
+    const clickEvent = window.event;
     
     // 사이드바가 접혀있으면 무조건 페이지 이동
     if (body.classList.contains('sidebar-collapsed')) {
-        event.stopPropagation();
+        if (clickEvent) clickEvent.stopPropagation();
         // 현재 페이지와 다를 때만 이동
         if (window.location.pathname !== page && !window.location.pathname.endsWith(page)) {
             window.location.href = page;
@@ -54,7 +55,7 @@ function handleMenuClick(element, page) {
     
     // 서브메뉴가 있는 경우 토글
     if (submenu) {
-        event.stopPropagation();
+        if (clickEvent) clickEvent.stopPropagation();
         
         // 다른 열린 서브메뉴 닫기
         const allMenuItems = document.querySelectorAll('.menu > ul > li');
@@ -76,7 +77,7 @@ function handleMenuClick(element, page) {
         }
     } else {
         // 서브메뉴가 없으면 페이지 이동 (현재 페이지와 다를 때만)
-        event.stopPropagation();
+        if (clickEvent) clickEvent.stopPropagation();
         if (window.location.pathname !== page && !window.location.pathname.endsWith(page)) {
             window.location.href = page;
         }
@@ -85,6 +86,14 @@ function handleMenuClick(element, page) {
 
 // 페이지 로드 시 사이드바 상태 복원
 document.addEventListener('DOMContentLoaded', function() {
+    // 하위 링크 클릭이 상위 메뉴의 onclick까지 전달되면 상위 기본 경로로
+    // 다시 이동할 수 있다. 실제 링크 이동만 실행되도록 전파를 차단한다.
+    document.querySelectorAll('.menu .submenu a').forEach(link => {
+        link.addEventListener('click', function(clickEvent) {
+            clickEvent.stopPropagation();
+        });
+    });
+
     const sidebarCollapsed = localStorage.getItem('sidebarCollapsed');
     
     if (sidebarCollapsed === 'true') {

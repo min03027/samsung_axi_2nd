@@ -54,6 +54,14 @@ class P1OperationsFlowTest {
 
         LearnerCareRecord journal = careRepository.findByTraineeId(trainee.getId()).get(0);
         assertThat(journal.getRecordType()).isEqualTo(LearnerCareRecord.RecordType.LEARNING_JOURNAL);
+        journal.updateFollowUp(LearnerCareRecord.CareStatus.SCHEDULED, "상담 일정을 잡았습니다.",
+                LocalDateTime.of(2026, 8, 28, 14, 30));
+        careRepository.saveAndFlush(journal);
+
+        mvc.perform(get("/admin/care/follow-ups").with(as(admin)))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("데이터 전처리 회고")))
+                .andExpect(content().string(containsString("상담·조치 보드")));
 
         mvc.perform(get("/admin/care/diary").with(as(admin)))
                 .andExpect(status().isOk())
