@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>통합 검색 — 삼성AXI</title>
+  <meta name="description" content="삼성AXI의 모집 과정, 수료생 인터뷰, 기업교육 사례와 주요 안내를 한 번에 검색합니다.">
+  <link rel="canonical" href="https://samsung-axi-2nd.min0302748.workers.dev/v2/site/search.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="통합 검색 — 삼성AXI">
+  <meta property="og:description" content="과정·후기·기업사례·공지 정보를 한곳에서 찾아보세요.">
+  <meta property="og:image" content="https://samsung-axi-2nd.min0302748.workers.dev/v2/assets/axi-share-card.svg">
+  <link rel="stylesheet" href="/v2/assets/tokens.css">
+  <link rel="stylesheet" href="/v2/assets/base.css">
+  <link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64">
+  <link rel="stylesheet" href="/v2/assets/search-page.css?v=20260826-119">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"SearchResultsPage","name":"삼성AXI 통합 검색","url":"https://samsung-axi-2nd.min0302748.workers.dev/v2/site/search.html","isPartOf":{"@type":"WebSite","name":"삼성AXI","url":"https://samsung-axi-2nd.min0302748.workers.dev/v2/index.html","potentialAction":{"@type":"SearchAction","target":"https://samsung-axi-2nd.min0302748.workers.dev/v2/site/search.html?q={search_term_string}","query-input":"required name=search_term_string"}}}
+  </script>
+</head>
+<body class="search-site">
+  <section class="search-hero">
+    <div class="container search-container">
+      <p class="search-eyebrow">SAMSUNG AXI SEARCH</p>
+      <h1>필요한 정보를<br><em>한 번에 찾으세요.</em></h1>
+      <p>모집 과정부터 수료생의 경험, 기업교육 사례와 주요 안내까지 같은 검색어로 확인할 수 있습니다.</p>
+      <form class="search-form" role="search" data-integrated-search>
+        <label for="integrated-query">통합 검색어</label>
+        <div class="search-input-row">
+          <input id="integrated-query" name="q" type="search" autocomplete="off" placeholder="예: 데이터 분석, 로봇 AI, 취업, RAG">
+          <button type="submit">검색</button>
+        </div>
+      </form>
+      <div class="search-suggestions" aria-label="추천 검색어">
+        <span>추천</span>
+        <button type="button" data-search-suggestion="데이터 분석">데이터 분석</button>
+        <button type="button" data-search-suggestion="로봇 AI">로봇 AI</button>
+        <button type="button" data-search-suggestion="취업">취업</button>
+        <button type="button" data-search-suggestion="기업교육">기업교육</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="search-results-section">
+    <div class="container search-container">
+      <div class="search-toolbar">
+        <div class="search-tabs" role="tablist" aria-label="검색 결과 유형">
+          <button type="button" role="tab" aria-selected="true" data-search-type="all">전체 <span data-search-count="all">0</span></button>
+          <button type="button" role="tab" aria-selected="false" data-search-type="course">과정 <span data-search-count="course">0</span></button>
+          <button type="button" role="tab" aria-selected="false" data-search-type="review">후기 <span data-search-count="review">0</span></button>
+          <button type="button" role="tab" aria-selected="false" data-search-type="case">기업사례 <span data-search-count="case">0</span></button>
+          <button type="button" role="tab" aria-selected="false" data-search-type="notice">공지 <span data-search-count="notice">0</span></button>
+        </div>
+        <p class="search-result-summary" aria-live="polite"><strong data-result-count>0</strong>개의 결과</p>
+      </div>
+
+      <div class="search-result-list" data-search-results></div>
+      <div class="search-empty" data-search-empty hidden>
+        <strong>일치하는 결과가 없습니다.</strong>
+        <p>검색어를 짧게 바꾸거나 다른 유형을 선택해 보세요.</p>
+        <a href="/v2/site/class/index.html">전체 과정 둘러보기 →</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="/v2/assets/brand.js"></script>
+  <script src="/v2/assets/page-section-navigation.js?v=20260826-119"></script>
+  <script src="/v2/assets/search-index.js?v=20260826-119"></script>
+  <script>Shell.site({service:"home",sections:[],hideNavigator:true});</script>
+</body>
+</html>

@@ -26,6 +26,52 @@
     });
   }
 
+  /* 공개 페이지의 기본 SEO 계약. 각 페이지가 title·description 만 정확히 적으면
+     canonical, 공유 메타, WebPage 구조화 데이터는 공통 셸이 보완한다. */
+  function applyPublicSeo() {
+    if (!/^\/v2\/(?:index\.html|site\/)/.test(location.pathname)) return;
+    var title = (document.title || B.name).replace(/\{brand\}/g, B.name);
+    var descriptionNode = document.querySelector('meta[name="description"]');
+    var description = descriptionNode ? descriptionNode.content : "배움에서 실무와 취업까지 연결하는 AI 교육, 삼성AXI";
+    var canonicalUrl = location.origin + location.pathname;
+    var shareImage = location.origin + "/v2/assets/axi-share-card.svg";
+    function link(rel, href) {
+      var node = document.querySelector('link[rel="' + rel + '"]') || document.createElement("link");
+      node.rel = rel; node.href = href;
+      if (!node.parentNode) document.head.appendChild(node);
+    }
+    function meta(selector, attrs) {
+      var node = document.querySelector(selector) || document.createElement("meta");
+      Object.keys(attrs).forEach(function (key) { node.setAttribute(key, attrs[key]); });
+      if (!node.parentNode) document.head.appendChild(node);
+    }
+    link("canonical", canonicalUrl);
+    meta('meta[property="og:type"]', {property:"og:type", content:"website"});
+    meta('meta[property="og:site_name"]', {property:"og:site_name", content:"삼성AXI"});
+    meta('meta[property="og:title"]', {property:"og:title", content:title});
+    meta('meta[property="og:description"]', {property:"og:description", content:description});
+    meta('meta[property="og:url"]', {property:"og:url", content:canonicalUrl});
+    meta('meta[property="og:image"]', {property:"og:image", content:shareImage});
+    meta('meta[name="twitter:card"]', {name:"twitter:card", content:"summary_large_image"});
+    meta('meta[name="twitter:title"]', {name:"twitter:title", content:title});
+    meta('meta[name="twitter:description"]', {name:"twitter:description", content:description});
+    meta('meta[name="twitter:image"]', {name:"twitter:image", content:shareImage});
+    if (!document.querySelector('script[type="application/ld+json"]')) {
+      var structured = document.createElement("script");
+      structured.type = "application/ld+json";
+      structured.dataset.seoRuntime = "true";
+      structured.textContent = JSON.stringify({
+        "@context":"https://schema.org",
+        "@graph":[
+          {"@type":"Organization","name":"삼성AXI","url":location.origin + "/v2/index.html"},
+          {"@type":"WebPage","name":title,"description":description,"url":canonicalUrl,
+            "isPartOf":{"@type":"WebSite","name":"삼성AXI","url":location.origin + "/v2/index.html"}}
+        ]
+      });
+      document.head.appendChild(structured);
+    }
+  }
+
   /* ---------------------------------------------------------
      공개사이트 메뉴 — 서비스별로 다르다
      --------------------------------------------------------- */
@@ -135,7 +181,7 @@
       { key: "cms-partners", label: "기업·기관",   href: "/admin/organizations", level: "L2" },
       { key: "cms-inquiry",  label: "문의 통합",   href: null /* 화면 미구현 */, level: "L2" },
       { key: "cms-site",     label: "메뉴·배너",   href: null /* 화면 미구현 */, level: "L2" },
-      { key: "cms-seo",      label: "검색·SEO",    href: null /* 화면 미구현 */, level: "L1" }
+      { key: "cms-seo",      label: "검색·SEO",    href: "/admin/site/seo", level: "L1" }
     ]},
     { group: "설정", items: [
       { key: "admins",   label: "관리자 계정", href: "/admin/admins", level: "L1" },
@@ -161,7 +207,7 @@
 
     var serviceLinks = B.services.map(function (s) {
       return '<a href="' + s.href + '"' + (s.key === svc ? ' aria-current="page"' : "") + ">" + esc(s.label) + "</a>";
-    }).join("");
+    }).join("") + '<a href="/v2/site/search.html"' + (location.pathname === "/v2/site/search.html" ? ' aria-current="page"' : '') + '>통합 검색</a>';
 
     var sectionBlock = "";
     var serviceQuickbar = "";
@@ -477,5 +523,6 @@
     sync();
   }
 
+  applyPublicSeo();
   window.Shell = { site: site, app: app, nav: sideNav, NAV: { trainee: TRAINEE_NAV, admin: ADMIN_NAV, site: SITE_NAV } };
 })();

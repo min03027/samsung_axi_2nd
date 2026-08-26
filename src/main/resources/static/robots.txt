@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /trainee/
+Disallow: /instructor/
+
+Sitemap: https://samsung-axi-2nd.min0302748.workers.dev/sitemap.xml

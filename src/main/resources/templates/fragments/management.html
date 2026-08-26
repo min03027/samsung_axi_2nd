@@ -129,11 +129,12 @@
                 <li sec:authorize="hasRole('ADMIN')" data-page="/admin/organizations"
                     onclick="handleMenuClick(this, '/admin/organizations')">
                     <img src="/static/icons/03-description.svg" alt="" class="management-menu-icon">
-                    <span class="menu-text" th:classappend="${active == 'organizations' or active == 'reviews'} ? 'active_menu'">사이트 운영</span>
+                    <span class="menu-text" th:classappend="${active == 'organizations' or active == 'reviews' or active == 'seo'} ? 'active_menu'">사이트 운영</span>
                     <span class="chev" aria-hidden="true">▾</span>
                     <ul>
                         <li class="submenu" th:classappend="${active == 'organizations'} ? 'active_menu'"><a href="/admin/organizations">기업·기관 관리</a></li>
                         <li class="submenu" th:classappend="${active == 'reviews'} ? 'active_menu'"><a href="/admin/reviews">후기 관리</a></li>
+                        <li class="submenu" th:classappend="${active == 'seo'} ? 'active_menu'"><a href="/admin/site/seo">검색·SEO 관리</a></li>
                     </ul>
                 </li>
 
