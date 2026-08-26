@@ -248,14 +248,14 @@ public class SampleScreenData {
                 new CompletionView(
                         900_201L, "홍길동", "1998-04-12",
                         "K-디지털 트레이닝 백엔드 개발자 양성과정 / 2기",
-                        100, 96, true,
+                        100, 96, 92.0, true,
                         "PASS", "이수", "CONFIRMED", "확정",
                         now.minusDays(20), true),
                 // 진행 중인 과정 — 이수예정
                 new CompletionView(
                         900_202L, "홍길동", "1998-04-12",
                         COURSE_LABEL,
-                        68, 92, false,
+                        68, 92, null, false,
                         "PENDING", "판정대기", "EXPECTED", "이수예정",
                         null, false)
         );

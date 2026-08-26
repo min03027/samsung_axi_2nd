@@ -5,8 +5,13 @@ import com.ssa.lms.completion.entity.CompletionResult;
 import com.ssa.lms.completion.entity.ConfirmStatus;
 import com.ssa.lms.completion.repository.CompletionRepository;
 import com.ssa.lms.course.entity.Course;
+import com.ssa.lms.course.entity.Enrollment;
+import com.ssa.lms.course.entity.EnrollmentStatus;
 import com.ssa.lms.course.entity.CourseStatus;
 import com.ssa.lms.course.repository.CourseRepository;
+import com.ssa.lms.course.repository.EnrollmentRepository;
+import com.ssa.lms.grading.entity.Grade;
+import com.ssa.lms.grading.repository.GradeRepository;
 import com.ssa.lms.user.entity.Role;
 import com.ssa.lms.user.entity.User;
 import com.ssa.lms.user.entity.UserStatus;
@@ -25,8 +30,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -44,6 +52,8 @@ class AttendanceCompletionViewTest {
 
     @Autowired MockMvc mvc;
     @Autowired CourseRepository courseRepository;
+    @Autowired EnrollmentRepository enrollmentRepository;
+    @Autowired GradeRepository gradeRepository;
     @Autowired UserRepository userRepository;
     @Autowired CompletionRepository completionRepository;
 
@@ -74,6 +84,150 @@ class AttendanceCompletionViewTest {
                 .andExpect(content().string(containsString("data-certificate-preview")))
                 .andExpect(content().string(containsString("certificatePreviewFrame")))
                 .andExpect(content().string(containsString("</html>")));
+    }
+
+    @Test
+    @DisplayName("관리자는 훈련생에게 실제 과정 이수를 부여하고 즉시 이수증을 발급한다")
+    @WithUserDetails("admin")
+    void adminGrantsManualCompletionAndCertificate() throws Exception {
+        Course course = courseRepository.save(Course.builder()
+                .courseCode("COURSE-MANUAL-CERT-A3")
+                .courseName("관리자 직접 이수 부여 과정")
+                .startDate(LocalDate.of(2026, 3, 1))
+                .endDate(LocalDate.of(2026, 8, 20))
+                .capacity(20)
+                .status(CourseStatus.COMPLETED)
+                .completionProgressRate(80)
+                .build());
+        User trainee = userRepository.save(User.builder()
+                .loginId("manual-certificate-trainee-a3")
+                .password("x")
+                .name("직접이수훈련생")
+                .role(Role.TRAINEE)
+                .status(UserStatus.ACTIVE)
+                .birthDate("2000-01-01")
+                .build());
+
+        mvc.perform(post("/admin/completion/manual-grant")
+                        .with(csrf())
+                        .param("courseId", course.getId().toString())
+                        .param("traineeId", trainee.getId().toString())
+                        .param("progressRate", "96")
+                        .param("attendanceRate", "94")
+                        .param("averageScore", "91")
+                        .param("gradesConfirmed", "true"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/completion?courseId=" + course.getId()))
+                .andExpect(flash().attribute("message", containsString("이수증을 발급")));
+
+        Completion granted = completionRepository
+                .findByCourseIdAndTraineeId(course.getId(), trainee.getId())
+                .orElseThrow();
+        assertThat(granted.getProgressRate()).isEqualTo(96);
+        assertThat(granted.getAttendanceRate()).isEqualTo(94);
+        assertThat(granted.getAverageScore()).isEqualTo(91.0);
+        assertThat(granted.getResult()).isEqualTo(CompletionResult.PASS);
+        assertThat(granted.getConfirmStatus()).isEqualTo(ConfirmStatus.CONFIRMED);
+        assertThat(granted.isCertificateIssuable()).isTrue();
+
+        mvc.perform(get("/admin/completion/{id}/certificate", granted.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_PDF));
+    }
+
+    @Test
+    @DisplayName("관리자가 설정한 진도·출석·테스트 기준 충족 시 자동 이수와 이수증 발급까지 처리한다")
+    @WithUserDetails("admin")
+    void adminCriteriaAutomaticallyCompletesTraineeAndIssuesCertificate() throws Exception {
+        Course course = courseRepository.save(Course.builder()
+                .courseCode("COURSE-AUTO-CERT-A3")
+                .courseName("자동 이수 기준 과정")
+                .startDate(LocalDate.of(2026, 3, 1))
+                .endDate(LocalDate.of(2026, 8, 20))
+                .capacity(20)
+                .status(CourseStatus.COMPLETED)
+                .completionProgressRate(0)
+                .build());
+        User trainee = userRepository.save(User.builder()
+                .loginId("auto-certificate-trainee-a3")
+                .password("x")
+                .name("자동이수훈련생")
+                .role(Role.TRAINEE)
+                .status(UserStatus.ACTIVE)
+                .birthDate("2001-03-14")
+                .build());
+        Enrollment enrollment = enrollmentRepository.save(Enrollment.builder()
+                .trainee(trainee)
+                .course(course)
+                .status(EnrollmentStatus.APPROVED)
+                .appliedAt(LocalDateTime.now().minusMonths(3))
+                .build());
+        User admin = userRepository.findByLoginId("admin").orElseThrow();
+        Grade grade = Grade.builder()
+                .user(trainee)
+                .course(course)
+                .evalType(Grade.EvalType.EXAM)
+                .evalRefId(991_001L)
+                .status(Grade.GradeStatus.UNGRADED)
+                .build();
+        grade.applyScore(85, null, 60, admin, LocalDateTime.now());
+        grade.confirm(admin, LocalDateTime.now());
+        gradeRepository.save(grade);
+
+        mvc.perform(post("/admin/completion/criteria")
+                        .with(csrf())
+                        .param("courseId", course.getId().toString())
+                        .param("minProgressRate", "0")
+                        .param("minAttendanceRate", "0")
+                        .param("minAverageScore", "90")
+                        .param("requireGradePass", "true")
+                        .param("note", "자동 이수 통합 테스트"))
+                .andExpect(status().is3xxRedirection());
+
+        mvc.perform(post("/admin/completion/evaluate")
+                        .with(csrf())
+                        .param("courseId", course.getId().toString()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(flash().attribute("message", containsString("이수 확정 및 이수증 발급")));
+
+        Completion belowThreshold = completionRepository
+                .findByCourseIdAndTraineeId(course.getId(), trainee.getId())
+                .orElseThrow();
+        assertThat(belowThreshold.getAverageScore()).isEqualTo(85.0);
+        assertThat(belowThreshold.getResult()).isEqualTo(CompletionResult.FAIL);
+        assertThat(belowThreshold.getConfirmStatus()).isEqualTo(ConfirmStatus.EXPECTED);
+        assertThat(enrollmentRepository.findById(enrollment.getId()).orElseThrow().getStatus())
+                .isEqualTo(EnrollmentStatus.APPROVED);
+
+        mvc.perform(post("/admin/completion/criteria")
+                        .with(csrf())
+                        .param("courseId", course.getId().toString())
+                        .param("minProgressRate", "0")
+                        .param("minAttendanceRate", "0")
+                        .param("minAverageScore", "80")
+                        .param("requireGradePass", "true"))
+                .andExpect(status().is3xxRedirection());
+        mvc.perform(post("/admin/completion/evaluate")
+                        .with(csrf())
+                        .param("courseId", course.getId().toString()))
+                .andExpect(status().is3xxRedirection());
+
+        Completion completion = completionRepository
+                .findByCourseIdAndTraineeId(course.getId(), trainee.getId())
+                .orElseThrow();
+        assertThat(completion.getAverageScore()).isEqualTo(85.0);
+        assertThat(completion.getGradesConfirmed()).isTrue();
+        assertThat(completion.getResult()).isEqualTo(CompletionResult.PASS);
+        assertThat(completion.getConfirmStatus()).isEqualTo(ConfirmStatus.CONFIRMED);
+        assertThat(completion.isCertificateIssuable()).isTrue();
+        assertThat(enrollmentRepository.findById(enrollment.getId()).orElseThrow().getStatus())
+                .isEqualTo(EnrollmentStatus.COMPLETED);
+
+        mvc.perform(get("/admin/completion").param("courseId", course.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("최소 테스트 평균")))
+                .andExpect(content().string(containsString("기준 적용·자동 이수 처리")))
+                .andExpect(content().string(containsString("자동이수훈련생")));
     }
 
     /* ===== 권한 경계 ===== */

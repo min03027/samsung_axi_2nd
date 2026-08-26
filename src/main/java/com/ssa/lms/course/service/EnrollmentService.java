@@ -134,6 +134,20 @@ public class EnrollmentService {
         e.reapply(LocalDateTime.now());
     }
 
+    /** 이수 기준을 통과한 승인 수강생을 수료 상태로 전환한다. 이미 수료 상태면 그대로 둔다. */
+    @Transactional
+    public void completeByCriteria(Long traineeId, Long courseId, LocalDateTime completedAt) {
+        Enrollment enrollment = enrollmentRepository.findByTraineeIdAndCourseId(traineeId, courseId)
+                .orElseThrow(() -> new EnrollmentException("승인된 수강 정보를 찾을 수 없습니다."));
+        if (enrollment.getStatus() == EnrollmentStatus.COMPLETED) {
+            return;
+        }
+        if (enrollment.getStatus() != EnrollmentStatus.APPROVED) {
+            throw new EnrollmentException("승인된 수강생만 자동 이수 처리할 수 있습니다.");
+        }
+        enrollment.complete(completedAt);
+    }
+
     private Enrollment get(Long id) {
         return enrollmentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("수강신청을 찾을 수 없습니다: " + id));

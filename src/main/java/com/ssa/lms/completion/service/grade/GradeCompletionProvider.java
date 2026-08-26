@@ -18,4 +18,7 @@ public interface GradeCompletionProvider {
 
     /** 해당 과정에서 사용자가 성적(평가) 이수 요건을 충족했는지. */
     boolean gradesConfirmed(Long userId, Long courseId);
+
+    /** 해당 과정의 확정된 평가 평균 점수. 확정 성적이 없으면 null. */
+    Double averageConfirmedScore(Long userId, Long courseId);
 }

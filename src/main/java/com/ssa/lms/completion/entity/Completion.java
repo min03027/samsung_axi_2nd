@@ -48,6 +48,10 @@ public class Completion extends BaseEntity {
     @Column(name = "attendance_rate", nullable = false)
     private int attendanceRate;
 
+    /** 판정 당시 확정된 평가의 평균 점수. 점수 기준 미적용 또는 확정 성적 없음이면 null. */
+    @Column(name = "average_score")
+    private Double averageScore;
+
     /** 성적 요건 충족 여부. 성적 기준 미반영(requireGradePass=false)이면 null. */
     @Column(name = "grades_confirmed")
     private Boolean gradesConfirmed;
@@ -68,12 +72,13 @@ public class Completion extends BaseEntity {
 
     @Builder
     private Completion(Course course, User trainee, int progressRate, int attendanceRate,
-                       Boolean gradesConfirmed, CompletionResult result, ConfirmStatus confirmStatus,
+                       Double averageScore, Boolean gradesConfirmed, CompletionResult result, ConfirmStatus confirmStatus,
                        LocalDateTime evaluatedAt) {
         this.course = course;
         this.trainee = trainee;
         this.progressRate = progressRate;
         this.attendanceRate = attendanceRate;
+        this.averageScore = averageScore;
         this.gradesConfirmed = gradesConfirmed;
         this.result = result != null ? result : CompletionResult.PENDING;
         this.confirmStatus = confirmStatus != null ? confirmStatus : ConfirmStatus.EXPECTED;
@@ -81,10 +86,11 @@ public class Completion extends BaseEntity {
     }
 
     /** 자동 판정 결과/근거 갱신. 이미 확정(CONFIRMED)된 건은 확정 상태를 유지한다. */
-    public void applyEvaluation(int progressRate, int attendanceRate, Boolean gradesConfirmed,
+    public void applyEvaluation(int progressRate, int attendanceRate, Double averageScore, Boolean gradesConfirmed,
                                 CompletionResult result, LocalDateTime evaluatedAt) {
         this.progressRate = progressRate;
         this.attendanceRate = attendanceRate;
+        this.averageScore = averageScore;
         this.gradesConfirmed = gradesConfirmed;
         this.result = result;
         this.evaluatedAt = evaluatedAt;

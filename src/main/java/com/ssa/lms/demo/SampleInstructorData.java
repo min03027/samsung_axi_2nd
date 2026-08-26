@@ -129,6 +129,7 @@ public class SampleInstructorData {
                     BIRTH_DATES[i],
                     courseLabel,
                     progress[i], attendance[i],
+                    pending ? null : 84.0 + i,
                     !pending,
                     result, resultLabel,
                     confirmed ? "CONFIRMED" : "EXPECTED",

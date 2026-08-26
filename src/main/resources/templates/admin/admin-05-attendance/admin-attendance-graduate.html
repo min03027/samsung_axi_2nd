@@ -15,13 +15,24 @@
         .toolbar label { display:block; font-size:13px; font-weight:600; color:var(--gray-500); margin-bottom:4px; }
         .toolbar select { padding:8px 12px; border:1px solid var(--gray-300); border-radius:8px; min-width:280px; }
         .flash-msg { background:#e7f6ec; color:#1b7a3d; border:1px solid #b6e0c4; padding:10px 14px; border-radius:8px; margin-bottom:16px; font-size:14px; }
-        .criteria-box { background:#fff; border:1px solid var(--color-line-gray,#e5e5e5); border-radius:8px; padding:18px 20px; margin-bottom:20px; }
-        .criteria-box h3 { font-size:16px; font-weight:700; margin-bottom:12px; }
-        .criteria-form { display:flex; gap:18px; align-items:flex-end; flex-wrap:wrap; }
-        .criteria-form label { display:block; font-size:13px; color:var(--gray-500); margin-bottom:4px; }
-        .criteria-form input[type=number] { width:90px; padding:8px 10px; border:1px solid var(--gray-300); border-radius:6px; }
-        .criteria-form input[type=text] { width:260px; padding:8px 10px; border:1px solid var(--gray-300); border-radius:6px; }
+        .flash-msg.error { background:#fff1f1; color:#b42318; border-color:#ffc9c9; }
+        .auto-flow { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid #d9e2f5; border-radius:10px; margin-bottom:18px; overflow:hidden; background:#f7f9fe; }
+        .auto-flow__step { position:relative; padding:16px 18px; min-height:76px; border-right:1px solid #d9e2f5; }
+        .auto-flow__step:last-child { border-right:0; }
+        .auto-flow__step span { display:block; color:#3564d4; font-size:11px; font-weight:800; letter-spacing:.08em; margin-bottom:6px; }
+        .auto-flow__step strong { display:block; font-size:14px; color:var(--gray-900); }
+        .criteria-box { background:#fff; border:1px solid var(--color-line-gray,#e5e5e5); border-radius:10px; padding:22px; margin-bottom:14px; }
+        .criteria-box__head { display:flex; justify-content:space-between; gap:24px; margin-bottom:18px; }
+        .criteria-box__head h3 { font-size:18px; font-weight:700; margin:0 0 5px; }
+        .criteria-box__head p { margin:0; font-size:13px; line-height:1.55; color:var(--gray-500); }
+        .criteria-form { display:grid; grid-template-columns:repeat(3,minmax(140px,1fr)) minmax(220px,1.5fr); gap:14px; align-items:end; }
+        .criteria-form label { display:block; font-size:12px; font-weight:600; color:var(--gray-600); margin-bottom:6px; }
+        .criteria-form input[type=number], .criteria-form input[type=text] { width:100%; height:42px; box-sizing:border-box; padding:8px 10px; border:1px solid var(--gray-300); border-radius:7px; background:#fff; }
+        .criteria-form__options { grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between; gap:20px; padding-top:4px; }
+        .criteria-form__check { display:flex !important; align-items:center; gap:8px; margin:0 !important; color:var(--gray-800) !important; font-size:13px !important; font-weight:500 !important; }
+        .criteria-form__help { margin:12px 0 0; color:var(--gray-500); font-size:12px; line-height:1.55; }
         .action-row { display:flex; gap:10px; align-items:center; margin-bottom:16px; flex-wrap:wrap; }
+        .action-row__help { color:var(--gray-500); font-size:12px; }
         table.grad-table { border-collapse:collapse; width:100%; font-size:13px; }
         table.grad-table th, table.grad-table td { border-bottom:1px solid var(--gray-200); padding:10px 12px; text-align:center; }
         table.grad-table th { background:var(--gray-50); color:var(--gray-600); font-weight:600; }
@@ -36,6 +47,27 @@
         .inline-form { display:inline; }
         .status-form { display:inline-flex; gap:4px; align-items:center; }
         .status-form select { padding:2px 6px; font-size:12px; border:1px solid var(--gray-300); border-radius:6px; }
+        .grant-box { border:1px solid #dfe3eb; background:#fff; border-radius:10px; margin-bottom:20px; }
+        .grant-box > summary { cursor:pointer; padding:15px 20px; font-size:14px; font-weight:700; color:var(--gray-800); }
+        .grant-box__body { padding:0 20px 20px; border-top:1px solid #eef0f4; }
+        .grant-box__head { display:flex; justify-content:space-between; gap:20px; align-items:flex-start; margin-bottom:16px; }
+        .grant-box__head p { margin:16px 0 0; color:var(--gray-600); font-size:13px; line-height:1.55; }
+        .grant-form { display:grid; grid-template-columns:minmax(220px,1.5fr) repeat(3,100px) minmax(150px,auto) auto; gap:12px; align-items:end; }
+        .grant-form label { display:flex; flex-direction:column; gap:6px; color:var(--gray-600); font-size:12px; font-weight:600; }
+        .grant-form select, .grant-form input[type=number] { height:40px; border:1px solid var(--gray-300); border-radius:7px; background:#fff; padding:0 10px; color:var(--gray-900); }
+        .grant-form .grant-check { flex-direction:row; align-items:center; height:40px; color:var(--gray-800); font-size:13px; font-weight:500; }
+        .grant-box__note { margin:12px 0 0; color:var(--gray-500); font-size:12px; }
+        @media (max-width:1100px) {
+            .criteria-form { grid-template-columns:repeat(2,minmax(180px,1fr)); }
+            .grant-form { grid-template-columns:repeat(2,minmax(180px,1fr)); }
+        }
+        @media (max-width:720px) {
+            .auto-flow { grid-template-columns:1fr 1fr; }
+            .auto-flow__step:nth-child(2) { border-right:0; }
+            .auto-flow__step:nth-child(-n+2) { border-bottom:1px solid #d9e2f5; }
+            .criteria-form, .grant-form { grid-template-columns:1fr; }
+            .criteria-form__options { align-items:flex-start; flex-direction:column; }
+        }
     </style>
 </head>
 <body data-user-role="admin">
@@ -49,6 +81,7 @@
             </div>
 
             <p class="flash-msg" th:if="${message}" th:text="${message}"></p>
+            <p class="flash-msg error" th:if="${error}" th:text="${error}"></p>
 
             <!-- 과정 선택 -->
             <form class="toolbar" method="get" th:action="@{/admin/completion}">
@@ -63,9 +96,21 @@
             </form>
 
             <div th:if="${selectedCourse != null}">
+                <div class="auto-flow" aria-label="자동 이수 처리 흐름">
+                    <div class="auto-flow__step"><span>01</span><strong>과정별 기준 설정</strong></div>
+                    <div class="auto-flow__step"><span>02</span><strong>학습 지표 자동 집계</strong></div>
+                    <div class="auto-flow__step"><span>03</span><strong>기준 충족 시 이수 확정</strong></div>
+                    <div class="auto-flow__step"><span>04</span><strong>이수증 즉시 발급</strong></div>
+                </div>
+
                 <!-- 이수 기준 설정 -->
                 <div class="criteria-box">
-                    <h3>이수 기준 설정</h3>
+                    <div class="criteria-box__head">
+                        <div>
+                            <h3>자동 이수 기준</h3>
+                            <p>과정별로 필요한 목표값을 저장하세요. 모든 적용 기준을 충족한 훈련생만 자동 이수 처리됩니다.</p>
+                        </div>
+                    </div>
                     <form class="criteria-form" method="post" th:action="@{/admin/completion/criteria}">
                         <input type="hidden" name="courseId" th:value="${selectedCourse.id}">
                         <div>
@@ -79,34 +124,59 @@
                                    th:value="${criteria.minAttendanceRate}">
                         </div>
                         <div>
-                            <label>성적 요건 반영</label>
-                            <label style="font-weight:400;color:var(--gray-800);">
-                                <input type="checkbox" name="requireGradePass" value="true"
-                                       th:checked="${criteria.requireGradePass}">
-                                평가(성적) 이수 요건 포함
-                            </label>
+                            <label>최소 테스트 평균(점)</label>
+                            <input type="number" name="minAverageScore" min="0" max="100"
+                                   placeholder="미적용" th:value="${criteria.minAverageScore}">
                         </div>
                         <div>
                             <label>비고</label>
                             <input type="text" name="note" th:value="${criteria.note}">
                         </div>
-                        <button type="submit" class="btn btn-primary">기준 저장</button>
+                        <div class="criteria-form__options">
+                            <label class="criteria-form__check">
+                                <input type="checkbox" name="requireGradePass" value="true"
+                                       th:checked="${criteria.requireGradePass}">
+                                모든 평가의 성적 확정 여부까지 확인
+                            </label>
+                            <button type="submit" class="btn btn-primary">이수 기준 저장</button>
+                        </div>
                     </form>
-                    <p class="empty-hint" style="padding:8px 0 0;">
-                        성적 도메인 통합 전에는 성적 요건을 끄고(진도+출결 기준) 판정하세요. 진도율은 콘텐츠/진도 트랙 통합 후 실제 값이 반영됩니다.
-                    </p>
+                    <p class="criteria-form__help">테스트 평균을 비워두면 점수는 판정에서 제외됩니다. 테스트 평균을 적용하면 미확정 평가가 없는지도 함께 확인합니다.</p>
                 </div>
 
                 <!-- 자동 판정 실행 -->
                 <div class="action-row">
                     <form class="inline-form" method="post" th:action="@{/admin/completion/evaluate}">
                         <input type="hidden" name="courseId" th:value="${selectedCourse.id}">
-                        <button type="submit" class="btn btn-primary">이수 자동 판정 실행</button>
+                        <button type="submit" class="btn btn-primary">기준 적용·자동 이수 처리</button>
                     </form>
                     <a class="btn btn-secondary"
                        th:href="@{/admin/completion/export.xlsx(courseId=${selectedCourse.id})}">이수 현황 엑셀 다운로드</a>
-                    <span class="empty-hint" style="padding:0;">기준 대비 진도율·출석률(·성적)로 이수/미이수를 판정합니다.</span>
+                    <span class="action-row__help">통과한 훈련생은 수료 상태로 전환되고 이수증이 즉시 활성화됩니다.</span>
                 </div>
+
+                <details class="grant-box">
+                    <summary>예외 이수 직접 부여</summary>
+                    <div class="grant-box__body">
+                        <div class="grant-box__head"><p>자동 집계가 어려운 이전 과정이나 관리자 승인 예외 건에만 사용하세요.</p></div>
+                        <form class="grant-form" method="post" th:action="@{/admin/completion/manual-grant}">
+                            <input type="hidden" name="courseId" th:value="${selectedCourse.id}">
+                            <label>훈련생
+                                <select name="traineeId" required>
+                                    <option value="">훈련생 선택</option>
+                                    <option th:each="trainee : ${trainees}" th:value="${trainee.id}"
+                                            th:text="|${trainee.name} (${trainee.loginId})|">훈련생</option>
+                                </select>
+                            </label>
+                            <label>진도율(%)<input type="number" name="progressRate" min="0" max="100" value="100" required></label>
+                            <label>출석률(%)<input type="number" name="attendanceRate" min="0" max="100" value="100" required></label>
+                            <label>테스트 평균<input type="number" name="averageScore" min="0" max="100" value="100" required></label>
+                            <label class="grant-check"><input type="checkbox" name="gradesConfirmed" value="true"> 성적 확정</label>
+                            <button type="submit" class="btn btn-secondary">직접 이수 부여</button>
+                        </form>
+                        <p class="grant-box__note">동일 과정·훈련생 기록이 있으면 새 행을 만들지 않고 기존 이수 기록을 갱신합니다.</p>
+                    </div>
+                </details>
 
                 <!-- 이수 현황 -->
                 <div class="attendance-info-section">
@@ -122,6 +192,7 @@
                                 <th>과정명/기수</th>
                                 <th>진도율(%)</th>
                                 <th>출석률(%)</th>
+                                <th>테스트 평균</th>
                                 <th>이수상태</th>
                                 <th>이수확정상태</th>
                                 <th>확정일자</th>
@@ -136,6 +207,7 @@
                                 <td th:text="${row.courseLabel}">과정</td>
                                 <td th:text="${row.progressRate}">0</td>
                                 <td th:text="${row.attendanceRate}">0</td>
+                                <td th:text="${row.averageScore != null ? #numbers.formatDecimal(row.averageScore, 1, 1) : '-'}">-</td>
                                 <td><span class="badge" th:classappend="'res-' + ${row.result}" th:text="${row.resultLabel}">상태</span></td>
                                 <td>
                                     <form class="status-form" method="post"

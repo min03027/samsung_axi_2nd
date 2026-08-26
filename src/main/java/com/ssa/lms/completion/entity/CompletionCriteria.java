@@ -43,6 +43,10 @@ public class CompletionCriteria extends BaseEntity {
     @Column(name = "min_attendance_rate", nullable = false)
     private int minAttendanceRate;
 
+    /** 확정된 평가 점수의 최소 평균. null 이면 테스트 점수를 판정에서 제외한다. */
+    @Column(name = "min_average_score")
+    private Integer minAverageScore;
+
     /**
      * 성적(평가) 이수 요건 반영 여부. B의 성적 도메인(GradeQueryService)이 통합되기 전에는
      * 기본 false 로 두고 진도+출결만으로 판정한다. true 로 켜면 성적 요건 미충족 시 미이수.
@@ -55,17 +59,20 @@ public class CompletionCriteria extends BaseEntity {
 
     @Builder
     private CompletionCriteria(Course course, int minProgressRate, int minAttendanceRate,
-                               boolean requireGradePass, String note) {
+                               Integer minAverageScore, boolean requireGradePass, String note) {
         this.course = course;
         this.minProgressRate = minProgressRate;
         this.minAttendanceRate = minAttendanceRate;
+        this.minAverageScore = minAverageScore;
         this.requireGradePass = requireGradePass;
         this.note = note;
     }
 
-    public void update(int minProgressRate, int minAttendanceRate, boolean requireGradePass, String note) {
+    public void update(int minProgressRate, int minAttendanceRate, Integer minAverageScore,
+                       boolean requireGradePass, String note) {
         this.minProgressRate = minProgressRate;
         this.minAttendanceRate = minAttendanceRate;
+        this.minAverageScore = minAverageScore;
         this.requireGradePass = requireGradePass;
         this.note = note;
     }

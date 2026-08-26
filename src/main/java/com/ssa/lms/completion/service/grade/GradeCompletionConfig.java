@@ -18,6 +18,16 @@ public class GradeCompletionConfig {
     @Bean
     @ConditionalOnMissingBean(GradeCompletionProvider.class)
     public GradeCompletionProvider fallbackGradeCompletionProvider() {
-        return (userId, courseId) -> false; // 성적 도메인 통합 전 임시값
+        return new GradeCompletionProvider() {
+            @Override
+            public boolean gradesConfirmed(Long userId, Long courseId) {
+                return false;
+            }
+
+            @Override
+            public Double averageConfirmedScore(Long userId, Long courseId) {
+                return null;
+            }
+        };
     }
 }

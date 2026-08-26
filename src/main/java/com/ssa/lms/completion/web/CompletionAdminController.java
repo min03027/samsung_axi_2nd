@@ -37,6 +37,7 @@ public class CompletionAdminController {
     public String graduate(@RequestParam(required = false) Long courseId, Model model) {
         List<Course> courses = courseRepository.findAllByOrderByStartDateDesc();
         model.addAttribute("courses", courses);
+        model.addAttribute("trainees", completionService.activeTrainees());
 
         Course selected = resolveSelected(courses, courseId);
         model.addAttribute("selectedCourse", selected);
@@ -53,18 +54,45 @@ public class CompletionAdminController {
     public String saveCriteria(@RequestParam Long courseId,
                                @RequestParam int minProgressRate,
                                @RequestParam int minAttendanceRate,
+                               @RequestParam(required = false) Integer minAverageScore,
                                @RequestParam(defaultValue = "false") boolean requireGradePass,
                                @RequestParam(required = false) String note,
                                RedirectAttributes ra) {
-        completionService.saveCriteria(courseId, minProgressRate, minAttendanceRate, requireGradePass, note);
-        ra.addFlashAttribute("message", "이수 기준을 저장했습니다.");
+        try {
+            completionService.saveCriteria(
+                    courseId, minProgressRate, minAttendanceRate, minAverageScore, requireGradePass, note);
+            ra.addFlashAttribute("message", "이수 기준을 저장했습니다. 다음 자동 판정부터 적용됩니다.");
+        } catch (IllegalArgumentException e) {
+            ra.addFlashAttribute("error", e.getMessage());
+        }
         return "redirect:/admin/completion?courseId=" + courseId;
     }
 
     @PostMapping("/evaluate")
     public String evaluate(@RequestParam Long courseId, RedirectAttributes ra) {
         int count = completionService.evaluate(courseId);
-        ra.addFlashAttribute("message", "이수 자동 판정을 실행했습니다. (대상 " + count + "명)");
+        ra.addFlashAttribute("message", "자동 판정을 완료했습니다. 기준 충족자는 이수 확정 및 이수증 발급 처리되었습니다. (대상 " + count + "명)");
+        return "redirect:/admin/completion?courseId=" + courseId;
+    }
+
+    /** 관리자 직접 이수 부여 — 실제 Completion 을 PASS·CONFIRMED 로 저장한다. */
+    @PostMapping("/manual-grant")
+    public String manualGrant(@RequestParam Long courseId,
+                              @RequestParam Long traineeId,
+                              @RequestParam(defaultValue = "100") int progressRate,
+                              @RequestParam(defaultValue = "100") int attendanceRate,
+                              @RequestParam(defaultValue = "100") int averageScore,
+                              @RequestParam(defaultValue = "false") boolean gradesConfirmed,
+                              RedirectAttributes ra) {
+        try {
+            boolean created = completionService.grantManual(
+                    courseId, traineeId, progressRate, attendanceRate, averageScore, gradesConfirmed);
+            ra.addFlashAttribute("message", created
+                    ? "훈련생에게 과정 이수를 부여하고 이수증을 발급했습니다."
+                    : "기존 이수 기록을 갱신하고 이수증 발급 상태로 확정했습니다.");
+        } catch (IllegalArgumentException e) {
+            ra.addFlashAttribute("error", e.getMessage());
+        }
         return "redirect:/admin/completion?courseId=" + courseId;
     }
 

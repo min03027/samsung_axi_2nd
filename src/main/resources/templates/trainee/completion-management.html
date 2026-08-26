@@ -51,6 +51,7 @@
                             <th>과정명/기수</th>
                             <th style="width:110px;">진도율(%)</th>
                             <th style="width:110px;">출결률(%)</th>
+                            <th style="width:110px;">테스트 평균</th>
                             <th style="width:110px;">이수상태</th>
                             <th style="width:120px;">이수확정상태</th>
                             <th style="width:130px;">확정일자</th>
@@ -63,6 +64,7 @@
                             <td th:text="${row.courseLabel}">과정명/기수</td>
                             <td th:text="${row.progressRate}">0</td>
                             <td th:text="${row.attendanceRate}">0</td>
+                            <td th:text="${row.averageScore != null ? #numbers.formatDecimal(row.averageScore, 1, 1) : '-'}">-</td>
                             <td><span class="badge" th:classappend="'res-' + ${row.result}" th:text="${row.resultLabel}">상태</span></td>
                             <td><span class="badge" th:classappend="'cs-' + ${row.confirmStatus}" th:text="${row.confirmStatusLabel}">확정</span></td>
                             <td th:text="${row.confirmedAt != null ? #temporals.format(row.confirmedAt, 'yyyy-MM-dd') : '-'}">-</td>

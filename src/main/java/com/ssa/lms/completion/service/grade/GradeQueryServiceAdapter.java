@@ -21,4 +21,9 @@ public class GradeQueryServiceAdapter implements GradeCompletionProvider {
     public boolean gradesConfirmed(Long userId, Long courseId) {
         return gradeQueryService.hasAllRequiredGradesConfirmed(userId, courseId);
     }
+
+    @Override
+    public Double averageConfirmedScore(Long userId, Long courseId) {
+        return gradeQueryService.averageConfirmedScore(userId, courseId);
+    }
 }
