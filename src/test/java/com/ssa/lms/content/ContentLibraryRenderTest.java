@@ -1,7 +1,9 @@
 package com.ssa.lms.content;
 
+import com.ssa.lms.auth.LoginUser;
 import com.ssa.lms.content.repository.ContentRepository;
 import com.ssa.lms.content.service.ContentLibraryService;
+import com.ssa.lms.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ class ContentLibraryRenderTest {
     @Autowired MockMvc mvc;
     @Autowired ContentLibraryService libraryService;
     @Autowired ContentRepository contentRepository;
+    @Autowired UserRepository userRepository;
 
     @Test
     @DisplayName("공용 라이브러리 목록·등록·버전 화면을 렌더링한다")
@@ -47,7 +50,8 @@ class ContentLibraryRenderTest {
     @DisplayName("공용 원본 상세·과정 배치 화면을 렌더링한다")
     @WithUserDetails("admin")
     void detailAndDeployPages() throws Exception {
-        Long id = libraryService.promoteExisting(contentRepository.findAll().get(0).getId());
+        LoginUser admin = new LoginUser(userRepository.findByLoginId("admin").orElseThrow());
+        Long id = libraryService.promoteExisting(contentRepository.findAll().get(0).getId(), admin);
 
         mvc.perform(get("/instructor/content-library/{id}", id))
                 .andExpect(status().isOk())

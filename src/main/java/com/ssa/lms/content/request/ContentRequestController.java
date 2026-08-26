@@ -51,7 +51,7 @@ public class ContentRequestController {
     @GetMapping("/instructor/content-requests/{id}")
     public String detail(@PathVariable Long id, @AuthenticationPrincipal LoginUser user, Model model) {
         var row = service.view(id, user); model.addAttribute("row", row);
-        model.addAttribute("libraryItems", service.libraryOptions()); model.addAttribute("sessions", service.sessionOptions(row.courseId()));
+        model.addAttribute("libraryItems", service.libraryOptions()); model.addAttribute("sessions", service.sessionOptions(row.courseId(), user));
         model.addAttribute("form", new ContentRequestDecisionForm()); return "instructor/content-request-detail";
     }
 
@@ -63,7 +63,7 @@ public class ContentRequestController {
     @PostMapping("/instructor/content-requests/{id}/fulfill")
     public String fulfill(@PathVariable Long id, @Valid @ModelAttribute("form") ContentRequestDecisionForm form,
                           BindingResult errors, @AuthenticationPrincipal LoginUser user, RedirectAttributes ra, Model model) {
-        if (errors.hasErrors()) { var row=service.view(id,user); model.addAttribute("row",row); model.addAttribute("libraryItems",service.libraryOptions()); model.addAttribute("sessions",service.sessionOptions(row.courseId())); return "instructor/content-request-detail"; }
+        if (errors.hasErrors()) { var row=service.view(id,user); model.addAttribute("row",row); model.addAttribute("libraryItems",service.libraryOptions()); model.addAttribute("sessions",service.sessionOptions(row.courseId(), user)); return "instructor/content-request-detail"; }
         service.fulfill(id, form, user); ra.addFlashAttribute("message", "요청 콘텐츠를 과정에 배치했습니다."); return redirect(id);
     }
 

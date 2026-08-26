@@ -1,5 +1,6 @@
 package com.ssa.lms.content.service;
 
+import com.ssa.lms.auth.LoginUser;
 import com.ssa.lms.content.entity.*;
 import com.ssa.lms.content.repository.ContentLibraryItemRepository;
 import com.ssa.lms.content.repository.ContentLibraryLinkRepository;
@@ -8,15 +9,19 @@ import com.ssa.lms.content.repository.ContentRepository;
 import com.ssa.lms.content.web.*;
 import com.ssa.lms.course.entity.Course;
 import com.ssa.lms.course.entity.Session;
+import com.ssa.lms.course.repository.CourseInstructorRepository;
 import com.ssa.lms.course.repository.CourseRepository;
 import com.ssa.lms.course.repository.SessionRepository;
+import com.ssa.lms.user.entity.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * 공용 콘텐츠 라이브러리, 과정 배포, 원본 버전 발행과 자동 동기화를 하나의 트랜잭션으로 처리한다.
@@ -31,6 +36,7 @@ public class ContentLibraryService {
     private final ContentLibraryLinkRepository linkRepository;
     private final ContentRepository contentRepository;
     private final CourseRepository courseRepository;
+    private final CourseInstructorRepository courseInstructorRepository;
     private final SessionRepository sessionRepository;
     private final FileStorageService fileStorageService;
 
@@ -85,12 +91,18 @@ public class ContentLibraryService {
                 .toList();
     }
 
-    public List<Course> courseOptions() {
-        return courseRepository.findAllByOrderByStartDateDesc();
+    public List<Course> courseOptions(LoginUser actor) {
+        List<Course> courses = courseRepository.findAllByOrderByStartDateDesc();
+        if (actor.getRole() == Role.ADMIN) {
+            return courses;
+        }
+        Set<Long> assignedCourseIds = Set.copyOf(
+                courseInstructorRepository.findCourseIdsByInstructorId(actor.getId()));
+        return courses.stream().filter(course -> assignedCourseIds.contains(course.getId())).toList();
     }
 
-    public List<SessionOption> sessionOptions() {
-        return courseRepository.findAllByOrderByStartDateDesc().stream()
+    public List<SessionOption> sessionOptions(LoginUser actor) {
+        return courseOptions(actor).stream()
                 .flatMap(course -> sessionRepository
                         .findBySubjectCourseIdOrderBySubjectOrderNoAscSeqAsc(course.getId()).stream()
                         .map(session -> new SessionOption(session.getId(), course.getId(),
@@ -125,15 +137,19 @@ public class ContentLibraryService {
 
     /** 기존 과정 콘텐츠를 공용 원본으로 승격하고 기존 콘텐츠는 첫 연결로 유지한다. */
     @Transactional
-    public Long promoteExisting(Long contentId) {
+    public Long promoteExisting(Long contentId, LoginUser actor) {
         return linkRepository.findByContentId(contentId)
-                .map(link -> link.getLibraryItem().getId())
-                .orElseGet(() -> promote(contentId));
+                .map(link -> {
+                    assertCourseAccess(link.getContent().getCourse(), actor);
+                    return link.getLibraryItem().getId();
+                })
+                .orElseGet(() -> promote(contentId, actor));
     }
 
-    private Long promote(Long contentId) {
+    private Long promote(Long contentId, LoginUser actor) {
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(() -> new ContentNotFoundException(contentId));
+        assertCourseAccess(content.getCourse(), actor);
         ContentLibraryItem item = itemRepository.save(ContentLibraryItem.builder()
                 .type(content.getType())
                 .title(content.getTitle())
@@ -197,13 +213,14 @@ public class ContentLibraryService {
 
     /** 공용 원본을 과정에 새 콘텐츠로 배치하고 동기화 연결을 만든다. */
     @Transactional
-    public Long deploy(Long libraryItemId, ContentLibraryDeployForm form) {
+    public Long deploy(Long libraryItemId, ContentLibraryDeployForm form, LoginUser actor) {
         ContentLibraryItem item = get(libraryItemId);
         if (item.getStatus() == ContentLibraryStatus.ARCHIVED) {
             throw new IllegalStateException("보관된 원본은 과정에 배치할 수 없습니다.");
         }
         Course course = courseRepository.findById(form.getCourseId())
                 .orElseThrow(() -> new IllegalArgumentException("과정을 찾을 수 없습니다: " + form.getCourseId()));
+        assertCourseAccess(course, actor);
         Session session = resolveSession(course, form.getSessionId());
         ensureNotDuplicated(libraryItemId, course.getId(), session != null ? session.getId() : null);
 
@@ -235,24 +252,26 @@ public class ContentLibraryService {
 
     /** 수동 연결 또는 누락된 연결 하나를 현재 원본 버전으로 즉시 맞춘다. */
     @Transactional
-    public void syncNow(Long libraryItemId, Long linkId) {
+    public void syncNow(Long libraryItemId, Long linkId, LoginUser actor) {
         ContentLibraryItem item = get(libraryItemId);
         ContentLibraryLink link = linkRepository.findById(linkId)
                 .orElseThrow(() -> new IllegalArgumentException("콘텐츠 연결을 찾을 수 없습니다: " + linkId));
         if (!link.getLibraryItem().getId().equals(item.getId())) {
             throw new IllegalArgumentException("해당 원본의 콘텐츠 연결이 아닙니다.");
         }
+        assertCourseAccess(link.getContent().getCourse(), actor);
         apply(item, link);
     }
 
     @Transactional
-    public void changeAutoSync(Long libraryItemId, Long linkId, boolean autoSync) {
+    public void changeAutoSync(Long libraryItemId, Long linkId, boolean autoSync, LoginUser actor) {
         ContentLibraryItem item = get(libraryItemId);
         ContentLibraryLink link = linkRepository.findById(linkId)
                 .orElseThrow(() -> new IllegalArgumentException("콘텐츠 연결을 찾을 수 없습니다: " + linkId));
         if (!link.getLibraryItem().getId().equals(item.getId())) {
             throw new IllegalArgumentException("해당 원본의 콘텐츠 연결이 아닙니다.");
         }
+        assertCourseAccess(link.getContent().getCourse(), actor);
         link.changeAutoSync(autoSync);
         if (autoSync && link.getAppliedVersion() < item.getCurrentVersion()) {
             apply(item, link);
@@ -269,6 +288,16 @@ public class ContentLibraryService {
                 item.getFileUrl(), item.getOriginalFileName(), item.getFileSize(), item.getMimeType(),
                 item.getDurationSeconds(), item.getPageCount());
         link.markSynced(item.getCurrentVersion());
+    }
+
+    private void assertCourseAccess(Course course, LoginUser actor) {
+        if (actor.getRole() == Role.ADMIN) {
+            return;
+        }
+        if (actor.getRole() != Role.INSTRUCTOR
+                || !courseInstructorRepository.existsByCourseIdAndInstructorId(course.getId(), actor.getId())) {
+            throw new AccessDeniedException("담당 과정의 콘텐츠만 배치하거나 동기화할 수 있습니다.");
+        }
     }
 
     private Session resolveSession(Course course, Long sessionId) {
