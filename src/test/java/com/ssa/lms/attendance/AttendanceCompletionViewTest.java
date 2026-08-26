@@ -70,6 +70,9 @@ class AttendanceCompletionViewTest {
                 .andExpect(content().string(containsString("</html>")));
         mvc.perform(get("/trainee/completion-management"))
                 .andExpect(status().isOk())
+                .andExpect(content().string(containsString("이수증 보기")))
+                .andExpect(content().string(containsString("data-certificate-preview")))
+                .andExpect(content().string(containsString("certificatePreviewFrame")))
                 .andExpect(content().string(containsString("</html>")));
     }
 
