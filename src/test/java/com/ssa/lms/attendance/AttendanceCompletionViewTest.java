@@ -382,7 +382,7 @@ class AttendanceCompletionViewTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_PDF))
                 .andReturn().getResponse().getContentAsByteArray();
         try (PDDocument document = PDDocument.load(adminPdf)) {
-            String text = new PDFTextStripper().getText(document).replaceAll("\\s+", "");
+            String text = new PDFTextStripper().getText(document).replaceAll("[\\s\\u00a0]+", "");
             assertThat(text).contains("CUSTOMCERTIFICATE", "AXICustomizedIssuer");
         }
     }
@@ -407,8 +407,13 @@ class AttendanceCompletionViewTest {
 
         assertThat(pdf).isNotEmpty();
         try (PDDocument document = PDDocument.load(pdf)) {
-            String text = new PDFTextStripper().getText(document).replaceAll("\\s+", "");
-            assertThat(text).contains("MYCOMPLETION", "AXIStudentCertificate");
+            String text = new PDFTextStripper().getText(document).replaceAll("[\\s\\u00a0]+", "");
+            assertThat(text).contains(
+                    "MYCOMPLETION",
+                    "AXIStudentCertificate",
+                    "학습기준을충족하여이증서를수여합니다.",
+                    "2026년8월26일");
+            assertThat(text).doesNotContain("####");
         }
     }
 
