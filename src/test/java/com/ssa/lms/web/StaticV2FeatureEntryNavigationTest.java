@@ -46,6 +46,9 @@ class StaticV2FeatureEntryNavigationTest {
         String attendance = read("templates/admin/admin-05-attendance/admin-attendance.html");
 
         assertThat(fragment)
+                .contains("data-page=\"/admin/completion\"")
+                .contains("onclick=\"handleMenuClick(this, '/admin/completion')\"")
+                .contains(">이수 관리</span>")
                 .contains("/v2/admin/attendance.html")
                 .contains("/v2/admin/presence-monitor.html")
                 .contains("/v2/admin/live-class-monitor.html");
