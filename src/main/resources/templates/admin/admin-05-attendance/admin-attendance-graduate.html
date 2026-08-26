@@ -181,7 +181,7 @@
                 <!-- 이수 현황 -->
                 <div class="attendance-info-section">
                     <p class="empty-hint" th:if="${completions == null or completions.isEmpty()}">
-                        판정된 이수 정보가 없습니다. 이수 기준을 설정하고 자동 판정을 실행하세요.
+                        승인된 수강생이 없습니다. 과정 상세의 수강신청 현황을 확인하세요.
                     </p>
                     <table class="grad-table" th:unless="${completions == null or completions.isEmpty()}">
                         <thead>
@@ -200,7 +200,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="row, i : ${completions}">
+                            <tr th:each="row, i : ${completions}"
+                                th:attr="data-pending-trainee=${row.id == null ? row.traineeName : null}">
                                 <td th:text="${i.count}">1</td>
                                 <td th:text="${row.traineeName}">훈련생</td>
                                 <td th:text="${row.birthDate} ?: '-'">-</td>
@@ -210,19 +211,22 @@
                                 <td th:text="${row.averageScore != null ? #numbers.formatDecimal(row.averageScore, 1, 1) : '-'}">-</td>
                                 <td><span class="badge" th:classappend="'res-' + ${row.result}" th:text="${row.resultLabel}">상태</span></td>
                                 <td>
-                                    <form class="status-form" method="post"
-                                          th:action="@{/admin/completion/{id}/status(id=${row.id})}">
-                                        <input type="hidden" name="courseId" th:value="${selectedCourse.id}">
-                                        <select name="status" onchange="this.form.submit()">
-                                            <option th:each="s : ${confirmStatuses}" th:value="${s}"
-                                                    th:selected="${s.name() == row.confirmStatus}"
-                                                    th:text="${s.label}">상태</option>
-                                        </select>
-                                    </form>
+                                    <th:block th:if="${row.id != null}">
+                                        <form class="status-form" method="post"
+                                              th:action="@{/admin/completion/{id}/status(id=${row.id})}">
+                                            <input type="hidden" name="courseId" th:value="${selectedCourse.id}">
+                                            <select name="status" onchange="this.form.submit()">
+                                                <option th:each="s : ${confirmStatuses}" th:value="${s}"
+                                                        th:selected="${s.name() == row.confirmStatus}"
+                                                        th:text="${s.label}">상태</option>
+                                            </select>
+                                        </form>
+                                    </th:block>
+                                    <span th:if="${row.id == null}" class="badge cs-PENDING">자동 판정 전</span>
                                 </td>
                                 <td th:text="${row.confirmedAt != null ? #temporals.format(row.confirmedAt, 'yyyy-MM-dd') : '-'}">-</td>
                                 <td>
-                                    <form th:if="${row.confirmStatus != 'CONFIRMED' and row.result == 'PASS'}"
+                                    <form th:if="${row.id != null and row.confirmStatus != 'CONFIRMED' and row.result == 'PASS'}"
                                           class="inline-form" method="post"
                                           th:action="@{/admin/completion/{id}/confirm(id=${row.id})}">
                                         <input type="hidden" name="courseId" th:value="${selectedCourse.id}">
@@ -231,7 +235,7 @@
                                     <a th:if="${row.certificateIssuable}" class="btn btn-secondary"
                                        th:href="@{/admin/completion/{id}/certificate(id=${row.id})}"
                                        target="_blank">이수증 출력</a>
-                                    <span th:if="${row.confirmStatus != 'CONFIRMED' and row.result != 'PASS'}"
+                                    <span th:if="${row.id == null or (row.confirmStatus != 'CONFIRMED' and row.result != 'PASS')}"
                                           class="empty-hint" style="padding:0;">-</span>
                                 </td>
                             </tr>

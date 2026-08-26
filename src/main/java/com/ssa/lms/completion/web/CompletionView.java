@@ -1,6 +1,10 @@
 package com.ssa.lms.completion.web;
 
 import com.ssa.lms.completion.entity.Completion;
+import com.ssa.lms.completion.entity.CompletionResult;
+import com.ssa.lms.completion.entity.ConfirmStatus;
+import com.ssa.lms.course.entity.Course;
+import com.ssa.lms.user.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -25,13 +29,11 @@ public record CompletionView(
         boolean certificateIssuable
 ) {
     public static CompletionView of(Completion c) {
-        String cohort = c.getCourse().getCohort();
-        String courseLabel = c.getCourse().getCourseName() + (cohort != null ? " / " + cohort : "");
         return new CompletionView(
                 c.getId(),
                 c.getTrainee().getName(),
                 c.getTrainee().getBirthDate(),
-                courseLabel,
+                courseLabel(c.getCourse()),
                 c.getProgressRate(),
                 c.getAttendanceRate(),
                 c.getAverageScore(),
@@ -43,5 +45,30 @@ public record CompletionView(
                 c.getConfirmedAt(),
                 c.isCertificateIssuable()
         );
+    }
+
+    /** 승인 수강생이 아직 자동 판정을 받지 않았을 때 관리자 명단에 표시하는 미판정 행. */
+    public static CompletionView pending(Course course, User trainee, int progressRate, int attendanceRate) {
+        return new CompletionView(
+                null,
+                trainee.getName(),
+                trainee.getBirthDate(),
+                courseLabel(course),
+                progressRate,
+                attendanceRate,
+                null,
+                null,
+                CompletionResult.PENDING.name(),
+                CompletionResult.PENDING.getLabel(),
+                ConfirmStatus.PENDING.name(),
+                ConfirmStatus.PENDING.getLabel(),
+                null,
+                false
+        );
+    }
+
+    private static String courseLabel(Course course) {
+        String cohort = course.getCohort();
+        return course.getCourseName() + (cohort != null ? " / " + cohort : "");
     }
 }

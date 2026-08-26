@@ -230,6 +230,45 @@ class AttendanceCompletionViewTest {
                 .andExpect(content().string(containsString("자동이수훈련생")));
     }
 
+    @Test
+    @DisplayName("승인된 과정 수강생은 자동 판정 전에도 관리자 이수 관리 명단에 표시된다")
+    @WithUserDetails("admin")
+    void approvedTraineeAppearsBeforeCompletionEvaluation() throws Exception {
+        Course course = courseRepository.save(Course.builder()
+                .courseCode("COURSE-PENDING-COMPLETION-A3")
+                .courseName("미판정 수강생 표시 과정")
+                .startDate(LocalDate.of(2026, 3, 1))
+                .endDate(LocalDate.of(2026, 8, 20))
+                .capacity(20)
+                .status(CourseStatus.IN_PROGRESS)
+                .completionProgressRate(80)
+                .build());
+        User trainee = userRepository.save(User.builder()
+                .loginId("pending-completion-trainee-a3")
+                .password("x")
+                .name("승인미판정훈련생")
+                .role(Role.TRAINEE)
+                .status(UserStatus.ACTIVE)
+                .birthDate("2002-05-03")
+                .build());
+        enrollmentRepository.save(Enrollment.builder()
+                .trainee(trainee)
+                .course(course)
+                .status(EnrollmentStatus.APPROVED)
+                .appliedAt(LocalDateTime.now().minusDays(2))
+                .build());
+
+        assertThat(completionRepository.findByCourseIdAndTraineeId(course.getId(), trainee.getId())).isEmpty();
+
+        mvc.perform(get("/admin/completion").param("courseId", course.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("data-pending-trainee=\"승인미판정훈련생\"")))
+                .andExpect(content().string(containsString("자동 판정 전")));
+
+        // 단순 화면 조회는 공식 이수 기록을 만들지 않는다.
+        assertThat(completionRepository.findByCourseIdAndTraineeId(course.getId(), trainee.getId())).isEmpty();
+    }
+
     /* ===== 권한 경계 ===== */
 
     @Test

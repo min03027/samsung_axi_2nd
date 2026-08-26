@@ -45,7 +45,7 @@ public class CompletionAdminController {
 
         if (selected != null) {
             model.addAttribute("criteria", completionService.criteriaOf(selected.getId()));
-            model.addAttribute("completions", completionService.viewsByCourse(selected.getId()));
+            model.addAttribute("completions", completionService.managementViewsByCourse(selected.getId()));
         }
         return VIEW;
     }

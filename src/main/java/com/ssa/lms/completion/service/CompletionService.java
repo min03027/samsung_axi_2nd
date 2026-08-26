@@ -22,7 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 이수 기준 설정 + 자동 판정.
@@ -220,6 +224,40 @@ public class CompletionService {
                 .map(CompletionView::of).toList();
     }
 
+    /**
+     * 관리자 이수 관리용 전체 명단.
+     *
+     * <p>기존 이수 판정 행뿐 아니라 승인·수료 상태의 과정 수강생도 포함한다. 아직 Completion 이 없는
+     * 수강생은 현재 진도·출석을 표시한 판정대기 행으로 구성하며, 조회만으로 DB 이수 기록을 만들지는 않는다.
+     * 관리자 직접 이수 부여처럼 수강 등록 없이 생성된 공식 이수 기록도 누락하지 않는다.</p>
+     */
+    public List<CompletionView> managementViewsByCourse(Long courseId) {
+        Course course = getCourse(courseId);
+        List<Completion> existing = completionRepository.findByCourseId(courseId);
+        Map<Long, Completion> byTrainee = new HashMap<>();
+        existing.forEach(c -> byTrainee.put(c.getTrainee().getId(), c));
+
+        List<CompletionView> rows = new ArrayList<>();
+        List<User> enrolled = userRepository.findAllById(courseQueryService.findUserIdsByCourseId(courseId));
+        for (User trainee : enrolled) {
+            Completion completion = byTrainee.remove(trainee.getId());
+            if (completion != null) {
+                rows.add(CompletionView.of(completion));
+            } else {
+                rows.add(CompletionView.pending(
+                        course,
+                        trainee,
+                        progressQueryService.completedRatio(trainee.getId(), courseId),
+                        attendanceService.attendanceRate(trainee.getId(), courseId)));
+            }
+        }
+
+        // 수강 등록 없이 관리자가 직접 부여한 과거 이수 기록도 함께 보여준다.
+        byTrainee.values().stream().map(CompletionView::of).forEach(rows::add);
+        rows.sort(Comparator.comparing(CompletionView::traineeName));
+        return rows;
+    }
+
     /** 수강생 본인 이수 현황 행 뷰(훈련생 이수관리 화면). */
     public List<CompletionView> viewsByTrainee(Long traineeId) {
         return completionRepository.findByTraineeId(traineeId).stream()
@@ -251,7 +289,7 @@ public class CompletionService {
      */
     public byte[] completionExcel(Long courseId) {
         Course course = getCourse(courseId);
-        List<CompletionView> rows = viewsByCourse(courseId);
+        List<CompletionView> rows = managementViewsByCourse(courseId);
 
         try (ExcelWriter writer = ExcelWriter.create()) {
             writer.sheet(sheetName(course), COMPLETION_HEADERS);
