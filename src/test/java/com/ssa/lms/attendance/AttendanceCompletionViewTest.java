@@ -3,7 +3,9 @@ package com.ssa.lms.attendance;
 import com.ssa.lms.completion.entity.Completion;
 import com.ssa.lms.completion.entity.CompletionResult;
 import com.ssa.lms.completion.entity.ConfirmStatus;
+import com.ssa.lms.completion.repository.CertificateDesignRepository;
 import com.ssa.lms.completion.repository.CompletionRepository;
+import com.ssa.lms.completion.service.CertificateDesignService;
 import com.ssa.lms.course.entity.Course;
 import com.ssa.lms.course.entity.Enrollment;
 import com.ssa.lms.course.entity.EnrollmentStatus;
@@ -16,11 +18,14 @@ import com.ssa.lms.user.entity.Role;
 import com.ssa.lms.user.entity.User;
 import com.ssa.lms.user.entity.UserStatus;
 import com.ssa.lms.user.repository.UserRepository;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
@@ -56,6 +61,8 @@ class AttendanceCompletionViewTest {
     @Autowired GradeRepository gradeRepository;
     @Autowired UserRepository userRepository;
     @Autowired CompletionRepository completionRepository;
+    @Autowired CertificateDesignRepository certificateDesignRepository;
+    @Autowired CertificateDesignService certificateDesignService;
 
     /* ===== 렌더링 ===== */
 
@@ -294,12 +301,115 @@ class AttendanceCompletionViewTest {
                 .andExpect(content().string(containsString("크리에이티브형")))
                 .andExpect(content().string(containsString("A4 미리보기")))
                 .andExpect(content().string(containsString("id=\"certificatePaper\"")))
-                .andExpect(content().string(containsString("실제 발급 PDF와 서버 데이터에는 아직 반영되지 않습니다")));
+                .andExpect(content().string(containsString("관리자 출력과 훈련생 이수증 보기에 동일하게 적용")));
 
         mvc.perform(get("/admin/completion").param("courseId", course.getId().toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("/admin/completion/certificate-editor?courseId=" + course.getId())))
                 .andExpect(content().string(containsString("이수증 디자인 편집")));
+    }
+
+    @Test
+    @DisplayName("관리자가 과정 디자인을 저장하면 같은 설정이 다시 열리고 실제 PDF 생성에 사용된다")
+    @WithUserDetails("admin")
+    void savedCertificateDesignIsAppliedToPdf() throws Exception {
+        Course course = courseRepository.save(Course.builder()
+                .courseCode("COURSE-CERT-DESIGN-SAVE-A3")
+                .courseName("저장 디자인 적용 과정")
+                .cohort("5기")
+                .category("AI")
+                .startDate(LocalDate.of(2026, 3, 1))
+                .endDate(LocalDate.of(2026, 8, 20))
+                .capacity(20)
+                .status(CourseStatus.COMPLETED)
+                .completionProgressRate(80)
+                .build());
+        User trainee = userRepository.save(User.builder()
+                .loginId("certificate-design-admin-preview-a3")
+                .password("x")
+                .name("디자인확인훈련생")
+                .role(Role.TRAINEE)
+                .status(UserStatus.ACTIVE)
+                .birthDate("2000-02-03")
+                .build());
+        Completion completion = Completion.builder()
+                .course(course)
+                .trainee(trainee)
+                .progressRate(100)
+                .attendanceRate(97)
+                .averageScore(93.0)
+                .gradesConfirmed(true)
+                .result(CompletionResult.PASS)
+                .confirmStatus(ConfirmStatus.EXPECTED)
+                .evaluatedAt(LocalDateTime.now())
+                .build();
+        completion.confirm(LocalDateTime.now());
+        completionRepository.save(completion);
+
+        mvc.perform(post("/admin/completion/certificate-editor")
+                        .with(csrf())
+                        .param("courseId", course.getId().toString())
+                        .param("preset", "tech")
+                        .param("title", "CUSTOM CERTIFICATE")
+                        .param("issuer", "AXI Customized Issuer")
+                        .param("statement", "프로젝트 기준을 충족하여 이 증서를 수여합니다.")
+                        .param("accentColor", "#2459d9")
+                        .param("showPeriod", "true")
+                        .param("showMetrics", "true"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/completion/certificate-editor?courseId=" + course.getId()))
+                .andExpect(flash().attribute("message", containsString("관리자와 훈련생 출력에 동일하게 반영")));
+
+        var saved = certificateDesignRepository.findByCourseId(course.getId()).orElseThrow();
+        assertThat(saved.getPreset()).isEqualTo("tech");
+        assertThat(saved.getTitle()).isEqualTo("CUSTOM CERTIFICATE");
+        assertThat(saved.getIssuer()).isEqualTo("AXI Customized Issuer");
+        assertThat(saved.isShowBirth()).isFalse();
+        assertThat(saved.isShowPeriod()).isTrue();
+        assertThat(saved.isShowMetrics()).isTrue();
+        assertThat(saved.isShowSeal()).isFalse();
+
+        mvc.perform(get("/admin/completion/certificate-editor")
+                        .param("courseId", course.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("value=\"tech\"")))
+                .andExpect(content().string(containsString("CUSTOM CERTIFICATE")))
+                .andExpect(content().string(containsString("AXI Customized Issuer")))
+                .andExpect(content().string(containsString("preset-tech")));
+
+        byte[] adminPdf = mvc.perform(get("/admin/completion/{id}/certificate", completion.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_PDF))
+                .andReturn().getResponse().getContentAsByteArray();
+        try (PDDocument document = PDDocument.load(adminPdf)) {
+            String text = new PDFTextStripper().getText(document).replaceAll("\\s+", "");
+            assertThat(text).contains("CUSTOMCERTIFICATE", "AXICustomizedIssuer");
+        }
+    }
+
+    @Test
+    @DisplayName("훈련생 이수증 PDF도 관리자가 과정에 저장한 디자인을 사용한다")
+    @WithUserDetails("trainee1")
+    void traineeCertificateUsesCourseDesign() throws Exception {
+        Course course = courseRepository.findByCourseCode(DEMO_COURSE).orElseThrow();
+        User trainee = userRepository.findByLoginId("trainee1").orElseThrow();
+        Completion completion = completionRepository.findByCourseIdAndTraineeId(course.getId(), trainee.getId())
+                .orElseThrow();
+        certificateDesignService.save(course.getId(), "creative", "MY COMPLETION",
+                "AXI Student Certificate", "학습 기준을 충족하여 이 증서를 수여합니다.",
+                "#7c3aed", false, true, false, true);
+
+        byte[] pdf = mvc.perform(get("/trainee/completion-management/{id}/certificate", completion.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_PDF))
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, containsString("inline")))
+                .andReturn().getResponse().getContentAsByteArray();
+
+        assertThat(pdf).isNotEmpty();
+        try (PDDocument document = PDDocument.load(pdf)) {
+            String text = new PDFTextStripper().getText(document).replaceAll("\\s+", "");
+            assertThat(text).contains("MYCOMPLETION", "AXIStudentCertificate");
+        }
     }
 
     /* ===== 권한 경계 ===== */

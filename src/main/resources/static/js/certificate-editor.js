@@ -5,8 +5,8 @@
     var paper = document.getElementById("certificatePaper");
     if (!page || !paper) return;
 
-    var courseId = page.dataset.courseId || "default";
-    var storageKey = "axi-certificate-demo:" + courseId;
+    var form = document.getElementById("certificateEditorForm");
+    var presetInput = document.getElementById("certificatePresetInput");
     var presetButtons = Array.from(document.querySelectorAll("[data-certificate-preset]"));
     var titleInput = document.getElementById("certificateTitleInput");
     var issuerInput = document.getElementById("certificateIssuerInput");
@@ -39,7 +39,14 @@
         }
     };
 
-    var state = clone(presets.formal);
+    var state = {
+        preset: presetInput && presets[presetInput.value] ? presetInput.value : "formal",
+        title: titleInput.value,
+        issuer: issuerInput.value,
+        statement: statementInput.value,
+        accent: accentInput.value,
+        fields: {}
+    };
 
     function clone(value) {
         return JSON.parse(JSON.stringify(value));
@@ -50,6 +57,7 @@
         state.issuer = issuerInput.value.trim() || presets[state.preset].issuer;
         state.statement = statementInput.value.trim() || presets[state.preset].statement;
         state.accent = accentInput.value;
+        if (presetInput) presetInput.value = state.preset;
         state.fields = state.fields || {};
         document.querySelectorAll("[data-certificate-toggle]").forEach(function (input) {
             state.fields[input.dataset.certificateToggle] = input.checked;
@@ -107,41 +115,23 @@
 
     document.getElementById("certificateSaveButton").addEventListener("click", function () {
         readForm();
-        try {
-            localStorage.setItem(storageKey, JSON.stringify(state));
-            saveStatus.textContent = "이 과정의 시연 디자인을 현재 브라우저에 저장했습니다.";
-        } catch (error) {
-            saveStatus.textContent = "브라우저 저장을 사용할 수 없습니다. 미리보기 변경은 그대로 유지됩니다.";
-        }
+        saveStatus.textContent = "과정 디자인을 저장하고 이수증 출력에 적용합니다.";
     });
 
     document.getElementById("certificateResetButton").addEventListener("click", function () {
-        try {
-            localStorage.removeItem(storageKey);
-        } catch (ignore) {
-            // 저장소 접근이 제한된 브라우저에서도 화면 복원은 계속 진행한다.
-        }
         selectPreset("formal");
-        saveStatus.textContent = "기본 공식형 디자인으로 복원했습니다.";
+        saveStatus.textContent = "기본 공식형 디자인을 불러왔습니다. 적용하려면 저장 버튼을 눌러 주세요.";
     });
 
     document.getElementById("certificatePrintButton").addEventListener("click", function () {
         window.print();
     });
 
-    try {
-        var saved = JSON.parse(localStorage.getItem(storageKey));
-        if (saved && presets[saved.preset]) {
-            state = Object.assign(clone(presets[saved.preset]), saved);
-            state.fields = Object.assign({}, presets[saved.preset].fields, saved.fields || {});
-        }
-    } catch (ignore) {
-        try {
-            localStorage.removeItem(storageKey);
-        } catch (storageError) {
-            // 저장소가 막힌 환경에서는 기본 템플릿으로 계속 렌더링한다.
-        }
+    if (form) {
+        form.addEventListener("submit", function () {
+            readForm();
+            if (presetInput) presetInput.value = state.preset;
+        });
     }
-    writeForm();
     render();
 }());

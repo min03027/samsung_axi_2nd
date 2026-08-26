@@ -40,6 +40,9 @@
     font-size: 13px;
 }
 .editor-notice strong { color: #1f4fc2; white-space: nowrap; }
+.editor-flash { margin: -6px 0 18px; padding: 12px 15px; border-radius: 9px; font-size: 13px; font-weight: 700; }
+.editor-flash--success { border: 1px solid #a7dfbd; background: #eefaf2; color: #176b39; }
+.editor-flash--error { border: 1px solid #f0b7b7; background: #fff1f1; color: #a12d2d; }
 
 .editor-empty { padding: 80px 24px; border: 1px solid var(--editor-line); border-radius: 14px; background: #fff; color: var(--editor-muted); text-align: center; }
 .editor-workspace { display: grid; grid-template-columns: 360px minmax(620px, 1fr); gap: 20px; align-items: start; }

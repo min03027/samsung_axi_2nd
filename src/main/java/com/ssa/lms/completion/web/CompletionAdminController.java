@@ -1,6 +1,7 @@
 package com.ssa.lms.completion.web;
 
 import com.ssa.lms.completion.entity.ConfirmStatus;
+import com.ssa.lms.completion.service.CertificateDesignService;
 import com.ssa.lms.completion.service.CertificateService;
 import com.ssa.lms.completion.service.CompletionService;
 import com.ssa.lms.course.entity.Course;
@@ -32,6 +33,7 @@ public class CompletionAdminController {
 
     private final CompletionService completionService;
     private final CertificateService certificateService;
+    private final CertificateDesignService certificateDesignService;
     private final CourseRepository courseRepository;
 
     @GetMapping
@@ -51,7 +53,7 @@ public class CompletionAdminController {
         return VIEW;
     }
 
-    /** 과정별 이수증 디자인 시연 화면. 1차 단계에서는 DB 저장 없이 브라우저 미리보기만 제공한다. */
+    /** 과정별 공식 이수증 디자인 편집 화면. 저장한 설정은 관리자·훈련생 PDF에 공통 적용한다. */
     @GetMapping("/certificate-editor")
     public String certificateEditor(@RequestParam(required = false) Long courseId, Model model) {
         List<Course> courses = courseRepository.findAllByOrderByStartDateDesc();
@@ -59,7 +61,32 @@ public class CompletionAdminController {
         model.addAttribute("courses", courses);
         model.addAttribute("selectedCourse", selected);
         model.addAttribute("previewIssueDate", LocalDate.now());
+        if (selected != null) {
+            model.addAttribute("design", certificateDesignService.viewForCourse(selected.getId()));
+        }
         return "admin/admin-05-attendance/certificate-editor";
+    }
+
+    @PostMapping("/certificate-editor")
+    public String saveCertificateEditor(@RequestParam Long courseId,
+                                        @RequestParam String preset,
+                                        @RequestParam String title,
+                                        @RequestParam String issuer,
+                                        @RequestParam String statement,
+                                        @RequestParam String accentColor,
+                                        @RequestParam(defaultValue = "false") boolean showBirth,
+                                        @RequestParam(defaultValue = "false") boolean showPeriod,
+                                        @RequestParam(defaultValue = "false") boolean showMetrics,
+                                        @RequestParam(defaultValue = "false") boolean showSeal,
+                                        RedirectAttributes ra) {
+        try {
+            certificateDesignService.save(courseId, preset, title, issuer, statement, accentColor,
+                    showBirth, showPeriod, showMetrics, showSeal);
+            ra.addFlashAttribute("message", "이 과정의 이수증 디자인을 적용했습니다. 관리자와 훈련생 출력에 동일하게 반영됩니다.");
+        } catch (IllegalArgumentException e) {
+            ra.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/admin/completion/certificate-editor?courseId=" + courseId;
     }
 
     @PostMapping("/criteria")
