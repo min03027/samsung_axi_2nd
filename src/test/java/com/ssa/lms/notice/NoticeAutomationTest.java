@@ -2,6 +2,7 @@ package com.ssa.lms.notice;
 
 import com.ssa.lms.notice.dto.LoginNoticePopup;
 import com.ssa.lms.notice.dto.NoticeForm;
+import com.ssa.lms.notice.dto.NotificationForm;
 import com.ssa.lms.notice.service.NoticeService;
 import com.ssa.lms.notice.service.NotificationService;
 import com.ssa.lms.user.entity.Role;
@@ -64,5 +65,25 @@ class NoticeAutomationTest {
         LoginNoticePopup popup = notificationService.findLoginPopup(trainee.getId());
         assertThat(popup).isNotNull();
         assertThat(popup.confirmUrl()).isEqualTo("/trainee/notice/" + noticeId);
+    }
+
+    @Test
+    void 미확인_중요_알림도_훈련생_화면_진입_즉시_팝업으로_전달된다() {
+        var admin = userRepository.findByRoleOrderByNameAsc(Role.ADMIN).get(0);
+        var trainee = userRepository.findByRoleOrderByNameAsc(Role.TRAINEE).get(0);
+        NotificationForm form = new NotificationForm();
+        form.setTitle("출결 이수 위험군입니다.");
+        form.setContent("출결 이수내역을 신경써주세요.");
+        form.setPriority("high");
+        form.setTargetType("USER");
+        form.setTargetRefId(trainee.getId());
+
+        Long notificationId = notificationService.create(form, admin.getId(), Role.ADMIN);
+        LoginNoticePopup popup = notificationService.findLoginPopup(trainee.getId());
+
+        assertThat(popup).isNotNull();
+        assertThat(popup.notificationId()).isEqualTo(notificationId);
+        assertThat(popup.title()).isEqualTo("출결 이수 위험군입니다.");
+        assertThat(popup.confirmUrl()).isEqualTo("/trainee/alarm");
     }
 }

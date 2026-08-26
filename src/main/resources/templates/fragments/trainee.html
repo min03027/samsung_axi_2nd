@@ -17,6 +17,7 @@
 
 <!-- ===== 상단 GNB 헤더 ===== -->
 <header th:fragment="header(active)" class="trainee-site-header" data-trainee-header>
+    <link rel="stylesheet" href="/static/css/trainee/alert-popup.css?v=20260826-1">
     <div class="trainee-header-top">
         <div class="header-logo">
             <a href="/trainee" aria-label="Samsung Academy LXP 홈">
@@ -125,7 +126,23 @@
             </li>
         </ul>
     </nav>
-    <script src="/static/js/trainee/navigation.js" defer></script>
+
+    <div class="trainee-alert-backdrop" th:if="${loginNoticePopup != null}" id="traineeAlertPopup"
+         th:attr="data-notification-id=${loginNoticePopup.notificationId}">
+        <section class="trainee-alert-dialog" role="dialog" aria-modal="true" aria-labelledby="traineeAlertTitle">
+            <span class="trainee-alert-kicker">NEW ALERT</span>
+            <h2 id="traineeAlertTitle" th:text="${loginNoticePopup.title}">새 알림</h2>
+            <p th:text="${loginNoticePopup.content}">확인이 필요한 새 알림이 있습니다.</p>
+            <form method="post" action="/trainee/alarm/read">
+                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" name="ids" th:value="${loginNoticePopup.notificationId}">
+                <input type="hidden" name="returnTo" th:value="${loginNoticePopup.confirmUrl}">
+                <button type="button" class="trainee-alert-later" data-alert-later>나중에</button>
+                <button type="submit" class="trainee-alert-confirm">알림 확인</button>
+            </form>
+        </section>
+    </div>
+    <script src="/static/js/trainee/navigation.js?v=20260826-2" defer></script>
 </header>
 
 <!--

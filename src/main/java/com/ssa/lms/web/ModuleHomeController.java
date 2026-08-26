@@ -5,7 +5,6 @@ import com.ssa.lms.dashboard.service.AdminDashboardService;
 import com.ssa.lms.dashboard.service.DashboardMetricsService;
 import com.ssa.lms.dashboard.service.DashboardLearningReportService;
 import com.ssa.lms.ai.service.AiStatusService;
-import com.ssa.lms.notice.service.NotificationService;
 import com.ssa.lms.ai.service.AiUsageStatsService;
 import com.ssa.lms.job.service.RoadmapService;
 import com.ssa.lms.dashboard.service.InstructorDashboardService;
@@ -37,7 +36,6 @@ public class ModuleHomeController {
     private final RoadmapService roadmapService;
     private final AiUsageStatsService aiUsageStatsService;
     private final AiStatusService aiStatusService;
-    private final NotificationService notificationService;
 
     @GetMapping("/admin")
     public String adminHome(@AuthenticationPrincipal LoginUser loginUser, Model model) {
@@ -73,7 +71,6 @@ public class ModuleHomeController {
                 traineeDashboardService.load(loginUser.getId(), loginUser.getName()));
         // 우리 반에서 내 학습 위치 (달리기 트랙). 혼자 듣는 과정이면 값이 없다
         model.addAttribute("pace", dashboardMetricsService.paceOf(loginUser.getId()).orElse(null));
-        model.addAttribute("loginNoticePopup", notificationService.findLoginPopup(loginUser.getId()));
         return "trainee/index";
     }
 }

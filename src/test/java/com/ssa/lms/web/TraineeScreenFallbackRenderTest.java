@@ -53,7 +53,17 @@ class TraineeScreenFallbackRenderTest {
         }
         mvc.perform(get("/trainee/alarm")).andExpect(status().isOk())
                 .andExpect(content().string(not(containsString("href=\"/templates/"))))
+                .andExpect(content().string(containsString("class=\"trainee-alert-backdrop\"")))
+                .andExpect(content().string(containsString("grid-template-columns: minmax(300px, 390px) minmax(0, 1fr)")))
+                .andExpect(content().string(containsString("<h2>알림함</h2>")))
+                .andExpect(content().string(not(containsString("<h2>학습 피드백</h2>"))))
                 .andExpect(content().string(containsString("</html>")));
+
+        mvc.perform(get("/trainee/alarm/popup").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful());
+        mvc.perform(get("/static/js/trainee/navigation.js"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("setInterval(pollAlertPopup, 15000)")));
     }
 
     @Test

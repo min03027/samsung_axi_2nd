@@ -29,15 +29,20 @@ public interface NotificationRecipientRepository extends JpaRepository<Notificat
             """)
     List<NotificationRecipient> findMine(@Param("userId") Long userId, Pageable pageable);
 
-    /** 로그인 직후 보여줄 미확인 팝업 공지. 한 번에 하나만 꺼내 순서대로 확인하게 한다. */
+    /**
+     * 훈련생 화면 진입 즉시 보여줄 미확인 팝업.
+     * 관리자가 팝업으로 지정한 공지뿐 아니라 HIGH·URGENT 중요 알림도 바로 확인시킨다.
+     */
     @Query("""
             select r from NotificationRecipient r
               join fetch r.notification n
             where r.user.id = :userId
               and r.readAt is null
-              and n.popupOnLogin = true
+              and (n.popupOnLogin = true
+                   or n.priority = com.ssa.lms.notice.entity.Notification.Priority.HIGH
+                   or n.priority = com.ssa.lms.notice.entity.Notification.Priority.URGENT)
               and n.status = com.ssa.lms.notice.entity.Notification.NotificationStatus.SENT
-            order by n.sendAt asc, n.id asc
+            order by n.sendAt desc, n.id desc
             """)
     List<NotificationRecipient> findUnreadLoginPopups(@Param("userId") Long userId, Pageable pageable);
 }

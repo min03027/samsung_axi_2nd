@@ -2,12 +2,14 @@ package com.ssa.lms.web.trainee.notice;
 
 import com.ssa.lms.auth.LoginUser;
 import com.ssa.lms.notice.dto.NotificationListRow;
+import com.ssa.lms.notice.dto.LoginNoticePopup;
 import com.ssa.lms.notice.dto.NotificationSearchCond;
 import com.ssa.lms.notice.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -53,6 +55,16 @@ public class TraineeAlarmController {
         model.addAttribute("unreadCount",
                 rows.stream().filter(r -> "읽지않음".equals(r.readStatus())).count());
         return "trainee/alram";
+    }
+
+    /**
+     * 화면을 열어 둔 상태에서도 새 중요 알림을 확인하기 위한 경량 조회 API.
+     * 읽지 않은 팝업이 없으면 204를 반환해 빈 모달을 만들지 않는다.
+     */
+    @GetMapping("/popup")
+    public ResponseEntity<LoginNoticePopup> popup(@AuthenticationPrincipal LoginUser loginUser) {
+        LoginNoticePopup popup = notificationService.findLoginPopup(loginUser.getId());
+        return popup == null ? ResponseEntity.noContent().build() : ResponseEntity.ok(popup);
     }
 
     /** 읽음 처리 — 본인 수신 건만 바뀐다(서비스에서 보장). */

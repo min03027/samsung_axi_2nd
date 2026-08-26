@@ -1,0 +1,11 @@
+/* 공지·중요 학습 알림 공통 팝업 — 모든 훈련생 화면에서 즉시 노출 */
+.trainee-alert-backdrop{position:fixed;inset:0;z-index:3000;display:grid;place-items:center;padding:24px;background:rgba(7,16,36,.62);backdrop-filter:blur(5px)}
+.trainee-alert-dialog{width:min(520px,100%);padding:34px;border:1px solid rgba(255,255,255,.8);border-radius:20px;background:#fff;box-shadow:0 28px 90px rgba(4,18,45,.32);animation:trainee-alert-enter 180ms ease-out both}
+.trainee-alert-kicker{display:block;margin-bottom:12px;color:#255ee8;font-size:12px;font-weight:800;letter-spacing:.16em}
+.trainee-alert-dialog h2{margin:0;color:#101828;font-size:clamp(22px,3vw,28px);line-height:1.35;word-break:keep-all}
+.trainee-alert-dialog p{max-height:240px;margin:18px 0 26px;overflow:auto;color:#475467;font-size:16px;line-height:1.75;white-space:pre-line}
+.trainee-alert-dialog form{display:flex;justify-content:flex-end;gap:10px}
+.trainee-alert-dialog button{min-height:46px;padding:0 20px;border-radius:10px;font:inherit;font-weight:700;cursor:pointer}
+.trainee-alert-later{border:1px solid #d0d5dd;background:#fff;color:#344054}.trainee-alert-confirm{border:1px solid #255ee8;background:#255ee8;color:#fff}
+@keyframes trainee-alert-enter{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:560px){.trainee-alert-backdrop{padding:16px}.trainee-alert-dialog{padding:26px 22px}.trainee-alert-dialog form{flex-direction:column-reverse}.trainee-alert-dialog button{width:100%}}
