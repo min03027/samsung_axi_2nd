@@ -1,0 +1,248 @@
+.grader-page {
+    --grader-blue: #1769e0;
+    --grader-blue-dark: #104fae;
+    --grader-ink: #13233f;
+    --grader-muted: #65728a;
+    --grader-line: #dce3ee;
+    --grader-soft: #f4f7fb;
+    max-width: 1280px;
+    margin: 0 auto;
+    color: var(--grader-ink);
+}
+
+.grader-page * { box-sizing: border-box; }
+
+.grader-hero {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 28px 0 24px;
+    border-bottom: 1px solid var(--grader-line);
+}
+
+.grader-eyebrow {
+    margin: 0 0 8px;
+    color: var(--grader-blue);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .08em;
+}
+
+.grader-hero h2 {
+    margin: 0;
+    font-size: clamp(28px, 3vw, 42px);
+    line-height: 1.18;
+    letter-spacing: -.04em;
+}
+
+.grader-hero p:not(.grader-eyebrow) {
+    max-width: 680px;
+    margin: 12px 0 0;
+    color: var(--grader-muted);
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.grader-hero-actions { display: flex; gap: 10px; flex: none; }
+
+.grader-link-button,
+.grader-primary-button,
+.grader-secondary-button {
+    min-height: 42px;
+    padding: 0 17px;
+    border-radius: 8px;
+    border: 1px solid var(--grader-line);
+    background: #fff;
+    color: var(--grader-ink);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grader-primary-button {
+    border-color: var(--grader-blue);
+    background: var(--grader-blue);
+    color: #fff;
+}
+
+.grader-primary-button:hover { background: var(--grader-blue-dark); }
+.grader-link-button:hover, .grader-secondary-button:hover { border-color: #aab9ce; background: #f8faff; }
+
+.grader-progress {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 24px 0;
+    border: 1px solid var(--grader-line);
+    border-radius: 10px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.grader-progress button {
+    position: relative;
+    min-height: 72px;
+    padding: 15px 16px 15px 52px;
+    border: 0;
+    border-right: 1px solid var(--grader-line);
+    background: #fff;
+    color: var(--grader-muted);
+    text-align: left;
+    cursor: pointer;
+}
+
+.grader-progress button:last-child { border-right: 0; }
+.grader-progress button::before {
+    content: attr(data-step);
+    position: absolute;
+    left: 16px;
+    top: 19px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #e9eef6;
+    color: #63708a;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.grader-progress button span { display: block; font-size: 14px; font-weight: 800; color: var(--grader-ink); }
+.grader-progress button small { display: block; margin-top: 3px; font-size: 12px; }
+.grader-progress button.is-active { background: #eef5ff; color: #3767a9; }
+.grader-progress button.is-active::before { background: var(--grader-blue); color: #fff; }
+
+.grader-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 24px;
+    align-items: start;
+}
+
+.grader-main { display: grid; gap: 20px; }
+.grader-panel, .grader-summary {
+    border: 1px solid var(--grader-line);
+    border-radius: 12px;
+    background: #fff;
+}
+
+.grader-panel { padding: 26px; scroll-margin-top: 92px; }
+.grader-panel-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.grader-panel-heading h3 { margin: 0; font-size: 20px; letter-spacing: -.02em; }
+.grader-panel-heading p { margin: 6px 0 0; color: var(--grader-muted); font-size: 14px; line-height: 1.55; }
+.grader-step-label { color: var(--grader-blue); font-size: 13px; font-weight: 800; white-space: nowrap; }
+
+.grader-field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.grader-field { display: grid; gap: 8px; }
+.grader-field.is-wide { grid-column: 1 / -1; }
+.grader-field label { font-size: 13px; font-weight: 800; color: #35445d; }
+.grader-field select,
+.grader-field input,
+.grader-field textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e3;
+    border-radius: 7px;
+    background: #fff;
+    color: var(--grader-ink);
+    font: inherit;
+    font-size: 14px;
+}
+
+.grader-field textarea { min-height: 190px; resize: vertical; font-family: "SFMono-Regular", Consolas, monospace; line-height: 1.6; }
+.grader-field select:focus, .grader-field input:focus, .grader-field textarea:focus { outline: 3px solid rgba(23,105,224,.13); border-color: var(--grader-blue); }
+
+.mode-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.mode-card { position: relative; display: block; cursor: pointer; }
+.mode-card input { position: absolute; opacity: 0; }
+.mode-card-content {
+    height: 100%;
+    min-height: 144px;
+    padding: 18px;
+    border: 1px solid var(--grader-line);
+    border-radius: 10px;
+    background: #fff;
+    transition: border-color .18s, background .18s, box-shadow .18s;
+}
+
+.mode-card input:checked + .mode-card-content { border-color: var(--grader-blue); background: #f3f8ff; box-shadow: inset 0 0 0 1px var(--grader-blue); }
+.mode-card strong { display: block; margin-bottom: 8px; font-size: 16px; }
+.mode-card p { margin: 0; color: var(--grader-muted); font-size: 13px; line-height: 1.55; }
+.mode-card em { display: inline-block; margin-top: 12px; color: var(--grader-blue); font-size: 12px; font-style: normal; font-weight: 800; }
+
+.grader-code-toolbar { display: flex; gap: 10px; margin-bottom: 12px; }
+.grader-code-toolbar .grader-field { flex: 1; }
+.code-shell { border: 1px solid #24344f; border-radius: 9px; overflow: hidden; background: #101827; }
+.code-shell-header { display: flex; justify-content: space-between; padding: 10px 14px; color: #b8c5db; font-size: 12px; background: #162237; }
+.code-shell textarea { width: 100%; min-height: 230px; padding: 18px; border: 0; resize: vertical; outline: 0; background: #101827; color: #e7edf7; font: 13px/1.65 "SFMono-Regular", Consolas, monospace; tab-size: 4; }
+
+.case-table { width: 100%; margin-top: 18px; border-collapse: collapse; font-size: 13px; }
+.case-table th { padding: 11px 10px; border-top: 1px solid var(--grader-line); border-bottom: 1px solid var(--grader-line); background: var(--grader-soft); color: #506079; text-align: left; }
+.case-table td { padding: 10px; border-bottom: 1px solid #edf1f6; vertical-align: middle; }
+.case-table input { width: 100%; min-height: 36px; padding: 7px 9px; border: 1px solid #d4dce8; border-radius: 6px; font: 12px "SFMono-Regular", Consolas, monospace; }
+.case-table .case-points { width: 86px; }
+.case-table button { border: 0; background: transparent; color: #8a96a8; cursor: pointer; font-weight: 700; }
+
+.score-rule-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.score-rule {
+    padding: 16px;
+    border: 1px solid var(--grader-line);
+    border-radius: 9px;
+    background: #fff;
+}
+.score-rule label { display: flex; gap: 9px; align-items: flex-start; font-size: 14px; font-weight: 800; }
+.score-rule p { margin: 8px 0 12px 27px; color: var(--grader-muted); font-size: 12px; line-height: 1.55; }
+.score-rule input[type="number"] { width: 82px; min-height: 36px; margin-left: 27px; padding: 6px 8px; border: 1px solid #cbd5e3; border-radius: 6px; }
+
+.grader-summary { position: sticky; top: 24px; overflow: hidden; }
+.grader-summary-head { padding: 20px; background: #13233f; color: #fff; }
+.grader-summary-head span { display: block; color: #9fc5ff; font-size: 12px; font-weight: 800; letter-spacing: .08em; }
+.grader-summary-head h3 { margin: 7px 0 0; font-size: 20px; }
+.grader-summary-body { padding: 20px; }
+.summary-list { margin: 0; }
+.summary-list div { display: grid; grid-template-columns: 92px 1fr; gap: 10px; padding: 11px 0; border-bottom: 1px solid #edf1f6; }
+.summary-list dt { color: var(--grader-muted); font-size: 12px; }
+.summary-list dd { margin: 0; font-size: 13px; font-weight: 800; line-height: 1.45; }
+.grader-status { display: flex; align-items: center; gap: 8px; margin: 18px 0; padding: 12px; border-radius: 8px; background: #f2f6fb; color: #53627b; font-size: 12px; line-height: 1.5; }
+.grader-status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #a5b2c5; flex: none; }
+.grader-status.is-ready { background: #eaf7ef; color: #227244; }
+.grader-status.is-ready::before { background: #32a867; }
+.grader-summary .grader-primary-button, .grader-summary .grader-secondary-button { width: 100%; margin-top: 8px; }
+
+.screen-scope-note { margin: 20px 0 0; padding: 14px 16px; border-left: 3px solid #9ebbe5; background: #f5f8fc; color: #5c6a7f; font-size: 13px; line-height: 1.65; }
+.grader-toast { position: fixed; right: 28px; bottom: 28px; z-index: 1000; max-width: 360px; padding: 14px 18px; border-radius: 9px; background: #13233f; color: #fff; font-size: 14px; box-shadow: 0 14px 36px rgba(19,35,63,.25); opacity: 0; transform: translateY(10px); pointer-events: none; transition: .2s; }
+.grader-toast.is-visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 1050px) {
+    .grader-layout { grid-template-columns: 1fr; }
+    .grader-summary { position: static; }
+}
+
+@media (max-width: 760px) {
+    .grader-page { padding: 0 2px; }
+    .grader-hero { align-items: flex-start; flex-direction: column; }
+    .grader-hero-actions { width: 100%; }
+    .grader-hero-actions > * { flex: 1; }
+    .grader-progress { grid-template-columns: 1fr 1fr; }
+    .grader-progress button:nth-child(2) { border-right: 0; }
+    .grader-progress button:nth-child(-n+2) { border-bottom: 1px solid var(--grader-line); }
+    .mode-options, .grader-field-grid, .score-rule-grid { grid-template-columns: 1fr; }
+    .grader-field.is-wide { grid-column: auto; }
+    .grader-panel { padding: 20px 16px; }
+    .grader-code-toolbar { flex-direction: column; }
+    .case-table { display: block; overflow-x: auto; white-space: nowrap; }
+}

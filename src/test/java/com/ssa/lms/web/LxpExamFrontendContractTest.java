@@ -54,6 +54,7 @@ class LxpExamFrontendContractTest {
     private String monitoring()  { return read(TPL.resolve("admin/admin-04-evaluation/admin-evaluation-monitoring-live.html")); }
     private String identityList(){ return read(TPL.resolve("admin/admin-04-evaluation/admin-evaluation-identity.html")); }
     private String identityDetail(){ return read(TPL.resolve("admin/admin-04-evaluation/admin-evaluation-identity-detail.html")); }
+    private String graderSettings(){ return read(TPL.resolve("admin/admin-04-evaluation/admin-evaluation-grader-settings.html")); }
 
     /** 문자열이 정확히 n 번 나오는지. 중복 로드를 잡는 데 쓴다. */
     private int countOf(String haystack, String needle) {
@@ -77,6 +78,8 @@ class LxpExamFrontendContractTest {
                 "js/exam-integrity-controls.js",
                 "css/proctor-enhancements.css",
                 "js/proctor-enhancements.js",
+                "css/grader-settings.css",
+                "js/grader-settings.js",
                 "css/auth-guide.css",
                 "manuals/identity-program-notice.html",
                 "manuals/otp-auth-manual.html",
@@ -102,6 +105,7 @@ class LxpExamFrontendContractTest {
                 TPL.resolve("admin/admin-04-evaluation/admin-evaluation-monitoring-live.html"),
                 TPL.resolve("admin/admin-04-evaluation/admin-evaluation-identity.html"),
                 TPL.resolve("admin/admin-04-evaluation/admin-evaluation-identity-detail.html"),
+                TPL.resolve("admin/admin-04-evaluation/admin-evaluation-grader-settings.html"),
                 STATIC.resolve("manuals/identity-program-notice.html"),
                 STATIC.resolve("manuals/otp-auth-manual.html"),
                 STATIC.resolve("manuals/identity-onboarding.html")
@@ -121,6 +125,26 @@ class LxpExamFrontendContractTest {
             }
         }
         assertThat(missing).as("참조하지만 없는 자산: %s", missing).isEmpty();
+    }
+
+    @Test
+    @DisplayName("[LXP-022~025] 그레이더 설정 화면에 채점 방식·코드·케이스·부분점수 흐름이 있다")
+    void 그레이더_설정화면_계약() {
+        String html = graderSettings();
+        String js = read(STATIC.resolve("js/grader-settings.js"));
+
+        assertThat(html).contains("name=\"gradingMode\"")
+                .contains("id=\"graderSource\"")
+                .contains("id=\"caseBody\"")
+                .contains("id=\"graderScore\"")
+                .contains("id=\"validateGrader\"")
+                .contains("id=\"applyGrader\"");
+        assertThat(html).contains("실제 제출 코드의 격리 실행")
+                .contains("서버 저장은 채점 엔진 연동 단계");
+        assertThat(js).contains("addCase")
+                .contains("updateSummary")
+                .contains("localStorage")
+                .contains("실제 코드 실행은 2차 연동 범위");
     }
 
     /* ===================== 2. do-test 로드 계약 ===================== */

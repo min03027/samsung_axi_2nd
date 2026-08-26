@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/common-style.css">
+    <link rel="stylesheet" href="/static/css/sidebar-style.css">
+    <link rel="stylesheet" href="/static/css/btn-style.css">
+    <link rel="stylesheet" href="/static/css/grader-settings.css?v=20260826-1">
+    <script src="/static/js/sidebar-function.js" defer></script>
+    <script src="/static/js/common-funtion.js" defer></script>
+    <script src="/static/js/grader-settings.js?v=20260826-1" defer></script>
+    <title>Samsung Academy LXP - 그레이더 설정</title>
+</head>
+<body data-user-role="admin">
+<header th:replace="~{fragments/admin :: header('평가 관리 &gt; 시험 관리 &gt; 그레이더 설정')}"></header>
+<th:block th:replace="~{fragments/admin :: sidebar('eval-grader')}"></th:block>
+
+<main class="main-content">
+    <section class="main-content-inner grader-page">
+        <div class="grader-hero">
+            <div>
+                <p class="grader-eyebrow">GRADER WORKSPACE</p>
+                <h2>시험에 맞는 채점 방식을 설계하세요</h2>
+                <p>객관식부터 실습형 코딩 테스트까지 자동·수동·혼합 채점 규칙과 테스트 케이스를 한 화면에서 구성합니다.</p>
+            </div>
+            <div class="grader-hero-actions">
+                <a class="grader-link-button" href="/admin/evaluation/exams">시험 목록</a>
+                <button class="grader-secondary-button" id="saveDraft" type="button">임시 저장</button>
+            </div>
+        </div>
+
+        <nav class="grader-progress" aria-label="그레이더 설정 단계">
+            <button class="is-active" type="button" data-step="1" data-target="graderMode"><span>채점 방식</span><small>자동·수동·혼합</small></button>
+            <button type="button" data-step="2" data-target="graderCode"><span>채점 코드</span><small>실행 환경·검증 코드</small></button>
+            <button type="button" data-step="3" data-target="graderCases"><span>테스트 케이스</span><small>입력·출력·배점</small></button>
+            <button type="button" data-step="4" data-target="graderScore"><span>부분점수 규칙</span><small>상대점수·예외 처리</small></button>
+        </nav>
+
+        <div class="grader-layout">
+            <div class="grader-main">
+                <section class="grader-panel" id="graderMode">
+                    <div class="grader-panel-heading">
+                        <div><h3>적용 시험과 채점 방식을 선택하세요</h3><p>문항 유형에 따라 자동 채점과 강사 확인 단계를 조합할 수 있습니다.</p></div>
+                        <span class="grader-step-label">LXP-022 · LXP-024</span>
+                    </div>
+                    <div class="grader-field-grid" style="margin-bottom:18px;">
+                        <div class="grader-field is-wide">
+                            <label for="targetExam">적용 시험</label>
+                            <select id="targetExam">
+                                <option>Python 알고리즘 역량평가 · 2026-08</option>
+                                <option>데이터 분석 SQL 실기 · 1차</option>
+                                <option>AI 모델링 종합평가 · 중간고사</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mode-options">
+                        <label class="mode-card">
+                            <input type="radio" name="gradingMode" data-label="자동 채점">
+                            <span class="mode-card-content"><strong>자동 채점</strong><p>정답·테스트 케이스 결과로 즉시 점수를 계산합니다.</p><em>객관식 · 단답 · 코딩</em></span>
+                        </label>
+                        <label class="mode-card">
+                            <input type="radio" name="gradingMode" data-label="수동 채점">
+                            <span class="mode-card-content"><strong>수동 채점</strong><p>강사가 제출 답안과 실행 결과를 확인해 점수를 확정합니다.</p><em>서술형 · 프로젝트</em></span>
+                        </label>
+                        <label class="mode-card">
+                            <input type="radio" name="gradingMode" data-label="혼합 채점" checked>
+                            <span class="mode-card-content"><strong>혼합 채점</strong><p>자동 점수를 먼저 계산하고 필요한 답안만 강사가 검토합니다.</p><em>실습형 평가 권장</em></span>
+                        </label>
+                    </div>
+                </section>
+
+                <section class="grader-panel" id="graderCode">
+                    <div class="grader-panel-heading">
+                        <div><h3>그레이더 실행 조건을 설정하세요</h3><p>문제 유형별 프리셋을 선택하고 채점 코드를 미리 구성합니다.</p></div>
+                        <span class="grader-step-label">LXP-022 · LXP-023</span>
+                    </div>
+                    <div class="grader-code-toolbar">
+                        <div class="grader-field"><label for="graderPreset">그레이더 프리셋</label><select id="graderPreset"><option>알고리즘·코딩</option><option>SQL 결과 비교</option><option>문자열·정규식 비교</option><option>객관식·단답 정답 비교</option></select></div>
+                        <div class="grader-field"><label for="runtime">실행 환경</label><select id="runtime"><option>Python 3.12</option><option>Java 17</option><option>JavaScript Node 20</option><option>MySQL 8</option></select></div>
+                    </div>
+                    <div class="code-shell">
+                        <div class="code-shell-header"><span>grader.py</span><span>제한시간 2초 · 메모리 256MB</span></div>
+                        <textarea id="graderSource" spellcheck="false" aria-label="채점 코드">def grade(submission, expected):
+    result = run_submission(submission)
+    if result.timed_out:
+        return {"score": 0, "reason": "실행 시간 초과"}
+
+    passed = compare_output(result.stdout, expected)
+    return {"score": 100 if passed else 0,
+            "reason": "정답" if passed else "출력값 불일치"}</textarea>
+                    </div>
+                </section>
+
+                <section class="grader-panel" id="graderCases">
+                    <div class="grader-panel-heading">
+                        <div><h3>채점용 테스트 케이스를 입력하세요</h3><p>공개·비공개 케이스별 입력값, 기대 출력과 배점을 설정합니다.</p></div>
+                        <span class="grader-step-label">LXP-023</span>
+                    </div>
+                    <button class="grader-secondary-button" id="addCase" type="button">+ 테스트 케이스 추가</button>
+                    <table class="case-table">
+                        <thead><tr><th>번호</th><th>입력값</th><th>기대 출력</th><th>배점</th><th></th></tr></thead>
+                        <tbody id="caseBody">
+                        <tr><td>1</td><td><input aria-label="테스트 입력 1" value="[1, 2, 3]"></td><td><input aria-label="기대 출력 1" value="6"></td><td class="case-points"><input aria-label="배점 1" type="number" min="0" max="100" value="30"></td><td><button type="button" class="remove-case">삭제</button></td></tr>
+                        <tr><td>2</td><td><input aria-label="테스트 입력 2" value="[-1, 0, 1]"></td><td><input aria-label="기대 출력 2" value="0"></td><td class="case-points"><input aria-label="배점 2" type="number" min="0" max="100" value="30"></td><td><button type="button" class="remove-case">삭제</button></td></tr>
+                        <tr><td>3</td><td><input aria-label="테스트 입력 3" value="[1000000]"></td><td><input aria-label="기대 출력 3" value="1000000"></td><td class="case-points"><input aria-label="배점 3" type="number" min="0" max="100" value="40"></td><td><button type="button" class="remove-case">삭제</button></td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="grader-panel" id="graderScore">
+                    <div class="grader-panel-heading">
+                        <div><h3>다양한 풀이를 고려해 부분점수를 구성하세요</h3><p>통과한 케이스와 코드 품질, 효율성 기준을 합산해 상대 점수를 계산합니다.</p></div>
+                        <span class="grader-step-label">LXP-024 · LXP-025</span>
+                    </div>
+                    <div class="score-rule-grid">
+                        <div class="score-rule"><label><input type="checkbox" checked> 테스트 케이스 통과율</label><p>통과한 비공개 테스트 케이스 비율을 반영합니다.</p><input type="number" value="70" min="0" max="100" aria-label="테스트 케이스 통과율 배점"> 점</div>
+                        <div class="score-rule"><label><input type="checkbox" checked> 시간·메모리 효율성</label><p>기준 실행시간과 메모리 사용량 구간별 점수를 부여합니다.</p><input type="number" value="15" min="0" max="100" aria-label="효율성 배점"> 점</div>
+                        <div class="score-rule"><label><input type="checkbox" checked> 코드 품질 검토</label><p>가독성·예외처리·구조를 강사가 최종 확인합니다.</p><input type="number" value="15" min="0" max="100" aria-label="코드 품질 배점"> 점</div>
+                        <div class="score-rule"><label><input type="checkbox"> 풀이 경로별 보정</label><p>복수 정답이나 대체 알고리즘에 별도 기준을 적용합니다.</p><input type="number" value="0" min="0" max="100" aria-label="풀이 경로 보정 배점"> 점</div>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="grader-summary" aria-label="그레이더 설정 요약">
+                <div class="grader-summary-head"><span>SETTING SUMMARY</span><h3>적용 전 확인</h3></div>
+                <div class="grader-summary-body">
+                    <dl class="summary-list">
+                        <div><dt>시험</dt><dd id="summaryExam">Python 알고리즘 역량평가 · 2026-08</dd></div>
+                        <div><dt>채점 방식</dt><dd id="summaryMode">혼합 채점</dd></div>
+                        <div><dt>프리셋</dt><dd id="summaryPreset">알고리즘·코딩</dd></div>
+                        <div><dt>실행 환경</dt><dd id="summaryRuntime">Python 3.12</dd></div>
+                        <div><dt>케이스·배점</dt><dd id="summaryCases">3개 · 100점</dd></div>
+                    </dl>
+                    <div class="grader-status" id="graderStatus">아직 설정 검증을 실행하지 않았습니다.</div>
+                    <button class="grader-secondary-button" id="validateGrader" type="button">설정 검증</button>
+                    <button class="grader-primary-button" id="applyGrader" type="button">이 시험에 적용</button>
+                </div>
+            </aside>
+        </div>
+
+        <p class="screen-scope-note"><strong>1차 시연 범위</strong> · 설정 선택, 테스트 케이스 편집, 검증 상태와 적용 흐름을 확인할 수 있습니다. 실제 제출 코드의 격리 실행, 상대점수 계산과 서버 저장은 채점 엔진 연동 단계에서 적용됩니다.</p>
+    </section>
+</main>
+<div class="grader-toast" id="graderToast" role="status" aria-live="polite"></div>
+</body>
+</html>

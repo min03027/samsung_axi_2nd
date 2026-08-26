@@ -39,6 +39,7 @@ public class AdminExamController {
     private static final String LIST_VIEW = "admin/admin-04-evaluation/admin-evaluation-test";
     private static final String ADD_VIEW = "admin/admin-04-evaluation/admin-evaluation-test-add";
     private static final String EDIT_VIEW = "admin/admin-04-evaluation/admin-evaluation-test-update";
+    private static final String GRADER_VIEW = "admin/admin-04-evaluation/admin-evaluation-grader-settings";
 
     /** 문제은행·설문·Q&A 와 같은 값으로 맞춘다. 화면 페이지네이션 DOM 이 10건 기준이다. */
     private static final int PAGE_SIZE = 10;
@@ -79,6 +80,18 @@ public class AdminExamController {
         model.addAttribute("form", new ExamForm());
         addFormModel(model, null);
         return ADD_VIEW;
+    }
+
+    /**
+     * LXP-022~025 1차 시연용 그레이더 설정 화면.
+     *
+     * <p>자동·수동·혼합 채점, 채점 코드와 테스트 케이스, 부분점수 규칙을 한 흐름에서
+     * 확인하는 화면이다. 실제 코드 격리 실행과 영속 저장은 후속 채점 엔진 범위이므로
+     * 이 진입점은 화면 모델을 별도로 요구하지 않는다.</p>
+     */
+    @GetMapping("/graders")
+    public String graderSettings() {
+        return GRADER_VIEW;
     }
 
     /** 등록. */
