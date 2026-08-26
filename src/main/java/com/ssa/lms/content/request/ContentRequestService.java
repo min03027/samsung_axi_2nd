@@ -62,8 +62,8 @@ public class ContentRequestService {
         return libraryService.list(null, null, com.ssa.lms.content.entity.ContentLibraryStatus.PUBLISHED);
     }
 
-    public List<SessionOption> sessionOptions(Long courseId) {
-        return libraryService.sessionOptions().stream().filter(s -> s.courseId().equals(courseId)).toList();
+    public List<SessionOption> sessionOptions(Long courseId, LoginUser actor) {
+        return libraryService.sessionOptions(actor).stream().filter(s -> s.courseId().equals(courseId)).toList();
     }
 
     @Transactional
@@ -91,7 +91,7 @@ public class ContentRequestService {
         ContentLibraryDeployForm deploy = new ContentLibraryDeployForm();
         deploy.setCourseId(request.getCourse().getId()); deploy.setSessionId(form.getSessionId());
         deploy.setOrderNo(form.getOrderNo()); deploy.setRequired(form.getRequired()); deploy.setAutoSync(form.getAutoSync());
-        Long contentId = libraryService.deploy(form.getLibraryItemId(), deploy);
+        Long contentId = libraryService.deploy(form.getLibraryItemId(), deploy, actor);
         Content content = contentRepository.findById(contentId).orElseThrow();
         ContentLibraryItem item = libraryService.get(form.getLibraryItemId());
         request.fulfill(userRepository.findById(actor.getId()).orElseThrow(), item, content, trim(form.getNote()));

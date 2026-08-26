@@ -1,11 +1,13 @@
 package com.ssa.lms.content.web;
 
+import com.ssa.lms.auth.LoginUser;
 import com.ssa.lms.content.entity.ContentLibraryStatus;
 import com.ssa.lms.content.entity.ContentType;
 import com.ssa.lms.content.service.ContentLibraryService;
 import com.ssa.lms.content.service.FileStorageException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -116,9 +118,9 @@ public class InstructorContentLibraryController {
     }
 
     @GetMapping("/{id}/deploy")
-    public String deployForm(@PathVariable Long id, Model model) {
+    public String deployForm(@PathVariable Long id, @AuthenticationPrincipal LoginUser actor, Model model) {
         model.addAttribute("deployForm", new ContentLibraryDeployForm());
-        addDeployRefs(id, model);
+        addDeployRefs(id, actor, model);
         return VIEW_DIR + "deploy";
     }
 
@@ -126,35 +128,38 @@ public class InstructorContentLibraryController {
     public String deploy(@PathVariable Long id,
                          @Valid @ModelAttribute("deployForm") ContentLibraryDeployForm form,
                          BindingResult bindingResult,
+                         @AuthenticationPrincipal LoginUser actor,
                          Model model,
                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            addDeployRefs(id, model);
+            addDeployRefs(id, actor, model);
             return VIEW_DIR + "deploy";
         }
         try {
-            Long contentId = libraryService.deploy(id, form);
+            Long contentId = libraryService.deploy(id, form, actor);
             redirectAttributes.addFlashAttribute("message",
                     "과정 콘텐츠로 배치했습니다. 콘텐츠 ID: " + contentId);
             return "redirect:/instructor/content-library/" + id;
         } catch (IllegalArgumentException | IllegalStateException e) {
             bindingResult.reject("deploy", e.getMessage());
-            addDeployRefs(id, model);
+            addDeployRefs(id, actor, model);
             return VIEW_DIR + "deploy";
         }
     }
 
     @PostMapping("/promote/{contentId}")
-    public String promote(@PathVariable Long contentId, RedirectAttributes redirectAttributes) {
-        Long id = libraryService.promoteExisting(contentId);
+    public String promote(@PathVariable Long contentId, @AuthenticationPrincipal LoginUser actor,
+                          RedirectAttributes redirectAttributes) {
+        Long id = libraryService.promoteExisting(contentId, actor);
         redirectAttributes.addFlashAttribute("message", "기존 과정 콘텐츠를 공용 원본으로 등록했습니다.");
         return "redirect:/instructor/content-library/" + id;
     }
 
     @PostMapping("/{id}/links/{linkId}/sync")
     public String syncNow(@PathVariable Long id, @PathVariable Long linkId,
+                          @AuthenticationPrincipal LoginUser actor,
                           RedirectAttributes redirectAttributes) {
-        libraryService.syncNow(id, linkId);
+        libraryService.syncNow(id, linkId, actor);
         redirectAttributes.addFlashAttribute("message", "현재 원본 버전을 과정 콘텐츠에 반영했습니다.");
         return "redirect:/instructor/content-library/" + id;
     }
@@ -162,8 +167,9 @@ public class InstructorContentLibraryController {
     @PostMapping("/{id}/links/{linkId}/auto-sync")
     public String changeAutoSync(@PathVariable Long id, @PathVariable Long linkId,
                                  @RequestParam boolean enabled,
+                                 @AuthenticationPrincipal LoginUser actor,
                                  RedirectAttributes redirectAttributes) {
-        libraryService.changeAutoSync(id, linkId, enabled);
+        libraryService.changeAutoSync(id, linkId, enabled, actor);
         redirectAttributes.addFlashAttribute("message", enabled
                 ? "자동 반영을 켰습니다. 최신 버전도 즉시 반영했습니다."
                 : "자동 반영을 껐습니다. 이후 업데이트는 수동으로 반영해야 합니다.");
@@ -182,10 +188,10 @@ public class InstructorContentLibraryController {
         model.addAttribute("libraryStatuses", ContentLibraryStatus.values());
     }
 
-    private void addDeployRefs(Long id, Model model) {
+    private void addDeployRefs(Long id, LoginUser actor, Model model) {
         model.addAttribute("item", libraryService.view(id));
         model.addAttribute("libraryItemId", id);
-        model.addAttribute("courses", libraryService.courseOptions());
-        model.addAttribute("sessionOptions", libraryService.sessionOptions());
+        model.addAttribute("courses", libraryService.courseOptions(actor));
+        model.addAttribute("sessionOptions", libraryService.sessionOptions(actor));
     }
 }

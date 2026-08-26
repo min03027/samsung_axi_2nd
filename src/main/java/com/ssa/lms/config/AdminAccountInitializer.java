@@ -29,7 +29,7 @@ import java.util.UUID;
  */
 @Slf4j
 @Component
-@Profile("!local")
+@Profile("!local & !demo")
 @Order(0)
 @RequiredArgsConstructor
 public class AdminAccountInitializer implements CommandLineRunner {

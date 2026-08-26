@@ -1,0 +1,22 @@
+# 역할별 연결형 데모 데이터를 검증하기 위한 비운영 전용 프로필.
+# 실행 예: SPRING_PROFILES_ACTIVE=demo, LMS_DEMO_SEED_DATA=true, LMS_DEMO_PASSWORD=<temporary>
+spring:
+  datasource:
+    url: jdbc:h2:mem:lms-demo;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+lms:
+  demo:
+    sample-data: ${LMS_DEMO_SAMPLE_DATA:false}

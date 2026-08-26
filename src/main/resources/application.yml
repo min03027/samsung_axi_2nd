@@ -51,7 +51,11 @@ lms:
   # DB 에는 아무것도 쓰지 않는다 — 요청마다 메모리에서 만들고 버린다.
   # 캡처가 끝나면 서버 .env 에 LMS_DEMO_SAMPLE_DATA=false 만 넣으면 꺼진다(재배포 불필요).
   demo:
-    sample-data: ${LMS_DEMO_SAMPLE_DATA:true}
+    # 운영을 포함한 공통 기본값은 OFF다. 로컬 화면 캡처용 기본값만 application-local.yml에서 유지한다.
+    sample-data: ${LMS_DEMO_SAMPLE_DATA:false}
+    # DB에 관계형 데모 세트를 넣는 별도 스위치. demo 프로필에서도 명시적으로 켜야 실행된다.
+    seed-data: ${LMS_DEMO_SEED_DATA:false}
+    password: ${LMS_DEMO_PASSWORD:}
 
   # AI(Claude) 연동. 키는 여기 적지 말고 환경변수 또는 .env 로만 주입한다.
   # 키가 없으면 자동으로 꺼진 상태로 뜨고 AI 화면은 안내 문구를 보여준다(AiConfig).

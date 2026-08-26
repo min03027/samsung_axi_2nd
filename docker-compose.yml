@@ -31,6 +31,8 @@ services:
       LMS_CRYPTO_SECRET: ${LMS_CRYPTO_SECRET:?LMS_CRYPTO_SECRET 를 .env 에 설정하세요}
       # 미지정 시 첫 기동 때 무작위 생성되어 로그에 1회 출력됨
       LMS_ADMIN_INIT_PASSWORD: ${LMS_ADMIN_INIT_PASSWORD:-}
+      # 운영 화면에 메모리 샘플 행이 노출되지 않도록 기본값을 명시적으로 OFF로 전달한다.
+      LMS_DEMO_SAMPLE_DATA: ${LMS_DEMO_SAMPLE_DATA:-false}
       # AI(Claude) — 키가 없으면 AI 기능만 꺼진 채 뜬다. 앱 기동을 막지 않는다.
       #
       # 여기 값은 컨테이너 안으로 들어가는 환경변수다. 호스트의 .env 를 docker compose 가

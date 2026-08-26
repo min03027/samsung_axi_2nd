@@ -1,10 +1,12 @@
 package com.ssa.lms.content;
 
+import com.ssa.lms.auth.LoginUser;
 import com.ssa.lms.content.entity.Content;
 import com.ssa.lms.content.repository.ContentLibraryLinkRepository;
 import com.ssa.lms.content.repository.ContentRepository;
 import com.ssa.lms.content.service.ContentLibraryService;
 import com.ssa.lms.content.web.ContentLibraryForm;
+import com.ssa.lms.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,14 @@ class ContentLibraryServiceTest {
     @Autowired ContentLibraryService libraryService;
     @Autowired ContentRepository contentRepository;
     @Autowired ContentLibraryLinkRepository linkRepository;
+    @Autowired UserRepository userRepository;
 
     @Test
     @DisplayName("기존 과정 콘텐츠를 원본으로 승격하고 새 버전을 자동 반영한다")
     void promoteAndPublishAutoSync() {
         Content content = contentRepository.findAll().get(0);
-        Long libraryId = libraryService.promoteExisting(content.getId());
+        LoginUser admin = new LoginUser(userRepository.findByLoginId("admin").orElseThrow());
+        Long libraryId = libraryService.promoteExisting(content.getId(), admin);
 
         ContentLibraryForm form = libraryService.editForm(libraryId);
         form.setTitle("업데이트된 공용 콘텐츠");
