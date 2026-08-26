@@ -45,4 +45,16 @@ public interface NotificationRecipientRepository extends JpaRepository<Notificat
             order by n.sendAt desc, n.id desc
             """)
     List<NotificationRecipient> findUnreadLoginPopups(@Param("userId") Long userId, Pageable pageable);
+
+    /** 성장 리포트 등 종류별 최근 발송·읽음 결과를 운영 화면에 표시한다. */
+    @Query("""
+            select r from NotificationRecipient r
+              join fetch r.notification n
+              join fetch r.user u
+            where n.kind = :kind
+            order by n.sendAt desc, n.id desc, r.id desc
+            """)
+    List<NotificationRecipient> findRecentByKind(
+            @Param("kind") com.ssa.lms.notice.entity.Notification.NotificationKind kind,
+            Pageable pageable);
 }

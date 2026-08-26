@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/basic-form-trainee.css">
+    <link rel="stylesheet" href="/static/css/trainee/platform-hubs.css?v=20260826-p1">
+    <title>Samsung Academy LXP - 학습일지</title>
+</head>
+<body class="platform-hub-body">
+<header th:replace="~{fragments/trainee :: header('growth')}"></header>
+<main class="platform-hub-main"><div class="platform-hub">
+    <section class="hub-hero journal-hero">
+        <div><span class="hub-eyebrow">LEARNING JOURNAL</span><h1>오늘의 학습을 기록하고,<br>필요한 도움으로 이어가요.</h1><p>내가 남긴 학습일지는 담당 강사와 관리자가 같은 흐름에서 확인하고 상담·후속조치로 연결할 수 있어요.</p></div>
+        <div class="hub-hero-guide"><strong>짧게 적어도 충분해요</strong><span>어려웠던 점, 해낸 일, 다음에 확인할 내용을 중심으로 남겨 보세요.</span></div>
+    </section>
+    <section class="hub-section">
+        <div class="hub-section-heading"><div><span class="hub-section-eyebrow">NEW RECORD</span><h2>학습일지 작성</h2></div><p>저장한 내용은 수정되지 않은 기록으로 누적됩니다.</p></div>
+        <div class="journal-message" th:if="${message}" th:text="${message}"></div>
+        <form class="journal-form" method="post" action="/trainee/journal">
+            <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <label>제목<input type="text" name="subject" maxlength="160" required placeholder="예: 데이터 전처리 실습 회고"></label>
+            <label>오늘의 기록<textarea name="content" rows="6" required placeholder="배운 점, 어려웠던 점, 도움받고 싶은 내용을 적어 주세요."></textarea></label>
+            <button type="submit">학습일지 저장</button>
+        </form>
+    </section>
+    <section class="hub-section">
+        <div class="hub-section-heading"><div><span class="hub-section-eyebrow">MY HISTORY</span><h2>나의 기록과 상담 흐름</h2></div><p>내 기록 이후 담당자가 남긴 상담·후속조치 결과도 함께 확인할 수 있어요.</p></div>
+        <div class="hub-empty-panel" th:if="${#lists.isEmpty(records)}"><div class="hub-empty-mark">01</div><div><h3>아직 작성한 기록이 없어요.</h3><p>첫 학습일지를 남기면 이곳에 시간순으로 쌓입니다.</p></div></div>
+        <div class="journal-timeline" th:unless="${#lists.isEmpty(records)}">
+            <article th:each="record : ${records}"><div><span th:text="${record.type.label}">학습일지</span><time th:text="${#temporals.format(record.createdAt, 'yyyy.MM.dd HH:mm')}">날짜</time></div><h3 th:text="${record.subject}">제목</h3><p th:text="${record.content}">내용</p><aside><strong th:text="${record.status.label}">관찰 필요</strong><span th:if="${record.result != null and !#strings.isEmpty(record.result)}" th:text="${record.result}">조치 결과</span></aside></article>
+        </div>
+    </section>
+</div></main>
+<footer th:replace="~{fragments/trainee :: footer}"></footer>
+</body></html>

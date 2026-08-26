@@ -21,6 +21,7 @@ public class AdminGrowthReportSettingController {
     @GetMapping
     public String view(Model model) {
         model.addAttribute("setting", growthReportService.currentSetting());
+        model.addAttribute("recentDispatches", growthReportService.recentDispatches());
         model.addAttribute("active", "growth-report");
         return "admin/admin-07-notice/admin-growth-report-setting";
     }

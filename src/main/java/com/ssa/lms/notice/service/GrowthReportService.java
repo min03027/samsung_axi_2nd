@@ -6,6 +6,7 @@ import com.ssa.lms.notice.dto.GrowthReportView;
 import com.ssa.lms.notice.entity.GrowthReportSetting;
 import com.ssa.lms.notice.entity.Notification;
 import com.ssa.lms.notice.repository.GrowthReportSettingRepository;
+import com.ssa.lms.notice.repository.NotificationRecipientRepository;
 import com.ssa.lms.user.entity.Role;
 import com.ssa.lms.user.entity.User;
 import com.ssa.lms.user.entity.UserStatus;
@@ -13,8 +14,10 @@ import com.ssa.lms.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /** 진도·권장 진도·출석·미완료 항목을 묶어 화면과 이메일에 같은 리포트를 제공한다. */
 @Service
@@ -24,6 +27,19 @@ public class GrowthReportService {
     private final UserRepository userRepository;
     private final TraineeDashboardService dashboardService;
     private final NotificationService notificationService;
+    private final NotificationRecipientRepository recipientRepository;
+
+    public record GrowthDispatchRow(String traineeName, String title, LocalDateTime sentAt,
+                                    LocalDateTime readAt) {}
+
+    @Transactional(readOnly = true)
+    public List<GrowthDispatchRow> recentDispatches() {
+        return recipientRepository.findRecentByKind(
+                        Notification.NotificationKind.GROWTH_REPORT, PageRequest.of(0, 20)).stream()
+                .map(row -> new GrowthDispatchRow(row.getUser().getName(),
+                        row.getNotification().getTitle(), row.getNotification().getSendAt(), row.getReadAt()))
+                .toList();
+    }
 
     @Transactional(readOnly = true)
     public GrowthReportSetting currentSetting() {

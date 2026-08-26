@@ -104,9 +104,13 @@
                     <li><a href="/trainee/ai/curriculum">맞춤 학습 추천</a></li>
                 </ul>
             </li>
-            <li class="gnb-item"
+            <li class="gnb-item has-submenu"
                 th:classappend="${active == 'growth'} ? 'active_menu'">
                 <a class="gnb-link" href="/trainee/growth">성장·피드백</a>
+                <ul class="gnb-submenu">
+                    <li><a href="/trainee/growth">주간 성장 리포트</a></li>
+                    <li><a href="/trainee/journal">학습일지·상담 기록</a></li>
+                </ul>
             </li>
             <li class="gnb-item has-submenu"
                 th:classappend="${active == 'career'} ? 'active_menu'">

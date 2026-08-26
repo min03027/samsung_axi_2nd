@@ -30,6 +30,10 @@
                    padding:14px 18px; font-size:13px; color:#3a4262; line-height:1.9; }
         .off-warn { background:#fff6e6; border:1px solid #f0c98a; color:#8a5a00;
                     padding:12px 16px; border-radius:8px; margin-bottom:18px; font-size:14px; }
+        .history-table { width:100%; border-collapse:collapse; }
+        .history-table th,.history-table td { padding:12px 10px; border-top:1px solid #eef0f3; text-align:left; font-size:13px; }
+        .history-table th { color:#667085; }
+        .history-empty { padding:24px; border:1px dashed #c7cbe0; border-radius:8px; color:#667085; text-align:center; }
     </style>
 </head>
 <body data-user-role="admin">
@@ -147,6 +151,22 @@
                     <button type="submit" class="btn btn-primary">저장</button>
                 </div>
             </form>
+
+            <section class="setting-box" style="margin-top:22px">
+                <h3>최근 미응답 리마인더 발송 결과</h3>
+                <p class="setting-desc">과제 미제출·시험 미응시·설문 미응답 등 실제 발송 기록 최근 20건입니다.</p>
+                <div class="history-empty" th:if="${#lists.isEmpty(recentHistory)}">아직 발송 기록이 없습니다. 대상과 마감 조건이 맞으면 자동으로 여기에 기록됩니다.</div>
+                <div style="overflow-x:auto" th:unless="${#lists.isEmpty(recentHistory)}">
+                    <table class="history-table">
+                        <thead><tr><th>훈련생</th><th>미응답 항목</th><th>단계</th><th>대상 번호</th><th>발송 시각</th></tr></thead>
+                        <tbody><tr th:each="row : ${recentHistory}">
+                            <td th:text="${row.traineeName}">훈련생</td><td th:text="${row.type}">과제</td>
+                            <td th:text="${row.stage}">24시간 전</td><td th:text="${row.targetRefId}">1</td>
+                            <td th:text="${#temporals.format(row.sentAt, 'yyyy.MM.dd HH:mm')}">-</td>
+                        </tr></tbody>
+                    </table>
+                </div>
+            </section>
 
         </div>
     </main>

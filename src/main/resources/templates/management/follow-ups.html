@@ -9,7 +9,7 @@
     <link sec:authorize="hasRole('ADMIN')" rel="stylesheet" href="/static/css/sidebar-style.css">
     <link sec:authorize="hasRole('INSTRUCTOR')" rel="stylesheet" href="/static/css/i-common-style.css">
     <link sec:authorize="hasRole('INSTRUCTOR')" rel="stylesheet" href="/static/css/i-sidebar-style.css">
-    <link rel="stylesheet" href="/static/css/management-hubs.css">
+    <link rel="stylesheet" href="/static/css/management-hubs.css?v=20260826-p1">
     <script src="/static/js/sidebar-function.js" defer></script>
 </head>
 <body class="management-hub-body">
@@ -26,20 +26,30 @@
         <section class="management-section">
             <div class="management-section-head"><div><h3>상담·조치 보드</h3><p>학생 다이어리에서 등록된 조치 건을 처리 단계별로 확인합니다.</p></div>
                 <a class="management-link" th:href="${managementBase + '/care/diary'}">학생 다이어리 보기 →</a></div>
+            <div class="management-message" th:if="${message}" th:text="${message}"></div>
             <div class="management-board">
-                <article class="management-board-column"><h4>관찰 필요 <span>—</span></h4><div class="management-board-empty">등록된 관찰 건이 없습니다.</div></article>
-                <article class="management-board-column"><h4>상담 예정 <span>—</span></h4><div class="management-board-empty">예약된 상담이 없습니다.</div></article>
-                <article class="management-board-column"><h4>상담 진행 <span>—</span></h4><div class="management-board-empty">진행 중인 상담이 없습니다.</div></article>
-                <article class="management-board-column"><h4>조치 완료 <span>—</span></h4><div class="management-board-empty">완료 처리된 조치가 없습니다.</div></article>
-                <article class="management-board-column"><h4>정상화 <span>—</span></h4><div class="management-board-empty">정상화 기록이 없습니다.</div></article>
+                <article class="management-board-column" th:each="status : ${careStatuses}"><h4><span th:text="${status.label}">관찰 필요</span> <span th:text="${statusCounts.get(status)}">0</span></h4>
+                    <div class="management-board-empty" th:if="${statusCounts.get(status) == 0}">해당 단계의 기록이 없습니다.</div>
+                    <div class="management-board-card" th:each="record : ${records}" th:if="${record.status == status}"><strong th:text="${record.traineeName}">훈련생</strong><span th:text="${record.subject}">제목</span><small th:text="${record.type.label}">상담</small></div>
+                </article>
             </div>
         </section>
 
         <section class="management-section">
             <div class="management-section-head"><div><h3>후속조치 상세</h3><p>학생, 원인 기록, 담당자, 예정일, 상담 내용과 완료 근거를 함께 확인합니다.</p></div></div>
-            <div class="management-workspace-grid">
-                <article class="management-panel"><h4>조치 대상</h4><p class="management-panel-intro">선택한 상태 카드의 학생과 원인 기록을 표시합니다.</p><div class="management-empty"><span>○</span><strong>선택된 조치 건이 없습니다.</strong><p>실제 조치 건이 생성되면 학생의 이전 기록과 함께 표시합니다.</p></div></article>
-                <article class="management-panel"><h4>처리 이력</h4><p class="management-panel-intro">상태 변경, 담당자 변경과 상담 결과를 시간순으로 표시합니다.</p><div class="management-empty"><span>↻</span><strong>처리 이력이 없습니다.</strong><p>보존 기준에 맞는 실제 처리 이력만 표시됩니다.</p></div></article>
+            <div class="management-empty" th:if="${#lists.isEmpty(records)}"><span>○</span><strong>처리할 기록이 없습니다.</strong><p>학생 다이어리에 기록이 생성되면 이곳에서 상담 결과와 상태를 이어서 관리합니다.</p></div>
+            <div class="management-followup-list" th:unless="${#lists.isEmpty(records)}">
+                <article class="management-followup-card" th:each="record : ${records}">
+                    <header><div><span th:text="${record.type.label}">상담</span><h4 th:text="${record.traineeName + ' · ' + record.subject}">훈련생 · 제목</h4></div><strong th:text="${record.status.label}">관찰 필요</strong></header>
+                    <p th:text="${record.content}">원인 기록</p>
+                    <form method="post" th:action="${managementBase + '/care/follow-ups/update'}">
+                        <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"><input type="hidden" name="recordId" th:value="${record.id}">
+                        <label>상태<select name="status"><option th:each="status : ${careStatuses}" th:value="${status}" th:text="${status.label}" th:selected="${status == record.status}">상태</option></select></label>
+                        <label>다음 확인일<input type="datetime-local" name="followUpAt" th:value="${record.followUpAt == null ? '' : #temporals.format(record.followUpAt, 'yyyy-MM-dd''T''HH:mm')}"></label>
+                        <label class="wide">상담·조치 결과<textarea name="result" rows="3" placeholder="상담 내용과 다음 행동을 기록하세요" th:text="${record.result}"></textarea></label>
+                        <button class="management-primary-button" type="submit">처리 내용 저장</button>
+                    </form>
+                </article>
             </div>
         </section>
     </div>

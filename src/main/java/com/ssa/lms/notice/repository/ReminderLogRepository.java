@@ -1,6 +1,7 @@
 package com.ssa.lms.notice.repository;
 
 import com.ssa.lms.notice.entity.ReminderLog;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,4 +37,12 @@ public interface ReminderLogRepository extends JpaRepository<ReminderLog, Long> 
     List<Object[]> findSentPairs(@Param("type") ReminderLog.ReminderType type,
                                  @Param("targetRefIds") Collection<Long> targetRefIds,
                                  @Param("stage") ReminderLog.ReminderStage stage);
+
+    /** 운영자가 최근 실제 발송 결과를 확인하는 화면용. */
+    @Query("""
+            select r from ReminderLog r
+              join fetch r.user u
+            order by r.sentAt desc, r.id desc
+            """)
+    List<ReminderLog> findRecent(Pageable pageable);
 }
