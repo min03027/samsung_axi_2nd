@@ -183,8 +183,10 @@
       sectionBlock =
         '<div>' + (opts.hideSectionLabel ? '' : '<p class="sidenav__label">이 페이지</p>') + '<div class="sidenav__list">' +
         sections.map(function (m) {
-          if (m.todo) {  // 아직 화면이 없다 — 404 대신 안내 (CLAUDE.md 규칙 8)
-            return '<a href="#" onclick="alert(\'준비 중인 기능입니다.\');return false">' + esc(m.label) + "</a>";
+          if (m.todo) {
+            // 화면이 없는 항목을 링크처럼 보이게 만들면 시연 중 "눌러도 안 되는 버튼"이 된다.
+            // 실제 경로가 생길 때까지는 명시적인 2차 항목으로만 표시한다.
+            return '<span class="sidenav__future" aria-disabled="true">' + esc(m.label) + '<small>2차</small></span>';
           }
           return '<a href="' + m.href + '"' + (m.key && m.key === opts.nav ? ' aria-current="page"' : "") + ">" + esc(m.label) + "</a>";
         }).join("") +
@@ -198,7 +200,7 @@
           var current = (m.key && m.key === opts.nav) || (!opts.nav && index === 0);
           var attrs = current ? ' aria-current="step"' : '';
           if (m.todo) {
-            return '<a href="#"' + attrs + ' onclick="alert(\'준비 중인 기능입니다.\');return false"><i></i><span>' + esc(m.label) + '</span></a>';
+            return '<span class="course-journey__future" aria-disabled="true"><i></i><span>' + esc(m.label) + '</span><small>2차</small></span>';
           }
           return '<a href="' + m.href + '"' + attrs + '><i></i><span>' + esc(m.label) + '</span></a>';
         }).join("") + '</nav>';
@@ -378,9 +380,12 @@
 
     var navHtml = groups.map(function (g) {
       var items = g.items.map(function (it) {
-        var to = it.href
-          ? ' href="' + (window.lxpUrl ? window.lxpUrl(it.href) : it.href) + '"'
-          : ' href="#" onclick="alert(\'준비 중인 기능입니다.\');return false"';
+        if (!it.href) {
+          return '<span class="sidebar__link sidebar__link--future" aria-disabled="true"' +
+            (it.level ? ' data-level="' + it.level + '"' : '') + '>' +
+            '<span>' + esc(it.label) + '</span><small>2차</small></span>';
+        }
+        var to = ' href="' + (window.lxpUrl ? window.lxpUrl(it.href) : it.href) + '"';
         return '<a class="sidebar__link"' + to +
           (it.key === opts.nav ? ' aria-current="page"' : "") +
           (it.level ? ' data-level="' + it.level + '"' : "") + ">" +
