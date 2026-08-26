@@ -101,8 +101,8 @@
                             <td><input type="checkbox" class="alarm-checkbox" name="ids" th:value="${row.id}" form="alarmBulkForm"></td>
                             <td>
                                 <span th:text="${row.status}" style="font-weight:600;">발송완료</span><br>
-                                <span th:text="${row.readStatus}"
-                                      th:style="${row.readStatus == '읽지않음'} ? 'color:var(--color-danger);font-weight:600;' : 'color:var(--gray-500);'">읽음</span>
+                                <span th:text="${row.aggregateReadStatus()}"
+                                      th:style="${row.readCount > 0} ? 'color:var(--color-primary);font-weight:600;' : 'color:var(--color-danger);font-weight:600;'">읽음 현황</span>
                             </td>
                             <td th:text="${row.id}">1</td>
                             <td th:text="${row.title}">제목</td>
@@ -112,7 +112,7 @@
                             <td th:text="${row.date}">2026-01-01</td>
                             <td th:text="${row.importance}">높음</td>
                             <td th:text="${row.author}">관리자</td>
-                            <td th:text="${row.readCount} + ' / ' + ${row.recipientCount}">0 / 0</td>
+                            <td th:text="${row.recipientCount} + ' / ' + ${row.readCount}">0 / 0</td>
                             <td>
                                 <button class="btn btn-secondary" type="button"
                                         th:attr="onclick=|window.open('/admin/notice/alarms/${row.id}','alarmDetailModal','width=520,height=600,scrollbars=yes,resizable=no');|">상세보기</button>

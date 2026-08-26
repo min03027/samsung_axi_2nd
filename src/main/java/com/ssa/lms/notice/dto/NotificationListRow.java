@@ -27,6 +27,14 @@ public record NotificationListRow(
         long readCount
 ) {
 
+    /** 관리자 알림 목록에서 수신자 전체의 읽음 진행 상태를 표시한다. */
+    public String aggregateReadStatus() {
+        if (recipientCount == 0) return "수신자 없음";
+        if (readCount == 0) return "읽지 않음";
+        if (readCount >= recipientCount) return "전체 읽음";
+        return "일부 읽음";
+    }
+
     public static NotificationListRow of(Notification n, String readStatus,
                                          long recipientCount, long readCount) {
         return new NotificationListRow(
