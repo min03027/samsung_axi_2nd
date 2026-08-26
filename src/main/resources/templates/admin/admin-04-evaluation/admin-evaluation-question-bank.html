@@ -93,10 +93,10 @@
             <div style="display:flex; justify-content:flex-end; align-items:center; gap:10px; margin-bottom:10px;">
                 <!-- 엑셀 업로드(일괄 등록)는 아직 서버가 없다. uploadExcel() 이 정의된 적이 없어
                      누르면 ReferenceError 만 났다 — 안내로 바꿔 둔다. -->
-                <button id="excelUploadBtn" type="button" class="btn-gray btn flex"
-                        onclick="alert('준비 중인 기능입니다.')">
+                <button id="excelUploadBtn" type="button" class="btn-gray btn flex" disabled
+                        title="엑셀 일괄 등록은 2차 서버 연동 항목입니다.">
                     <img src="/static/icons/excel.svg" alt="Excel icon" style="margin-right: 8px;">
-                    <span>엑셀로 등록</span>
+                    <span>엑셀로 등록 (2차)</span>
                 </button>
                 <!-- 현재 검색 조건 전체를 xlsx 로 내린다 (보이는 페이지 10건이 아니라). -->
                 <button id="excelDownloadBtn" type="button" class="btn-gray btn flex"

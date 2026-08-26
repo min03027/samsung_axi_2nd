@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -66,6 +67,18 @@ public class ReminderService {
     private final SessionRepository sessionRepository;
     private final ReminderMailSender mailSender;
     private final ReminderSettingService settingService;
+
+    public record ReminderHistoryRow(String traineeName, String type, String stage,
+                                     Long targetRefId, LocalDateTime sentAt) {}
+
+    @Transactional(readOnly = true)
+    public List<ReminderHistoryRow> recentHistory() {
+        return reminderLogRepository.findRecent(PageRequest.of(0, 20)).stream()
+                .map(row -> new ReminderHistoryRow(
+                        row.getUser().getName(), typeLabel(row.getReminderType()),
+                        stageLabel(row.getStage()), row.getTargetRefId(), row.getSentAt()))
+                .toList();
+    }
 
     /**
      * 마감 임박 대상에게 리마인드를 보낸다.
@@ -325,5 +338,22 @@ public class ReminderService {
                     .add(((Number) row[1]).longValue());
         }
         return map;
+    }
+
+    private String typeLabel(ReminderLog.ReminderType type) {
+        return switch (type) {
+            case ASSIGNMENT -> "과제 미제출";
+            case EXAM -> "시험 미응시";
+            case SURVEY -> "설문 미응답";
+            case LESSON -> "수업 시작";
+        };
+    }
+
+    private String stageLabel(ReminderLog.ReminderStage stage) {
+        return switch (stage) {
+            case BEFORE_24H -> "24시간 전";
+            case BEFORE_1H -> "1시간 전";
+            case OVERDUE -> "마감 후 독려";
+        };
     }
 }

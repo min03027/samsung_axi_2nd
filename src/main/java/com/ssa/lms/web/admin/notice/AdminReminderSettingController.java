@@ -1,6 +1,7 @@
 package com.ssa.lms.web.admin.notice;
 
 import com.ssa.lms.notice.service.ReminderSettingService;
+import com.ssa.lms.notice.service.ReminderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,10 +27,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AdminReminderSettingController {
 
     private final ReminderSettingService settingService;
+    private final ReminderService reminderService;
 
     @GetMapping
     public String view(Model model) {
         model.addAttribute("setting", settingService.current());
+        model.addAttribute("recentHistory", reminderService.recentHistory());
         model.addAttribute("active", "reminder");
         return "admin/admin-07-notice/admin-reminder-setting";
     }

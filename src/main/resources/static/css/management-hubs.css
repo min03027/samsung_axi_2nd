@@ -319,6 +319,99 @@ a.management-action-card:focus-visible {
 .management-tag.care { border-color: #f0cfb7; background: #fff7f1; color: #a64c17; }
 .management-tag.urgent { border-color: #efc0c0; background: #fff2f2; color: #a83636; }
 
+.management-message {
+    margin-bottom: 16px;
+    padding: 12px 15px;
+    border-radius: 10px;
+    background: #ecfdf3;
+    color: #027a48;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.management-record-form,
+.management-followup-card form {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.management-record-form label,
+.management-followup-card label {
+    display: grid;
+    gap: 7px;
+    color: #475467;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.management-record-form .wide,
+.management-followup-card .wide { grid-column: 1 / -1; }
+
+.management-record-form input,
+.management-record-form select,
+.management-record-form textarea,
+.management-followup-card input,
+.management-followup-card select,
+.management-followup-card textarea {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid #d9e0ea;
+    border-radius: 10px;
+    background: #fff;
+    color: #344054;
+    font: inherit;
+}
+
+.management-record-form textarea,
+.management-followup-card textarea { resize: vertical; }
+
+.management-primary-button {
+    justify-self: start;
+    min-height: 42px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 10px;
+    background: #244d91;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.management-timeline,
+.management-followup-list { display: grid; gap: 13px; }
+
+.management-timeline-item {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 20px;
+    padding: 19px 0;
+    border-top: 1px solid #e8ecf2;
+}
+
+.management-timeline-meta { display: grid; align-content: start; gap: 6px; color: #667085; font-size: 12px; }
+.management-timeline-meta span { color: #244d91; font-weight: 800; }
+.management-timeline-item strong { color: #1d2939; font-size: 16px; }
+.management-timeline-item p { margin: 7px 0; color: #526174; line-height: 1.65; white-space: pre-line; }
+.management-timeline-item small { color: #7a8699; }
+
+.management-board-card { display: grid; gap: 6px; margin-top: 9px; padding: 12px; border: 1px solid #dce3ed; border-radius: 11px; background: #fff; }
+.management-board-card strong { color: #1d2939; font-size: 13px; }
+.management-board-card span { color: #475467; font-size: 12px; line-height: 1.45; }
+.management-board-card small { color: #7a8699; font-size: 11px; }
+
+.management-followup-card { padding: 22px; border: 1px solid #e3e8ef; border-radius: 16px; background: #fbfcfe; }
+.management-followup-card header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.management-followup-card header span { color: #244d91; font-size: 11px; font-weight: 900; }
+.management-followup-card header h4 { margin: 6px 0 0; color: #1d2939; font-size: 17px; }
+.management-followup-card header>strong { padding: 6px 9px; border-radius: 999px; background: #eaf0f8; color: #244d91; font-size: 12px; }
+.management-followup-card>p { margin: 14px 0 18px; color: #526174; line-height: 1.65; white-space: pre-line; }
+.management-followup-card form { grid-template-columns: 180px 220px minmax(0, 1fr); }
+.management-followup-card .wide { grid-column: 3; }
+.management-followup-card .management-primary-button { grid-column: 1 / -1; }
+
 .management-board {
     display: grid;
     grid-template-columns: repeat(5, minmax(180px, 1fr));
@@ -406,6 +499,9 @@ a.management-action-card:focus-visible {
     .management-hub-main { height: calc(100vh - 74px); margin-top: 74px; padding: 30px 20px 52px; }
     .management-hub-hero { grid-template-columns: 1fr; padding: 26px; }
     .management-workspace-grid, .management-quality-grid { grid-template-columns: 1fr; }
+    .management-record-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .management-followup-card form { grid-template-columns: 1fr 1fr; }
+    .management-followup-card .wide { grid-column: 1 / -1; }
 }
 
 @media (max-width: 620px) {
@@ -413,4 +509,7 @@ a.management-action-card:focus-visible {
     .management-hub-hero, .management-section { padding: 21px; border-radius: 18px; }
     .management-action-grid, .management-filter-bar, .management-flow { grid-template-columns: 1fr; }
     .management-section-head { align-items: flex-start; flex-direction: column; }
+    .management-record-form, .management-followup-card form { grid-template-columns: 1fr; }
+    .management-record-form .wide, .management-followup-card .wide { grid-column: 1; }
+    .management-timeline-item { grid-template-columns: 1fr; gap: 10px; }
 }

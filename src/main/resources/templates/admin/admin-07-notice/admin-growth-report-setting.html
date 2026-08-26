@@ -11,6 +11,7 @@
         .report-row{display:grid;grid-template-columns:210px 1fr;align-items:center;gap:20px;padding:18px 0;border-top:1px solid #eef0f3}
         .report-row label,.report-row strong{font-weight:700;color:#344054}.report-row input[type=number]{width:110px;padding:10px;border:1px solid #cbd5e1;border-radius:8px}
         .report-row small{display:block;margin-top:7px;color:#667085}.message{margin-bottom:18px;padding:12px 16px;border-radius:8px;background:#ecfdf3;color:#027a48}
+        .report-history{max-width:880px;margin-top:20px;background:#fff;border:1px solid #e4e7ec;border-radius:14px;padding:28px 32px}.report-history h2{margin:0 0 6px;color:#101828}.report-history>p{margin:0 0 20px;color:#667085}.report-table{width:100%;border-collapse:collapse}.report-table th,.report-table td{padding:13px 10px;border-top:1px solid #eef0f3;text-align:left;font-size:13px}.report-table th{color:#667085}.read-badge{display:inline-flex;padding:4px 8px;border-radius:999px;background:#ecfdf3;color:#027a48;font-weight:700}.read-badge.unread{background:#fff4e5;color:#9a5800}.report-empty{padding:26px;border:1px dashed #cbd5e1;border-radius:10px;color:#667085;text-align:center}
         @media(max-width:700px){.report-setting{padding:22px}.report-row{grid-template-columns:1fr;gap:8px}}
     </style>
 </head>
@@ -35,5 +36,21 @@
         <p>대기하지 않고 현재 학습 기록으로 리포트를 만들어 훈련생 알림함에 바로 보냅니다. 훈련생은 알림의 <strong>상세 보기</strong>를 누르면 성장 리포트 화면으로 이동합니다.</p>
         <div class="button-group" style="justify-content:flex-end"><button type="submit" class="btn btn-primary">성장 리포트 지금 발송</button></div>
     </form>
+    <section class="report-history">
+        <h2>최근 성장 리포트 발송 결과</h2>
+        <p>누구에게 언제 발송됐고 훈련생이 확인했는지 최근 20건을 보여줍니다.</p>
+        <div class="report-empty" th:if="${#lists.isEmpty(recentDispatches)}">아직 발송된 성장 리포트가 없습니다. 위의 즉시 발송으로 흐름을 확인할 수 있습니다.</div>
+        <div style="overflow-x:auto" th:unless="${#lists.isEmpty(recentDispatches)}">
+            <table class="report-table">
+                <thead><tr><th>훈련생</th><th>리포트</th><th>발송 시각</th><th>확인 상태</th></tr></thead>
+                <tbody><tr th:each="row : ${recentDispatches}">
+                    <td th:text="${row.traineeName}">훈련생</td><td th:text="${row.title}">리포트</td>
+                    <td th:text="${#temporals.format(row.sentAt, 'yyyy.MM.dd HH:mm')}">-</td>
+                    <td><span class="read-badge" th:classappend="${row.readAt == null} ? ' unread'"
+                              th:text="${row.readAt == null ? '미확인' : '확인 완료'}">미확인</span></td>
+                </tr></tbody>
+            </table>
+        </div>
+    </section>
 </div></main>
 </body></html>
