@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/css/common-style.css">
+  <link rel="stylesheet" href="/static/css/sidebar-style.css">
+  <link rel="stylesheet" href="/v2/assets/operations-showcase.css">
+  <title>Samsung Academy LXP - 기술 증빙 자료실</title>
+</head>
+<body class="ops-demo-page">
+<main class="main-content"><div class="ops-wrap">
+  <p class="ops-demo-note"><strong>1차 화면 시연용 샘플입니다.</strong> 실제 파일 업로드·전자서명·만료 알림·감사로그 저장은 2차 백엔드 연동 범위입니다.</p>
+  <section class="ops-intro">
+    <div><p class="ops-eyebrow">OPERATIONS EVIDENCE</p><h2 class="ops-title">기술 증빙 자료실</h2><p class="ops-desc">인증, 운영 실적, SLA, 특허 자료를 한 기준으로 분류하고 검토 상태와 유효기간을 확인합니다.</p></div>
+    <div class="ops-actions"><button type="button" class="ops-button" id="evidenceRegisterBtn">증빙 등록(데모)</button></div>
+  </section>
+  <dl class="ops-summary">
+    <div><dt>전체 증빙</dt><dd id="evidenceTotal">0</dd></div><div><dt>검증 완료</dt><dd id="evidenceValid">0</dd></div>
+    <div><dt>검토 필요</dt><dd id="evidenceReview">0</dd></div><div><dt>90일 내 만료</dt><dd id="evidenceExpiring">0</dd></div>
+  </dl>
+  <section class="ops-panel">
+    <div class="ops-panel-head"><div><h3>증빙 목록</h3><p class="ops-panel-sub">여러 조건을 함께 선택하면 모든 조건에 맞는 자료만 표시합니다.</p></div><span id="evidenceCount" aria-live="polite"></span></div>
+    <div class="ops-filter">
+      <input id="evidenceSearch" type="search" placeholder="자료명·발급기관 검색" aria-label="증빙 검색">
+      <select id="evidenceCategory" aria-label="분류"><option value="all">분류 전체</option><option value="인증">인증</option><option value="운영실적">운영실적</option><option value="SLA">SLA</option><option value="특허">특허</option></select>
+      <select id="evidenceState" aria-label="상태"><option value="all">상태 전체</option><option value="valid">검증 완료</option><option value="review">검토 필요</option><option value="draft">초안</option></select>
+      <button type="button" class="ops-button" id="evidenceReset">초기화</button>
+    </div>
+  </section>
+  <section class="ops-panel">
+    <div class="ops-table-scroll"><table class="ops-table"><thead><tr><th>분류</th><th>자료명</th><th>발급·확인 기관</th><th>유효기간</th><th>상태</th><th>상세</th></tr></thead><tbody id="evidenceBody"></tbody></table></div>
+  </section>
+</div></main>
+<script src="/v2/assets/exam-legacy-shell.js"></script><script src="/v2/assets/evidence-library.js"></script>
+<script>ExamShell.admin({ active: "evidence-demo", title: "성과관리 > 기술 증빙 자료실" });</script>
+</body></html>

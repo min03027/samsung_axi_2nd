@@ -32,7 +32,9 @@ class StaticV2FeatureEntryNavigationTest {
         assertThat(fragment)
                 .contains("/v2/lxp/trainee/learning-presence-check.html")
                 .contains("/v2/lxp/trainee/live-class-precheck.html")
-                .contains("/v2/lxp/trainee/attendance.html");
+                .contains("/v2/lxp/trainee/attendance.html")
+                .contains("/v2/lxp/trainee/exam-workspace.html")
+                .contains("/v2/lxp/trainee/points-ranking.html");
         assertThat(contents)
                 .contains("/v2/lxp/trainee/learning-presence-check.html")
                 .contains("/v2/lxp/trainee/live-class-precheck.html");
@@ -51,7 +53,9 @@ class StaticV2FeatureEntryNavigationTest {
                 .contains(">이수 관리</span>")
                 .contains("/v2/admin/attendance.html")
                 .contains("/v2/admin/presence-monitor.html")
-                .contains("/v2/admin/live-class-monitor.html");
+                .contains("/v2/admin/live-class-monitor.html")
+                .contains("/v2/admin/engagement-points.html")
+                .contains("/v2/admin/evidence-library.html");
         assertThat(attendance)
                 .contains("/v2/admin/attendance.html")
                 .contains("/v2/admin/presence-monitor.html")
@@ -69,7 +73,11 @@ class StaticV2FeatureEntryNavigationTest {
                 .contains("/v2/lxp/trainee/attendance.html")
                 .contains("/v2/admin/attendance.html")
                 .contains("/v2/admin/presence-monitor.html")
-                .contains("/v2/admin/live-class-monitor.html");
+                .contains("/v2/admin/live-class-monitor.html")
+                .contains("/v2/lxp/trainee/exam-workspace.html")
+                .contains("/v2/lxp/trainee/points-ranking.html")
+                .contains("/v2/admin/engagement-points.html")
+                .contains("/v2/admin/evidence-library.html");
     }
 
     @Test

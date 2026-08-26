@@ -51,6 +51,7 @@
     { key: "test", label: "시험/과제", href: "/trainee/exam", sub: [
       { label: "온라인 시험", href: "/trainee/exam" },
       { label: "응시 데모(사전점검)", href: "/v2/lxp/trainee/exams.html" },
+      { label: "코딩 실습 작업공간(데모)", href: "/v2/lxp/trainee/exam-workspace.html" },
       { label: "과제", href: "/trainee/assignment" }
     ]},
     { key: "ai", label: "AI 학습지원", href: "/trainee/ai/qna", sub: [
@@ -65,6 +66,11 @@
       { label: "출결·본인인증(데모)", href: "/v2/lxp/trainee/attendance.html" },
       { label: "이수관리", href: "/trainee/completion-management" },
       { label: "설문조사", href: "/trainee/survey" }
+    ]},
+    { key: "growth", label: "성장·피드백", href: "/trainee/growth", sub: [
+      { label: "주간 성장 리포트", href: "/trainee/growth" },
+      { label: "점수 내역·랭킹(데모)", href: "/v2/lxp/trainee/points-ranking.html" },
+      { label: "학습일지·상담 기록", href: "/trainee/journal" }
     ]}
   ];
 
@@ -196,6 +202,10 @@
     { key: "support", label: "학습 지원", href: "/admin/support/tutoring", icon: "06-support.svg", w: 25, sub: [
       { key: "support-tutoring", label: "튜터링/Q&A", href: "/admin/support/tutoring" },
       { key: "support-response", label: "응답현황", href: "/admin/support/response" }
+    ]},
+    { key: "performance-demo", label: "성과·증빙", href: "/v2/admin/engagement-points.html", icon: "08-analytics.svg", w: 26, sub: [
+      { key: "points-demo", label: "점수 기준 관리(데모)", href: "/v2/admin/engagement-points.html" },
+      { key: "evidence-demo", label: "기술 증빙 자료실(데모)", href: "/v2/admin/evidence-library.html" }
     ]},
     { key: "notice", label: "공지/알림", href: "/admin/notice", icon: "bell.svg", w: 26, white: true, sub: [
       { key: "notice", label: "공지 관리", href: "/admin/notice" },

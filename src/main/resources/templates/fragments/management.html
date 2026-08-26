@@ -230,13 +230,16 @@
                     onclick="handleMenuClick(this, '/admin/analytics/dropout')">
                     <img src="/static/icons/08-analytics.svg" alt="" class="management-menu-icon">
                     <span class="menu-text" th:classappend="${active == 'analytics-dropout' or active == 'analytics-learning'
-                            or active == 'analytics-interventions' or active == 'career-management' or active == 'performance'} ? 'active_menu'">성과관리</span>
+                            or active == 'analytics-interventions' or active == 'career-management' or active == 'performance'
+                            or active == 'points-demo' or active == 'evidence-demo'} ? 'active_menu'">성과관리</span>
                     <span class="chev" aria-hidden="true">▾</span>
                     <ul>
                         <li class="submenu" th:classappend="${active == 'analytics-dropout'} ? 'active_menu'"><a href="/admin/analytics/dropout">학습 이탈 예측</a></li>
                         <li class="submenu" th:classappend="${active == 'analytics-learning'} ? 'active_menu'"><a href="/admin/analytics/learning">학습 성과 분석</a></li>
                         <li class="submenu" th:classappend="${active == 'analytics-interventions'} ? 'active_menu'"><a href="/admin/analytics/interventions">개입·피드백 큐</a></li>
                         <li class="submenu" th:classappend="${active == 'career-management'} ? 'active_menu'"><a href="/admin/career">취업·사후관리</a></li>
+                        <li class="submenu" th:classappend="${active == 'points-demo'} ? 'active_menu'"><a href="/v2/admin/engagement-points.html">점수 기준 관리(데모)</a></li>
+                        <li class="submenu" th:classappend="${active == 'evidence-demo'} ? 'active_menu'"><a href="/v2/admin/evidence-library.html">기술 증빙 자료실(데모)</a></li>
                     </ul>
                 </li>
 

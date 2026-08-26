@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="/static/css/basic-form-trainee.css"><link rel="stylesheet" href="/v2/assets/operations-showcase.css"><title>Samsung Academy LXP - 점수 내역·랭킹</title></head>
+<body class="ops-demo-page">
+<main><section class="main-content main-wrap ops-wrap">
+  <p class="ops-demo-note"><strong>1차 화면 시연용 샘플입니다.</strong> 점수와 순위는 화면 확인용 데이터이며 실제 학습 활동·전체 훈련생 데이터와 연결되지 않습니다.</p>
+  <section class="ops-intro"><div><p class="ops-eyebrow">MY ENGAGEMENT</p><h2 class="ops-title">점수 내역·랭킹</h2><p class="ops-desc">이번 주 학습 참여 점수와 과정 내 위치를 확인하고, 다음 목표까지 필요한 활동을 살펴보세요.</p></div><div class="ops-actions"><a class="ops-button" href="/trainee/growth">주간 성장 리포트</a></div></section>
+  <section class="rank-hero"><div class="rank-total"><span>이번 주 참여 점수</span><strong id="myPointTotal">420점</strong><p>지난주보다 85점 올랐어요.</p><div class="ops-progress"><span style="width:70%"></span></div></div><div class="rank-position"><span>AI 기반 데이터 분석 · 1기</span><strong>5위 / 38명</strong><p>다음 순위까지 35점 남았습니다.</p><div class="ops-progress"><span style="width:82%"></span></div></div></section>
+  <section class="ops-panel"><div class="ops-panel-head"><div><h3>최근 점수 내역</h3><p class="ops-panel-sub">활동별 점수와 반영 상태를 확인합니다.</p></div><select id="pointPeriod" aria-label="조회 기간"><option value="week">이번 주</option><option value="month">이번 달</option></select></div><div class="ops-table-scroll"><table class="ops-table"><thead><tr><th>일자</th><th>활동</th><th>과정</th><th>점수</th><th>상태</th></tr></thead><tbody id="pointHistoryBody"></tbody></table></div></section>
+  <section class="ops-panel"><div class="ops-panel-head"><div><h3>과정 랭킹</h3><p class="ops-panel-sub">개인정보 보호를 위해 다른 훈련생은 별칭으로 표시합니다.</p></div></div><div class="ops-table-scroll"><table class="ops-table"><thead><tr><th>순위</th><th>훈련생</th><th>주간 점수</th><th>연속 학습</th></tr></thead><tbody id="rankingBody"></tbody></table></div></section>
+</section></main>
+<script src="/v2/assets/exam-legacy-shell.js"></script><script src="/v2/assets/engagement-points.js"></script><script>ExamShell.trainee({ active: "growth", title: "성장·피드백 > 점수 내역·랭킹" });</script>
+</body></html>

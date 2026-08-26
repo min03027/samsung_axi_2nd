@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="/static/css/common-style.css"><link rel="stylesheet" href="/static/css/sidebar-style.css"><link rel="stylesheet" href="/v2/assets/operations-showcase.css"><title>Samsung Academy LXP - 점수 기준 관리</title></head>
+<body class="ops-demo-page">
+<main class="main-content"><div class="ops-wrap">
+  <p class="ops-demo-note"><strong>1차 화면 시연용 샘플입니다.</strong> 설정값은 현재 브라우저에만 저장됩니다. 실제 활동 집계·부정 적립 방지·전체 순위 배치는 2차 백엔드 범위입니다.</p>
+  <section class="ops-intro"><div><p class="ops-eyebrow">ENGAGEMENT RULES</p><h2 class="ops-title">학습 점수 기준 관리</h2><p class="ops-desc">과정 참여 활동별 점수와 일일 한도를 정하고, 훈련생에게 보일 점수 내역과 랭킹 화면을 미리 확인합니다.</p></div><div class="ops-actions"><a class="ops-button" href="/v2/lxp/trainee/points-ranking.html">훈련생 화면 미리보기</a><button class="ops-button primary" type="button" id="savePointRules">기준 저장(데모)</button></div></section>
+  <dl class="ops-summary"><div><dt>적용 과정</dt><dd>3</dd></div><div><dt>활성 기준</dt><dd id="activeRuleCount">0</dd></div><div><dt>주간 최대</dt><dd id="weeklyMax">0점</dd></div><div><dt>이번 주 참여자</dt><dd>38명</dd></div></dl>
+  <section class="ops-panel"><div class="ops-panel-head"><div><h3>과정 선택</h3><p class="ops-panel-sub">과정별로 다른 참여 기준을 구성할 수 있습니다.</p></div></div><select id="pointCourse" aria-label="과정 선택"><option>AI 기반 데이터 분석 / 1기</option><option>생성형 AI 서비스 개발 / 2기</option><option>로봇 AI 실무 / 1기</option></select></section>
+  <section class="ops-panel"><div class="ops-panel-head"><div><h3>활동별 점수 기준</h3><p class="ops-panel-sub">점수와 하루 인정 횟수를 조정하면 상단 예상치가 즉시 바뀝니다.</p></div><button type="button" class="ops-button" id="resetPointRules">기본값 복원</button></div><div class="criteria-list" id="criteriaList"></div></section>
+  <section class="ops-panel"><h3>운영 원칙</h3><div class="ops-card-grid"><article class="ops-card"><h4>학습 중심</h4><p>단순 접속보다 학습 완료, 과제 제출, 동료 피드백처럼 의미 있는 활동에 더 높은 점수를 부여합니다.</p></article><article class="ops-card"><h4>과열 방지</h4><p>활동별 일일 인정 횟수와 운영자 조정 이력을 함께 관리해 반복 클릭에 의한 과도한 적립을 제한합니다.</p></article></div></section>
+</div></main>
+<script src="/v2/assets/exam-legacy-shell.js"></script><script src="/v2/assets/engagement-points.js"></script><script>ExamShell.admin({ active: "points-demo", title: "성과관리 > 점수 기준 관리" });</script>
+</body></html>

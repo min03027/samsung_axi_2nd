@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/css/common-style.css"><link rel="stylesheet" href="/static/css/sidebar-style.css"><link rel="stylesheet" href="/v2/assets/operations-showcase.css">
+  <title>Samsung Academy LXP - 기술 증빙 상세</title>
+</head>
+<body class="ops-demo-page">
+<main class="main-content"><div class="ops-wrap">
+  <p class="ops-demo-note"><strong>1차 화면 시연용 샘플입니다.</strong> 원본 파일 열람·검증기관 API·전자서명은 연결하지 않습니다.</p>
+  <section class="ops-intro"><div><p class="ops-eyebrow" id="detailCategory">OPERATIONS EVIDENCE</p><h2 class="ops-title" id="detailTitle">증빙 상세</h2><p class="ops-desc" id="detailDescription"></p></div><div class="ops-actions"><a class="ops-button" href="/v2/admin/evidence-library.html">목록으로</a><button class="ops-button primary" type="button" id="markReviewedBtn">검토 완료 표시(데모)</button></div></section>
+  <section class="ops-panel"><div class="ops-panel-head"><div><h3>기본 정보</h3><p class="ops-panel-sub">운영 담당자가 확인해야 할 핵심 메타데이터입니다.</p></div><span class="ops-status" id="detailStatus"></span></div><dl class="ops-meta" id="detailMeta"></dl></section>
+  <div class="ops-card-grid">
+    <section class="ops-panel"><h3>검토 이력</h3><ol class="ops-timeline" id="detailTimeline"></ol></section>
+    <section class="ops-panel"><h3>2차 연동 항목</h3><ul class="ops-timeline"><li>원본 파일 저장소와 접근권한 정책</li><li>만료 90·30·7일 전 담당자 알림</li><li>검증자·변경 이력을 남기는 감사로그</li><li>기관 API 또는 전자서명 진위 확인</li></ul></section>
+  </div>
+</div></main>
+<script src="/v2/assets/exam-legacy-shell.js"></script><script src="/v2/assets/evidence-library.js"></script>
+<script>ExamShell.admin({ active: "evidence-demo", title: "성과관리 > 기술 증빙 상세" });</script>
+</body></html>
