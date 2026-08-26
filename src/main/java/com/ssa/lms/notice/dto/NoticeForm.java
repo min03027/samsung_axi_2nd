@@ -32,6 +32,12 @@ public class NoticeForm {
 
     private boolean pinned;
 
+    /** 로그인 직후 팝업으로 노출. 읽음 처리는 기존 알림 수신자 상태를 사용한다. */
+    private boolean popupOnLogin;
+
+    /** 최초 게시 시 대상 훈련생에게 이메일도 함께 발송. */
+    private boolean emailNotify;
+
     /** 체크 해제 시 임시저장(미게시) — publishedAt = null. */
     private boolean published = true;
 
@@ -43,6 +49,8 @@ public class NoticeForm {
         form.title = n.getTitle();
         form.content = n.getContent();
         form.pinned = n.isPinned();
+        form.popupOnLogin = n.isPopupOnLogin();
+        form.emailNotify = n.isEmailNotify();
         form.published = n.getPublishedAt() != null;
         return form;
     }

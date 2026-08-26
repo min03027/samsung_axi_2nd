@@ -345,8 +345,8 @@ public class TraineeDashboardService {
     /* ===================== 오늘 일정 ===================== */
 
     /**
-     * 실제 차시 날짜와 오늘 마감 항목만 사용한다. Session 에 시작 시각 컬럼이 없으므로
-     * "09:00 수업" 같은 가짜 생활 시간표를 만들지 않고 "시간 미정"으로 명확히 표시한다.
+     * 실제 차시 날짜와 오늘 마감 항목만 사용한다. 시작 시각이 등록된 차시는 정확한 시각으로,
+     * 날짜만 등록된 차시는 "시간 미정"으로 표시한다.
      */
     private List<TraineeDashboardView.ScheduleItem> todaySchedule(
             List<MyEnrollmentView> enrollments,
@@ -364,10 +364,13 @@ public class TraineeDashboardService {
                 String minutes = session.getLearningMinutes() == null
                         ? "수업 일정"
                         : "인정 학습시간 " + session.getLearningMinutes() + "분";
+                boolean exactTime = session.getLessonStartTime() != null;
+                LocalTime lessonTime = exactTime ? session.getLessonStartTime() : LocalTime.NOON;
                 candidates.add(new ScheduleCandidate(
-                        "시간 미정", "LESSON", "수업", session.getName(),
+                        exactTime ? lessonTime.format(DateTimeFormatter.ofPattern("HH:mm")) : "시간 미정",
+                        "LESSON", "수업", session.getName(),
                         enrollment.courseName() + " · " + minutes,
-                        LEARNING_URL, LocalTime.NOON, false));
+                        LEARNING_URL, lessonTime, exactTime));
             }
         }
 

@@ -74,7 +74,9 @@ public class ReminderLog extends BaseEntity {
         /** 시험 미응시 */
         EXAM,
         /** 설문 미응답 */
-        SURVEY
+        SURVEY,
+        /** 반복 수업 시작 알림 */
+        LESSON
     }
 
     /** 앨리스 항목의 "24시간 전 / 1시간 전 리마인드" + 마감 후 독려. */

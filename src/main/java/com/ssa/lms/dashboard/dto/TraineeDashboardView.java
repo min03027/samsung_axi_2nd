@@ -63,7 +63,7 @@ public record TraineeDashboardView(
 
     /**
      * 오늘 타임라인 한 건. 수업 시작 시각은 현재 Session 스키마에 없으므로 임의 시각을 만들지 않는다.
-     * timeLabel 이 "시간 미정"이면 날짜만 등록된 실제 차시다.
+     * timeLabel 이 "시간 미정"이면 날짜만 등록되고 시작 시각은 아직 정해지지 않은 차시다.
      */
     public record ScheduleItem(String timeLabel, String type, String typeLabel,
                                String title, String meta, String href, boolean current) {

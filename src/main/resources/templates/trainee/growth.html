@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/basic-form-trainee.css">
-    <link rel="stylesheet" href="/static/css/trainee/platform-hubs.css">
+    <link rel="stylesheet" href="/static/css/trainee/platform-hubs.css?v=20260826-1">
     <title>Samsung Academy LXP - 성장·피드백</title>
 </head>
 <body class="platform-hub-body">
@@ -85,12 +85,17 @@
                     <h2 id="weekly-growth-title">주간 성장 흐름</h2>
                 </div>
             </div>
-            <div class="hub-empty-panel">
-                <div class="hub-empty-mark" aria-hidden="true">↗</div>
-                <div>
-                    <h3>기록을 한눈에 보는 자리예요</h3>
-                    <p>현재는 홈과 각 학습 화면에서 진도·출결·평가 기록을 확인할 수 있어요. 이 영역에는 실제 학습 기록을 바탕으로 한 주간 변화가 제공됩니다.</p>
+            <div class="growth-report" th:classappend="${' tone-' + report.tone}">
+                <div class="growth-report-head">
+                    <div><span>현재 과정</span><strong th:text="${report.courseName}">과정명</strong></div>
+                    <p th:text="${report.summary}">현재 학습 흐름을 안내합니다.</p>
                 </div>
+                <div class="growth-metrics">
+                    <article><span>현재 진도</span><strong th:text="${report.progressRate + '%'}">0%</strong><small th:text="${report.recommendedProgress == null ? '권장 진도 집계 전' : '권장 ' + report.recommendedProgress + '%'}">권장 진도</small></article>
+                    <article><span>출석률</span><strong th:text="${report.attendanceRate == null ? '집계 전' : report.attendanceRate + '%'}">집계 전</strong><small>누적 출석 기준</small></article>
+                    <article><span>남은 항목</span><strong th:text="${report.pendingCount + '건'}">0건</strong><small th:text="${'과제 ' + report.remainingAssignments + ' · 시험 ' + report.remainingExams}">과제·시험</small></article>
+                </div>
+                <a class="growth-report-action" th:href="${report.actionHref}" th:text="${report.actionLabel}">학습 이어하기</a>
             </div>
         </section>
     </div>

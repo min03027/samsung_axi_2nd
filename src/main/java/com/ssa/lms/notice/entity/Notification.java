@@ -68,6 +68,23 @@ public class Notification extends BaseEntity {
     @Column(name = "due_date")
     private LocalDateTime dueDate;
 
+    /** 알림의 생성 출처. null 은 기존 일반 알림으로 간주한다. */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "notification_kind", length = 30)
+    private NotificationKind kind;
+
+    /** 공지·리포트·차시 등 원본 엔티티 id. 중복 자동 발송을 막는 키로 사용한다. */
+    @Column(name = "source_ref_id")
+    private Long sourceRefId;
+
+    /** 사용자가 확인할 원본 화면 경로. */
+    @Column(name = "source_url", length = 500)
+    private String sourceUrl;
+
+    /** 로그인 직후 미확인 상태라면 팝업으로 노출할지 여부. */
+    @Column(name = "popup_on_login", nullable = false, columnDefinition = "boolean default false")
+    private boolean popupOnLogin;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
@@ -79,7 +96,8 @@ public class Notification extends BaseEntity {
     @Builder
     public Notification(String title, String content, Priority priority, TargetType targetType,
                         Long targetRefId, LocalDateTime sendAt, LocalDateTime dueDate,
-                        User sender, NotificationStatus status) {
+                        User sender, NotificationStatus status, NotificationKind kind,
+                        Long sourceRefId, String sourceUrl, boolean popupOnLogin) {
         this.title = title;
         this.content = content;
         this.priority = priority;
@@ -89,6 +107,10 @@ public class Notification extends BaseEntity {
         this.dueDate = dueDate;
         this.sender = sender;
         this.status = status;
+        this.kind = kind == null ? NotificationKind.GENERAL : kind;
+        this.sourceRefId = sourceRefId;
+        this.sourceUrl = sourceUrl;
+        this.popupOnLogin = popupOnLogin;
     }
 
     public void markSent() {
@@ -132,5 +154,12 @@ public class Notification extends BaseEntity {
         SCHEDULED,
         SENT,
         CANCELED
+    }
+
+    public enum NotificationKind {
+        GENERAL,
+        NOTICE,
+        GROWTH_REPORT,
+        REMINDER
     }
 }

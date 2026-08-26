@@ -125,6 +125,8 @@
                             <label>과정 <select name="courseId"><option value="">전체 공지</option><option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}" th:selected="${course.id == form.courseId}">과정</option></select></label>
                             <label><input type="checkbox" name="pinned" th:checked="${form.pinned}"> 상단 고정</label>
                             <label><input type="checkbox" name="published" th:checked="${form.published}"> 게시</label>
+                            <label><input type="checkbox" name="popupOnLogin" th:checked="${form.popupOnLogin}"> 로그인 팝업</label>
+                            <label><input type="checkbox" name="emailNotify" th:checked="${form.emailNotify}"> 게시 즉시 이메일</label>
                             </td>
                         </tr>
                     </tbody>

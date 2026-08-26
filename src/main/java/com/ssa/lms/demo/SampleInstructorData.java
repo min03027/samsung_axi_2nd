@@ -298,7 +298,8 @@ public class SampleInstructorData {
         for (int i = 0; i < subjects.length; i++) {
             List<SubjectView.SessionView> sessions = new ArrayList<>(subjects[i].length - 1);
             for (int j = 1; j < subjects[i].length; j++) {
-                sessions.add(new SubjectView.SessionView(sessionId++, j, subjects[i][j], lessonDate, 180));
+                sessions.add(new SubjectView.SessionView(sessionId++, j, subjects[i][j], lessonDate,
+                        java.time.LocalTime.of(9, 0), 180));
                 lessonDate = lessonDate.plusDays(3);
             }
             rows.add(new SubjectView(subjectId++, subjects[i][0], null, i + 1, sessions));
@@ -325,7 +326,8 @@ public class SampleInstructorData {
         List<CourseScheduleView> rows = new ArrayList<>(plan.length);
         for (int i = 0; i < plan.length; i++) {
             rows.add(new CourseScheduleView(
-                    start.plusDays(i * 2L), SAMPLE_COURSE_ID, COURSE_CODE, COURSE,
+                    start.plusDays(i * 2L), java.time.LocalTime.of(9, 0),
+                    SAMPLE_COURSE_ID, COURSE_CODE, COURSE,
                     plan[i][0], i + 1, plan[i][1], 240));
         }
         return rows;

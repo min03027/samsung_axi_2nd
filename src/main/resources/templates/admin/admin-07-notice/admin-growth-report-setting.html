@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/common-style.css"><link rel="stylesheet" href="/static/css/sidebar-style.css"><link rel="stylesheet" href="/static/css/btn-style.css">
+    <script src="/static/js/sidebar-function.js" defer></script>
+    <title>Samsung Academy LXP - 성장 리포트 설정</title>
+    <style>
+        .report-setting{max-width:880px;background:#fff;border:1px solid #e4e7ec;border-radius:14px;padding:32px}
+        .report-setting h2{margin:0 0 8px;color:#101828}.report-setting>p{margin:0 0 28px;color:#667085;line-height:1.7}
+        .report-row{display:grid;grid-template-columns:210px 1fr;align-items:center;gap:20px;padding:18px 0;border-top:1px solid #eef0f3}
+        .report-row label,.report-row strong{font-weight:700;color:#344054}.report-row input[type=number]{width:110px;padding:10px;border:1px solid #cbd5e1;border-radius:8px}
+        .report-row small{display:block;margin-top:7px;color:#667085}.message{margin-bottom:18px;padding:12px 16px;border-radius:8px;background:#ecfdf3;color:#027a48}
+        @media(max-width:700px){.report-setting{padding:22px}.report-row{grid-template-columns:1fr;gap:8px}}
+    </style>
+</head>
+<body data-user-role="admin">
+<header th:replace="~{fragments/admin :: header('공지/알림 > 성장 리포트 설정')}"></header>
+<th:block th:replace="~{fragments/admin :: sidebar('growth-report')}"/>
+<main class="main-content"><div class="main-content-inner">
+    <div class="message" th:if="${message}" th:text="${message}"></div>
+    <form class="report-setting" method="post" action="/admin/settings/growth-report">
+        <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <h2>주간 성장 리포트</h2>
+        <p>훈련생의 실제 진도·권장 진도·출석·미완료 과제와 시험을 한 번에 집계해 알림함과 이메일로 보냅니다.</p>
+        <div class="report-row"><strong>자동 발송</strong><label><input type="checkbox" name="enabled" value="true" th:checked="${setting.enabled}"> 사용</label></div>
+        <div class="report-row"><label for="intervalDays">발송 주기</label><div><input id="intervalDays" type="number" name="intervalDays" min="1" max="30" th:value="${setting.intervalDays}" required> 일마다<small>1~30일 사이에서 운영 일정에 맞게 설정할 수 있습니다.</small></div></div>
+        <div class="report-row"><label for="sendHour">발송 시각</label><div><input id="sendHour" type="number" name="sendHour" min="0" max="23" th:value="${setting.sendHour}" required> 시<small>매시간 확인하며 설정 시각 이후 아직 발송하지 않은 리포트를 보냅니다.</small></div></div>
+        <div class="report-row"><label for="lowProgressGap">부진 판단 기준</label><div>권장 진도보다 <input id="lowProgressGap" type="number" name="lowProgressGap" min="0" max="50" th:value="${setting.lowProgressGap}" required> %p 이상 낮을 때<small>해당 훈련생에게 학습 계획 점검 문구를 제공합니다.</small></div></div>
+        <div class="button-group" style="justify-content:flex-end;margin-top:24px"><button type="submit" class="btn btn-primary">설정 저장</button></div>
+    </form>
+</div></main>
+</body></html>

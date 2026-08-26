@@ -3,6 +3,8 @@ package com.ssa.lms.notice.service;
 import com.ssa.lms.assignment.entity.CourseAssignment;
 import com.ssa.lms.assignment.repository.CourseAssignmentRepository;
 import com.ssa.lms.course.service.CourseQueryService;
+import com.ssa.lms.course.entity.Session;
+import com.ssa.lms.course.repository.SessionRepository;
 import com.ssa.lms.exam.entity.Exam;
 import com.ssa.lms.exam.repository.ExamAttemptRepository;
 import com.ssa.lms.exam.repository.ExamRepository;
@@ -61,6 +63,7 @@ public class ReminderService {
     private final NotificationRecipientRepository recipientRepository;
     private final UserRepository userRepository;
     private final CourseQueryService courseQueryService;
+    private final SessionRepository sessionRepository;
     private final ReminderMailSender mailSender;
     private final ReminderSettingService settingService;
 
@@ -111,6 +114,42 @@ public class ReminderService {
         if (cfg.isAssignmentEnabled()) sent += remindAssignments(now, stage, from, to);
         if (cfg.isExamEnabled()) sent += remindExams(now, stage, from, to);
         if (cfg.isSurveyEnabled()) sent += remindSurveys(now, stage, from, to);
+        if (cfg.isLessonEnabled() && stage != ReminderLog.ReminderStage.OVERDUE) {
+            sent += remindLessons(now, stage, from, to);
+        }
+        return sent;
+    }
+
+    /* ===== 수업 시작 24시간·1시간 전 ===== */
+
+    private int remindLessons(LocalDateTime now, ReminderLog.ReminderStage stage,
+                              LocalDateTime from, LocalDateTime to) {
+        List<Session> targets = sessionRepository.findScheduledBetween(from.toLocalDate(), to.toLocalDate())
+                .stream()
+                .filter(s -> {
+                    LocalDateTime startsAt = LocalDateTime.of(s.getLessonDate(), s.getLessonStartTime());
+                    return !startsAt.isBefore(from) && startsAt.isBefore(to);
+                }).toList();
+        if (targets.isEmpty()) return 0;
+        List<Long> ids = targets.stream().map(Session::getId).toList();
+        Map<Long, Set<Long>> alreadySent = toPairMap(
+                reminderLogRepository.findSentPairs(ReminderLog.ReminderType.LESSON, ids, stage));
+        int sent = 0;
+        for (Session lesson : targets) {
+            Set<Long> skip = alreadySent.getOrDefault(lesson.getId(), Set.of());
+            LocalDateTime startsAt = LocalDateTime.of(lesson.getLessonDate(), lesson.getLessonStartTime());
+            Long courseId = lesson.getSubject().getCourse().getId();
+            for (Long userId : courseQueryService.findUserIdsByCourseId(courseId)) {
+                if (skip.contains(userId)) continue;
+                String prefix = stage == ReminderLog.ReminderStage.BEFORE_1H
+                        ? "[수업 1시간 전] " : "[수업 24시간 전] ";
+                String content = "%s 과정의 %s 수업이 %s에 시작합니다. 학습 화면에서 준비 내용을 확인해 주세요."
+                        .formatted(lesson.getSubject().getCourse().getCourseName(), lesson.getName(),
+                                startsAt.format(DUE_FORMAT));
+                sent += notify(userId, ReminderLog.ReminderType.LESSON, lesson.getId(), stage, now,
+                        prefix + lesson.getName(), content);
+            }
+        }
         return sent;
     }
 
@@ -238,6 +277,10 @@ public class ReminderService {
                 .sendAt(now)
                 .sender(user.get())   // 시스템 발송이지만 sender 가 필수라 수신자 본인으로 둔다
                 .status(Notification.NotificationStatus.SENT)
+                .kind(Notification.NotificationKind.REMINDER)
+                .sourceRefId(targetRefId)
+                .sourceUrl(type == ReminderLog.ReminderType.LESSON
+                        ? "/trainee/learning" : "/trainee/evaluations")
                 .build());
 
         recipientRepository.save(NotificationRecipient.builder()

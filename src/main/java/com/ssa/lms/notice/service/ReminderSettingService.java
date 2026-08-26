@@ -42,8 +42,15 @@ public class ReminderSettingService {
     @Transactional
     public ReminderSetting save(int firstHours, int secondHours, int overdueDays,
                                 boolean assignment, boolean exam, boolean survey, boolean enabled) {
+        return save(firstHours, secondHours, overdueDays, assignment, exam, survey, true, enabled);
+    }
+
+    @Transactional
+    public ReminderSetting save(int firstHours, int secondHours, int overdueDays,
+                                boolean assignment, boolean exam, boolean survey, boolean lesson,
+                                boolean enabled) {
         ReminderSetting s = current();
-        s.update(firstHours, secondHours, overdueDays, assignment, exam, survey, enabled);
+        s.update(firstHours, secondHours, overdueDays, assignment, exam, survey, lesson, enabled);
         log.info("[알림] 리마인드 설정 변경 — {}시간 전 / {}시간 전 / 마감 후 {}일, "
                         + "과제 {} 시험 {} 설문 {}, 전체 {}",
                 s.getFirstNoticeHours(), s.getSecondNoticeHours(), s.getOverdueDays(),

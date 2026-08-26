@@ -240,13 +240,14 @@
                     onclick="handleMenuClick(this, '/admin/users/pending')">
                     <img src="/static/icons/setting.svg" alt="" class="management-menu-icon">
                     <span class="menu-text" th:classappend="${active == 'user-approval' or active == 'user-instructor'
-                            or active == 'user-admin' or active == 'reminder' or active == 'system'} ? 'active_menu'">시스템</span>
+                            or active == 'user-admin' or active == 'reminder' or active == 'growth-report' or active == 'system'} ? 'active_menu'">시스템</span>
                     <span class="chev" aria-hidden="true">▾</span>
                     <ul>
                         <li class="submenu" th:classappend="${active == 'user-approval'} ? 'active_menu'"><a href="/admin/users/pending">가입 승인</a></li>
                         <li class="submenu" th:classappend="${active == 'user-instructor'} ? 'active_menu'"><a href="/admin/users/instructors">강사 계정·배정</a></li>
                         <li class="submenu" th:classappend="${active == 'user-admin'} ? 'active_menu'"><a href="/admin/admins">관리자·권한</a></li>
                         <li class="submenu" th:classappend="${active == 'reminder'} ? 'active_menu'"><a href="/admin/settings/reminder">리마인드 설정</a></li>
+                        <li class="submenu" th:classappend="${active == 'growth-report'} ? 'active_menu'"><a href="/admin/settings/growth-report">성장 리포트 설정</a></li>
                         <li class="submenu future-menu"><span>데이터·HRD</span><em>향후</em></li>
                         <li class="submenu future-menu"><span>설정·활동 로그</span><em>향후</em></li>
                     </ul>

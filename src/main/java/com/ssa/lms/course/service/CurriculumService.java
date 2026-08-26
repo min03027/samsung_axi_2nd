@@ -63,7 +63,8 @@ public class CurriculumService {
         int nextSeq = (int) sessionRepository.countBySubjectId(subjectId) + 1;
         Session session = Session.builder()
                 .seq(nextSeq).name(form.getName())
-                .lessonDate(form.getLessonDate()).learningMinutes(form.getLearningMinutes()).build();
+                .lessonDate(form.getLessonDate()).lessonStartTime(form.getLessonStartTime())
+                .learningMinutes(form.getLearningMinutes()).build();
         subject.addSession(session);          // 연관관계 설정
         return sessionRepository.save(session).getId();
     }
@@ -71,7 +72,8 @@ public class CurriculumService {
     @Transactional
     public void updateSession(Long sessionId, SessionForm form) {
         Session session = getSession(sessionId);
-        session.update(session.getSeq(), form.getName(), form.getLessonDate(), form.getLearningMinutes());
+        session.update(session.getSeq(), form.getName(), form.getLessonDate(), form.getLessonStartTime(),
+                form.getLearningMinutes());
     }
 
     @Transactional

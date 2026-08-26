@@ -24,6 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     /** 역할별 목록(강사/훈련생/관리자 관리) — 이름 가나다 순 */
     List<User> findByRoleOrderByNameAsc(Role role);
 
+    List<User> findByRoleAndStatusOrderByNameAsc(Role role, UserStatus status);
+
     /** 역할·상태별 계정 수 — "마지막 활성 관리자" 비활성화 방지에 사용. */
     long countByRoleAndStatus(Role role, UserStatus status);
 

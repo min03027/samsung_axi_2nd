@@ -1729,3 +1729,12 @@
     transition: none;
   }
 }
+.login-notice-backdrop{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;padding:24px;background:rgba(8,18,38,.55);backdrop-filter:blur(4px)}
+.login-notice-dialog{width:min(520px,100%);padding:34px;border-radius:18px;background:#fff;box-shadow:0 24px 80px rgba(4,18,45,.25)}
+.login-notice-kicker{display:block;margin-bottom:12px;color:#255ee8;font-size:12px;font-weight:800;letter-spacing:.16em}
+.login-notice-dialog h2{margin:0;color:#101828;font-size:26px;line-height:1.35}
+.login-notice-dialog p{max-height:240px;margin:18px 0 26px;overflow:auto;color:#475467;font-size:15px;line-height:1.75;white-space:pre-line}
+.login-notice-dialog form{display:flex;justify-content:flex-end;gap:10px}
+.login-notice-dialog button{min-height:44px;padding:0 20px;border-radius:10px;font:inherit;font-weight:700;cursor:pointer}
+.login-notice-later{border:1px solid #d0d5dd;background:#fff;color:#344054}
+.login-notice-confirm{border:1px solid #255ee8;background:#255ee8;color:#fff}

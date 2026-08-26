@@ -46,6 +46,7 @@ public class NoticeService {
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
     private final CourseInstructorRepository courseInstructorRepository;
+    private final NotificationService notificationService;
 
     /** 관리자 목록 — 고정 공지 먼저, 그 다음 최신순. 정렬은 Pageable 로 컨트롤러가 준다. */
     public Page<NoticeListRow> search(NoticeSearchCond cond, Pageable pageable) {
@@ -130,9 +131,12 @@ public class NoticeService {
                 .author(author)
                 .pinned(form.isPinned())
                 .publishedAt(form.isPublished() ? LocalDateTime.now() : null)
+                .popupOnLogin(form.isPopupOnLogin())
+                .emailNotify(form.isEmailNotify())
                 .build();
-
-        return noticeRepository.save(notice).getId();
+        noticeRepository.save(notice);
+        if (notice.getPublishedAt() != null) notificationService.dispatchNotice(notice);
+        return notice.getId();
     }
 
     @Transactional
@@ -140,13 +144,16 @@ public class NoticeService {
         Notice notice = getOrThrow(id);
         assertCanManageCourse(notice.getCourse() == null ? null : notice.getCourse().getId(), actorId, role);
         assertCanManageCourse(form.getCourseId(), actorId, role);
-        notice.update(findCategory(form.getCategoryId()), form.getTitle(), form.getContent(), form.isPinned());
+        boolean wasPublished = notice.getPublishedAt() != null;
+        notice.update(findCategory(form.getCategoryId()), form.getTitle(), form.getContent(), form.isPinned(),
+                form.isPopupOnLogin(), form.isEmailNotify());
         notice.changeCourse(findCourse(form.getCourseId()));
         if (form.isPublished()) {
             notice.publish(LocalDateTime.now());
         } else {
             notice.unpublish();
         }
+        if (!wasPublished && notice.getPublishedAt() != null) notificationService.dispatchNotice(notice);
     }
 
     /**

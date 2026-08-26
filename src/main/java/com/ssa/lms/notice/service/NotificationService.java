@@ -5,8 +5,10 @@ import com.ssa.lms.course.repository.CourseInstructorRepository;
 import com.ssa.lms.notice.dto.NotificationForm;
 import com.ssa.lms.notice.dto.NotificationListRow;
 import com.ssa.lms.notice.dto.NotificationSearchCond;
+import com.ssa.lms.notice.dto.LoginNoticePopup;
 import com.ssa.lms.notice.entity.Notification;
 import com.ssa.lms.notice.entity.NotificationRecipient;
+import com.ssa.lms.notice.entity.Notice;
 import com.ssa.lms.notice.repository.NotificationRecipientRepository;
 import com.ssa.lms.notice.repository.NotificationRepository;
 import com.ssa.lms.user.entity.User;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.access.AccessDeniedException;
@@ -47,6 +50,19 @@ public class NotificationService {
     private final CourseQueryService courseQueryService;
     private final UserRepository userRepository;
     private final CourseInstructorRepository courseInstructorRepository;
+    private final ReminderMailSender mailSender;
+
+    public LoginNoticePopup findLoginPopup(Long userId) {
+        if (userId == null) return null;
+        return recipientRepository.findUnreadLoginPopups(userId, PageRequest.of(0, 1)).stream()
+                .findFirst()
+                .map(r -> new LoginNoticePopup(
+                        r.getNotification().getId(),
+                        r.getNotification().getTitle(),
+                        r.getNotification().getContent(),
+                        safeTraineeUrl(r.getNotification().getSourceUrl())))
+                .orElse(null);
+    }
 
     /**
      * 알림 내역 목록. 수신자 수/읽음 수는 페이지에 담긴 id 묶음으로 한 번에 집계한다
@@ -151,6 +167,55 @@ public class NotificationService {
         return notification.getId();
     }
 
+    /** 게시 공지를 인앱 알림으로 펼치고, 선택한 경우 같은 대상에게 이메일도 보낸다. */
+    @Transactional
+    public void dispatchNotice(Notice notice) {
+        if (notice == null || notice.getId() == null || notice.getPublishedAt() == null
+                || notificationRepository.existsByKindAndSourceRefId(
+                        Notification.NotificationKind.NOTICE, notice.getId())) {
+            return;
+        }
+        Notification notification = notificationRepository.save(Notification.builder()
+                .title("[공지] " + notice.getTitle())
+                .content(notice.getContent())
+                .priority(notice.isPinned() ? Notification.Priority.HIGH : Notification.Priority.NORMAL)
+                .targetType(notice.getCourse() == null
+                        ? Notification.TargetType.ALL : Notification.TargetType.COURSE)
+                .targetRefId(notice.getCourse() == null ? null : notice.getCourse().getId())
+                .sendAt(notice.getPublishedAt())
+                .sender(notice.getAuthor())
+                .status(Notification.NotificationStatus.SENT)
+                .kind(Notification.NotificationKind.NOTICE)
+                .sourceRefId(notice.getId())
+                .sourceUrl("/trainee/notice/" + notice.getId())
+                .popupOnLogin(notice.isPopupOnLogin())
+                .build());
+        fanOut(notification);
+        if (notice.isEmailNotify()) {
+            for (Long userId : resolveTargets(notification)) {
+                userRepository.findById(userId)
+                        .ifPresent(user -> mailSender.send(user, notification.getTitle(), notification.getContent()));
+            }
+        }
+    }
+
+    /** 성장 리포트처럼 개인에게 자동 생성되는 인앱 알림과 이메일을 함께 보낸다. */
+    @Transactional
+    public Long dispatchPersonal(User user, String title, String content,
+                                 Notification.NotificationKind kind, String sourceUrl,
+                                 boolean email) {
+        Notification notification = notificationRepository.save(Notification.builder()
+                .title(title).content(content).priority(Notification.Priority.NORMAL)
+                .targetType(Notification.TargetType.USER).targetRefId(user.getId())
+                .sendAt(LocalDateTime.now()).sender(user)
+                .status(Notification.NotificationStatus.SENT)
+                .kind(kind).sourceUrl(safeTraineeUrl(sourceUrl)).build());
+        recipientRepository.save(NotificationRecipient.builder()
+                .notification(notification).user(user).build());
+        if (email) mailSender.send(user, title, content);
+        return notification.getId();
+    }
+
     @Transactional
     public void update(Long id, NotificationForm form, Long actorId, Role role) {
         Notification n = getOrThrow(id);
@@ -252,6 +317,10 @@ public class NotificationService {
                     : courseQueryService.findUserIdsByCourseId(n.getTargetRefId());
             case USER -> n.getTargetRefId() == null ? List.of() : List.of(n.getTargetRefId());
         };
+    }
+
+    private String safeTraineeUrl(String sourceUrl) {
+        return sourceUrl != null && sourceUrl.startsWith("/trainee/") ? sourceUrl : "/trainee/alarm";
     }
 
     /** id → [수신자 수, 읽은 수] */

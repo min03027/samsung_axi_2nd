@@ -62,6 +62,9 @@ public class ReminderSetting extends BaseEntity {
     @Column(name = "survey_enabled", nullable = false)
     private boolean surveyEnabled = true;
 
+    @Column(name = "lesson_enabled", nullable = false, columnDefinition = "boolean default true")
+    private boolean lessonEnabled = true;
+
     /** 리마인드 전체 스위치. 시간을 0으로 만들어 끄려 하면 마감 시각에 쏟아진다. */
     @Column(name = "enabled", nullable = false)
     private boolean enabled = true;
@@ -78,6 +81,11 @@ public class ReminderSetting extends BaseEntity {
      */
     public void update(int firstHours, int secondHours, int overdueDays,
                        boolean assignment, boolean exam, boolean survey, boolean enabled) {
+        update(firstHours, secondHours, overdueDays, assignment, exam, survey, true, enabled);
+    }
+
+    public void update(int firstHours, int secondHours, int overdueDays,
+                       boolean assignment, boolean exam, boolean survey, boolean lesson, boolean enabled) {
         this.firstNoticeHours = clamp(firstHours, MIN_HOURS, MAX_HOURS);
         this.secondNoticeHours = clamp(secondHours, MIN_HOURS, MAX_HOURS);
         this.overdueDays = clamp(overdueDays, 1, MAX_OVERDUE_DAYS);
@@ -95,6 +103,7 @@ public class ReminderSetting extends BaseEntity {
         this.assignmentEnabled = assignment;
         this.examEnabled = exam;
         this.surveyEnabled = survey;
+        this.lessonEnabled = lesson;
         this.enabled = enabled;
     }
 

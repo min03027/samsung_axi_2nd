@@ -48,11 +48,12 @@ public class AdminReminderSettingController {
                        @RequestParam(defaultValue = "false") boolean assignmentEnabled,
                        @RequestParam(defaultValue = "false") boolean examEnabled,
                        @RequestParam(defaultValue = "false") boolean surveyEnabled,
+                       @RequestParam(defaultValue = "false") boolean lessonEnabled,
                        @RequestParam(defaultValue = "false") boolean enabled,
                        RedirectAttributes ra) {
 
         var saved = settingService.save(firstNoticeHours, secondNoticeHours, overdueDays,
-                assignmentEnabled, examEnabled, surveyEnabled, enabled);
+                assignmentEnabled, examEnabled, surveyEnabled, lessonEnabled, enabled);
 
         ra.addFlashAttribute("message", saved.isEnabled()
                 ? "저장했습니다. 마감 %d시간 전, %d시간 전, 마감 후 %d일까지 알립니다."

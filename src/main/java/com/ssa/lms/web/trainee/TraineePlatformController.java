@@ -1,6 +1,11 @@
 package com.ssa.lms.web.trainee;
 
+import com.ssa.lms.auth.LoginUser;
+import com.ssa.lms.notice.service.GrowthReportService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -12,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/trainee")
+@RequiredArgsConstructor
 public class TraineePlatformController {
+
+    private final GrowthReportService growthReportService;
 
     @GetMapping("/evaluations")
     public String evaluations() {
@@ -20,7 +28,8 @@ public class TraineePlatformController {
     }
 
     @GetMapping("/growth")
-    public String growth() {
+    public String growth(@AuthenticationPrincipal LoginUser loginUser, Model model) {
+        model.addAttribute("report", growthReportService.current(loginUser.getId(), loginUser.getName()));
         return "trainee/growth";
     }
 

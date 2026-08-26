@@ -31,7 +31,7 @@ public class CourseScheduleService {
         return sessionRepository.findBySubjectCourseIdOrderBySubjectOrderNoAscSeqAsc(courseId).stream()
                 .filter(s -> s.getLessonDate() != null)
                 .map(s -> new CourseScheduleView(
-                        s.getLessonDate(), course.getId(), course.getCourseCode(), course.getCourseName(),
+                        s.getLessonDate(), s.getLessonStartTime(), course.getId(), course.getCourseCode(), course.getCourseName(),
                         s.getSubject().getName(), s.getSeq(), s.getName(), s.getLearningMinutes()))
                 .sorted(Comparator.comparing(CourseScheduleView::lessonDate))
                 .toList();

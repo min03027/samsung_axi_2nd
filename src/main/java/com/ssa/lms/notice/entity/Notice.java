@@ -73,12 +73,21 @@ public class Notice extends BaseEntity {
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
 
+    /** 훈련생이 로그인한 직후 아직 읽지 않은 공지를 팝업으로 노출할지 여부. */
+    @Column(name = "popup_on_login", nullable = false, columnDefinition = "boolean default false")
+    private boolean popupOnLogin;
+
+    /** 게시 시점에 대상 훈련생에게 이메일도 함께 보낼지 여부. */
+    @Column(name = "email_notify", nullable = false, columnDefinition = "boolean default false")
+    private boolean emailNotify;
+
     @OneToMany(mappedBy = "notice", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NoticeAttachment> attachments = new ArrayList<>();
 
     @Builder
     public Notice(NoticeCategory category, Course course, String title, String content,
-                  User author, boolean pinned, LocalDateTime publishedAt) {
+                  User author, boolean pinned, LocalDateTime publishedAt,
+                  boolean popupOnLogin, boolean emailNotify) {
         this.category = category;
         this.course = course;
         this.title = title;
@@ -86,6 +95,8 @@ public class Notice extends BaseEntity {
         this.author = author;
         this.pinned = pinned;
         this.publishedAt = publishedAt;
+        this.popupOnLogin = popupOnLogin;
+        this.emailNotify = emailNotify;
         this.viewCount = 0;
     }
 
@@ -98,11 +109,14 @@ public class Notice extends BaseEntity {
         this.viewCount++;
     }
 
-    public void update(NoticeCategory category, String title, String content, boolean pinned) {
+    public void update(NoticeCategory category, String title, String content, boolean pinned,
+                       boolean popupOnLogin, boolean emailNotify) {
         this.category = category;
         this.title = title;
         this.content = content;
         this.pinned = pinned;
+        this.popupOnLogin = popupOnLogin;
+        this.emailNotify = emailNotify;
     }
 
     /** 노출 범위 변경. null 이면 전체 공지. */

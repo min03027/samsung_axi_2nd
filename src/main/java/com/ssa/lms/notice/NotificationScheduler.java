@@ -3,6 +3,7 @@ package com.ssa.lms.notice;
 import com.ssa.lms.notice.entity.ReminderLog;
 import com.ssa.lms.notice.service.NotificationService;
 import com.ssa.lms.notice.service.ReminderService;
+import com.ssa.lms.notice.service.GrowthReportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +34,7 @@ public class NotificationScheduler {
 
     private final NotificationService notificationService;
     private final ReminderService reminderService;
+    private final GrowthReportService growthReportService;
 
     /** 테스트·로컬에서 끌 수 있게 스위치를 둔다. 기본 활성. */
     @Value("${lms.scheduler.notification.enabled:true}")
@@ -78,6 +80,7 @@ public class NotificationScheduler {
             for (ReminderLog.ReminderStage stage : ReminderLog.ReminderStage.values()) {
                 total += reminderService.remindDue(now, stage);
             }
+            total += growthReportService.sendDue(now);
             if (total > 0) {
                 log.info("리마인드 알림 {}건 발송", total);
             }

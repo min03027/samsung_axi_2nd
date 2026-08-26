@@ -59,9 +59,12 @@ public class TraineeAlarmController {
     @PostMapping("/read")
     public String markRead(@AuthenticationPrincipal LoginUser loginUser,
                            @RequestParam("ids") List<Long> ids,
+                           @RequestParam(required = false) String returnTo,
                            RedirectAttributes redirectAttributes) {
         int changed = notificationService.markRead(ids, loginUser.getId());
         redirectAttributes.addFlashAttribute("message", changed + "건을 읽음 처리했습니다.");
-        return "redirect:/trainee/alarm";
+        String safeReturn = returnTo != null && returnTo.startsWith("/trainee/")
+                ? returnTo : "/trainee/alarm";
+        return "redirect:" + safeReturn;
     }
 }

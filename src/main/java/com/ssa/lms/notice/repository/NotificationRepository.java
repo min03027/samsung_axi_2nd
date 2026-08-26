@@ -14,6 +14,8 @@ import java.util.Optional;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
+    boolean existsByKindAndSourceRefId(Notification.NotificationKind kind, Long sourceRefId);
+
     /**
      * 알림 내역 검색 (admin-alarm.html).
      * 필터: 중요도 / 발송일 범위 / 검색어(제목·내용).

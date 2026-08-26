@@ -47,6 +47,7 @@
                 <thead>
                     <tr>
                         <th>날짜</th>
+                        <th>시작</th>
                         <th>과목</th>
                         <th>차시</th>
                         <th>차시명</th>
@@ -56,13 +57,14 @@
                 <tbody>
                     <tr th:each="item : ${schedule}">
                         <td class="date-cell" th:text="${item.lessonDate}">2026-01-01</td>
+                        <td th:text="${item.lessonStartTime != null ? item.lessonStartTime : '미정'}">09:00</td>
                         <td th:text="${item.subjectName}">과목</td>
                         <td th:text="|${item.seq}차시|">1차시</td>
                         <td th:text="${item.sessionName}">차시명</td>
                         <td th:text="${item.learningMinutes} != null ? |${item.learningMinutes}분| : '-'">-</td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(schedule)}">
-                        <td colspan="5" class="empty-hint">일정(날짜 지정 차시)이 없습니다.</td>
+                        <td colspan="6" class="empty-hint">일정(날짜 지정 차시)이 없습니다.</td>
                     </tr>
                 </tbody>
             </table>

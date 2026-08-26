@@ -97,6 +97,8 @@
                                       th:checked="${setting.examEnabled}"> 시험 미응시</label>
                         <label><input type="checkbox" name="surveyEnabled" value="true"
                                       th:checked="${setting.surveyEnabled}"> 설문 미응답</label>
+                        <label><input type="checkbox" name="lessonEnabled" value="true"
+                                      th:checked="${setting.lessonEnabled}"> 수업 시작 24시간·1시간 전</label>
                     </div>
 
                     <div class="set-row">
@@ -131,7 +133,8 @@
                             <span th:if="${setting.assignmentEnabled}">과제 </span>
                             <span th:if="${setting.examEnabled}">시험 </span>
                             <span th:if="${setting.surveyEnabled}">설문</span>
-                            <span th:if="${!setting.assignmentEnabled and !setting.examEnabled and !setting.surveyEnabled}"
+                            <span th:if="${setting.lessonEnabled}">수업</span>
+                            <span th:if="${!setting.assignmentEnabled and !setting.examEnabled and !setting.surveyEnabled and !setting.lessonEnabled}"
                                   style="color:var(--color-danger);">없음 — 대상을 하나도 고르지 않아 아무것도 나가지 않습니다</span>
                         </span>
                     </div>
