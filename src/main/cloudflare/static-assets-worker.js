@@ -1,7 +1,18 @@
 export default {
   async fetch(request, env) {
     const assetUrl = new URL(request.url);
-    assetUrl.searchParams.set("__axi_asset_version", "20260826-119");
+    if ((assetUrl.pathname === "/p" || assetUrl.pathname === "/p/") && assetUrl.searchParams.has("j")) {
+      const legacySection = assetUrl.searchParams.get("j");
+      let destination = "/v2/index.html";
+      if (legacySection === "23") destination = "/v2/site/class/index.html";
+      if (legacySection === "87") {
+        destination = assetUrl.searchParams.get("pno") === "9"
+          ? "/v2/site/class/review.html?id=20126"
+          : "/v2/site/class/reviews.html";
+      }
+      return Response.redirect(assetUrl.origin + destination, 301);
+    }
+    assetUrl.searchParams.set("__axi_asset_version", "20260827-120");
     const response = await env.ASSETS.fetch(new Request(assetUrl, request));
     const headers = new Headers(response.headers);
     const type = headers.get("content-type") || "";

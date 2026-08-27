@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>교육 후 확장 — {brand}</title>
+<meta name="description" content="기업별 교육 성과, 후속과제, 심화교육, 컨설팅과 SI 연계 이력을 한 흐름으로 확인하는 비즈워크래프트 교육 후 확장 화면입니다.">
+<link rel="stylesheet" href="/v2/assets/tokens.css">
+<link rel="stylesheet" href="/v2/assets/base.css">
+<link rel="stylesheet" href="/v2/assets/components.css?v=20260824-64">
+<link rel="stylesheet" href="/v2/assets/public-journey.css?v=20260824-64">
+<link rel="stylesheet" href="/v2/assets/biz-pages.css?v=20260827-115">
+<link rel="stylesheet" href="/v2/assets/public-analytics.css?v=20260827-01">
+</head>
+<body class="biz-followup-page">
+<header class="biz-page-hero biz-followup-hero"><div class="container"><span class="eyebrow">AFTER THE CLASS</span><h1>교육이 끝난 뒤,<br>조직에 남는 변화</h1><p>설문과 결과물 검토에서 후속과제, 심화교육, 컨설팅까지 기업별 다음 단계를 한 화면에서 확인합니다.</p></div></header>
+
+<main id="main">
+  <section class="section" id="followup-overview">
+    <div class="container">
+      <aside class="demo-disclosure demo-disclosure--blue" role="note"><b>1차 화면 시연 데이터</b><span>기업명과 운영 이력은 화면 흐름 확인을 위한 익명 샘플입니다. 실제 저장·담당자 배정·알림 전송은 LXP 관리자 연동 단계에서 처리합니다.</span></aside>
+      <div class="followup-toolbar">
+        <div><span>COMPANY VIEW</span><h2>기업별 교육 후속 현황</h2></div>
+        <label>기업·기관 선택<select id="followup-company"></select></label>
+      </div>
+      <dl class="followup-summary" data-followup-summary aria-live="polite"></dl>
+
+      <section class="followup-panel" aria-labelledby="followup-stage-title">
+        <header><div><span>EXPANSION PATH</span><h2 id="followup-stage-title">교육 이후 확장 단계</h2></div><p data-followup-updated></p></header>
+        <ol class="followup-stages" data-followup-stages></ol>
+      </section>
+
+      <div class="followup-layout">
+        <section class="followup-panel" aria-labelledby="followup-task-title">
+          <header><div><span>NEXT ACTION</span><h2 id="followup-task-title">후속조치</h2></div></header>
+          <div class="followup-actions" data-followup-actions></div>
+        </section>
+        <section class="followup-panel" aria-labelledby="followup-owner-title">
+          <header><div><span>OWNER</span><h2 id="followup-owner-title">담당과 일정</h2></div></header>
+          <dl class="followup-owner" data-followup-owner></dl>
+          <a class="btn btn--primary" href="/v2/site/biz/index.html#biz-contact">운영 상담 요청</a>
+        </section>
+      </div>
+
+      <section class="followup-panel" id="followup-history" aria-labelledby="followup-history-title">
+        <header><div><span>HISTORY</span><h2 id="followup-history-title">교육·확장 이력</h2></div><p>관계 유형을 교육, 컨설팅, SI 검토로 구분합니다.</p></header>
+        <div class="followup-table-wrap"><table class="followup-table"><thead><tr><th>일자</th><th>단계</th><th>주요 내용</th><th>결과물</th><th>상태</th></tr></thead><tbody data-followup-history></tbody></table></div>
+      </section>
+
+      <section class="followup-boundary" id="followup-boundary">
+        <div><span>OPERATING BOUNDARY</span><h2>1차 화면과<br>실제 운영의 경계</h2></div>
+        <ul><li><b>현재 화면</b><span>기업 선택, 단계·상태 표현, 후속조치와 이력 확인</span></li><li><b>관리자 연동</b><span>담당자 배정, 상태 저장, 설문·성과 데이터 수집</span></li><li><b>확장 연동</b><span>이메일 안내, 제안서 발송, 계약·SI 프로젝트 이력</span></li></ul>
+      </section>
+    </div>
+  </section>
+</main>
+
+<script src="/v2/assets/brand.js"></script>
+<script src="/v2/assets/page-section-navigation.js"></script>
+<script>Shell.site({service:'biz',nav:'followup',sections:[{href:'#followup-overview',label:'기업별 현황'},{href:'#followup-history',label:'확장 이력'},{href:'#followup-boundary',label:'운영 연동'}]})</script>
+<script src="/v2/assets/biz-follow-up.js?v=20260827-01"></script>
+</body>
+</html>

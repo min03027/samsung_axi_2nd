@@ -52,6 +52,9 @@
       document.querySelector('[data-review-cover]').src = `/v2/assets/reviews/${id}.png`;
       const body = document.querySelector('[data-review-body]');
       body.innerHTML = html;
+      body.querySelectorAll('a[href="?j=23"]').forEach(link => {
+        link.href = '/v2/site/class/index.html';
+      });
       addCourseRecommendations(body);
       const heading = document.querySelector('[data-review-body] h1');
       if (heading) document.title = `${heading.textContent.trim()} — ${window.BRAND?.name || '삼성AXI'}`;

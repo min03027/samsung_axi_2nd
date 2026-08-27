@@ -78,7 +78,7 @@
   var SITE_NAV = {
     campus: [
       { key: "about",   label: "브랜드 스토리", href: "/v2/site/campus/about.html", todo: true },
-      { key: "outcome", label: "취업 성과",     href: "/v2/site/campus/outcome.html", todo: true },
+      { key: "outcome", label: "취업 성과",     href: "/v2/site/campus/outcomes.html" },
       { key: "review",  label: "취업 후기",     href: "/v2/site/class/reviews.html" },
       { key: "support", label: "취업 지원",     href: "/v2/site/campus/support.html" },
       { key: "facility",label: "캠퍼스·기숙사", href: "/v2/site/campus/facility.html" }
@@ -94,6 +94,7 @@
       { key: "flow",      label: "AX Flow",     href: "/v2/site/biz/flow.html", todo: true },
       { key: "programs",  label: "직무별 과정", href: "/v2/site/biz/programs.html" },
       { key: "cases",     label: "기업 사례",   href: "/v2/site/biz/cases.html" },
+      { key: "followup",  label: "교육 후 확장", href: "/v2/site/biz/follow-up.html" },
       { key: "contact",   label: "도입 문의",   href: "/v2/site/biz/index.html#biz-contact" }
     ]
   };
@@ -217,6 +218,7 @@
         { key: "home", label: "비즈워크래프트 홈", href: "/v2/site/biz/index.html" },
         { key: "programs", label: "직무별 과정", href: "/v2/site/biz/programs.html" },
         { key: "cases", label: "기업교육 사례", href: "/v2/site/biz/cases.html" },
+        { key: "followup", label: "교육 후 확장", href: "/v2/site/biz/follow-up.html" },
         { key: "contact", label: "도입 문의", href: "/v2/site/biz/index.html#biz-contact" }
       ];
       serviceQuickbar = '<nav class="biz-quickbar" aria-label="비즈워크래프트 빠른 이동"><div class="container">' +
